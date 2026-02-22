@@ -51,6 +51,10 @@ import {
   ListOrdered,
   Check,
   ClipboardList,
+  LogOut,
+  User,
+  Mail,
+  Phone,
 } from "lucide-react";
 
 // ==========================================
@@ -58,7 +62,7 @@ import {
 // ==========================================
 const GlobalStyles = () => (
   <style>{`
-    @import url('https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800;900&display=swap');
 
     :root {
       /* --- TYPOGRAPHY --- */
@@ -66,10 +70,10 @@ const GlobalStyles = () => (
 
       /* --- BRAND (PRIMARY) --- */
       --color-primary-50: #EEF2FF;
-      --color-primary-100: #E0E7FF;
-      --color-primary-500: #4338CA; /* Głęboki, elegancki Indigo/Blue */
-      --color-primary-700: #3730A3;
-      --color-primary-900: #312E81;
+      --color-primary-100: #DBE5FF;
+      --color-primary-500: #0038F8; /* Firmowy niebieski */
+      --color-primary-700: #0027BA;
+      --color-primary-900: #001566;
 
       /* --- NEUTRALS (SURFACES & TEXT) --- */
       --color-neutral-000: #FFFFFF;
@@ -77,7 +81,7 @@ const GlobalStyles = () => (
       --color-neutral-100: #F1F5F9; /* Tła dla hover / secondary areas */
       --color-neutral-200: #E2E8F0; /* Delikatne dzielniki */
       --color-neutral-400: #94A3B8; 
-      --color-neutral-500: #64748B; /* Teksty pomocnicze */
+      --color-neutral-500: #64748B; /* Teksty pomocnicze, BORDERY WCAG (Kontrast 4.6:1 z bielą) */
       --color-neutral-700: #334155; /* Teksty zwykłe */
       --color-neutral-900: #0F172A; /* Nagłówki i ważne dane */
 
@@ -94,14 +98,18 @@ const GlobalStyles = () => (
       --color-success-main: #10B981;
       --color-success-text: #166534;
       
-      /* --- SOFT SHADOWS --- */
-      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-      --shadow-card: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
-      --shadow-primary: 0 4px 14px 0 rgba(67, 56, 202, 0.25);
+      /* --- SOFT SHADOWS (Zwiększony kontrast cieni dla lepszej widoczności) --- */
+      --shadow-sm: 0 2px 8px -2px rgba(15, 23, 42, 0.05);
+      --shadow-soft: 0 8px 24px -4px rgba(15, 23, 42, 0.06);
+      --shadow-card: 0 12px 32px -4px rgba(15, 23, 42, 0.08);
+      --shadow-primary: 0 8px 24px -4px rgba(67, 56, 202, 0.3);
+    }
+
+    body, html, * {
+      font-family: var(--font-family-base) !important;
     }
 
     body {
-      font-family: var(--font-family-base);
       font-variant-numeric: tabular-nums;
       background-color: var(--color-neutral-050);
       color: var(--color-neutral-700);
@@ -311,12 +319,12 @@ const mockErrorsData = [
 ];
 
 // ==========================================
-// 2. WSPÓLNE KOMPONENTY UI (Zaktualizowane: Soft UI)
+// 2. WSPÓLNE KOMPONENTY UI (Zaktualizowane na WCAG 2.2 AA - Kontrast pól)
 // ==========================================
 const ScoreBadge = ({ score, large = false }) => {
   if (score === null)
     return (
-      <span className="text-[var(--color-neutral-400)] text-sm font-bold bg-[var(--color-neutral-100)] rounded-lg px-3 py-1">
+      <span className="text-[var(--color-neutral-500)] text-sm font-bold bg-[var(--color-neutral-100)] rounded-lg px-3 py-1">
         -
       </span>
     );
@@ -372,21 +380,21 @@ const StatusBadge = ({ status }) => {
   );
 };
 
-// Globalne style (Delikatne zaokrąglenia, brak zbędnych obrysów)
+// Globalne style przycisków i inputów (Mocne ramki zgodnie z 1.4.11 Non-text Contrast)
 const btnPrimary =
   "flex items-center px-5 py-2.5 bg-[var(--color-primary-500)] text-white text-sm font-bold rounded-lg hover:bg-[var(--color-primary-700)] shadow-[var(--shadow-primary)] transition-all";
 const btnGhost =
-  "flex items-center px-5 py-2.5 bg-[var(--color-neutral-100)] text-[var(--color-neutral-700)] text-sm font-bold rounded-lg hover:bg-[var(--color-neutral-200)] hover:text-[var(--color-neutral-900)] transition-all";
+  "flex items-center px-5 py-2.5 bg-white border border-[var(--color-neutral-500)] text-[var(--color-neutral-700)] text-sm font-bold rounded-lg hover:bg-[var(--color-neutral-050)] hover:text-[var(--color-primary-500)] transition-all";
 const btnIcon =
   "p-2 text-[var(--color-neutral-500)] hover:text-[var(--color-primary-500)] bg-[var(--color-neutral-050)] hover:bg-[var(--color-primary-50)] rounded-lg transition-colors cursor-pointer";
 
-// Input bazuje na tle, obrys pojawia się lekko przy focusie
+// Input WCAG Compliant - solidna, widoczna ramka (contrast 3:1), ciemny placeholder (contrast 4.5:1)
 const inputClass =
-  "w-full p-3 bg-[var(--color-neutral-050)] border border-transparent rounded-lg text-sm font-medium text-[var(--color-neutral-900)] placeholder-[var(--color-neutral-400)] transition-all focus:bg-white focus:border-[var(--color-primary-500)] focus:ring-4 focus:ring-[var(--color-primary-50)] outline-none";
+  "w-full p-3 bg-white border border-[var(--color-neutral-500)] rounded-lg text-sm font-medium text-[var(--color-neutral-900)] placeholder-[var(--color-neutral-500)] transition-all focus:border-[var(--color-primary-500)] focus:ring-4 focus:ring-[var(--color-primary-50)] outline-none";
 
-// Karty z miękkim cieniem
+// Karty z wyraźniejszym cieniem
 const cardClass =
-  "bg-white rounded-xl shadow-[var(--shadow-card)] overflow-hidden border border-white hover:border-[var(--color-primary-100)] transition-colors";
+  "bg-white rounded-xl shadow-[var(--shadow-card)] overflow-hidden border border-[var(--color-neutral-100)] hover:shadow-[0_16px_40px_-4px_rgba(15,23,42,0.1)] hover:border-[var(--color-primary-100)] transition-all duration-300";
 
 // ==========================================
 // 3. MODUŁ: MOJE USŁUGI
@@ -439,11 +447,11 @@ const ServicesModule = ({ onNavigateToAuditor }) => {
             </button>
           </div>
           <div className="relative">
-            <Search className="w-4 h-4 absolute left-4 top-3.5 text-[var(--color-neutral-400)]" />
+            <Search className="w-4 h-4 absolute left-4 top-3.5 text-[var(--color-neutral-500)]" />
             <input
               type="text"
               placeholder="Szukaj usługi..."
-              className={inputClass + " pl-11 py-2.5"}
+              className={`${inputClass} pl-11 py-2.5`}
             />
           </div>
         </div>
@@ -472,7 +480,7 @@ const ServicesModule = ({ onNavigateToAuditor }) => {
                         className={`w-4 h-4 mr-2.5 flex-shrink-0 ${
                           isServiceActive && !activeProcessId
                             ? "text-white/80"
-                            : "text-[var(--color-neutral-400)]"
+                            : "text-[var(--color-neutral-500)]"
                         }`}
                       />
                     ) : (
@@ -480,7 +488,7 @@ const ServicesModule = ({ onNavigateToAuditor }) => {
                         className={`w-4 h-4 mr-2.5 flex-shrink-0 ${
                           isServiceActive && !activeProcessId
                             ? "text-white/80"
-                            : "text-[var(--color-neutral-400)]"
+                            : "text-[var(--color-neutral-500)]"
                         }`}
                       />
                     )}
@@ -547,12 +555,12 @@ const ServicesModule = ({ onNavigateToAuditor }) => {
       {/* PANEL DETAIL (Główny obszar) */}
       <div className="flex-1 flex flex-col relative overflow-hidden">
         {/* Header Sekcji */}
-        <div className="px-8 py-8 z-10 flex-shrink-0">
+        <div className="bg-white border-b border-[var(--color-neutral-100)] shadow-[var(--shadow-sm)] px-8 py-8 z-10 flex-shrink-0">
           <div className="flex items-center text-xs font-bold text-[var(--color-neutral-500)] mb-3">
             {!isStructurePanelOpen && (
               <button
                 onClick={() => setIsStructurePanelOpen(true)}
-                className={`${btnIcon} mr-3 py-1 px-1.5 bg-white shadow-sm`}
+                className={`${btnIcon} mr-3 py-1 px-1.5 bg-[var(--color-neutral-050)]`}
               >
                 <PanelLeft className="w-4 h-4" />
               </button>
@@ -596,7 +604,7 @@ const ServicesModule = ({ onNavigateToAuditor }) => {
         <div className="flex-1 overflow-y-auto px-8 pb-12">
           <div className="max-w-7xl mx-auto">
             {!activeProcessId ? (
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-4 mt-6">
                 <div className="flex items-center justify-between px-2 mb-2">
                   <span className="text-sm font-bold text-[var(--color-neutral-500)]">
                     Zarządzanie procesami (
@@ -665,7 +673,7 @@ const ServicesModule = ({ onNavigateToAuditor }) => {
                 ))}
               </div>
             ) : (
-              <div className="flex flex-col gap-5 max-w-5xl mx-auto">
+              <div className="flex flex-col gap-5 max-w-5xl mx-auto mt-6">
                 {/* Karty Widoków */}
                 {activeProcess.views.map((view, index) => {
                   const isExpanded = expandedViews.includes(view.id);
@@ -748,7 +756,7 @@ const ServicesModule = ({ onNavigateToAuditor }) => {
                                     e
                                   )
                                 }
-                                className="flex items-center px-4 py-2 bg-[var(--color-neutral-100)] text-[var(--color-neutral-700)] hover:bg-[var(--color-neutral-200)] hover:text-[var(--color-neutral-900)] rounded-lg text-sm font-bold transition-colors"
+                                className={btnGhost}
                               >
                                 <Link className="w-4 h-4 mr-2 text-[var(--color-neutral-500)]" />{" "}
                                 Przypisz audyt
@@ -787,7 +795,7 @@ const ServicesModule = ({ onNavigateToAuditor }) => {
                         </div>
                       </div>
 
-                      {/* Błędy (Akordeon z tłem zamiast kresek) */}
+                      {/* Błędy (Akordeon z tłem) */}
                       <div
                         className={`transition-all duration-300 overflow-hidden ${
                           isExpanded
@@ -801,7 +809,7 @@ const ServicesModule = ({ onNavigateToAuditor }) => {
                               {view.errors.map((error, idx) => (
                                 <div
                                   key={error.id}
-                                  className="bg-white p-5 rounded-xl shadow-sm flex items-start"
+                                  className="bg-white p-5 rounded-xl shadow-[var(--shadow-soft)] border border-[var(--color-neutral-100)] flex items-start"
                                 >
                                   <div className="w-8 h-8 rounded-full bg-[var(--color-error-bg)] flex items-center justify-center mr-4 flex-shrink-0 mt-0.5">
                                     <AlertOctagon className="w-4 h-4 text-[var(--color-error-main)]" />
@@ -823,7 +831,7 @@ const ServicesModule = ({ onNavigateToAuditor }) => {
                               ))}
                             </div>
                           ) : (
-                            <div className="py-8 text-center flex flex-col items-center bg-white rounded-xl shadow-sm">
+                            <div className="py-8 text-center flex flex-col items-center bg-white rounded-xl shadow-[var(--shadow-soft)] border border-[var(--color-neutral-100)]">
                               <div className="w-12 h-12 bg-[var(--color-success-bg)] rounded-full flex items-center justify-center mb-3">
                                 <CheckCircle2 className="w-6 h-6 text-[var(--color-success-main)]" />
                               </div>
@@ -896,7 +904,7 @@ const AuditsModule = ({ onNavigateToAuditor, isDevMode }) => {
       {/* ---------------- WIDOK 1: LISTA (Soft Grid) ---------------- */}
       {currentView === "list" && (
         <div className="flex-1 flex flex-col overflow-hidden">
-          <div className="px-8 py-10 z-10 flex-shrink-0">
+          <div className="bg-white border-b border-[var(--color-neutral-100)] shadow-[var(--shadow-sm)] px-8 py-8 z-10 flex-shrink-0">
             <div className="max-w-7xl mx-auto">
               <div className="flex justify-between items-end mb-8">
                 <div>
@@ -919,20 +927,21 @@ const AuditsModule = ({ onNavigateToAuditor, isDevMode }) => {
                 )}
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              {/* Sekcja filtrów - z wyraźnymi obramowaniami WCAG (3:1 Kontrast) */}
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 bg-[var(--color-neutral-050)] p-4 rounded-xl border border-[var(--color-neutral-200)]">
                 <div className="col-span-1 md:col-span-2 relative">
-                  <Search className="w-5 h-5 absolute left-4 top-3.5 text-[var(--color-neutral-400)]" />
+                  <Search className="w-5 h-5 absolute left-4 top-3.5 text-[var(--color-neutral-500)]" />
                   <input
                     type="text"
                     placeholder="Szukaj audytu po nazwie..."
-                    className={`${inputClass} pl-12 bg-white shadow-sm`}
+                    className={`${inputClass} pl-12`}
                   />
                 </div>
-                <select className={`${inputClass} bg-white shadow-sm`}>
+                <select className={inputClass}>
                   <option>Wszyscy klienci</option>
                   <option>ING</option>
                 </select>
-                <select className={`${inputClass} bg-white shadow-sm`}>
+                <select className={inputClass}>
                   <option>Status: Wszystkie</option>
                   <option>W trakcie</option>
                 </select>
@@ -940,7 +949,7 @@ const AuditsModule = ({ onNavigateToAuditor, isDevMode }) => {
             </div>
           </div>
 
-          <div className="flex-1 overflow-y-auto px-8 pb-12">
+          <div className="flex-1 overflow-y-auto px-8 pb-12 mt-6">
             <div className="max-w-7xl mx-auto">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {mockAuditsData.map((audit) => (
@@ -949,7 +958,7 @@ const AuditsModule = ({ onNavigateToAuditor, isDevMode }) => {
                     className={`${cardClass} flex flex-col group hover:-translate-y-1 hover:shadow-lg transition-all duration-300`}
                   >
                     <div className="p-6 pb-4 flex justify-between items-center bg-white">
-                      <span className="text-xs font-bold text-[var(--color-neutral-500)] flex items-center bg-[var(--color-neutral-050)] px-3 py-1.5 rounded-lg">
+                      <span className="text-xs font-bold text-[var(--color-neutral-700)] flex items-center bg-[var(--color-neutral-050)] border border-[var(--color-neutral-200)] px-3 py-1.5 rounded-lg">
                         <Calendar className="w-3.5 h-3.5 mr-1.5 text-[var(--color-primary-500)]" />{" "}
                         {audit.dateStart}
                       </span>
@@ -973,7 +982,7 @@ const AuditsModule = ({ onNavigateToAuditor, isDevMode }) => {
                     <div className="p-6 bg-[var(--color-neutral-050)]/50 flex justify-between items-center mt-auto border-t border-[var(--color-neutral-100)]">
                       <div className="flex space-x-5">
                         <div className="flex flex-col">
-                          <span className="text-[10px] font-bold text-[var(--color-neutral-400)] uppercase tracking-wider mb-1">
+                          <span className="text-[10px] font-bold text-[var(--color-neutral-500)] uppercase tracking-wider mb-1">
                             Priorytet
                           </span>
                           <span className="text-xl font-bold text-[var(--color-error-main)] flex items-center leading-none">
@@ -982,7 +991,7 @@ const AuditsModule = ({ onNavigateToAuditor, isDevMode }) => {
                         </div>
                         <div className="h-8 w-px bg-[var(--color-neutral-200)]"></div>
                         <div className="flex flex-col">
-                          <span className="text-[10px] font-bold text-[var(--color-neutral-400)] uppercase tracking-wider mb-1">
+                          <span className="text-[10px] font-bold text-[var(--color-neutral-500)] uppercase tracking-wider mb-1">
                             Wynik
                           </span>
                           <span className="text-xl font-bold text-[var(--color-success-main)] flex items-center leading-none">
@@ -995,7 +1004,7 @@ const AuditsModule = ({ onNavigateToAuditor, isDevMode }) => {
                         {isDevMode && (
                           <button
                             onClick={() => navigateTo("edit", audit.id)}
-                            className={`${btnIcon} bg-white shadow-sm`}
+                            className={btnGhost}
                           >
                             <Edit2 className="w-4 h-4" />
                           </button>
@@ -1019,7 +1028,7 @@ const AuditsModule = ({ onNavigateToAuditor, isDevMode }) => {
       {/* ---------------- WIDOK 2: SZCZEGÓŁY ---------------- */}
       {currentView === "details" && (
         <div className="flex-1 flex flex-col h-full overflow-y-auto">
-          <div className="px-8 py-8 z-10">
+          <div className="bg-white border-b border-[var(--color-neutral-100)] shadow-[var(--shadow-sm)] px-8 py-8 z-10">
             <div className="max-w-7xl mx-auto">
               <button
                 onClick={() => navigateTo("list")}
@@ -1056,7 +1065,7 @@ const AuditsModule = ({ onNavigateToAuditor, isDevMode }) => {
             </div>
           </div>
 
-          <div className="max-w-7xl mx-auto w-full px-8 pb-12 space-y-8">
+          <div className="max-w-7xl mx-auto w-full px-8 pb-12 space-y-8 mt-6">
             {/* Soft Cards for Stats */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
               <div className={`${cardClass} p-6 flex items-center space-x-5`}>
@@ -1133,7 +1142,7 @@ const AuditsModule = ({ onNavigateToAuditor, isDevMode }) => {
                   {activeAudit.elements.map((el) => (
                     <div
                       key={el.id}
-                      className="bg-white p-5 rounded-xl shadow-sm border border-[var(--color-neutral-100)] flex items-center justify-between hover:shadow-md transition-all group"
+                      className="bg-white p-5 rounded-xl shadow-[var(--shadow-soft)] border border-[var(--color-neutral-100)] flex items-center justify-between hover:shadow-[var(--shadow-card)] transition-all group"
                     >
                       <div className="flex items-center space-x-4 w-1/3">
                         <div className="w-10 h-10 rounded-lg bg-[var(--color-neutral-050)] flex items-center justify-center text-[var(--color-neutral-500)] group-hover:bg-[var(--color-primary-50)] group-hover:text-[var(--color-primary-500)] transition-colors">
@@ -1186,7 +1195,7 @@ const AuditsModule = ({ onNavigateToAuditor, isDevMode }) => {
                       <div className="flex justify-end space-x-2 w-1/3">
                         <button
                           onClick={() => onNavigateToAuditor(el.title)}
-                          className="flex items-center px-4 py-2 bg-[var(--color-neutral-050)] hover:bg-[var(--color-primary-50)] text-[var(--color-neutral-700)] hover:text-[var(--color-primary-700)] text-sm font-bold rounded-lg transition-colors"
+                          className="flex items-center px-4 py-2 bg-[var(--color-neutral-050)] border border-[var(--color-neutral-200)] hover:bg-[var(--color-primary-50)] text-[var(--color-neutral-700)] hover:text-[var(--color-primary-700)] text-sm font-bold rounded-lg transition-colors"
                         >
                           {isDevMode ? "Edytuj błędy" : "Raport"}{" "}
                           <ArrowRight className="w-4 h-4 ml-2 opacity-50" />
@@ -1194,11 +1203,12 @@ const AuditsModule = ({ onNavigateToAuditor, isDevMode }) => {
                         {isDevMode && (
                           <>
                             <button
-                              className={`${btnIcon} bg-white shadow-sm border border-[var(--color-neutral-100)]`}
+                              className={btnGhost}
+                              style={{ padding: "0.5rem" }}
                             >
                               <Edit2 className="w-4 h-4" />
                             </button>
-                            <button className="p-2 text-[var(--color-neutral-400)] hover:text-[var(--color-error-main)] bg-white shadow-sm border border-[var(--color-neutral-100)] hover:bg-[var(--color-error-bg)] hover:border-[var(--color-error-main)] rounded-lg transition-colors">
+                            <button className="p-2 text-[var(--color-neutral-500)] hover:text-[var(--color-error-main)] bg-white shadow-sm border border-[var(--color-neutral-500)] hover:bg-[var(--color-error-bg)] hover:border-[var(--color-error-main)] rounded-lg transition-colors">
                               <Trash2 className="w-4 h-4" />
                             </button>
                           </>
@@ -1216,24 +1226,25 @@ const AuditsModule = ({ onNavigateToAuditor, isDevMode }) => {
       {/* ---------------- WIDOK 3: EDYCJA (Tylko Dev) ---------------- */}
       {currentView === "edit" && isDevMode && (
         <div className="flex-1 flex flex-col h-full overflow-y-auto bg-[var(--color-neutral-050)]">
-          <div className="max-w-4xl mx-auto w-full p-8 py-12">
-            <div className="flex justify-between items-center mb-8">
+          <div className="bg-white border-b border-[var(--color-neutral-100)] shadow-[var(--shadow-sm)] px-8 py-8 z-10 flex-shrink-0">
+            <div className="max-w-4xl mx-auto flex justify-between items-center">
               <h1 className="text-3xl font-extrabold text-[var(--color-neutral-900)] tracking-tight">
                 {activeAuditId ? "Edytuj Audyt" : "Nowy Projekt Audytowy"}
               </h1>
               <button
                 onClick={() => navigateTo(activeAuditId ? "details" : "list")}
-                className="flex items-center text-sm font-bold text-[var(--color-neutral-500)] hover:text-[var(--color-primary-500)] transition-colors bg-white px-4 py-2 rounded-lg shadow-sm border border-[var(--color-neutral-200)]"
+                className="flex items-center text-sm font-bold text-[var(--color-neutral-700)] hover:text-[var(--color-primary-500)] transition-colors bg-white px-4 py-2 rounded-lg shadow-sm border border-[var(--color-neutral-500)]"
               >
                 <X className="w-4 h-4 mr-1.5" /> Anuluj
               </button>
             </div>
-
+          </div>
+          <div className="max-w-4xl mx-auto w-full p-8">
             <div className={cardClass}>
               <div className="p-8 space-y-8 bg-white">
                 <div className="grid grid-cols-2 gap-8">
                   <div>
-                    <label className="block text-xs font-bold text-[var(--color-neutral-700)] mb-2">
+                    <label className="block text-xs font-bold text-[var(--color-neutral-900)] mb-2">
                       Klient *
                     </label>
                     <select
@@ -1248,7 +1259,7 @@ const AuditsModule = ({ onNavigateToAuditor, isDevMode }) => {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-[var(--color-neutral-700)] mb-2">
+                    <label className="block text-xs font-bold text-[var(--color-neutral-900)] mb-2">
                       Nazwa audytu *
                     </label>
                     <input
@@ -1261,7 +1272,7 @@ const AuditsModule = ({ onNavigateToAuditor, isDevMode }) => {
                 </div>
 
                 <div className="border-t border-[var(--color-neutral-100)] pt-8">
-                  <label className="block text-xs font-bold text-[var(--color-neutral-700)] mb-4">
+                  <label className="block text-xs font-bold text-[var(--color-neutral-900)] mb-4">
                     Badane Platformy
                   </label>
                   <div className="flex flex-wrap gap-4 mb-8">
@@ -1270,10 +1281,10 @@ const AuditsModule = ({ onNavigateToAuditor, isDevMode }) => {
                         <button
                           key={platform}
                           onClick={() => togglePlatform(platform)}
-                          className={`flex items-center px-5 py-2.5 rounded-lg font-bold text-sm transition-all border border-transparent ${
+                          className={`flex items-center px-5 py-2.5 rounded-lg font-bold text-sm transition-all border ${
                             selectedPlatforms.includes(platform)
-                              ? "bg-[var(--color-primary-50)] text-[var(--color-primary-700)] ring-2 ring-[var(--color-primary-500)]"
-                              : "bg-[var(--color-neutral-050)] text-[var(--color-neutral-600)] hover:bg-[var(--color-neutral-100)]"
+                              ? "bg-[var(--color-primary-50)] text-[var(--color-primary-700)] border-[var(--color-primary-500)] ring-1 ring-[var(--color-primary-500)]"
+                              : "bg-white text-[var(--color-neutral-700)] border-[var(--color-neutral-500)] hover:bg-[var(--color-neutral-050)]"
                           }`}
                         >
                           {selectedPlatforms.includes(platform) && (
@@ -1289,9 +1300,9 @@ const AuditsModule = ({ onNavigateToAuditor, isDevMode }) => {
               <div className="bg-[var(--color-neutral-050)]/50 p-6 border-t border-[var(--color-neutral-100)] flex justify-end space-x-4">
                 <button
                   onClick={() => navigateTo("details", activeAuditId || "a1")}
-                  className={btnPrimary}
+                  className={btnGhost}
                 >
-                  <Save className="w-5 h-5 mr-2" /> Zapisz projekt
+                  Zapisz projekt
                 </button>
               </div>
             </div>
@@ -1334,14 +1345,16 @@ const AuditorWorkspaceModule = ({ activeElementName, onBack, isDevMode }) => {
 
   const PriorityBadge = ({ type }) => {
     const styles = {
-      PRIORYTETOWY: "bg-[var(--color-error-bg)] text-[var(--color-error-text)]",
-      WAŻNY: "bg-[var(--color-warning-bg)] text-[var(--color-warning-text)]",
+      PRIORYTETOWY:
+        "bg-[var(--color-error-bg)] text-[var(--color-error-text)] border-[var(--color-error-main)]",
+      WAŻNY:
+        "bg-[var(--color-warning-bg)] text-[var(--color-warning-text)] border-[var(--color-warning-main)]",
     };
     return (
       <span
-        className={`px-2.5 py-1 text-[10px] rounded-md font-bold uppercase tracking-wider ${
+        className={`px-2.5 py-1 text-[10px] rounded-md font-bold uppercase tracking-wider border ${
           styles[type] ||
-          "bg-[var(--color-neutral-100)] text-[var(--color-neutral-700)]"
+          "bg-[var(--color-neutral-100)] text-[var(--color-neutral-700)] border-[var(--color-neutral-500)]"
         }`}
       >
         {type}
@@ -1351,11 +1364,11 @@ const AuditorWorkspaceModule = ({ activeElementName, onBack, isDevMode }) => {
 
   return (
     <div className="flex-1 flex flex-col min-w-0 bg-[var(--color-neutral-050)] relative z-30">
-      <div className="bg-white border-b border-[var(--color-neutral-200)] z-10 px-8 py-5 flex justify-between items-center shadow-sm">
+      <div className="bg-white border-b border-[var(--color-neutral-100)] shadow-[var(--shadow-sm)] z-10 px-8 py-5 flex justify-between items-center">
         <div>
           <button
             onClick={onBack}
-            className="flex items-center text-xs font-bold text-[var(--color-neutral-500)] hover:text-[var(--color-primary-500)] mb-1.5 transition-colors"
+            className="flex items-center text-xs font-bold text-[var(--color-neutral-700)] hover:text-[var(--color-primary-500)] mb-1.5 transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5 mr-1" /> Wróć do przeglądu
           </button>
@@ -1366,12 +1379,12 @@ const AuditorWorkspaceModule = ({ activeElementName, onBack, isDevMode }) => {
             </span>
           </h1>
         </div>
-        <div className="bg-[var(--color-neutral-050)] rounded-xl px-5 py-2.5 flex items-center border border-[var(--color-neutral-100)]">
+        <div className="bg-[var(--color-neutral-050)] rounded-xl px-5 py-2.5 flex items-center border border-[var(--color-neutral-200)]">
           <div className="flex flex-col items-center mr-6 pr-6 border-r border-[var(--color-neutral-200)]">
             <span className="text-xl font-bold text-[var(--color-error-main)] leading-none">
               2
             </span>
-            <span className="text-[10px] font-bold text-[var(--color-neutral-500)] uppercase tracking-wider mt-1">
+            <span className="text-[10px] font-bold text-[var(--color-neutral-700)] uppercase tracking-wider mt-1">
               Priorytety
             </span>
           </div>
@@ -1379,7 +1392,7 @@ const AuditorWorkspaceModule = ({ activeElementName, onBack, isDevMode }) => {
             <span className="text-xl font-bold text-[var(--color-success-main)] leading-none">
               89%
             </span>
-            <span className="text-[10px] font-bold text-[var(--color-neutral-500)] uppercase tracking-wider mt-1">
+            <span className="text-[10px] font-bold text-[var(--color-neutral-700)] uppercase tracking-wider mt-1">
               Zgodność WCAG
             </span>
           </div>
@@ -1399,9 +1412,10 @@ const AuditorWorkspaceModule = ({ activeElementName, onBack, isDevMode }) => {
             {isDevMode && (
               <button
                 onClick={handleAddNew}
-                className="text-sm font-bold text-[var(--color-primary-500)] hover:text-[var(--color-primary-700)] flex items-center"
+                className={btnGhost}
+                style={{ padding: "0.5rem 1rem" }}
               >
-                <Plus className="w-4 h-4 mr-1" /> Dodaj błąd
+                <Plus className="w-4 h-4 mr-1.5" /> Dodaj błąd
               </button>
             )}
           </div>
@@ -1411,23 +1425,23 @@ const AuditorWorkspaceModule = ({ activeElementName, onBack, isDevMode }) => {
               <div
                 key={error.id}
                 onClick={() => isDevMode && handleEdit(error)}
-                className={`bg-white p-5 rounded-xl shadow-sm border transition-all ${
+                className={`bg-white p-5 rounded-xl shadow-[var(--shadow-soft)] border transition-all ${
                   isDevMode ? "cursor-pointer group" : ""
                 } ${
                   activeErrorId === error.id && isDevMode
-                    ? "border-[var(--color-primary-500)] ring-2 ring-[var(--color-primary-50)]"
-                    : "border-[var(--color-neutral-100)] hover:border-[var(--color-primary-300)]"
+                    ? "border-[var(--color-primary-500)] ring-1 ring-[var(--color-primary-500)]"
+                    : "border-[var(--color-neutral-200)] hover:border-[var(--color-primary-300)]"
                 }`}
               >
                 <div className="flex justify-between items-start mb-3">
                   <div className="flex items-center space-x-3">
-                    <span className="text-xs font-bold text-[var(--color-neutral-400)]">
+                    <span className="text-xs font-bold text-[var(--color-neutral-500)]">
                       #{error.id.replace("e", "00")}
                     </span>
                     <PriorityBadge type={error.priority} />
                   </div>
                   {isDevMode && (
-                    <button className="opacity-0 group-hover:opacity-100 p-1.5 text-[var(--color-neutral-400)] hover:text-[var(--color-error-main)] bg-[var(--color-neutral-050)] hover:bg-[var(--color-error-bg)] rounded-lg transition-all">
+                    <button className="opacity-0 group-hover:opacity-100 p-1.5 text-[var(--color-neutral-500)] hover:text-[var(--color-error-main)] border border-transparent hover:border-[var(--color-error-main)] bg-[var(--color-neutral-050)] hover:bg-[var(--color-error-bg)] rounded-lg transition-all">
                       <Trash2 className="w-4 h-4" />
                     </button>
                   )}
@@ -1441,7 +1455,7 @@ const AuditorWorkspaceModule = ({ activeElementName, onBack, isDevMode }) => {
         </div>
 
         {isDevMode && (
-          <div className="flex-1 flex flex-col bg-white rounded-xl shadow-[var(--shadow-card)] border border-[var(--color-neutral-100)] overflow-hidden mb-6">
+          <div className="flex-1 flex flex-col bg-white rounded-xl shadow-[var(--shadow-card)] border border-[var(--color-neutral-200)] overflow-hidden mb-6">
             <div className="p-6 border-b border-[var(--color-neutral-100)] bg-white flex justify-between items-center">
               <h2 className="text-lg font-bold text-[var(--color-neutral-900)] flex items-center">
                 {activeErrorId ? (
@@ -1460,7 +1474,7 @@ const AuditorWorkspaceModule = ({ activeElementName, onBack, isDevMode }) => {
 
             <div className="flex-1 overflow-y-auto p-8 space-y-8 bg-white">
               <div>
-                <label className="block text-xs font-bold text-[var(--color-neutral-700)] mb-2">
+                <label className="block text-xs font-bold text-[var(--color-neutral-900)] mb-2">
                   Priorytet *
                 </label>
                 <select
@@ -1477,10 +1491,10 @@ const AuditorWorkspaceModule = ({ activeElementName, onBack, isDevMode }) => {
               </div>
               <div>
                 <div className="flex justify-between items-end mb-2">
-                  <label className="block text-xs font-bold text-[var(--color-neutral-700)]">
+                  <label className="block text-xs font-bold text-[var(--color-neutral-900)]">
                     Opis Problemu *
                   </label>
-                  <button className="flex items-center text-xs font-bold text-violet-700 bg-violet-50 hover:bg-violet-100 px-3 py-1.5 rounded-lg transition-colors">
+                  <button className="flex items-center text-xs font-bold text-violet-700 bg-violet-50 hover:bg-violet-100 px-3 py-1.5 rounded-lg border border-violet-700 transition-colors">
                     <Sparkles className="w-3.5 h-3.5 mr-1.5" /> Asystent AI
                   </button>
                 </div>
@@ -1495,12 +1509,12 @@ const AuditorWorkspaceModule = ({ activeElementName, onBack, isDevMode }) => {
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold text-[var(--color-neutral-700)] mb-2">
+                <label className="block text-xs font-bold text-[var(--color-neutral-900)] mb-2">
                   Rekomendacja dla klienta (Opcjonalnie)
                 </label>
                 <textarea
                   rows="3"
-                  className={`${inputClass} bg-[var(--color-neutral-050)] border-transparent`}
+                  className={inputClass}
                   value={formData.recommendation}
                   onChange={(e) =>
                     setFormData({ ...formData, recommendation: e.target.value })
@@ -1524,11 +1538,207 @@ const AuditorWorkspaceModule = ({ activeElementName, onBack, isDevMode }) => {
 };
 
 // ==========================================
+// X. MODUŁ: PROFIL UŻYTKOWNIKA (Mój Profil)
+// ==========================================
+const ProfileModule = () => {
+  return (
+    <div className="flex-1 flex flex-col h-full overflow-y-auto bg-[var(--color-neutral-050)]">
+      <div className="bg-white border-b border-[var(--color-neutral-100)] shadow-[var(--shadow-sm)] px-8 py-8 z-10 flex-shrink-0">
+        <div className="max-w-5xl mx-auto flex justify-between items-center">
+          <h1 className="text-3xl font-extrabold text-[var(--color-neutral-900)] tracking-tight">
+            Mój Profil
+          </h1>
+          <button className={btnGhost}>
+            <Edit2 className="w-4 h-4 mr-2" /> Edytuj Profil
+          </button>
+        </div>
+      </div>
+
+      <div className="flex-1 px-8 py-8 pb-12">
+        <div className="max-w-5xl mx-auto space-y-6">
+          {/* Wizytówka Główna */}
+          <div className={`${cardClass} p-8 flex items-center space-x-8`}>
+            <img
+              src="https://api.dicebear.com/7.x/avataaars/svg?seed=Patryk"
+              alt="Avatar"
+              className="w-32 h-32 rounded-3xl border-4 border-[var(--color-neutral-050)] shadow-sm bg-[var(--color-neutral-100)]"
+            />
+            <div className="flex-1">
+              <h2 className="text-2xl font-extrabold text-[var(--color-neutral-900)] mb-1">
+                Smułkowski Patryk
+              </h2>
+              <p className="text-sm font-medium text-[var(--color-neutral-700)] mb-3">
+                Accessibility Specialist, Senior accessibility project manager
+              </p>
+              <p className="text-sm font-bold text-[var(--color-primary-500)] mb-4">
+                Admin, Audytor, Klient
+              </p>
+              <span className="bg-[var(--color-success-main)] text-white text-[10px] font-bold px-3 py-1.5 rounded-md uppercase tracking-wider shadow-sm">
+                Aktywny
+              </span>
+            </div>
+          </div>
+
+          {/* Dane kontaktowe */}
+          <div className={cardClass}>
+            <div className="p-5 border-b border-[var(--color-neutral-100)] bg-white flex items-center">
+              <Mail className="w-5 h-5 mr-3 text-[var(--color-neutral-700)]" />
+              <h3 className="text-sm font-bold text-[var(--color-neutral-900)]">
+                Dane kontaktowe
+              </h3>
+            </div>
+            <div className="p-6 grid grid-cols-2 gap-8 bg-[var(--color-neutral-050)]/30">
+              <div>
+                <p className="text-[10px] font-bold text-[var(--color-neutral-500)] uppercase tracking-wider mb-1.5 flex items-center">
+                  <Mail className="w-3 h-3 mr-1" /> Adres e-mail
+                </p>
+                <p className="text-sm font-bold text-[var(--color-neutral-900)]">
+                  patryk@widzialni.eu
+                </p>
+              </div>
+              <div>
+                <p className="text-[10px] font-bold text-[var(--color-neutral-500)] uppercase tracking-wider mb-1.5 flex items-center">
+                  <Phone className="w-3 h-3 mr-1" /> Numer telefonu
+                </p>
+                <p className="text-sm font-bold text-[var(--color-neutral-900)]">
+                  503526875
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Nieobecności i L4 */}
+          <div className={cardClass}>
+            <div className="p-5 border-b border-[var(--color-neutral-100)] bg-white flex items-center">
+              <CalendarOff className="w-5 h-5 mr-3 text-[var(--color-neutral-700)]" />
+              <h3 className="text-sm font-bold text-[var(--color-neutral-900)]">
+                Nieobecności i L4 w roku 2026
+              </h3>
+            </div>
+            <div className="p-6 grid grid-cols-2 gap-8 bg-[var(--color-neutral-050)]/30">
+              <div>
+                <p className="text-[10px] font-bold text-[var(--color-neutral-500)] uppercase tracking-wider mb-1.5 flex items-center">
+                  <CalendarDays className="w-3 h-3 mr-1" /> Ilość wykorzystanych
+                  dni urlopu
+                </p>
+                <p className="text-sm font-bold text-[var(--color-neutral-900)]">
+                  13 dni
+                </p>
+              </div>
+              <div>
+                <p className="text-[10px] font-bold text-[var(--color-neutral-500)] uppercase tracking-wider mb-1.5 flex items-center">
+                  <AlertTriangle className="w-3 h-3 mr-1" /> Ilość dni na L4
+                </p>
+                <p className="text-sm font-bold text-[var(--color-neutral-900)]">
+                  0 dni
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Informacje o zatrudnieniu */}
+          <div className={cardClass}>
+            <div className="p-5 border-b border-[var(--color-neutral-100)] bg-white flex items-center">
+              <Briefcase className="w-5 h-5 mr-3 text-[var(--color-neutral-700)]" />
+              <h3 className="text-sm font-bold text-[var(--color-neutral-900)]">
+                Informacje o zatrudnieniu
+              </h3>
+            </div>
+            <div className="p-6 grid grid-cols-2 gap-y-8 gap-x-8 bg-[var(--color-neutral-050)]/30">
+              <div>
+                <p className="text-[10px] font-bold text-[var(--color-neutral-500)] uppercase tracking-wider mb-1.5 flex items-center">
+                  <Clock className="w-3 h-3 mr-1" /> Rejestrowanie czasu pracy
+                </p>
+                <p className="text-sm font-bold text-[var(--color-neutral-900)]">
+                  Tak
+                </p>
+              </div>
+              <div>
+                <p className="text-[10px] font-bold text-[var(--color-neutral-500)] uppercase tracking-wider mb-1.5 flex items-center">
+                  <UserCog className="w-3 h-3 mr-1" /> Wymiar etatu
+                </p>
+                <p className="text-sm font-bold text-[var(--color-neutral-900)]">
+                  Pełny etat
+                </p>
+              </div>
+              <div>
+                <p className="text-[10px] font-bold text-[var(--color-neutral-500)] uppercase tracking-wider mb-1.5 flex items-center">
+                  <CalendarDays className="w-3 h-3 mr-1" /> Roczna ilość dni
+                  urlopu
+                </p>
+                <p className="text-sm font-bold text-[var(--color-neutral-900)]">
+                  26 dni
+                </p>
+              </div>
+              <div>
+                <p className="text-[10px] font-bold text-[var(--color-neutral-500)] uppercase tracking-wider mb-1.5 flex items-center">
+                  <CalendarDays className="w-3 h-3 mr-1" /> Aktualna ilość dni
+                  urlopu
+                </p>
+                <p className="text-sm font-bold text-[var(--color-neutral-900)]">
+                  13 dni
+                </p>
+              </div>
+              <div>
+                <p className="text-[10px] font-bold text-[var(--color-neutral-500)] uppercase tracking-wider mb-1.5 flex items-center">
+                  <Calendar className="w-3 h-3 mr-1" /> Data podjęcia współpracy
+                </p>
+                <p className="text-sm font-bold text-[var(--color-neutral-900)]">
+                  01.09.2023
+                </p>
+              </div>
+              <div>
+                <p className="text-[10px] font-bold text-[var(--color-neutral-500)] uppercase tracking-wider mb-1.5 flex items-center">
+                  <CalendarOff className="w-3 h-3 mr-1" /> Data zakończenia
+                  współpracy
+                </p>
+                <p className="text-sm font-bold text-[var(--color-neutral-500)] italic">
+                  Nie podano
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Informacje systemowe */}
+          <div className={cardClass}>
+            <div className="p-5 border-b border-[var(--color-neutral-100)] bg-white flex items-center">
+              <Clock className="w-5 h-5 mr-3 text-[var(--color-neutral-700)]" />
+              <h3 className="text-sm font-bold text-[var(--color-neutral-900)]">
+                Informacje systemowe
+              </h3>
+            </div>
+            <div className="p-6 grid grid-cols-2 gap-8 bg-[var(--color-neutral-050)]/30">
+              <div>
+                <p className="text-[10px] font-bold text-[var(--color-neutral-500)] uppercase tracking-wider mb-1.5 flex items-center">
+                  <Calendar className="w-3 h-3 mr-1" /> Data utworzenia
+                </p>
+                <p className="text-sm font-bold text-[var(--color-neutral-900)]">
+                  02.09.2023 13:22
+                </p>
+              </div>
+              <div>
+                <p className="text-[10px] font-bold text-[var(--color-neutral-500)] uppercase tracking-wider mb-1.5 flex items-center">
+                  <Clock className="w-3 h-3 mr-1" /> Ostatnia aktualizacja
+                </p>
+                <p className="text-sm font-bold text-[var(--color-neutral-900)]">
+                  11.02.2026 11:06
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ==========================================
 // 6. GŁÓWNY ROUTER APLIKACJI
 // ==========================================
 export default function App() {
-  const [currentAppModule, setCurrentAppModule] = useState("services");
+  const [currentAppModule, setCurrentAppModule] = useState("audits_dev");
   const [isGlobalNavOpen, setIsGlobalNavOpen] = useState(true);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [auditorContext, setAuditorContext] = useState({
     prevModule: "services",
     elementName: "",
@@ -1572,21 +1782,55 @@ export default function App() {
   return (
     <>
       <GlobalStyles />
-      <div className="flex h-screen font-sans overflow-hidden bg-[var(--color-neutral-050)]">
+      {/* Usunięto konfliktującą klasę 'font-sans' z Tailwinda i wymuszono dziedziczenie styli */}
+      <div
+        className="flex h-screen overflow-hidden bg-[var(--color-neutral-050)]"
+        style={{ fontFamily: "var(--font-family-base)" }}
+      >
         {/* GLOBALNY SIDEBAR - Sleek Dark Theme */}
         <div
-          className={`bg-[#0A0F1C] border-r border-[#1E293B] flex flex-col z-50 flex-shrink-0 transition-all duration-300 ${
+          className={`bg-[#181821] border-r border-white/5 flex flex-col z-50 flex-shrink-0 transition-all duration-300 ${
             isGlobalNavOpen ? "w-[280px]" : "w-[88px]"
           }`}
         >
-          <div className="p-6 pb-4 flex flex-col items-center border-b border-white/5 mb-6">
-            <div className="w-12 h-12 bg-[var(--color-primary-500)] rounded-xl flex items-center justify-center shadow-[var(--shadow-primary)] mb-4">
-              <span className="text-white font-extrabold text-xl">W</span>
+          <div
+            className={`p-6 pb-4 flex ${
+              isGlobalNavOpen
+                ? "items-center space-x-3"
+                : "flex-col items-center"
+            } border-b border-white/5 mb-6`}
+          >
+            <div className="w-10 h-10 bg-[var(--color-primary-500)] rounded-xl flex items-center justify-center shadow-[var(--shadow-primary)] flex-shrink-0">
+              <svg
+                className="w-5 h-5 fill-white"
+                version="1.1"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 49 52"
+              >
+                <g className="type">
+                  <path
+                    className="signet"
+                    clipPath="url(#ID_2_)"
+                    d="M24.262,0.488C15.636,0.488,7.548,2.654,0,6.443v8.12
+                    c7.548-3.789,15.636-5.954,24.262-5.954c8.627,0,16.714,2.165,24.261,5.954v-8.12C40.976,2.654,32.889,0.488,24.262,0.488
+                    M0,18.535v8.12c4.348-2.183,8.879-3.805,13.584-4.807c-2.242,2.508-3.611,5.83-3.611,9.557c0,3.87,1.476,7.306,3.875,9.844
+                    C9.048,40.254,4.429,38.608,0,36.386v8.12c7.548,3.789,15.636,5.954,24.262,5.954c8.627,0,16.714-2.165,24.261-5.954v-8.12
+                    c-4.428,2.224-9.048,3.868-13.849,4.864c2.399-2.538,3.875-5.975,3.875-9.845c0-3.727-1.369-7.049-3.612-9.558
+                    c4.706,1.002,9.239,2.624,13.586,4.808v-8.12c-7.547-3.79-15.634-5.955-24.261-5.955C15.636,12.58,7.548,14.745,0,18.535
+                    M30.461,31.405c0,3.843-2.695,6.388-6.2,6.388s-6.2-2.545-6.2-6.388c0-3.844,2.695-6.388,6.2-6.388S30.461,27.562,30.461,31.405"
+                  ></path>
+                </g>
+              </svg>
             </div>
+
             {isGlobalNavOpen && (
-              <div className="text-white font-extrabold text-xl tracking-tight mb-2">
-                Auditor
-                <span className="text-[var(--color-primary-500)]">Pro</span>
+              <div className="flex flex-col min-w-0">
+                <span className="text-white font-extrabold text-lg leading-none tracking-tight mb-1">
+                  WCAG
+                </span>
+                <span className="text-[var(--color-neutral-400)] font-bold text-[10px] uppercase tracking-[0.25em] leading-none">
+                  Auditor
+                </span>
               </div>
             )}
           </div>
@@ -1619,34 +1863,72 @@ export default function App() {
             </nav>
           </div>
 
-          <div className="p-4 border-t border-white/5">
-            {isGlobalNavOpen ? (
-              <div className="flex items-center p-3 hover:bg-white/5 rounded-xl cursor-pointer transition-colors">
-                <img
-                  src="https://api.dicebear.com/7.x/avataaars/svg?seed=Patryk"
-                  alt="Avatar"
-                  className="w-10 h-10 rounded-full border border-white/10 mr-3"
-                />
-                <div className="flex flex-col min-w-0">
-                  <span className="text-sm font-bold text-white truncate">
-                    P. Smułkowski
-                  </span>
-                  <span className="text-[10px] font-bold text-[var(--color-neutral-500)] uppercase tracking-wider">
-                    Admin
-                  </span>
-                </div>
-              </div>
-            ) : (
-              <div className="flex justify-center mb-2 mt-2">
-                <img
-                  src="https://api.dicebear.com/7.x/avataaars/svg?seed=Patryk"
-                  alt="Avatar"
-                  className="w-10 h-10 rounded-full border border-white/10"
-                />
+          <div className="p-4 border-t border-white/5 relative">
+            <div
+              onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+              className={`flex items-center p-3 hover:bg-white/5 rounded-xl cursor-pointer transition-colors ${
+                isUserMenuOpen ? "bg-white/5" : ""
+              }`}
+            >
+              <img
+                src="https://api.dicebear.com/7.x/avataaars/svg?seed=Patryk"
+                alt="Avatar"
+                className={`w-10 h-10 rounded-full border border-white/10 ${
+                  isGlobalNavOpen ? "mr-3" : "mx-auto"
+                }`}
+              />
+              {isGlobalNavOpen && (
+                <>
+                  <div className="flex flex-col min-w-0 flex-1">
+                    <span className="text-sm font-bold text-white truncate">
+                      P. Smułkowski
+                    </span>
+                    <span className="text-[10px] font-bold text-[var(--color-neutral-500)] uppercase tracking-wider">
+                      Admin
+                    </span>
+                  </div>
+                  <MoreVertical className="w-4 h-4 text-[var(--color-neutral-500)] flex-shrink-0" />
+                </>
+              )}
+            </div>
+
+            {/* Podręczne menu użytkownika (Popover) */}
+            {isUserMenuOpen && (
+              <div
+                className={`absolute ${
+                  isGlobalNavOpen
+                    ? "bottom-full left-4 right-4 mb-2"
+                    : "bottom-0 left-full ml-4 w-48"
+                } bg-[#1E293B] border border-white/10 rounded-xl shadow-xl py-1.5 overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-100`}
+              >
+                <button
+                  onClick={() => {
+                    setCurrentAppModule("profile");
+                    setIsUserMenuOpen(false);
+                  }}
+                  className="w-full text-left px-4 py-2.5 text-sm font-bold text-white hover:bg-white/5 flex items-center transition-colors"
+                >
+                  <User className="w-4 h-4 mr-3 text-[var(--color-neutral-400)]" />{" "}
+                  Mój profil
+                </button>
+                <div className="h-px w-full bg-white/5 my-1"></div>
+                <button
+                  onClick={() => {
+                    setIsUserMenuOpen(false);
+                    alert("Wylogowano pomyślnie.");
+                  }}
+                  className="w-full text-left px-4 py-2.5 text-sm font-bold text-[var(--color-error-main)] hover:bg-white/5 flex items-center transition-colors"
+                >
+                  <LogOut className="w-4 h-4 mr-3" /> Wyloguj się
+                </button>
               </div>
             )}
+
             <button
-              onClick={() => setIsGlobalNavOpen(!isGlobalNavOpen)}
+              onClick={() => {
+                setIsGlobalNavOpen(!isGlobalNavOpen);
+                setIsUserMenuOpen(false);
+              }}
               className="w-full mt-2 p-2.5 flex items-center justify-center text-[var(--color-neutral-400)] hover:text-white rounded-xl hover:bg-white/10 transition-colors"
             >
               {isGlobalNavOpen ? (
@@ -1658,6 +1940,7 @@ export default function App() {
           </div>
         </div>
 
+        {currentAppModule === "profile" && <ProfileModule />}
         {currentAppModule === "services" && (
           <ServicesModule
             onNavigateToAuditor={(elementName) =>
