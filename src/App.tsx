@@ -1134,7 +1134,7 @@ function DashboardView({ setView }) {
           <div className="flex items-center justify-between mb-6">
             <div>
               <h3 className="text-lg font-bold text-slate-900">
-                Ostatnie i trwające audyty
+                Ostatnie audyty
               </h3>
               <span className="text-xs text-slate-500 font-medium">
                 Szybki podgląd prowadzonych prac
@@ -2340,7 +2340,7 @@ function ReportCard({
         <div className="flex items-center gap-4 sm:gap-6 md:gap-8">
           <div className="flex flex-col w-28 sm:w-32 shrink-0">
             <span className="text-[9px] md:text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
-              Blokery (Krytyczne)
+              Krytyczne (Blokery)
             </span>
             <span className="text-lg md:text-2xl font-bold text-red-500 leading-none">
               {priority}
@@ -3371,7 +3371,7 @@ function FiltersSidebar({ isCollapsed, setIsCollapsed }) {
           <div className="space-y-4 pt-1">
             <div>
               <div className="text-xs text-slate-500 mb-1.5 font-semibold">
-                Kontekst usługi
+                Usługi
               </div>
               <select
                 value={selectedService}
@@ -3383,7 +3383,7 @@ function FiltersSidebar({ isCollapsed, setIsCollapsed }) {
                 }}
                 className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2.5 text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50 font-medium shadow-sm"
               >
-                <option value="all">Wszystkie usługi w organizacji</option>
+                <option value="all">Wszystkie usługi</option>
                 <option value="s1">
                   Usługi płatnicze i powiązane z rachunkiem
                 </option>
@@ -3392,7 +3392,7 @@ function FiltersSidebar({ isCollapsed, setIsCollapsed }) {
             </div>
             <div>
               <div className="text-xs text-slate-500 mb-1.5 font-semibold">
-                Kontekst procesu
+                Procesy
               </div>
               <select className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2.5 text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50 font-medium shadow-sm">
                 <option value="all">Wszystkie procesy</option>
@@ -3403,7 +3403,7 @@ function FiltersSidebar({ isCollapsed, setIsCollapsed }) {
           </div>
         </FilterAccordion>
 
-        <FilterAccordion title="2. Źródło wykrycia" count={0}>
+        <FilterAccordion title="2. Źródło wykrycia błędu" count={0}>
           <FilterCheckbox label="Audyt" />
           <FilterCheckbox label="Reaudyt" />
           <FilterCheckbox label="Zgłoszenie użytkownika" />
@@ -3448,7 +3448,7 @@ function FiltersSidebar({ isCollapsed, setIsCollapsed }) {
 
         <FilterAccordion title="6. Czas">
           <div className="space-y-4 pt-1">
-            <FilterDateRange label="Data audytu ustawowego" />
+            <FilterDateRange label="Data audytu" />
             <div className="h-px bg-slate-100 my-1 mx-1"></div>
             <FilterDateRange label="Data wykrycia błędów" />
           </div>
