@@ -2157,7 +2157,7 @@ function RaportyView({ setView }) {
             isMobileFiltersOpen ? "block" : "hidden md:block"
           } bg-slate-50 md:bg-white`}
         >
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3 md:gap-4 mb-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-4">
             <div className="lg:col-span-2">
               <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-1.5">
                 Wyszukaj
@@ -2168,18 +2168,7 @@ function RaportyView({ setView }) {
                 className="w-full bg-white"
               />
             </div>
-            <div>
-              <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-1.5">
-                Klient
-              </label>
-              <select className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3.5 text-sm font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50 shadow-sm">
-                <option value="">Wszyscy klienci</option>
-                <option value="ing">ING</option>
-                <option value="mbank">mBank</option>
-                <option value="santander">Santander</option>
-                <option value="pkobp">PKO BP</option>
-              </select>
-            </div>
+            {/* Filtr "Klient" ukryty na prośbę */}
             <div>
               <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-1.5">
                 Audytor
@@ -2225,7 +2214,7 @@ function RaportyView({ setView }) {
                 <div className="flex items-center gap-1.5">
                   <AlertOctagon size={16} className="text-red-500" />
                   <span className="text-sm font-bold text-slate-700 group-hover:text-slate-900 transition-colors">
-                    Tylko audyty z błędami krytycznymi (Blokery)
+                    Tylko audyty z błędami krytycznymi (blokery)
                   </span>
                 </div>
               </label>
@@ -3255,6 +3244,7 @@ function FiltersSidebar({ isCollapsed, setIsCollapsed }) {
   const [selectedService, setSelectedService] = useState("all");
   const [isServiceAccOpen, setIsServiceAccOpen] = useState(true);
   const [filtersApplied, setFiltersApplied] = useState(false);
+  const [activeTimeRange, setActiveTimeRange] = useState("all");
 
   const serviceShortNames = {
     s1: "Usługi płatnicze...",
@@ -3436,8 +3426,6 @@ function FiltersSidebar({ isCollapsed, setIsCollapsed }) {
                 <option value="2">Piotr Smułkowski</option>
               </select>
             </div>
-            <FilterCheckbox label="Klient zewnętrzny (Tylko FW)" />
-            <div className="h-px bg-slate-100 my-1 mx-1"></div>
             <FilterNumberRange
               label="Zakres % dostępności"
               placeholderOd="Min %"
@@ -3448,6 +3436,54 @@ function FiltersSidebar({ isCollapsed, setIsCollapsed }) {
 
         <FilterAccordion title="6. Czas">
           <div className="space-y-4 pt-1">
+            <div>
+              <div className="text-xs text-slate-500 mb-2 font-semibold">
+                Szybki wybór okresu
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  onClick={() => setActiveTimeRange("30d")}
+                  className={`px-2.5 py-1 text-[11px] font-bold rounded-lg transition-colors border ${
+                    activeTimeRange === "30d"
+                      ? "bg-[#0038F8] text-white border-[#0038F8]"
+                      : "bg-slate-100 hover:bg-slate-200 text-slate-600 border-slate-200"
+                  }`}
+                >
+                  30 dni
+                </button>
+                <button
+                  onClick={() => setActiveTimeRange("60d")}
+                  className={`px-2.5 py-1 text-[11px] font-bold rounded-lg transition-colors border ${
+                    activeTimeRange === "60d"
+                      ? "bg-[#0038F8] text-white border-[#0038F8]"
+                      : "bg-slate-100 hover:bg-slate-200 text-slate-600 border-slate-200"
+                  }`}
+                >
+                  60 dni
+                </button>
+                <button
+                  onClick={() => setActiveTimeRange("1y")}
+                  className={`px-2.5 py-1 text-[11px] font-bold rounded-lg transition-colors border ${
+                    activeTimeRange === "1y"
+                      ? "bg-[#0038F8] text-white border-[#0038F8]"
+                      : "bg-slate-100 hover:bg-slate-200 text-slate-600 border-slate-200"
+                  }`}
+                >
+                  1 Rok
+                </button>
+                <button
+                  onClick={() => setActiveTimeRange("all")}
+                  className={`px-2.5 py-1 text-[11px] font-bold rounded-lg transition-colors border ${
+                    activeTimeRange === "all"
+                      ? "bg-[#0038F8] text-white border-[#0038F8]"
+                      : "bg-slate-100 hover:bg-slate-200 text-slate-600 border-slate-200"
+                  }`}
+                >
+                  Wszystkie
+                </button>
+              </div>
+            </div>
+            <div className="h-px bg-slate-100 my-1 mx-1"></div>
             <FilterDateRange label="Data audytu" />
             <div className="h-px bg-slate-100 my-1 mx-1"></div>
             <FilterDateRange label="Data wykrycia błędów" />
@@ -3474,6 +3510,7 @@ function FiltersSidebar({ isCollapsed, setIsCollapsed }) {
             setSelectedService("all");
             setIsServiceAccOpen(true);
             setFiltersApplied(false);
+            setActiveTimeRange("all");
           }}
           className="w-full text-slate-500 hover:text-slate-700 py-2 rounded-xl font-bold transition-colors text-sm"
         >
