@@ -16,6 +16,7 @@ import {
   Smartphone,
   Folder,
   ChevronRight,
+  ChevronLeft,
   Plus,
   Pencil,
   Trash2,
@@ -69,13 +70,14 @@ import {
 const getChannelIcon = (channelName) => {
   if (!channelName) return null;
   const name = channelName.toLowerCase();
+  const tooltip = `Kanał: ${channelName}`;
   if (name.includes("www"))
-    return <Monitor size={16} className="text-slate-400 shrink-0" />;
+    return <span title={tooltip}><Monitor size={16} className="text-slate-400 shrink-0" /></span>;
   if (name.includes("aplikacja"))
-    return <Smartphone size={16} className="text-slate-400 shrink-0" />;
+    return <span title={tooltip}><Smartphone size={16} className="text-slate-400 shrink-0" /></span>;
   if (name.includes("dokumenty"))
-    return <FileText size={16} className="text-slate-400 shrink-0" />;
-  return <Layout size={16} className="text-slate-400 shrink-0" />;
+    return <span title={tooltip}><FileText size={16} className="text-slate-400 shrink-0" /></span>;
+  return <span title={tooltip}><Layout size={16} className="text-slate-400 shrink-0" /></span>;
 };
 
 const genPrio = (i) => ({ c: i % 3, w: i % 4, m: (i % 3) + 2 });
@@ -360,9 +362,7 @@ export default function App() {
             </div>
           )}
           {currentView === "raporty" && (
-            <div className="flex-1 p-4 md:p-8 lg:p-12 overflow-auto">
-              <RaportyView setView={setCurrentView} />
-            </div>
+            <RaportyView setView={setCurrentView} />
           )}
           {(currentView === "baza-uslug" ||
             currentView === "proces-szczegoly") && (
@@ -741,11 +741,11 @@ function Sidebar({
       <div
         className={`flex ${
           isCollapsed
-            ? "items-center justify-between md:flex-col md:justify-center md:gap-6 px-6 md:px-0 py-6 md:py-8"
+            ? "items-center justify-center md:flex-col md:justify-center md:gap-4 px-4 md:px-0 py-6 md:py-8"
             : "items-center justify-between px-6 py-8"
         } overflow-hidden`}
       >
-        <div className="flex items-center gap-3">
+        <div className={`flex items-center gap-3 ${isCollapsed ? "md:hidden" : ""}`}>
           <div className="w-8 h-8 bg-[#0038F8] rounded-lg flex items-center justify-center text-white shadow-sm flex-shrink-0">
             <Eye size={20} strokeWidth={2.5} />
           </div>
@@ -765,13 +765,13 @@ function Sidebar({
         <div className="flex items-center gap-2">
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
-            className="hidden md:flex items-center justify-center text-slate-500 hover:text-slate-200 hover:bg-slate-800 w-8 h-8 rounded-lg transition-colors"
+            className="hidden md:flex items-center justify-center bg-slate-800/50 hover:bg-[#0038F8] text-white w-8 h-8 rounded-lg transition-colors"
             title={isCollapsed ? "Rozwiń menu" : "Zwiń menu"}
           >
             {isCollapsed ? (
-              <PanelLeftOpen size={20} />
+              <ChevronRight size={20} />
             ) : (
-              <PanelLeftClose size={20} />
+              <ChevronLeft size={20} />
             )}
           </button>
           <button
@@ -1140,7 +1140,7 @@ function DashboardView({ setView }) {
                 Szybki podgląd prowadzonych prac
               </span>
             </div>
-            <button className="text-[#0038F8] bg-[#0038F8]/5 hover:bg-[#0038F8]/10 p-2 rounded-lg transition-colors">
+            <button className="text-[#0038F8] bg-[#0038F8]/5 hover:bg-[#0038F8]/10 p-2 rounded-xl transition-colors">
               <Plus size={18} />
             </button>
           </div>
@@ -1315,9 +1315,45 @@ function Badge({ children, variant = "neutral", className = "", title }) {
   return (
     <span
       title={title}
-      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold ${variants[variant]} ${className}`}
+      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold ${variants[variant]} ${className}`}
     >
       {children}
+    </span>
+  );
+}
+
+// Unified PriorityBadge component with icons for consistent error display
+function PriorityBadge({ priority, size = "default" }) {
+  const sizeClasses = size === "small" ? "text-[10px] px-2 py-0.5" : "text-xs px-2.5 py-1";
+  
+  const config = {
+    "Krytyczny": {
+      icon: AlertOctagon,
+      iconSize: size === "small" ? 12 : 14,
+      className: "bg-red-50 text-red-600 border border-red-100",
+    },
+    "Ważny": {
+      icon: AlertTriangle,
+      iconSize: size === "small" ? 12 : 14,
+      className: "bg-orange-50 text-orange-600 border border-orange-100",
+    },
+    "Marginalny": {
+      icon: Info,
+      iconSize: size === "small" ? 12 : 14,
+      className: "bg-blue-50 text-blue-600 border border-blue-100",
+    },
+  };
+
+  const { icon: Icon, iconSize, className } = config[priority] || {
+    icon: AlertCircle,
+    iconSize: size === "small" ? 12 : 14,
+    className: "bg-slate-100 text-slate-600 border border-slate-200",
+  };
+
+  return (
+    <span className={`inline-flex items-center gap-1.5 rounded-xl font-semibold border ${className} ${sizeClasses}`}>
+      <Icon size={iconSize} className="flex-shrink-0" />
+      {priority}
     </span>
   );
 }
@@ -1353,27 +1389,45 @@ function ShowMoreToggle({ isExpanded, onToggle, total, visibleCount, label }) {
 
 function PriorityStats({ c = 0, w = 0, m = 0 }) {
   return (
-    <div className="flex items-center gap-1.5">
-      <div
-        className="flex items-center gap-1 bg-red-50 border border-red-100 px-1.5 py-0.5 rounded text-[10px] font-bold text-red-600"
-        title="Krytyczne"
-      >
-        <span>K:</span>
-        <span>{c}</span>
+    <div className="flex items-center gap-1 sm:gap-0">
+      <div className="flex items-center gap-1 w-10 sm:w-12 shrink-0 justify-center" title={`Błędy krytyczne: ${c}`}>
+        <AlertOctagon
+          size={16}
+          className={c > 0 ? "text-red-500" : "text-slate-400"}
+        />
+        <span
+          className={`font-bold text-sm ${
+            c > 0 ? "text-slate-800" : "text-slate-500"
+          }`}
+        >
+          {c}
+        </span>
       </div>
-      <div
-        className="flex items-center gap-1 bg-orange-50 border border-orange-100 px-1.5 py-0.5 rounded text-[10px] font-bold text-orange-600"
-        title="Ważne"
-      >
-        <span>W:</span>
-        <span>{w}</span>
+      <div className="flex items-center gap-1 w-10 sm:w-12 shrink-0 justify-center" title={`Błędy ważne: ${w}`}>
+        <AlertTriangle
+          size={16}
+          className={w > 0 ? "text-amber-500" : "text-slate-400"}
+        />
+        <span
+          className={`font-bold text-sm ${
+            w > 0 ? "text-slate-800" : "text-slate-500"
+          }`}
+        >
+          {w}
+        </span>
       </div>
-      <div
-        className="flex items-center gap-1 bg-blue-50 border border-blue-100 px-1.5 py-0.5 rounded text-[10px] font-bold text-blue-600"
-        title="Marginalne"
-      >
-        <span>M:</span>
-        <span>{m}</span>
+      <div className="flex items-center gap-1 w-10 sm:w-12 shrink-0 justify-center" title={`Błędy marginalne: ${m}`}>
+        <Info
+          size={16}
+          className={m > 0 ? "text-blue-500" : "text-slate-400"}
+        />
+        <span
+          className={`font-bold text-sm ${
+            m > 0 ? "text-slate-800" : "text-slate-500"
+          }`}
+        >
+          {m}
+        </span>
       </div>
     </div>
   );
@@ -1482,12 +1536,13 @@ function ServicesSidebar({ isCollapsed, setIsCollapsed, setView }) {
             e.stopPropagation();
             setIsCollapsed(!isCollapsed);
           }}
-          className="hidden md:block text-slate-400 bg-slate-50 hover:bg-slate-100 hover:text-slate-600 p-2 rounded-xl border border-slate-200 transition-colors flex-shrink-0"
+          className="hidden md:flex items-center justify-center bg-slate-100 hover:bg-[#0038F8] text-slate-700 hover:text-white w-8 h-8 rounded-lg transition-colors"
+          title={isCollapsed ? "Rozwiń filtry" : "Zwiń filtry"}
         >
           {isCollapsed ? (
-            <PanelRightOpen size={18} />
+            <ChevronRight size={20} />
           ) : (
-            <PanelRightClose size={18} />
+            <ChevronLeft size={20} />
           )}
         </button>
         <button
@@ -1764,17 +1819,19 @@ function ProcessCard({ title, views, score, scoreVariant, issues, onClick }) {
             </span>
           </div>
         </div>
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-end">
           <span className="text-[9px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5 h-3 flex items-end">
             Dostępność
           </span>
-          <div className="h-7 flex items-center justify-center w-full">
-            <Badge
-              variant={scoreVariant}
-              className="!py-0.5 sm:!py-1 text-[11px] sm:text-[13px] font-bold justify-center"
-            >
+          <div className="h-7 flex items-center justify-end w-full">
+            <span className={`text-[13px] sm:text-[15px] font-bold ${
+              scoreVariant === 'success' ? 'text-emerald-600' :
+              scoreVariant === 'warning' ? 'text-amber-500' :
+              scoreVariant === 'danger' ? 'text-red-600' :
+              'text-slate-700'
+            }`}>
               {score}
-            </Badge>
+            </span>
           </div>
         </div>
         <div className="flex flex-col items-center">
@@ -1782,7 +1839,7 @@ function ProcessCard({ title, views, score, scoreVariant, issues, onClick }) {
             Reklamacje
           </span>
           <div className="h-7 flex items-center justify-center w-full">
-            <span className="bg-slate-100 text-slate-600 text-[11px] sm:text-[13px] font-bold px-3 sm:px-4 py-0.5 sm:py-1 rounded-lg text-center">
+            <span className="bg-slate-100 text-slate-600 text-[11px] sm:text-[13px] font-bold px-3 sm:px-4 py-0.5 sm:py-1 rounded-xl text-center">
               {issues}
             </span>
           </div>
@@ -2029,8 +2086,6 @@ function StepItem({
 // ==========================================
 
 function RaportyView({ setView }) {
-  const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
-
   const mockAuditsList = [
     {
       id: 1,
@@ -2106,169 +2161,265 @@ function RaportyView({ setView }) {
     },
   ];
 
-  return (
-    <div className="max-w-[1200px] w-full">
-      <div className="mb-6 md:mb-8">
-        <h1 className="text-[24px] sm:text-[32px] font-extrabold text-slate-900 tracking-tight leading-tight mb-2">
-          Raporty z audytów
-        </h1>
-        <p className="text-slate-500 text-sm">
-          Przeglądaj i wyszukuj szczegółowe wyniki przeprowadzonych audytów.
-        </p>
-      </div>
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
+  const [activeTimeRange, setActiveTimeRange] = useState("all");
+  const [filtersApplied, setFiltersApplied] = useState(false);
 
-      <Card className="mb-6 md:mb-8 overflow-hidden">
-        <div
-          className={`md:hidden flex items-center justify-between p-4 cursor-pointer transition-colors duration-200 ${
-            isMobileFiltersOpen
-              ? "bg-slate-900 text-white"
-              : "bg-[#0038F8] text-white"
-          }`}
-          onClick={() => setIsMobileFiltersOpen(!isMobileFiltersOpen)}
+  const getMobileHeaderText = () => {
+    if (isMobileFiltersOpen) return "Filtrowanie wyników";
+    if (filtersApplied) return "Filtry zastosowane";
+    return "Ustaw filtry";
+  };
+
+  return (
+    <div className="flex flex-col md:flex-row h-full w-full relative">
+      {/* Sidebar filtrów */}
+      <div
+        className={`
+        bg-white border-b md:border-b-0 md:border-r border-slate-200 flex flex-col flex-shrink-0 transition-all duration-300 z-20 shadow-sm md:shadow-none overflow-visible relative
+        ${isSidebarCollapsed ? "md:w-0" : "w-full md:w-[320px]"}
+      `}
+      >
+        {/* Przycisk rozwijania - widoczny tylko na desktop */}
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsSidebarCollapsed(!isSidebarCollapsed);
+          }}
+          className={`hidden md:flex items-center justify-center w-8 h-8 transition-all duration-300 z-50
+            ${isSidebarCollapsed 
+              ? "absolute left-0 top-[23px] bg-slate-900 text-white hover:bg-slate-800 rounded-r-lg rounded-l-none" 
+              : "absolute right-[15px] top-[23px] bg-slate-100 text-slate-700 hover:bg-[#0038F8] hover:text-white rounded-lg"
+            }
+          `}
+          title={isSidebarCollapsed ? "Rozwiń filtry" : "Zwiń filtry"}
         >
-          <div className="flex items-center gap-2">
+          {isSidebarCollapsed ? (
+            <ChevronRight size={20} />
+          ) : (
+            <ChevronLeft size={20} />
+          )}
+        </button>
+
+        <div
+          className={`p-4 md:p-6 flex items-center ${
+            isSidebarCollapsed ? "md:hidden" : "justify-between"
+          } cursor-pointer md:cursor-default transition-colors duration-200 w-[320px]
+            ${
+              isMobileFiltersOpen
+                ? "bg-slate-900 text-white border-b border-slate-800"
+                : "bg-[#0038F8] text-white md:bg-white md:text-slate-900 border-b border-[#002ECC] md:border-slate-100"
+            }
+          `}
+          onClick={() => {
+            if (window.innerWidth < 768) {
+              setIsMobileFiltersOpen(!isMobileFiltersOpen);
+            }
+          }}
+        >
+          <div
+            className={`flex items-center gap-2 md:gap-3 min-w-0 pr-2 ${
+              isSidebarCollapsed && !isMobileFiltersOpen ? "md:hidden" : ""
+            }`}
+          >
             <Filter
               size={20}
-              className={isMobileFiltersOpen ? "text-slate-400" : "text-white"}
+              className={`flex-shrink-0 ${
+                isMobileFiltersOpen
+                  ? "text-slate-400 md:text-white"
+                  : "text-white md:text-[#0038F8]"
+              }`}
             />
-            <h2 className="text-[15px] font-bold">
-              {isMobileFiltersOpen
-                ? "Filtrowanie wyników"
-                : "Wyszukaj i filtruj audyty"}
+            <h2 className="text-[15px] md:text-lg font-bold min-w-0 truncate">
+              <span className="md:hidden flex items-center gap-2 truncate">
+                {filtersApplied && !isMobileFiltersOpen && (
+                  <CheckCircle2 size={16} className="text-white flex-shrink-0" />
+                )}
+                <span className="truncate">{getMobileHeaderText()}</span>
+              </span>
+              <span className="hidden md:block">Filtry</span>
             </h2>
           </div>
           <button
-            className={`p-1.5 transition-colors rounded-lg flex-shrink-0 ${
+            className={`md:hidden p-1.5 transition-colors rounded-lg flex-shrink-0 ${
               isMobileFiltersOpen
                 ? "bg-slate-800 text-slate-400 hover:text-white"
                 : "bg-white/20 text-white"
             }`}
           >
-            {isMobileFiltersOpen ? (
-              <ChevronUp size={20} />
-            ) : (
-              <ChevronDown size={20} />
-            )}
+            {isMobileFiltersOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
           </button>
         </div>
 
         <div
-          className={`p-4 md:p-5 ${
+          className={`md:flex-1 overflow-y-auto p-4 space-y-3 max-h-[65vh] md:max-h-none ${
+            isSidebarCollapsed || isMobileFiltersOpen ? "md:hidden" : ""
+          } ${
             isMobileFiltersOpen ? "block" : "hidden md:block"
           } bg-slate-50 md:bg-white`}
         >
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-4">
-            <div className="lg:col-span-2">
-              <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-1.5">
-                Wyszukaj
-              </label>
-              <Input
-                icon={Search}
-                placeholder="Nazwa audytu lub widoku..."
-                className="w-full bg-white"
-              />
-            </div>
-            {/* Filtr "Klient" ukryty na prośbę */}
-            <div>
-              <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-1.5">
-                Audytor
-              </label>
-              <select className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3.5 text-sm font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50 shadow-sm">
+          <FilterAccordion title="1. Audytor" count={0}>
+            <div className="pt-1">
+              <select className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50 font-medium shadow-sm">
                 <option value="">Wszyscy audytorzy</option>
                 <option value="1">Jan Kowalski</option>
                 <option value="2">Piotr Smułkowski</option>
                 <option value="3">Anna Nowak</option>
               </select>
             </div>
-            <div>
-              <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-1.5">
-                Status audytu
-              </label>
-              <select className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3.5 text-sm font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50 shadow-sm">
-                <option value="">Wszystkie statusy</option>
-                <option value="zakonczony">Zakończony</option>
-                <option value="w_trakcie">W trakcie / Nowy</option>
-              </select>
-            </div>
-          </div>
+          </FilterAccordion>
 
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between border-t border-slate-200 md:border-slate-100 pt-4 mt-4 gap-4">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 md:gap-6 w-full md:w-auto">
-              <div className="flex items-center justify-between w-full sm:w-auto border-b border-slate-200 md:border-slate-100 sm:border-0 pb-3 sm:pb-0">
-                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-widest mr-2">
-                  Obszar:
-                </label>
-                <select className="bg-transparent border-none text-sm font-bold text-slate-800 focus:outline-none cursor-pointer hover:text-[#0038F8] transition-colors">
-                  <option value="">Wszystkie obszary</option>
-                  <option value="desktop">Desktop</option>
-                  <option value="ios">iOS</option>
-                  <option value="android">Android</option>
-                  <option value="dokumenty">Dokumenty (PDF/Doc)</option>
-                </select>
-              </div>
+          <FilterAccordion title="3. Status audytu" count={0}>
+            <FilterCheckbox label="Zakończony" />
+            <FilterCheckbox label="W trakcie" />
+            <FilterCheckbox label="Nowy" />
+          </FilterAccordion>
 
-              <div className="w-px h-6 bg-slate-200 hidden sm:block"></div>
+          <FilterAccordion title="4. Kanał" count={0}>
+            <FilterCheckbox label="Desktop" />
+            <FilterCheckbox label="Mobile Web" />
+            <FilterCheckbox label="iOS" />
+            <FilterCheckbox label="Android" />
+            <FilterCheckbox label="Dokumenty" />
+          </FilterAccordion>
 
-              <label className="flex items-center gap-3 cursor-pointer group">
-                <div className="w-5 h-5 rounded border border-slate-300 group-hover:border-red-500 flex items-center justify-center bg-white transition-colors relative"></div>
-                <div className="flex items-center gap-1.5">
-                  <AlertOctagon size={16} className="text-red-500" />
-                  <span className="text-sm font-bold text-slate-700 group-hover:text-slate-900 transition-colors">
-                    Tylko audyty z błędami krytycznymi (blokery)
-                  </span>
+          <FilterAccordion title="5. Czas" count={0}>
+            <div className="space-y-4 pt-1">
+              <div>
+                <div className="text-xs text-slate-500 mb-2 font-semibold">
+                  Szybki wybór okresu
                 </div>
-              </label>
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    onClick={() => setActiveTimeRange("30d")}
+                    className={`px-2.5 py-1 text-[11px] font-bold rounded-lg transition-colors border ${
+                      activeTimeRange === "30d"
+                        ? "bg-[#0038F8] text-white border-[#0038F8]"
+                        : "bg-slate-100 hover:bg-slate-200 text-slate-600 border-slate-200"
+                    }`}
+                  >
+                    30 dni
+                  </button>
+                  <button
+                    onClick={() => setActiveTimeRange("60d")}
+                    className={`px-2.5 py-1 text-[11px] font-bold rounded-lg transition-colors border ${
+                      activeTimeRange === "60d"
+                        ? "bg-[#0038F8] text-white border-[#0038F8]"
+                        : "bg-slate-100 hover:bg-slate-200 text-slate-600 border-slate-200"
+                    }`}
+                  >
+                    60 dni
+                  </button>
+                  <button
+                    onClick={() => setActiveTimeRange("1y")}
+                    className={`px-2.5 py-1 text-[11px] font-bold rounded-lg transition-colors border ${
+                      activeTimeRange === "1y"
+                        ? "bg-[#0038F8] text-white border-[#0038F8]"
+                        : "bg-slate-100 hover:bg-slate-200 text-slate-600 border-slate-200"
+                    }`}
+                  >
+                    1 Rok
+                  </button>
+                  <button
+                    onClick={() => setActiveTimeRange("all")}
+                    className={`px-2.5 py-1 text-[11px] font-bold rounded-lg transition-colors border ${
+                      activeTimeRange === "all"
+                        ? "bg-[#0038F8] text-white border-[#0038F8]"
+                        : "bg-slate-100 hover:bg-slate-200 text-slate-600 border-slate-200"
+                    }`}
+                  >
+                    Wszystkie
+                  </button>
+                </div>
+              </div>
+              <div className="h-px bg-slate-100 my-1 mx-1"></div>
+              <FilterDateRange label="Data realizacji" />
             </div>
+          </FilterAccordion>
 
-            <div className="flex items-center gap-3 w-full md:w-auto justify-end mt-2 md:mt-0">
-              <button
-                onClick={() => {
-                  if (window.innerWidth < 768) setIsMobileFiltersOpen(false);
-                }}
-                className="text-slate-500 hover:text-slate-700 font-bold text-sm px-4 py-2 flex-1 md:flex-none transition-colors border border-transparent hover:bg-slate-100 rounded-xl"
-              >
-                Wyczyść
-              </button>
-              <button
-                onClick={() => {
-                  if (window.innerWidth < 768) setIsMobileFiltersOpen(false);
-                }}
-                className="bg-[#0038F8] hover:bg-[#002ECC] text-white font-bold text-sm px-6 py-2.5 rounded-xl shadow-sm transition-colors flex-1 md:flex-none text-center"
-              >
-                Szukaj
-              </button>
-            </div>
-          </div>
+          <FilterAccordion title="6. Błędy" count={0}>
+            <FilterCheckbox label={<><AlertOctagon size={12} className="text-red-500 inline mr-1.5" />Tylko krytyczne błędy</>} />
+          </FilterAccordion>
         </div>
-      </Card>
 
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-3">
-        <span className="text-sm font-bold text-slate-500">
-          Znaleziono: {mockAuditsList.length} audytów
-        </span>
-        <select className="bg-transparent border border-slate-200 sm:border-none p-2 sm:p-0 rounded-lg sm:rounded-none w-full sm:w-auto text-sm font-bold text-slate-500 focus:outline-none cursor-pointer">
-          <option>Sortuj: Od najnowszych</option>
-          <option>Sortuj: Od najstarszych</option>
-          <option>Sortuj: Alfabetycznie (A-Z)</option>
-        </select>
+        <div
+          className={`p-4 border-t border-slate-100 bg-slate-50 shrink-0 gap-2 ${
+            isSidebarCollapsed || isMobileFiltersOpen ? "md:hidden" : ""
+          } ${isMobileFiltersOpen ? "flex flex-col" : "hidden md:flex md:flex-col"}`}
+        >
+          <button
+            onClick={() => {
+              setFiltersApplied(true);
+              if (window.innerWidth < 768) setIsMobileFiltersOpen(false);
+            }}
+            className="w-full bg-[#0038F8] hover:bg-[#002ECC] text-white px-5 py-3 rounded-xl font-bold shadow-sm transition-colors text-sm"
+          >
+            Zastosuj filtry
+          </button>
+          <button
+            onClick={() => {
+              setActiveTimeRange("all");
+              setFiltersApplied(false);
+              if (window.innerWidth < 768) setIsMobileFiltersOpen(false);
+            }}
+            className="w-full bg-white hover:bg-slate-50 text-slate-600 border border-slate-200 px-5 py-3 rounded-xl font-bold transition-colors text-sm shadow-sm"
+          >
+            Wyczyść
+          </button>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
-        {mockAuditsList.map((audit) => (
-          <ReportCard
-            key={audit.id}
-            date={audit.date}
-            status={audit.status}
-            statusVariant={audit.statusVariant}
-            tag={audit.tag}
-            title={audit.title}
-            devices={audit.devices}
-            priority={audit.priority}
-            score={audit.score}
-            icon={audit.icon}
-            onClick={() => setView("raport-szczegoly")}
-          />
-        ))}
+      {/* Główny obszar */}
+      <div className="flex-1 flex flex-col overflow-hidden min-h-0">
+        <div className="px-4 sm:px-8 lg:px-12 pt-6 sm:pt-12 bg-white z-10 flex-shrink-0 border-b border-slate-200">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 sm:mb-8 gap-4">
+            <h1 className="text-[24px] sm:text-[32px] font-extrabold text-slate-900 tracking-tight leading-tight">
+              Raporty z audytów
+            </h1>
+            <p className="text-slate-500 text-sm">
+              Przeglądaj i wyszukuj szczegółowe wyniki przeprowadzonych audytów.
+            </p>
+          </div>
+
+          <div className="mb-4">
+            <Input
+              icon={Search}
+              placeholder="Wyszukaj audyt..."
+              className="w-full bg-white"
+            />
+          </div>
+          <div className="flex items-center justify-between mb-4 gap-3">
+            <span className="text-sm font-bold text-slate-500">
+              Znaleziono: {mockAuditsList.length} audytów
+            </span>
+            <select className="bg-transparent border border-slate-200 p-2 rounded-xl w-auto text-sm font-bold text-slate-500 focus:outline-none cursor-pointer">
+              <option>Sortuj: Od najnowszych</option>
+              <option>Sortuj: Od najstarszych</option>
+              <option>Sortuj: Alfabetycznie (A-Z)</option>
+            </select>
+          </div>
+        </div>
+
+          <div className="flex-1 overflow-auto p-4 sm:p-8 lg:p-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
+            {mockAuditsList.map((audit) => (
+              <ReportCard
+                key={audit.id}
+                date={audit.date}
+                status={audit.status}
+                statusVariant={audit.statusVariant}
+                tag={audit.tag}
+                title={audit.title}
+                devices={audit.devices}
+                priority={audit.priority}
+                score={audit.score}
+                icon={audit.icon}
+                onClick={() => setView("raport-szczegoly")}
+              />
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -2288,64 +2439,63 @@ function ReportCard({
 }) {
   return (
     <Card
-      className="p-4 sm:p-6 md:p-7 hover:shadow-md transition-shadow cursor-pointer group flex flex-col"
+      className="p-3 sm:p-4 hover:shadow-md transition-shadow cursor-pointer group flex flex-col"
       onClick={onClick}
     >
-      <div className="flex items-center justify-between mb-4 md:mb-5">
-        <Badge variant="lightBlue" className="!text-[10px] md:!text-xs">
-          <Calendar size={12} className="text-[#0038F8] md:w-3.5 md:h-3.5" />
-          {date}
-        </Badge>
-        <Badge variant={statusVariant} className="!text-[10px] md:!text-xs">
+      <div className="flex items-center justify-between mb-2 sm:mb-3">
+        <div className="flex items-center gap-2">
+          <Badge variant="lightBlue" className="!text-[10px] sm:!text-xs">
+            <Calendar size={10} className="text-[#0038F8] w-3 h-3" />
+            {date}
+          </Badge>
+          <Badge variant="info" className="!text-[10px] sm:!text-xs px-1.5">
+            {tag}
+          </Badge>
+        </div>
+        <Badge variant={statusVariant} className="!text-[10px] sm:!text-xs">
           {statusVariant === "success" && (
-            <CheckCircle2 size={12} className="md:w-3.5 md:h-3.5" />
+            <CheckCircle2 size={10} className="w-3 h-3" />
           )}
           {statusVariant === "warning" && (
-            <Activity size={12} className="md:w-3.5 md:h-3.5" />
+            <Activity size={10} className="w-3 h-3" />
           )}
           {statusVariant === "info" && (
-            <Eye size={12} className="md:w-3.5 md:h-3.5" />
+            <Eye size={10} className="w-3 h-3" />
           )}
           {status}
         </Badge>
       </div>
-      <div className="mb-5 md:mb-6 flex-1">
-        <Badge
-          variant="info"
-          className="mb-3 md:mb-4 px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider"
-        >
-          {tag}
-        </Badge>
-        <h3 className="text-[16px] sm:text-[18px] md:text-[20px] font-bold text-slate-900 leading-snug mb-2 md:mb-3 pr-2">
+      <div className="mb-3 sm:mb-4 flex-1">
+        <h3 className="text-sm sm:text-base font-bold text-slate-900 leading-snug mb-1.5 sm:mb-2 pr-2">
           {title}
         </h3>
-        <div className="flex items-center gap-2 text-slate-500 text-[12px] md:text-sm font-medium">
-          <DeviceIcon size={14} className="md:w-4 md:h-4" />
-          {devices}
-        </div>
       </div>
-      <hr className="border-slate-100 mb-4 md:mb-5" />
+      <hr className="border-slate-100 mb-3" />
       <div className="flex items-center justify-between mt-auto">
-        <div className="flex items-center gap-4 sm:gap-6 md:gap-8">
-          <div className="flex flex-col w-28 sm:w-32 shrink-0">
-            <span className="text-[9px] md:text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
-              Krytyczne (Blokery)
+        <div className="flex items-center gap-3 sm:gap-4">
+          <div className="flex flex-col w-16 sm:w-20 shrink-0">
+            <span className="text-[8px] sm:text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">
+              Krytyczne
             </span>
-            <span className="text-lg md:text-2xl font-bold text-red-500 leading-none">
+            <span className="text-base sm:text-lg font-bold text-red-500 leading-none">
               {priority}
             </span>
           </div>
-          <div className="flex flex-col w-20 sm:w-24 shrink-0">
-            <span className="text-[9px] md:text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+          <div className="flex flex-col w-16 sm:w-20 shrink-0">
+            <span className="text-[8px] sm:text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">
               Zgodność
             </span>
             <span
-              className={`text-lg md:text-2xl font-bold leading-none ${
+              className={`text-base sm:text-lg font-bold leading-none ${
                 parseFloat(score) >= 80 ? "text-emerald-500" : "text-red-500"
               }`}
             >
               {score}
             </span>
+          </div>
+          <div className="flex items-center gap-1.5 text-slate-500 text-[11px] sm:text-xs font-medium">
+            <DeviceIcon size={16} className="w-4 h-4" />
+            {devices}
           </div>
         </div>
         <button
@@ -2353,9 +2503,9 @@ function ReportCard({
             e.stopPropagation();
             if (onClick) onClick();
           }}
-          className="w-10 h-10 md:w-12 md:h-12 bg-[#0038F8] hover:bg-[#002ECC] text-white rounded-xl flex items-center justify-center transition-all shadow-sm"
+          className="w-8 h-8 sm:w-9 sm:h-9 bg-[#0038F8] hover:bg-[#002ECC] text-white rounded-lg sm:rounded-xl flex items-center justify-center transition-all shadow-sm"
         >
-          <ArrowRight size={18} className="md:w-5 md:h-5" strokeWidth={2.5} />
+          <ArrowRight size={14} className="sm:w-4 sm:h-4" strokeWidth={2.5} />
         </button>
       </div>
     </Card>
@@ -2579,7 +2729,7 @@ function ReportSummaryView({ setView }) {
                   <div className="flex items-center gap-3 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100">
                     <div
                       className="flex items-center gap-1.5 border-r border-slate-200 pr-3"
-                      title="Krytyczne błędy"
+                      title={`Błędy krytyczne: ${reaudit.criticalErrors}`}
                     >
                       <AlertOctagon size={14} className="text-red-500" />
                       <span className="text-[15px] font-black text-slate-800">
@@ -2670,48 +2820,48 @@ function TestedElementItem({
         </span>
       </div>
 
-      <div className="flex flex-wrap items-center justify-between sm:justify-end flex-shrink-0 border-t border-slate-100 sm:border-none pt-3 sm:pt-0 w-full sm:w-auto">
-        <div className="flex items-center gap-1 sm:gap-0 sm:pr-4 w-32 sm:w-40 justify-center">
-          <div className="flex items-center gap-1.5 w-10 sm:w-12 shrink-0 justify-center">
-            <AlertOctagon
-              size={16}
-              className={priorities > 0 ? "text-red-500" : "text-slate-400"}
-            />
-            <span
-              className={`font-bold text-sm ${
-                priorities > 0 ? "text-slate-800" : "text-slate-500"
-              }`}
-            >
-              {priorities}
-            </span>
+        <div className="flex flex-wrap items-center justify-between sm:justify-end flex-shrink-0 border-t border-slate-100 sm:border-none pt-3 sm:pt-0 w-full sm:w-auto">
+          <div className="flex items-center gap-1 sm:gap-0 sm:pr-4 w-32 sm:w-40 justify-center">
+            <div className="flex items-center gap-1.5 w-10 sm:w-12 shrink-0 justify-center" title={`Błędy krytyczne: ${priorities}`}>
+              <AlertOctagon
+                size={16}
+                className={priorities > 0 ? "text-red-500" : "text-slate-400"}
+              />
+              <span
+                className={`font-bold text-sm ${
+                  priorities > 0 ? "text-slate-800" : "text-slate-500"
+                }`}
+              >
+                {priorities}
+              </span>
+            </div>
+            <div className="flex items-center gap-1.5 w-10 sm:w-12 shrink-0 justify-center" title={`Błędy ważne: ${warnings}`}>
+              <AlertTriangle
+                size={16}
+                className={warnings > 0 ? "text-amber-500" : "text-slate-400"}
+              />
+              <span
+                className={`font-bold text-sm ${
+                  warnings > 0 ? "text-slate-800" : "text-slate-500"
+                }`}
+              >
+                {warnings}
+              </span>
+            </div>
+            <div className="flex items-center gap-1.5 w-10 sm:w-12 shrink-0 justify-center" title={`Błędy marginalne: ${marginals}`}>
+              <Info
+                size={16}
+                className={marginals > 0 ? "text-blue-500" : "text-slate-400"}
+              />
+              <span
+                className={`font-bold text-sm ${
+                  marginals > 0 ? "text-slate-800" : "text-slate-500"
+                }`}
+              >
+                {marginals}
+              </span>
+            </div>
           </div>
-          <div className="flex items-center gap-1.5 w-10 sm:w-12 shrink-0 justify-center">
-            <AlertTriangle
-              size={16}
-              className={warnings > 0 ? "text-amber-500" : "text-slate-400"}
-            />
-            <span
-              className={`font-bold text-sm ${
-                warnings > 0 ? "text-slate-800" : "text-slate-500"
-              }`}
-            >
-              {warnings}
-            </span>
-          </div>
-          <div className="flex items-center gap-1.5 w-10 sm:w-12 shrink-0 justify-center">
-            <Info
-              size={16}
-              className={marginals > 0 ? "text-blue-500" : "text-slate-400"}
-            />
-            <span
-              className={`font-bold text-sm ${
-                marginals > 0 ? "text-slate-800" : "text-slate-500"
-              }`}
-            >
-              {marginals}
-            </span>
-          </div>
-        </div>
 
         <div className="flex items-center gap-2 sm:border-l border-slate-200 sm:pl-6 w-auto sm:w-32 shrink-0 justify-start sm:justify-start">
           {channel && (
@@ -2813,9 +2963,9 @@ function ReportErrorsView({ setView }) {
             </label>
             <select className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 text-sm font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50 transition-shadow appearance-none">
               <option value="">Wszystkie priorytety</option>
-              <option value="krytyczny">Krytyczne (Blokery)</option>
-              <option value="wazny">Ważne</option>
-              <option value="marginalny">Marginalne</option>
+              <option value="krytyczny">🔴 Krytyczne (Blokery)</option>
+              <option value="wazny">🟠 Ważne</option>
+              <option value="marginalny">🔵 Marginalne</option>
             </select>
           </div>
           <div className="w-full lg:w-[280px] shrink-0">
@@ -2831,11 +2981,11 @@ function ReportErrorsView({ setView }) {
             </select>
           </div>
           <div className="flex items-center gap-3 w-full lg:w-auto mt-2 lg:mt-0 shrink-0">
-            <button className="flex-1 lg:flex-none flex justify-center items-center gap-2 bg-[#0038F8] hover:bg-[#002ECC] text-white px-6 py-3.5 rounded-xl font-bold shadow-sm transition-colors text-sm">
+            <button className="flex-1 lg:flex-none flex justify-center items-center gap-2 bg-[#0038F8] hover:bg-[#002ECC] text-white px-5 py-3 rounded-xl font-bold shadow-sm transition-colors text-sm">
               Szukaj
             </button>
             <button
-              className="flex justify-center items-center gap-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-600 px-4 py-3.5 rounded-xl font-bold transition-colors text-sm shrink-0"
+              className="flex justify-center items-center gap-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-600 px-5 py-3 rounded-xl font-bold transition-colors text-sm shrink-0 shadow-sm"
               title="Wyczyść filtry"
             >
               <X size={16} className="text-slate-400" />
@@ -2850,7 +3000,7 @@ function ReportErrorsView({ setView }) {
           <h2 className="text-[16px] sm:text-lg font-bold text-slate-900">
             Zgłoszone błędy (5)
           </h2>
-          <span className="text-xs font-bold text-slate-500 bg-slate-100 px-3 py-1 rounded-lg">
+          <span className="text-xs font-bold text-slate-500 bg-slate-100 px-3 py-1 rounded-xl">
             Znaleziono: 5 wyników
           </span>
         </div>
@@ -3318,12 +3468,13 @@ function FiltersSidebar({ isCollapsed, setIsCollapsed }) {
             e.stopPropagation();
             setIsCollapsed(!isCollapsed);
           }}
-          className="hidden md:block text-slate-400 bg-slate-50 hover:bg-slate-100 hover:text-slate-600 p-2 rounded-xl border border-slate-200 transition-colors flex-shrink-0"
+          className="hidden md:flex items-center justify-center bg-slate-100 hover:bg-[#0038F8] text-slate-700 hover:text-white w-8 h-8 rounded-lg transition-colors"
+          title={isCollapsed ? "Rozwiń filtry" : "Zwiń filtry"}
         >
           {isCollapsed ? (
-            <PanelRightOpen size={18} />
+            <ChevronRight size={20} />
           ) : (
-            <PanelRightClose size={18} />
+            <ChevronLeft size={20} />
           )}
         </button>
         <button
@@ -3371,7 +3522,7 @@ function FiltersSidebar({ isCollapsed, setIsCollapsed }) {
                     setIsServiceAccOpen(false);
                   }
                 }}
-                className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2.5 text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50 font-medium shadow-sm"
+                className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50 font-medium shadow-sm"
               >
                 <option value="all">Wszystkie usługi</option>
                 <option value="s1">
@@ -3384,7 +3535,7 @@ function FiltersSidebar({ isCollapsed, setIsCollapsed }) {
               <div className="text-xs text-slate-500 mb-1.5 font-semibold">
                 Procesy
               </div>
-              <select className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2.5 text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50 font-medium shadow-sm">
+              <select className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50 font-medium shadow-sm">
                 <option value="all">Wszystkie procesy</option>
                 <option value="p1">Otwarcie ROR</option>
                 <option value="p2">Przelew krajowy</option>
@@ -3401,9 +3552,9 @@ function FiltersSidebar({ isCollapsed, setIsCollapsed }) {
         </FilterAccordion>
 
         <FilterAccordion title="3. Błąd" count={0}>
-          <FilterCheckbox label="Priorytet: Krytyczny" />
-          <FilterCheckbox label="Priorytet: Ważny" />
-          <FilterCheckbox label="Priorytet: Marginalny" />
+          <FilterCheckbox label={<><AlertOctagon size={12} className="text-red-500 inline mr-1.5" />Priorytet: Krytyczny</>} />
+          <FilterCheckbox label={<><AlertTriangle size={12} className="text-orange-500 inline mr-1.5" />Priorytet: Ważny</>} />
+          <FilterCheckbox label={<><Info size={12} className="text-blue-500 inline mr-1.5" />Priorytet: Marginalny</>} />
           <FilterCheckbox label="Status: Nowy" />
           <FilterCheckbox label="Status: Naprawiony" />
         </FilterAccordion>
@@ -3420,7 +3571,7 @@ function FiltersSidebar({ isCollapsed, setIsCollapsed }) {
               <div className="text-xs text-slate-500 mb-1.5 font-semibold">
                 Audytor
               </div>
-              <select className="w-full bg-slate-50 border border-slate-200 rounded-lg px-2 py-1.5 text-xs text-slate-600 focus:outline-none">
+              <select className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50 font-medium shadow-sm">
                 <option value="">Wszyscy audytorzy</option>
                 <option value="1">Jan Kowalski</option>
                 <option value="2">Piotr Smułkowski</option>
@@ -3495,28 +3646,28 @@ function FiltersSidebar({ isCollapsed, setIsCollapsed }) {
         className={`p-4 border-t border-slate-100 bg-slate-50 shrink-0 gap-2 ${
           isCollapsed ? "md:hidden" : ""
         } ${isMobileOpen ? "flex flex-col" : "hidden md:flex md:flex-col"}`}
-      >
-        <button
-          onClick={() => {
-            setFiltersApplied(true);
-            if (window.innerWidth < 768) setIsMobileOpen(false);
-          }}
-          className="w-full bg-[#0038F8] hover:bg-[#002ECC] text-white py-2.5 md:py-3 rounded-xl font-bold shadow-sm transition-colors text-sm"
         >
-          Zastosuj filtry
-        </button>
-        <button
-          onClick={() => {
-            setSelectedService("all");
-            setIsServiceAccOpen(true);
-            setFiltersApplied(false);
-            setActiveTimeRange("all");
-          }}
-          className="w-full text-slate-500 hover:text-slate-700 py-2 rounded-xl font-bold transition-colors text-sm"
-        >
-          Wyczyść
-        </button>
-      </div>
+          <button
+            onClick={() => {
+              setFiltersApplied(true);
+              if (window.innerWidth < 768) setIsMobileOpen(false);
+            }}
+            className="w-full bg-[#0038F8] hover:bg-[#002ECC] text-white px-5 py-3 rounded-xl font-bold shadow-sm transition-colors text-sm"
+          >
+            Zastosuj filtry
+          </button>
+          <button
+            onClick={() => {
+              setSelectedService("all");
+              setIsServiceAccOpen(true);
+              setFiltersApplied(false);
+              setActiveTimeRange("all");
+            }}
+            className="w-full bg-white hover:bg-slate-50 text-slate-600 border border-slate-200 px-5 py-3 rounded-xl font-bold transition-colors text-sm shadow-sm"
+          >
+            Wyczyść
+          </button>
+        </div>
     </div>
   );
 }
@@ -3627,7 +3778,7 @@ function FilterCheckbox({ label }) {
         )}
       </div>
       <span
-        className={`text-sm transition-colors ${
+        className={`text-sm transition-colors flex items-center ${
           isChecked
             ? "font-bold text-slate-900"
             : "font-medium text-slate-600 group-hover:text-slate-900"
@@ -3646,12 +3797,12 @@ function FilterDateRange({ label }) {
       <div className="flex items-center gap-2">
         <input
           type="date"
-          className="w-full bg-slate-50 border border-slate-200 rounded-lg px-2 py-1.5 text-xs text-slate-600 focus:outline-none focus:ring-1 focus:ring-[#0038F8]"
+          className="w-full bg-white border border-slate-200 rounded-xl px-2 py-2 text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50 shadow-sm"
         />
         <span className="text-slate-400 text-xs">-</span>
         <input
           type="date"
-          className="w-full bg-slate-50 border border-slate-200 rounded-lg px-2 py-1.5 text-xs text-slate-600 focus:outline-none focus:ring-1 focus:ring-[#0038F8]"
+          className="w-full bg-white border border-slate-200 rounded-xl px-2 py-2 text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50 shadow-sm"
         />
       </div>
     </div>
@@ -3670,13 +3821,13 @@ function FilterNumberRange({
         <input
           type="number"
           placeholder={placeholderOd}
-          className="w-full bg-slate-50 border border-slate-200 rounded-lg px-2 py-1.5 text-xs text-slate-600 focus:outline-none focus:ring-1 focus:ring-[#0038F8]"
+          className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50 shadow-sm"
         />
         <span className="text-slate-400 text-xs">-</span>
         <input
           type="number"
           placeholder={placeholderDo}
-          className="w-full bg-slate-50 border border-slate-200 rounded-lg px-2 py-1.5 text-xs text-slate-600 focus:outline-none focus:ring-1 focus:ring-[#0038F8]"
+          className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50 shadow-sm"
         />
       </div>
     </div>
@@ -3868,9 +4019,9 @@ function AuditNode({ audit, detailLevel }) {
               {audit.brokenCriteria}
             </span>
           </div>
-          <div className="flex flex-col border-r border-slate-100 pr-4 sm:pr-6 w-32 sm:w-40 hidden sm:flex shrink-0">
+          <div className="flex flex-col pr-4 sm:pr-6 w-32 sm:w-40 hidden sm:flex shrink-0">
             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">
-              Łączna l. błędów
+              Liczna błędów
             </span>
             <div className="flex items-center gap-3">
               <span className="text-xl font-extrabold text-slate-700">
@@ -3884,12 +4035,11 @@ function AuditNode({ audit, detailLevel }) {
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 hidden sm:block">
                 Zgodność
               </span>
-              <Badge
-                variant={audit.score >= 80 ? "success" : "warning"}
-                className="text-lg !px-3 !py-1 w-full justify-center"
-              >
+              <span className={`text-lg font-bold ${
+                audit.score >= 80 ? 'text-emerald-600' : 'text-amber-500'
+              }`}>
                 {audit.score.toFixed(1)}%
-              </Badge>
+              </span>
             </div>
           </div>
         </div>
@@ -3898,7 +4048,9 @@ function AuditNode({ audit, detailLevel }) {
       {audit.reaudits && audit.reaudits.length > 0 && (
         <div className="bg-[#f0f5ff] border-b border-[#dbeafe] p-4 sm:px-5 flex flex-col gap-3">
           <div className="flex items-center gap-2 mb-1">
-            <History size={16} className="text-[#0038F8]" />
+            <span title="Historia wyników">
+              <History size={16} className="text-[#0038F8]" />
+            </span>
             <h4 className="text-[11px] font-extrabold text-[#0038F8] uppercase tracking-widest">
               Historia i Reaudyty ({audit.reaudits.length})
             </h4>
@@ -3953,7 +4105,7 @@ function AuditNode({ audit, detailLevel }) {
                     <div className="flex items-center gap-4 bg-white px-3 py-1.5 rounded-lg border border-blue-100/50">
                       <div
                         className="flex items-center gap-1.5"
-                        title="Krytyczne błędy"
+                        title={`Błędy krytyczne: ${reaudit.critical || 0}`}
                       >
                         <AlertOctagon size={14} className="text-red-500" />
                         <span className="text-[15px] font-black text-slate-800">
@@ -4096,18 +4248,7 @@ function AuditViewNode({ view, detailLevel }) {
                 <Badge variant="neutral" className="!py-0.5 !text-[10px]">
                   Status: {err.status}
                 </Badge>
-                <Badge
-                  variant={
-                    err.priority === "Krytyczny"
-                      ? "danger"
-                      : err.priority === "Ważny"
-                      ? "warning"
-                      : "info"
-                  }
-                  className="!py-0.5 !text-[10px]"
-                >
-                  {err.priority}
-                </Badge>
+                <PriorityBadge priority={err.priority} size="small" />
               </div>
             </div>
           ))}
@@ -4221,41 +4362,6 @@ function AuditErrorTableRow({ data }) {
     setExpanded((prev) => !prev);
   };
 
-  const getPriorityBadge = (prio) => {
-    switch (prio) {
-      case "Krytyczny":
-        return (
-          <Badge variant="danger" className="!py-0.5">
-            Krytyczny
-          </Badge>
-        );
-      case "Ważny":
-        return (
-          <Badge
-            variant="warning"
-            className="!py-0.5 bg-orange-50 text-orange-600 border-orange-100"
-          >
-            Ważny
-          </Badge>
-        );
-      case "Marginalny":
-        return (
-          <Badge
-            variant="info"
-            className="!py-0.5 text-blue-600 bg-blue-50 border-blue-100"
-          >
-            Marginalny
-          </Badge>
-        );
-      default:
-        return (
-          <Badge variant="neutral" className="!py-0.5">
-            {prio}
-          </Badge>
-        );
-    }
-  };
-
   return (
     <>
       <tr
@@ -4295,7 +4401,7 @@ function AuditErrorTableRow({ data }) {
             </div>
           </div>
         </td>
-        <td className="px-4 py-4">{getPriorityBadge(data.priority)}</td>
+        <td className="px-4 py-4">{PriorityBadge({ priority: data.priority })}</td>
         <td className="px-4 py-4">
           <div className="flex flex-wrap gap-1">
             {data.channels.map((ch, i) => (
@@ -4470,12 +4576,11 @@ function ServiceNode({ service, detailLevel }) {
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 hidden sm:block">
                 Dostępność Usługi
               </span>
-              <Badge
-                variant={service.stats.score >= 80 ? "success" : "danger"}
-                className="text-sm !px-3 !py-1 w-full justify-center"
-              >
+              <span className={`text-sm font-bold ${
+                service.stats.score >= 80 ? 'text-emerald-600' : 'text-red-600'
+              }`}>
                 {service.stats.score.toFixed(1)}%
-              </Badge>
+              </span>
             </div>
           </div>
         </div>
@@ -4537,12 +4642,9 @@ function ProcessNode({ process, detailLevel }) {
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 hidden sm:block">
                 Dostępność
               </span>
-              <Badge
-                variant="warning"
-                className="text-xs !py-0.5 w-full justify-center"
-              >
+              <span className="text-xs font-bold text-amber-600">
                 {process.stats.score.toFixed(1)}%
-              </Badge>
+              </span>
             </div>
           </div>
         </div>
@@ -4579,12 +4681,14 @@ function ViewNode({ view, detailLevel }) {
       <div className="p-3 pl-4 sm:pl-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-slate-50 transition-colors">
         <div className="flex flex-col flex-1 min-w-[200px]">
           <div className="flex items-center gap-2 mb-1">
-            <Layout size={14} className="text-slate-400 flex-shrink-0" />
+            <span title={`Widok: ${view.name}`}>
+              <Layout size={14} className="text-slate-400 flex-shrink-0" />
+            </span>
             <span className="font-bold text-[14px] text-slate-800 leading-snug">
               {view.name}
             </span>
           </div>
-          <span className="text-[11px] text-slate-500 font-medium">
+          <span className="text-[11px] text-slate-500 font-medium" title={`Kanał: ${view.channel}`}>
             Kanał: {view.channel}
           </span>
         </div>
@@ -4633,9 +4737,7 @@ function ViewNode({ view, detailLevel }) {
                 <span className="bg-slate-100 text-slate-600 border border-slate-200 text-[10px] font-bold px-2 py-1 rounded">
                   {err.status}
                 </span>
-                <span className="bg-blue-50 text-blue-600 border border-blue-100 text-[10px] font-bold px-2 py-1 rounded">
-                  {err.priority}
-                </span>
+                <PriorityBadge priority={err.priority} size="small" />
               </div>
             </div>
           ))}
@@ -4867,15 +4969,15 @@ function ServicesErrorReport() {
           <table className="w-full text-left border-collapse min-w-[1200px] table-fixed">
             <thead className="bg-slate-50 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-widest">
               <tr>
-                <th className="px-5 py-4 w-[5%]"></th>
-                <th className="px-5 py-4 w-[25%]">Błąd i Kryterium</th>
-                <th className="px-5 py-4 w-[25%]">
+                <th className="p-4 w-[5%]"></th>
+                <th className="p-4 w-[25%]">Błąd i Kryterium</th>
+                <th className="p-4 w-[25%]">
                   Lokalizacja (Usługa / Proces / Widok)
                 </th>
-                <th className="px-5 py-4 w-[15%]">Audyt</th>
-                <th className="px-5 py-4 w-[10%]">Kanał</th>
-                <th className="px-5 py-4 w-[10%]">Priorytet</th>
-                <th className="px-5 py-4 w-[10%]">Data wykrycia</th>
+                <th className="p-4 w-[15%]">Audyt</th>
+                <th className="p-4 w-[10%]">Kanał</th>
+                <th className="p-4 w-[10%]">Priorytet</th>
+                <th className="p-4 w-[10%]">Data wykrycia</th>
               </tr>
             </thead>
             <tbody className="text-[13px]">
@@ -4910,51 +5012,16 @@ function ServiceErrorTableRow({ data }) {
     setExpanded((prev) => !prev);
   };
 
-  const getPriorityBadge = (prio) => {
-    switch (prio) {
-      case "Krytyczny":
-        return (
-          <Badge variant="danger" className="!py-0.5">
-            Krytyczny
-          </Badge>
-        );
-      case "Ważny":
-        return (
-          <Badge
-            variant="warning"
-            className="!py-0.5 bg-orange-50 text-orange-600 border-orange-100"
-          >
-            Ważny
-          </Badge>
-        );
-      case "Marginalny":
-        return (
-          <Badge
-            variant="info"
-            className="!py-0.5 text-blue-600 bg-blue-50 border-blue-100"
-          >
-            Marginalny
-          </Badge>
-        );
-      default:
-        return (
-          <Badge variant="neutral" className="!py-0.5">
-            {prio}
-          </Badge>
-        );
-    }
-  };
-
   return (
     <>
       <tr
         onClick={handleToggle}
         className="border-b border-slate-100 hover:bg-slate-50 transition-colors cursor-pointer group"
       >
-        <td className="px-5 py-4 text-slate-400 group-hover:text-[#0038F8]">
+        <td className="p-4 text-slate-400 group-hover:text-[#0038F8]">
           {expanded ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
         </td>
-        <td className="px-5 py-4">
+        <td className="p-4">
           <div className="font-bold text-slate-900 mb-1 leading-snug pr-4 line-clamp-2">
             {data.problem}
           </div>
@@ -4962,7 +5029,7 @@ function ServiceErrorTableRow({ data }) {
             {data.criteria}
           </div>
         </td>
-        <td className="px-5 py-4">
+        <td className="p-4">
           <div className="flex flex-col gap-1">
             <div className="flex items-center gap-1.5">
               <Library size={12} className="text-slate-400 flex-shrink-0" />
@@ -5009,7 +5076,7 @@ function ServiceErrorTableRow({ data }) {
             ))}
           </div>
         </td>
-        <td className="px-5 py-4">{getPriorityBadge(data.priority)}</td>
+        <td className="px-5 py-4">{PriorityBadge({ priority: data.priority })}</td>
         <td className="px-5 py-4 font-semibold text-slate-700 whitespace-nowrap">
           {data.dateFound}
         </td>
