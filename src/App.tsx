@@ -316,9 +316,9 @@ export default function App() {
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
 
-      <div className="flex flex-col md:flex-row h-screen w-full bg-[#f8fafc] font-['Figtree',_sans-serif] overflow-hidden text-slate-900 relative">
+      <div data-testid="app-container" className="flex flex-col md:flex-row h-screen w-full bg-[#f8fafc] font-['Figtree',_sans-serif] overflow-hidden text-slate-900 relative">
         {/* MOBILNY HEADER */}
-        <div className="md:hidden flex items-center justify-between bg-[#16161e] text-white px-5 py-4 z-30 relative shadow-md">
+        <div data-testid="mobile-header" className="md:hidden flex items-center justify-between bg-[#16161e] text-white px-5 py-4 z-30 relative shadow-md">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 bg-[#0038F8] rounded-lg flex items-center justify-center text-white shadow-sm flex-shrink-0">
               <Eye size={20} strokeWidth={2.5} />
@@ -355,7 +355,7 @@ export default function App() {
         />
 
         {/* GŁÓWNA ZAWARTOŚĆ */}
-        <main className="flex-1 flex flex-col h-full overflow-hidden bg-[#f8fafc] relative z-10">
+        <main data-testid="main-content" className="flex-1 flex flex-col h-full overflow-hidden bg-[#f8fafc] relative z-10">
           {currentView === "przeglad" && (
             <div className="flex-1 p-4 md:p-8 lg:p-12 overflow-auto">
               <DashboardView setView={setCurrentView} />
@@ -408,9 +408,9 @@ function LoginView({ onLogin }) {
         @import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap');
       `}</style>
 
-      <div className="flex h-screen w-full bg-white font-['Figtree',_sans-serif] text-slate-900 overflow-hidden">
+      <div data-testid="login-view" className="flex h-screen w-full bg-white font-['Figtree',_sans-serif] text-slate-900 overflow-hidden">
         {/* LEWA STRONA - FORMULARZ LOGOWANIA */}
-        <div className="w-full lg:w-[500px] xl:w-[600px] flex flex-col p-8 sm:p-12 lg:p-16 relative z-10 bg-white overflow-y-auto">
+        <div data-testid="login-form-container" className="w-full lg:w-[500px] xl:w-[600px] flex flex-col p-8 sm:p-12 lg:p-16 relative z-10 bg-white overflow-y-auto">
           <div className="w-full max-w-[400px] mx-auto flex flex-col h-full min-h-[500px]">
             {/* Logo */}
             <div className="flex items-center gap-3 shrink-0">
@@ -439,7 +439,7 @@ function LoginView({ onLogin }) {
                 </p>
               </div>
 
-              <form onSubmit={handleLogin} className="space-y-5">
+              <form data-testid="login-form" onSubmit={handleLogin} className="space-y-5">
                 <div className="space-y-2">
                   <label className="block text-[13px] font-bold text-slate-700">
                     Adres e-mail
@@ -450,6 +450,7 @@ function LoginView({ onLogin }) {
                       size={20}
                     />
                     <input
+                      data-testid="login-email-input"
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
@@ -478,6 +479,7 @@ function LoginView({ onLogin }) {
                       size={20}
                     />
                     <input
+                      data-testid="login-password-input"
                       type={showPassword ? "text" : "password"}
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
@@ -513,6 +515,7 @@ function LoginView({ onLogin }) {
                 </label>
 
                 <button
+                  data-testid="login-submit-button"
                   type="submit"
                   className="w-full bg-[#0038F8] hover:bg-[#002ECC] text-white py-4 rounded-xl font-bold shadow-[0_4px_14px_rgba(0,56,248,0.25)] hover:shadow-[0_6px_20px_rgba(0,56,248,0.3)] transition-all flex items-center justify-center gap-2 mt-6 group"
                 >
@@ -728,6 +731,7 @@ function Sidebar({
 
   return (
     <aside
+      data-testid="sidebar"
       className={`
       fixed md:relative z-50 h-full bg-[#16161e] text-slate-300 flex flex-col flex-shrink-0 transition-all duration-300 ease-in-out
       ${
@@ -765,13 +769,13 @@ function Sidebar({
         <div className="flex items-center gap-2">
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
-            className="hidden md:flex items-center justify-center bg-slate-800/50 hover:bg-[#0038F8] text-white w-8 h-8 rounded-lg transition-colors"
+            className="hidden md:flex items-center justify-center text-slate-500 hover:text-slate-200 hover:bg-slate-800 w-8 h-8 rounded-lg transition-colors"
             title={isCollapsed ? "Rozwiń menu" : "Zwiń menu"}
           >
             {isCollapsed ? (
-              <ChevronRight size={20} />
+              <PanelLeftOpen size={20} />
             ) : (
-              <ChevronLeft size={20} />
+              <PanelLeftClose size={20} />
             )}
           </button>
           <button
@@ -891,7 +895,7 @@ function Sidebar({
 
 function DashboardView({ setView }) {
   return (
-    <div className="max-w-[1400px] flex flex-col gap-6 w-full">
+    <div data-testid="dashboard-view" className="max-w-[1400px] flex flex-col gap-6 w-full">
       <div className="mb-2 sm:mb-4">
         <h1 className="text-[24px] sm:text-[32px] font-extrabold text-slate-900 tracking-tight leading-tight mb-2">
           Przegląd główny
@@ -1295,6 +1299,7 @@ function DashboardView({ setView }) {
 function Card({ children, className = "", ...props }) {
   return (
     <div
+      data-testid="card"
       className={`bg-white rounded-2xl shadow-sm border border-slate-200 ${className}`}
       {...props}
     >
@@ -1314,6 +1319,7 @@ function Badge({ children, variant = "neutral", className = "", title }) {
   };
   return (
     <span
+      data-testid="badge"
       title={title}
       className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold ${variants[variant]} ${className}`}
     >
@@ -1351,7 +1357,7 @@ function PriorityBadge({ priority, size = "default" }) {
   };
 
   return (
-    <span className={`inline-flex items-center gap-1.5 rounded-xl font-semibold border ${className} ${sizeClasses}`}>
+    <span data-testid="priority-badge" className={`inline-flex items-center gap-1.5 rounded-xl font-semibold border ${className} ${sizeClasses}`}>
       <Icon size={iconSize} className="flex-shrink-0" />
       {priority}
     </span>
@@ -1360,9 +1366,10 @@ function PriorityBadge({ priority, size = "default" }) {
 
 function Input({ icon: Icon, className = "", ...props }) {
   return (
-    <div className={`relative flex items-center ${className}`}>
+    <div data-testid="input-container" className={`relative flex items-center ${className}`}>
       {Icon && <Icon className="absolute left-4 text-slate-400" size={18} />}
       <input
+        data-testid="input"
         className={`w-full bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50 transition-shadow ${
           Icon ? "pl-11 pr-4 py-3.5" : "px-4 py-3.5"
         }`}
@@ -1376,6 +1383,7 @@ function ShowMoreToggle({ isExpanded, onToggle, total, visibleCount, label }) {
   if (total <= visibleCount) return null;
   return (
     <button
+      data-testid="show-more-toggle"
       onClick={onToggle}
       className="w-full flex items-center justify-center gap-2 py-2.5 mt-2 text-[13px] font-bold text-[#0038F8] hover:text-[#002ECC] bg-[#0038F8]/5 hover:bg-[#0038F8]/10 rounded-xl transition-colors border border-[#0038F8]/10 shadow-sm"
     >
@@ -1389,8 +1397,8 @@ function ShowMoreToggle({ isExpanded, onToggle, total, visibleCount, label }) {
 
 function PriorityStats({ c = 0, w = 0, m = 0 }) {
   return (
-    <div className="flex items-center gap-1 sm:gap-0">
-      <div className="flex items-center gap-1 w-10 sm:w-12 shrink-0 justify-center" title={`Błędy krytyczne: ${c}`}>
+    <div data-testid="priority-stats" className="flex items-center gap-1 sm:gap-0">
+      <div data-testid="priority-critical" className="flex items-center gap-1 w-10 sm:w-12 shrink-0 justify-center" title={`Błędy krytyczne: ${c}`}>
         <AlertOctagon
           size={16}
           className={c > 0 ? "text-red-500" : "text-slate-400"}
@@ -1440,7 +1448,7 @@ function PriorityStats({ c = 0, w = 0, m = 0 }) {
 function BazaUslugContainer({ currentView, setView }) {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   return (
-    <div className="flex flex-col md:flex-row h-full w-full">
+    <div data-testid="baza-uslug-container" className="flex flex-col md:flex-row h-full w-full">
       <ServicesSidebar
         isCollapsed={isSidebarCollapsed}
         setIsCollapsed={setIsSidebarCollapsed}
@@ -1477,10 +1485,31 @@ function ServicesSidebar({ isCollapsed, setIsCollapsed, setView }) {
   return (
     <div
       className={`
-      bg-white border-b md:border-b-0 md:border-r border-slate-200 flex flex-col flex-shrink-0 transition-all duration-300 z-20 shadow-sm md:shadow-none
-      ${isCollapsed ? "md:w-[72px]" : "w-full md:w-[320px]"}
+      bg-white border-b md:border-b-0 md:border-r border-slate-200 flex flex-col flex-shrink-0 transition-all duration-300 z-20 shadow-sm md:shadow-none overflow-visible relative
+      ${isCollapsed ? "md:w-0" : "w-full md:w-[320px]"}
     `}
     >
+      {/* Przycisk rozwijania - widoczny tylko na desktop */}
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          setIsCollapsed(!isCollapsed);
+        }}
+        className={`hidden md:flex items-center justify-center w-8 h-8 transition-all duration-300 z-50
+          ${isCollapsed
+            ? "absolute left-0 top-[23px] bg-slate-900 text-white hover:bg-slate-800 rounded-r-lg rounded-l-none"
+            : "absolute right-[15px] top-[23px] bg-slate-100 text-slate-700 hover:bg-[#0038F8] hover:text-white rounded-lg"
+          }
+        `}
+        title={isCollapsed ? "Rozwiń filtry" : "Zwiń filtry"}
+      >
+        {isCollapsed ? (
+          <ChevronRight size={20} />
+        ) : (
+          <ChevronLeft size={20} />
+        )}
+      </button>
+
       <div
         className={`p-4 md:p-6 flex items-center ${
           isCollapsed ? "md:justify-center px-2" : "justify-between"
@@ -1531,20 +1560,6 @@ function ServicesSidebar({ isCollapsed, setIsCollapsed, setView }) {
             <span className="hidden md:block">Struktura Usług</span>
           </h2>
         </div>
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            setIsCollapsed(!isCollapsed);
-          }}
-          className="hidden md:flex items-center justify-center bg-slate-100 hover:bg-[#0038F8] text-slate-700 hover:text-white w-8 h-8 rounded-lg transition-colors"
-          title={isCollapsed ? "Rozwiń filtry" : "Zwiń filtry"}
-        >
-          {isCollapsed ? (
-            <ChevronRight size={20} />
-          ) : (
-            <ChevronLeft size={20} />
-          )}
-        </button>
         <button
           className={`md:hidden p-1.5 transition-colors rounded-lg flex-shrink-0 ${
             isMobileOpen
@@ -1682,6 +1697,7 @@ function TreeFolder({
 function TreeItem({ title, isActive, onClick }) {
   return (
     <button
+      data-testid={`tree-item-${title.toLowerCase().replace(/\s+/g, '-')}`}
       onClick={(e) => {
         if (onClick) onClick(e, title);
       }}
@@ -1707,7 +1723,7 @@ function TreeItem({ title, isActive, onClick }) {
 
 function ProcessListView({ setView }) {
   return (
-    <div className="max-w-[1000px] w-full">
+    <div data-testid="process-list-view" className="max-w-[1000px] w-full">
       <div className="flex items-center gap-2 text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-4">
         <Folder size={14} className="text-slate-400" />
         <span>BAZA USŁUG</span>
@@ -1797,6 +1813,7 @@ function ProcessListView({ setView }) {
 function ProcessCard({ title, views, score, scoreVariant, issues, onClick }) {
   return (
     <Card
+      data-testid="process-card"
       className="flex flex-col sm:flex-row sm:items-center p-4 sm:p-5 gap-4 hover:border-[#0038F8]/30 hover:shadow-md transition-all duration-200 cursor-pointer group"
       onClick={onClick}
     >
@@ -1870,7 +1887,7 @@ function ProcessCard({ title, views, score, scoreVariant, issues, onClick }) {
 
 function ProcessDetailsView({ setView }) {
   return (
-    <div className="max-w-[1000px] w-full">
+    <div data-testid="process-details-view" className="max-w-[1000px] w-full">
       <div className="flex items-center gap-2 text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-4">
         <Folder size={14} className="text-slate-400" />
         <span>BAZA USŁUG</span>
@@ -1959,7 +1976,10 @@ function StepItem({
   onOpenAudit,
 }) {
   return (
-    <Card className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between bg-white hover:border-[#0038F8]/30 transition-all duration-300 gap-4">
+    <Card
+      data-testid="step-item"
+      className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between bg-white hover:border-[#0038F8]/30 transition-all duration-300 gap-4"
+    >
       <div className="flex items-center gap-4">
         <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-slate-100 flex items-center justify-center font-bold text-slate-700 text-sm sm:text-lg flex-shrink-0">
           {number}
@@ -2173,7 +2193,7 @@ function RaportyView({ setView }) {
   };
 
   return (
-    <div className="flex flex-col md:flex-row h-full w-full relative">
+    <div data-testid="raporty-view" className="flex flex-col md:flex-row h-full w-full relative">
       {/* Sidebar filtrów */}
       <div
         className={`
@@ -2209,7 +2229,7 @@ function RaportyView({ setView }) {
             ${
               isMobileFiltersOpen
                 ? "bg-slate-900 text-white border-b border-slate-800"
-                : "bg-[#0038F8] text-white md:bg-white md:text-slate-900 border-b border-[#002ECC] md:border-slate-100"
+                : "bg-[#0038F8] text-white md:bg-white md:text-slate-900 border-b border-[#002ECC] md:border-slate-100 md:border-r md:border-r-slate-200"
             }
           `}
           onClick={() => {
@@ -2439,6 +2459,7 @@ function ReportCard({
 }) {
   return (
     <Card
+      data-testid="report-card"
       className="p-3 sm:p-4 hover:shadow-md transition-shadow cursor-pointer group flex flex-col"
       onClick={onClick}
     >
@@ -2537,7 +2558,7 @@ function ReportSummaryView({ setView }) {
   ];
 
   return (
-    <div className="max-w-[1200px] w-full">
+    <div data-testid="report-summary-view" className="max-w-[1200px] w-full">
       <div className="flex items-center gap-2 text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-4">
         <ClipboardCheck size={14} className="text-slate-400" />
         <span>RAPORTY Z AUDYTÓW</span>
@@ -2810,7 +2831,10 @@ function TestedElementItem({
   onReportClick,
 }) {
   return (
-    <div className="border border-slate-200 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between hover:bg-slate-50 transition-colors gap-4 sm:gap-0">
+    <div
+      data-testid="tested-element-item"
+      className="border border-slate-200 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between hover:bg-slate-50 transition-colors gap-4 sm:gap-0"
+    >
       <div className="flex items-center gap-4 flex-1 min-w-0 pr-4">
         <div className="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center text-slate-500 flex-shrink-0">
           <Layout size={18} />
@@ -2889,7 +2913,7 @@ function TestedElementItem({
 
 function ReportErrorsView({ setView }) {
   return (
-    <div className="max-w-[1200px] w-full">
+    <div data-testid="report-errors-view" className="max-w-[1200px] w-full">
       <button
         onClick={() => setView("raport-szczegoly")}
         className="flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-500 hover:text-slate-800 transition-colors mb-4"
@@ -3040,6 +3064,7 @@ function ErrorAccordionItem({ id, title, subtext, initialExpanded = false }) {
 
   return (
     <Card
+      data-testid="error-accordion-item"
       className={`overflow-hidden transition-all duration-300 ${
         isExpanded
           ? "border-[#0038F8]/30 shadow-md ring-1 ring-[#0038F8]/10"
@@ -3204,7 +3229,7 @@ function ReportingModuleView() {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   return (
-    <div className="flex flex-col md:flex-row h-full w-full">
+    <div data-testid="reporting-module-view" className="flex flex-col md:flex-row h-full w-full">
       <FiltersSidebar
         isCollapsed={isSidebarCollapsed}
         setIsCollapsed={setIsSidebarCollapsed}
@@ -3419,10 +3444,31 @@ function FiltersSidebar({ isCollapsed, setIsCollapsed }) {
   return (
     <div
       className={`
-      bg-white border-b md:border-b-0 md:border-r border-slate-200 flex flex-col flex-shrink-0 transition-all duration-300 z-20 shadow-sm md:shadow-none
-      ${isCollapsed ? "md:w-[72px]" : "w-full md:w-[320px]"}
+      bg-white border-b md:border-b-0 md:border-r border-slate-200 flex flex-col flex-shrink-0 transition-all duration-300 z-20 shadow-sm md:shadow-none overflow-visible relative
+      ${isCollapsed ? "md:w-0" : "w-full md:w-[320px]"}
     `}
     >
+      {/* Przycisk rozwijania - widoczny tylko na desktop */}
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          setIsCollapsed(!isCollapsed);
+        }}
+        className={`hidden md:flex items-center justify-center w-8 h-8 transition-all duration-300 z-50
+          ${isCollapsed
+            ? "absolute left-0 top-[23px] bg-slate-900 text-white hover:bg-slate-800 rounded-r-lg rounded-l-none"
+            : "absolute right-[15px] top-[23px] bg-slate-100 text-slate-700 hover:bg-[#0038F8] hover:text-white rounded-lg"
+          }
+        `}
+        title={isCollapsed ? "Rozwiń filtry" : "Zwiń filtry"}
+      >
+        {isCollapsed ? (
+          <ChevronRight size={20} />
+        ) : (
+          <ChevronLeft size={20} />
+        )}
+      </button>
+
       <div
         className={`p-4 md:p-6 flex items-center ${
           isCollapsed ? "md:justify-center px-2" : "justify-between"
@@ -3463,20 +3509,6 @@ function FiltersSidebar({ isCollapsed, setIsCollapsed }) {
             <span className="hidden md:block">Filtry</span>
           </h2>
         </div>
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            setIsCollapsed(!isCollapsed);
-          }}
-          className="hidden md:flex items-center justify-center bg-slate-100 hover:bg-[#0038F8] text-slate-700 hover:text-white w-8 h-8 rounded-lg transition-colors"
-          title={isCollapsed ? "Rozwiń filtry" : "Zwiń filtry"}
-        >
-          {isCollapsed ? (
-            <ChevronRight size={20} />
-          ) : (
-            <ChevronLeft size={20} />
-          )}
-        </button>
         <button
           className={`md:hidden p-1.5 transition-colors rounded-lg flex-shrink-0 ${
             isMobileOpen
@@ -3697,6 +3729,7 @@ function FilterAccordion({
 
   return (
     <div
+      data-testid="filter-accordion"
       className={`border rounded-xl bg-white overflow-hidden transition-colors ${
         isControlled && !isExpanded && titleBadge
           ? "border-[#0038F8]/40 shadow-sm"
@@ -3745,6 +3778,7 @@ function FilterCheckbox({ label }) {
 
   return (
     <label
+      data-testid="filter-checkbox"
       className="flex items-center gap-3 cursor-pointer group"
       onClick={(e) => e.stopPropagation()}
     >
@@ -3792,7 +3826,9 @@ function FilterCheckbox({ label }) {
 
 function FilterDateRange({ label }) {
   return (
-    <div>
+    <div
+      data-testid="filter-date-range"
+    >
       <div className="text-xs text-slate-500 mb-1.5 font-semibold">{label}</div>
       <div className="flex items-center gap-2">
         <input
@@ -3815,7 +3851,9 @@ function FilterNumberRange({
   placeholderDo = "Do",
 }) {
   return (
-    <div>
+    <div
+      data-testid="filter-number-range"
+    >
       <div className="text-xs text-slate-500 mb-1.5 font-semibold">{label}</div>
       <div className="flex items-center gap-2">
         <input
@@ -3923,7 +3961,10 @@ function AuditReportView() {
   ];
 
   return (
-    <div className="max-w-[1200px]">
+    <div
+      data-testid="audit-report-view"
+      className="max-w-[1200px]"
+    >
       <Card className="mb-6 p-4 flex flex-col md:flex-row items-end md:items-center gap-4 sm:gap-6 bg-white border-slate-200">
         <div className="flex-1 w-full">
           <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-2">
@@ -3973,7 +4014,10 @@ function AuditNode({ audit, detailLevel }) {
   const visibleViews = expanded ? audit.views : audit.views.slice(0, 3);
 
   return (
-    <Card className="overflow-hidden border border-slate-200 shadow-sm">
+    <Card
+      data-testid="audit-node"
+      className="overflow-hidden border border-slate-200 shadow-sm"
+    >
       <div className="bg-white p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100">
         <div className="flex flex-col flex-1 min-w-[280px]">
           <div className="flex items-center gap-2 mb-1.5">
@@ -4175,7 +4219,10 @@ function AuditViewNode({ view, detailLevel }) {
     : [];
 
   return (
-    <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+    <div
+      data-testid="audit-view-node"
+      className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm"
+    >
       <div className="p-3 sm:p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white">
         <div className="flex items-center gap-3 flex-1">
           <ChevronRightSquare
@@ -4272,7 +4319,10 @@ function AuditErrorsReportView() {
   const data = useMemo(() => genFlatErrors(30, "AUD_ERR_"), []);
 
   return (
-    <div className="max-w-[1400px]">
+    <div
+      data-testid="audit-errors-report-view"
+      className="max-w-[1400px]"
+    >
       <div className="mb-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
         <Card className="p-4 flex items-center gap-4 border-slate-200">
           <div className="w-12 h-12 bg-red-50 text-red-500 rounded-xl flex items-center justify-center flex-shrink-0">
@@ -4365,6 +4415,7 @@ function AuditErrorTableRow({ data }) {
   return (
     <>
       <tr
+        data-testid="audit-error-table-row"
         onClick={handleToggle}
         className="border-b border-slate-100 hover:bg-slate-50 transition-colors cursor-pointer group"
       >
@@ -4484,7 +4535,10 @@ function OperationalReport() {
   const data = mockSharedServicesData;
 
   return (
-    <div className="max-w-[1200px]">
+    <div
+      data-testid="operational-report"
+      className="max-w-[1200px]"
+    >
       <Card className="mb-6 p-4 flex flex-col md:flex-row items-end md:items-center gap-4 sm:gap-6 bg-white border-slate-200">
         <div className="flex-1 w-full">
           <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-2">
@@ -4540,7 +4594,10 @@ function ServiceNode({ service, detailLevel }) {
     : service.processes.slice(0, 2);
 
   return (
-    <Card className="overflow-hidden border border-slate-200 shadow-sm">
+    <Card
+      data-testid="service-node"
+      className="overflow-hidden border border-slate-200 shadow-sm"
+    >
       <div className="bg-white p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100">
         <div className="flex items-center gap-3 flex-1">
           <div className="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center text-slate-500 flex-shrink-0">
@@ -4609,7 +4666,10 @@ function ProcessNode({ process, detailLevel }) {
   const visibleViews = expanded ? process.views : process.views.slice(0, 3);
 
   return (
-    <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+    <div
+      data-testid="process-node"
+      className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm"
+    >
       <div className="p-3 sm:p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 bg-white">
         <div className="flex items-center gap-3">
           <ChevronRightSquare size={16} className="text-[#0038F8]" />
@@ -4677,7 +4737,10 @@ function ViewNode({ view, detailLevel }) {
     : [];
 
   return (
-    <div className="flex flex-col">
+    <div
+      data-testid="view-node"
+      className="flex flex-col"
+    >
       <div className="p-3 pl-4 sm:pl-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-slate-50 transition-colors">
         <div className="flex flex-col flex-1 min-w-[200px]">
           <div className="flex items-center gap-2 mb-1">
@@ -4762,7 +4825,10 @@ function ProgressReport() {
   const data = mockSharedServicesData;
 
   return (
-    <div className="max-w-[1200px]">
+    <div
+      data-testid="progress-report"
+      className="max-w-[1200px]"
+    >
       <Card className="mb-6 p-4 flex flex-col md:flex-row items-end md:items-center gap-4 sm:gap-6 bg-white border-slate-200">
         <div className="flex-1 w-full">
           <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-2">
@@ -4803,7 +4869,10 @@ function ProgressReport() {
 
 function ProgressServiceNode({ service }) {
   return (
-    <Card className="overflow-hidden border border-slate-200 shadow-sm">
+    <Card
+      data-testid="progress-service-node"
+      className="overflow-hidden border border-slate-200 shadow-sm"
+    >
       <div className="bg-slate-50 p-4 sm:p-5 sm:pr-8 lg:pr-10 flex items-center gap-3 border-b border-slate-200">
         <div className="w-8 h-8 bg-white border border-slate-200 rounded-lg flex items-center justify-center text-slate-500 flex-shrink-0">
           <Library size={16} />
@@ -4828,7 +4897,10 @@ function ProgressServiceNode({ service }) {
 
 function ProgressProcessNode({ process }) {
   return (
-    <div className="p-4 sm:p-5 sm:pr-8 lg:pr-10 flex flex-col lg:flex-row lg:items-center justify-between gap-4 hover:bg-slate-50/50 transition-colors">
+    <div
+      data-testid="progress-process-node"
+      className="p-4 sm:p-5 sm:pr-8 lg:pr-10 flex flex-col lg:flex-row lg:items-center justify-between gap-4 hover:bg-slate-50/50 transition-colors"
+    >
       <div className="flex items-start sm:items-center gap-3 flex-1 min-w-[250px]">
         <ChevronRightSquare
           size={16}
@@ -4891,6 +4963,7 @@ function SparklineChart({ data }) {
 
   return (
     <div
+      data-testid="sparkline-chart"
       className="flex flex-col items-center justify-center relative group"
       title="Trend zmian w czasie"
     >
