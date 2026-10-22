@@ -1,0 +1,1311 @@
+================================================================================
+              W-ALLY: FRAZY MENU I PULPITU (DO REDAKCJI PROSTEGO JĘZYKA)        
+================================================================================
+Data wygenerowania: 22.10.2026, 14:21:41
+Łączna liczba fraz: 104
+
+INSTRUKCJA DLA REDAKTORA PROSTEGO JĘZYKA:
+1. Każda fraza posiada swój unikalny identyfikator [ID], kontekst występowania oraz [TYP].
+2. Pole [ORYGINALNY TEKST] zawiera obecne brzmienie w aplikacji.
+3. Wpisz swoją zredagowaną propozycję w linii [PROSTY JĘZYK: ...].
+4. Nie zmieniaj identyfikatorów [ID], aby plik mógł zostać automatycznie zaimportowany do kodu!
+5. Zasady prostego języka: krótkie zdania, strona czynna, brak żargonu, zrozumiałe skróty.
+================================================================================
+
+
+################################################################################
+### SEKCJA: NAWIGACJA GÓRNA
+################################################################################
+
+--------------------------------------------------------------------------------
+ID: nav.brand.name
+Lokalizacja: Logo / Brand w nagłówku po lewej stronie
+Typ elementu: Etykieta
+ORYGINALNY TEKST:
+W-ally
+
+PROSTY JĘZYK (PO REDAKCJI):
+W-ally
+
+Wskazówka redakcyjna:
+Nazwa własna systemu WCAG Auditor / W-ally. Pozostawić bez zmian lub dostosować zapis.
+--------------------------------------------------------------------------------
+ID: nav.menu.dashboard
+Lokalizacja: Pasek menu głównego (desktop i mobile) - Pozycja 1
+Typ elementu: Etykieta menu
+ORYGINALNY TEKST:
+Pulpit
+
+PROSTY JĘZYK (PO REDAKCJI):
+Pulpit
+
+Wskazówka redakcyjna:
+Główny ekran przeglądowy. Alternatywy prostego języka: 'Start', 'Przegląd', 'Pulpit'.
+--------------------------------------------------------------------------------
+ID: nav.menu.audits
+Lokalizacja: Pasek menu głównego - Pozycja 2
+Typ elementu: Etykieta menu
+ORYGINALNY TEKST:
+Audyty
+
+PROSTY JĘZYK (PO REDAKCJI):
+Audyty
+
+Wskazówka redakcyjna:
+Lista formalnych badań dostępności cyfrowej. Zrozumiałe, jasne.
+--------------------------------------------------------------------------------
+ID: nav.menu.services
+Lokalizacja: Pasek menu głównego - Pozycja 3
+Typ elementu: Etykieta menu
+ORYGINALNY TEKST:
+Baza Usług
+
+PROSTY JĘZYK (PO REDAKCJI):
+Katalog Usług
+
+Wskazówka redakcyjna:
+Inwentaryzacja serwisów, systemów i procesów. Alternatywa: 'Usługi' lub 'Katalog usług'.
+--------------------------------------------------------------------------------
+ID: nav.menu.reporting
+Lokalizacja: Pasek menu głównego - Pozycja 4
+Typ elementu: Etykieta menu
+ORYGINALNY TEKST:
+Raportowanie
+
+PROSTY JĘZYK (PO REDAKCJI):
+Raporty
+
+Wskazówka redakcyjna:
+Rzeczownik odczasownikowy 'Raportowanie' można uprościć do 'Raporty'.
+--------------------------------------------------------------------------------
+ID: nav.menu.complaints
+Lokalizacja: Pasek menu głównego - Pozycja 5
+Typ elementu: Etykieta menu
+ORYGINALNY TEKST:
+Skargi i reklamacje
+
+PROSTY JĘZYK (PO REDAKCJI):
+Zgłoszenia barier
+
+Wskazówka redakcyjna:
+Prawnicze określenie. W prostym języku często: 'Zgłoszenia problemów' lub 'Skargi i wnioski'.
+--------------------------------------------------------------------------------
+ID: nav.help.button
+Lokalizacja: Przycisk Pomoc w belce górnej
+Typ elementu: Przycisk
+ORYGINALNY TEKST:
+Pomoc
+
+PROSTY JĘZYK (PO REDAKCJI):
+Pomoc
+
+Wskazówka redakcyjna:
+Krótkie, jasne słowo.
+--------------------------------------------------------------------------------
+ID: nav.help.tooltip
+Lokalizacja: Atrybut title dla przycisku Pomoc
+Typ elementu: Dymek (Tooltip)
+ORYGINALNY TEKST:
+Pomoc
+
+PROSTY JĘZYK (PO REDAKCJI):
+Otwórz pomoc i instrukcje
+
+Wskazówka redakcyjna:
+Wskazane doprecyzowanie, co robi przycisk po najechaniu myszą.
+--------------------------------------------------------------------------------
+ID: nav.help.aria_label
+Lokalizacja: Etykieta aria-label przycisku Pomoc dla czytników ekranu
+Typ elementu: Dostępność (Aria)
+ORYGINALNY TEKST:
+Pomoc
+
+PROSTY JĘZYK (PO REDAKCJI):
+Otwórz okno pomocy i przewodnik
+
+Wskazówka redakcyjna:
+Ułatwienie dla użytkowników niewidomych korzystających ze screenreadera.
+--------------------------------------------------------------------------------
+ID: nav.tickets.title
+Lokalizacja: Przycisk ikony czatu z audytorami - atrybut title
+Typ elementu: Dymek (Tooltip)
+ORYGINALNY TEKST:
+Konsultacje
+
+PROSTY JĘZYK (PO REDAKCJI):
+Zapytaj audytora (konsultacje)
+
+Wskazówka redakcyjna:
+Wyjaśnienie, że chodzi o bezpośredni kontakt merytoryczny z audytorem.
+--------------------------------------------------------------------------------
+ID: nav.tickets.aria_label
+Lokalizacja: Przycisk czatu - etykieta aria-label
+Typ elementu: Dostępność (Aria)
+ORYGINALNY TEKST:
+Konsultacje z audytorami
+
+PROSTY JĘZYK (PO REDAKCJI):
+Konsultacje z zespołem audytorów
+
+Wskazówka redakcyjna:
+Jasna informacja o przeznaczeniu przycisku.
+--------------------------------------------------------------------------------
+ID: nav.notifications.title
+Lokalizacja: Przycisk ikony dzwonka - atrybut title
+Typ elementu: Dymek (Tooltip)
+ORYGINALNY TEKST:
+Powiadomienia: Odpowiedzi audytorów oraz Komunikaty
+
+PROSTY JĘZYK (PO REDAKCJI):
+Powiadomienia i wiadomości od audytorów
+
+Wskazówka redakcyjna:
+Uproszczenie nazwy dymka powiadomień.
+--------------------------------------------------------------------------------
+ID: nav.notifications.aria_label
+Lokalizacja: Przycisk ikony dzwonka - aria-label
+Typ elementu: Dostępność (Aria)
+ORYGINALNY TEKST:
+Otwórz menu powiadomień i komunikatów
+
+PROSTY JĘZYK (PO REDAKCJI):
+Otwórz listę powiadomień
+
+Wskazówka redakcyjna:
+Krótka, jednoznaczna instrukcja działania.
+--------------------------------------------------------------------------------
+ID: nav.profile.role
+Lokalizacja: Podpis pod nazwiskiem w menu profilu
+Typ elementu: Etykieta
+ORYGINALNY TEKST:
+Koordynator Dostępności
+
+PROSTY JĘZYK (PO REDAKCJI):
+Koordynator ds. dostępności
+
+Wskazówka redakcyjna:
+Nazwa roli / uprawnień zalogowanego użytkownika.
+--------------------------------------------------------------------------------
+ID: nav.profile.my_profile
+Lokalizacja: Rozwijane menu profilu użytkownika - Pozycja 1
+Typ elementu: Pozycja menu
+ORYGINALNY TEKST:
+Mój profil
+
+PROSTY JĘZYK (PO REDAKCJI):
+Twój profil
+
+Wskazówka redakcyjna:
+Możliwość ujednolicenia do zwrotu bezpośredniego 'Twój profil' lub zachowania 'Mój profil'.
+--------------------------------------------------------------------------------
+ID: nav.profile.logout
+Lokalizacja: Rozwijane menu profilu użytkownika - Pozycja 2
+Typ elementu: Pozycja menu
+ORYGINALNY TEKST:
+Wyloguj się
+
+PROSTY JĘZYK (PO REDAKCJI):
+Wyloguj się
+
+Wskazówka redakcyjna:
+Jasne polecenie w trybie rozkazującym.
+--------------------------------------------------------------------------------
+ID: nav.mobile.help_subtitle
+Lokalizacja: Podpis pod przyciskiem Pomoc w menu mobilnym
+Typ elementu: Podtytuł
+ORYGINALNY TEKST:
+Instrukcje & FAQ
+
+PROSTY JĘZYK (PO REDAKCJI):
+Instrukcje i częste pytania
+
+Wskazówka redakcyjna:
+Zastąpienie angielskiego akronimu 'FAQ' oraz znaku '&' polskim 'i częste pytania'.
+--------------------------------------------------------------------------------
+ID: nav.mobile.announcements_label
+Lokalizacja: Pozycja menu mobilnego
+Typ elementu: Pozycja menu
+ORYGINALNY TEKST:
+Komunikaty i Oferty
+
+PROSTY JĘZYK (PO REDAKCJI):
+Komunikaty i nowości
+
+Wskazówka redakcyjna:
+Słowo 'Oferty' może brzmieć zbyt handlowo; 'nowości' brzmi bardziej przyjaźnie.
+--------------------------------------------------------------------------------
+ID: nav.dropdown.tab_tickets
+Lokalizacja: Nagłówek zakładki w rozwijanym panelu powiadomień
+Typ elementu: Nagłówek
+ORYGINALNY TEKST:
+Wątki konsultacyjne z audytorami
+
+PROSTY JĘZYK (PO REDAKCJI):
+Rozmowy z audytorami
+
+Wskazówka redakcyjna:
+Uproszczenie 'Wątki konsultacyjne' na prostsze 'Rozmowy z audytorami'.
+--------------------------------------------------------------------------------
+ID: nav.dropdown.badge_action_required
+Lokalizacja: Pigułka statusowa w panelu powiadomień
+Typ elementu: Etykieta
+ORYGINALNY TEKST:
+Wymaga Twojej reakcji
+
+PROSTY JĘZYK (PO REDAKCJI):
+Czeka na Twoją odpowiedź
+
+Wskazówka redakcyjna:
+Bardziej bezpośrednie i precyzyjne sformułowanie.
+--------------------------------------------------------------------------------
+ID: nav.dropdown.badge_new_reply
+Lokalizacja: Etykieta przy nowej wypowiedzi w dymku
+Typ elementu: Etykieta
+ORYGINALNY TEKST:
+Nowa odpowiedź
+
+PROSTY JĘZYK (PO REDAKCJI):
+Nowa odpowiedź
+
+Wskazówka redakcyjna:
+Zrozumiałe, jasne.
+--------------------------------------------------------------------------------
+ID: nav.dropdown.open_ticket_link
+Lokalizacja: Link otwarcia czatu w powiadomieniu
+Typ elementu: Link / Akcja
+ORYGINALNY TEKST:
+Otwórz rozmowę w tickecie
+
+PROSTY JĘZYK (PO REDAKCJI):
+Przejdź do rozmowy
+
+Wskazówka redakcyjna:
+Usunięcie żargonowego anglicyzmu 'w tickecie'.
+--------------------------------------------------------------------------------
+ID: nav.dropdown.context_prefix
+Lokalizacja: Podpis kontekstu zgłoszenia w dymku
+Typ elementu: Etykieta
+ORYGINALNY TEKST:
+Dotyczy: {contextId}
+
+PROSTY JĘZYK (PO REDAKCJI):
+Dotyczy: {contextId}
+
+Wskazówka redakcyjna:
+Krótka informacja o powiązanym audycie lub procesie.
+--------------------------------------------------------------------------------
+ID: nav.dropdown.all_tickets_btn
+Lokalizacja: Przycisk na dole panelu konsultacji
+Typ elementu: Przycisk
+ORYGINALNY TEKST:
+Wszystkie konsultacje ({count})
+
+PROSTY JĘZYK (PO REDAKCJI):
+Zobacz wszystkie konsultacje ({count})
+
+Wskazówka redakcyjna:
+Dodanie czasownika ułatwia zrozumienie akcji.
+--------------------------------------------------------------------------------
+ID: nav.dropdown.tab_announcements
+Lokalizacja: Nagłówek zakładki komunikatów w dymku powiadomień
+Typ elementu: Nagłówek
+ORYGINALNY TEKST:
+Nowości systemowe i webinary
+
+PROSTY JĘZYK (PO REDAKCJI):
+Nowości i szkolenia
+
+Wskazówka redakcyjna:
+Zamiast obcego słowa 'webinary' można użyć 'szkolenia' lub 'spotkania online'.
+--------------------------------------------------------------------------------
+ID: nav.dropdown.mark_read_btn
+Lokalizacja: Przycisk oznaczania powiadomień w dymku
+Typ elementu: Przycisk
+ORYGINALNY TEKST:
+Oznacz przeczytane
+
+PROSTY JĘZYK (PO REDAKCJI):
+Oznacz wszystkie jako przeczytane
+
+Wskazówka redakcyjna:
+Poprawa gramatyczna i pełniejsze zdanie.
+--------------------------------------------------------------------------------
+ID: nav.dropdown.click_to_read
+Lokalizacja: Wskazówka na kafelku nieprzeczytanego komunikatu
+Typ elementu: Podpowiedź
+ORYGINALNY TEKST:
+Kliknij, by odczytać
+
+PROSTY JĘZYK (PO REDAKCJI):
+Kliknij, aby przeczytać
+
+Wskazówka redakcyjna:
+Naturalniejsza forma w języku polskim.
+--------------------------------------------------------------------------------
+ID: nav.dropdown.all_announcements_btn
+Lokalizacja: Przycisk na dole zakładki komunikatów
+Typ elementu: Przycisk
+ORYGINALNY TEKST:
+Zobacz wszystkie komunikaty ({count})
+
+PROSTY JĘZYK (PO REDAKCJI):
+Zobacz wszystkie komunikaty ({count})
+
+Wskazówka redakcyjna:
+Prawidłowe wezwanie do działania.
+
+################################################################################
+### SEKCJA: PULPIT – NAGŁÓWEK
+################################################################################
+
+--------------------------------------------------------------------------------
+ID: dashboard.header.breadcrumb
+Lokalizacja: Ścieżka powrotna (okruszki / breadcrumbs) nad tytułem
+Typ elementu: Nawigacja
+ORYGINALNY TEKST:
+Pulpit
+
+PROSTY JĘZYK (PO REDAKCJI):
+Pulpit
+
+Wskazówka redakcyjna:
+Wskazuje aktualne miejsce w strukturze serwisu.
+--------------------------------------------------------------------------------
+ID: dashboard.header.title
+Lokalizacja: Główny nagłówek H1 na pulpicie
+Typ elementu: Tytuł
+ORYGINALNY TEKST:
+Witaj, Kinga
+
+PROSTY JĘZYK (PO REDAKCJI):
+Witaj, Kinga
+
+Wskazówka redakcyjna:
+Bezpośrednie, przyjazne powitanie użytkownika.
+--------------------------------------------------------------------------------
+ID: dashboard.header.subtitle
+Lokalizacja: Podtytuł wprowadzający pod nagłówkiem H1
+Typ elementu: Podtytuł
+ORYGINALNY TEKST:
+Oto aktualny stan dostępności cyfrowej i wskaźniki zgodności WCAG 2.1 AA w Twojej organizacji.
+
+PROSTY JĘZYK (PO REDAKCJI):
+Sprawdź aktualny poziom dostępności cyfrowej i zgodności z normą WCAG w Twojej organizacji.
+
+Wskazówka redakcyjna:
+Uproszczenie zdania, zastąpienie 'Oto...' aktywnym zwrotem 'Sprawdź...'.
+--------------------------------------------------------------------------------
+ID: dashboard.header.btn_reporting
+Lokalizacja: Przycisk akcji w nagłówku - po prawej stronie
+Typ elementu: Przycisk
+ORYGINALNY TEKST:
+Raportowanie
+
+PROSTY JĘZYK (PO REDAKCJI):
+Przejdź do raportów
+
+Wskazówka redakcyjna:
+Zastąpienie rzeczownika 'Raportowanie' jasnym poleceniem z czasownikiem.
+--------------------------------------------------------------------------------
+ID: dashboard.header.btn_audits
+Lokalizacja: Główny przycisk akcji w nagłówku (niebieski)
+Typ elementu: Przycisk
+ORYGINALNY TEKST:
+Przeglądaj audyty
+
+PROSTY JĘZYK (PO REDAKCJI):
+Zobacz listę audytów
+
+Wskazówka redakcyjna:
+Jasne określenie docelowego miejsca.
+
+################################################################################
+### SEKCJA: PULPIT – KARTY KPI
+################################################################################
+
+--------------------------------------------------------------------------------
+ID: dashboard.kpi.accessibility.label
+Lokalizacja: Karta 1: Etykieta głównego wskaźnika procentowego
+Typ elementu: Etykieta
+ORYGINALNY TEKST:
+Średnia Dostępność
+
+PROSTY JĘZYK (PO REDAKCJI):
+Średni poziom dostępności
+
+Wskazówka redakcyjna:
+Naturalniejsze brzmienie w języku polskim (uniknięcie pisania obu słów wielką literą).
+--------------------------------------------------------------------------------
+ID: dashboard.kpi.accessibility.trend_badge
+Lokalizacja: Karta 1: Zielona pigułka dynamiki
+Typ elementu: Wskaźnik
+ORYGINALNY TEKST:
++2.4% r/r
+
+PROSTY JĘZYK (PO REDAKCJI):
++2,4% w porównaniu z zeszłym rokiem
+
+Wskazówka redakcyjna:
+Skrót r/r (rok do roku) bywa niezrozumiały dla osób spoza analityki finansowej. Warto wyjaśnić w dymku.
+--------------------------------------------------------------------------------
+ID: dashboard.kpi.accessibility.target_label
+Lokalizacja: Karta 1: Podpis pod wartością procentową
+Typ elementu: Etykieta
+ORYGINALNY TEKST:
+Cel: 90%
+
+PROSTY JĘZYK (PO REDAKCJI):
+Twój cel: 90%
+
+Wskazówka redakcyjna:
+Zwięzłe wskazanie progu docelowego.
+--------------------------------------------------------------------------------
+ID: dashboard.kpi.coverage.label
+Lokalizacja: Karta 2: Etykieta wskaźnika przebadania usług
+Typ elementu: Etykieta
+ORYGINALNY TEKST:
+Pokrycie Audytowe
+
+PROSTY JĘZYK (PO REDAKCJI):
+Zbadane usługi i procesy
+
+Wskazówka redakcyjna:
+Zwrot 'Pokrycie audytowe' jest kalką korporacyjną. Prostsze: 'Zbadane procesy' lub 'Objęte audytami'.
+--------------------------------------------------------------------------------
+ID: dashboard.kpi.coverage.processes_badge
+Lokalizacja: Karta 2: Szara pigułka z liczbą zbadanych elementów
+Typ elementu: Etykieta
+ORYGINALNY TEKST:
+142 procesy
+
+PROSTY JĘZYK (PO REDAKCJI):
+142 procesy łącznie
+
+Wskazówka redakcyjna:
+Wskazuje łączną liczbę zarejestrowanych ścieżek.
+--------------------------------------------------------------------------------
+ID: dashboard.kpi.errors.label
+Lokalizacja: Karta 3: Etykieta podsumowania problemów
+Typ elementu: Etykieta
+ORYGINALNY TEKST:
+Błędy Otwarte (Razem: 239)
+
+PROSTY JĘZYK (PO REDAKCJI):
+Aktywne błędy (łącznie: 239)
+
+Wskazówka redakcyjna:
+Zamiast informatycznego 'Błędy otwarte' prościej: 'Błędy do naprawy' lub 'Nierozwiązane problemy'.
+--------------------------------------------------------------------------------
+ID: dashboard.kpi.errors.trend_badge
+Lokalizacja: Karta 3: Czerwona pigułka dynamiki błędów
+Typ elementu: Wskaźnik
+ORYGINALNY TEKST:
++12 m/m
+
+PROSTY JĘZYK (PO REDAKCJI):
++12 w tym miesiącu
+
+Wskazówka redakcyjna:
+Skrót m/m (miesiąc do miesiąca) w prostym języku warto zastąpić zwrotem opisowym.
+--------------------------------------------------------------------------------
+ID: dashboard.kpi.errors.priority_title
+Lokalizacja: Karta 3: Pierwsza podkategoria błędów (czerwona)
+Typ elementu: Etykieta
+ORYGINALNY TEKST:
+Priorytetowe
+
+PROSTY JĘZYK (PO REDAKCJI):
+Krytyczne (najpilniejsze)
+
+Wskazówka redakcyjna:
+Kluczowa kategoria uniemożliwiająca korzystanie z serwisu osobom z niepełnosprawnościami.
+--------------------------------------------------------------------------------
+ID: dashboard.kpi.errors.priority_action
+Lokalizacja: Karta 3: Podpis pod liczbą błędów priorytetowych
+Typ elementu: Podtytuł
+ORYGINALNY TEKST:
+Wymaga akcji
+
+PROSTY JĘZYK (PO REDAKCJI):
+Napraw w pierwszej kolejności
+
+Wskazówka redakcyjna:
+Zastąpienie kalki 'Wymaga akcji' konkretną wskazówką działania.
+--------------------------------------------------------------------------------
+ID: dashboard.kpi.errors.important_title
+Lokalizacja: Karta 3: Druga podkategoria błędów (pomarańczowa)
+Typ elementu: Etykieta
+ORYGINALNY TEKST:
+Ważne
+
+PROSTY JĘZYK (PO REDAKCJI):
+Ważne
+
+Wskazówka redakcyjna:
+Jasne słowo.
+--------------------------------------------------------------------------------
+ID: dashboard.kpi.errors.important_action
+Lokalizacja: Karta 3: Podpis pod liczbą błędów ważnych
+Typ elementu: Podtytuł
+ORYGINALNY TEKST:
+Do planu
+
+PROSTY JĘZYK (PO REDAKCJI):
+Zaplanuj do naprawy
+
+Wskazówka redakcyjna:
+Rozwinięcie hasła 'Do planu' w czytelne zalecenie.
+--------------------------------------------------------------------------------
+ID: dashboard.kpi.errors.marginal_title
+Lokalizacja: Karta 3: Trzecia podkategoria błędów (niebieska)
+Typ elementu: Etykieta
+ORYGINALNY TEKST:
+Marginalne
+
+PROSTY JĘZYK (PO REDAKCJI):
+Drobne
+
+Wskazówka redakcyjna:
+'Drobne błędy' brzmi bardziej po polsku niż 'marginalne'.
+--------------------------------------------------------------------------------
+ID: dashboard.kpi.errors.marginal_action
+Lokalizacja: Karta 3: Podpis pod liczbą błędów marginalnych
+Typ elementu: Podtytuł
+ORYGINALNY TEKST:
+Niski wpływ
+
+PROSTY JĘZYK (PO REDAKCJI):
+Niewielkie utrudnienie
+
+Wskazówka redakcyjna:
+Wyjaśnienie, co oznacza ta waga dla użytkownika końcowego.
+--------------------------------------------------------------------------------
+ID: dashboard.kpi.audits.label
+Lokalizacja: Karta 4: Etykieta liczby zrealizowanych audytów
+Typ elementu: Etykieta
+ORYGINALNY TEKST:
+Przeprowadzone Audyty
+
+PROSTY JĘZYK (PO REDAKCJI):
+Zrealizowane audyty
+
+Wskazówka redakcyjna:
+Uniknięcie wielkich liter w środku zdania.
+--------------------------------------------------------------------------------
+ID: dashboard.kpi.audits.period_badge
+Lokalizacja: Karta 4: Niebieska pigułka horyzontu czasowego
+Typ elementu: Etykieta
+ORYGINALNY TEKST:
+W tym kwartale
+
+PROSTY JĘZYK (PO REDAKCJI):
+W bieżącym kwartale
+
+Wskazówka redakcyjna:
+Jasne określenie okresu rozliczeniowego.
+--------------------------------------------------------------------------------
+ID: dashboard.kpi.audits.in_progress_label
+Lokalizacja: Karta 4: Podpis pod liczbą audytów
+Typ elementu: Etykieta
+ORYGINALNY TEKST:
+4 w trakcie
+
+PROSTY JĘZYK (PO REDAKCJI):
+4 audyty trwają obecnie
+
+Wskazówka redakcyjna:
+Pełniejszy, bardziej naturalny opis.
+
+################################################################################
+### SEKCJA: PULPIT – DYMKI INFORMACYJNE (TOOLTIPS)
+################################################################################
+
+--------------------------------------------------------------------------------
+ID: dashboard.tooltip.accessibility_score
+Lokalizacja: Karta 1: Dymek przy etykiecie 'Średnia Dostępność'
+Typ elementu: Dymek (Tooltip)
+ORYGINALNY TEKST:
+Średni zagregowany wskaźnik spełnienia kryteriów sukcesu WCAG 2.1 AA we wszystkich audytowanych serwisach i procesach cyfrowych.
+
+PROSTY JĘZYK (PO REDAKCJI):
+Pokazuje, jaki procent wymogów dostępności cyfrowej spełniają łącznie wszystkie zbadane strony, aplikacje i procesy w Twojej organizacji.
+
+Wskazówka redakcyjna:
+Uproszczenie: usunięcie trudnych słów 'zagregowany wskaźnik spełnienia kryteriów sukcesu'.
+--------------------------------------------------------------------------------
+ID: dashboard.tooltip.accessibility_trend
+Lokalizacja: Karta 1: Dymek przy pigułce dynamiki '+2.4% r/r'
+Typ elementu: Dymek (Tooltip)
+ORYGINALNY TEKST:
+Porównanie rok do roku (r/r) – dynamika wzrostu ogólnego poziomu dostępności względem analogicznego okresu w ubiegłym roku.
+
+PROSTY JĘZYK (PO REDAKCJI):
+Porównanie z tym samym okresem w poprzednim roku. Wartość dodatnia oznacza, że dostępność Twoich usług rośnie.
+
+Wskazówka redakcyjna:
+Usunięcie żargonu analitycznego ('dynamika wzrostu względem analogicznego okresu').
+--------------------------------------------------------------------------------
+ID: dashboard.tooltip.accessibility_target
+Lokalizacja: Karta 1: Dymek przy celu 'Cel: 90%'
+Typ elementu: Dymek (Tooltip)
+ORYGINALNY TEKST:
+Strategiczny cel organizacji zgodny z wymaganiami Europejskiego Aktu o Dostępności (EAA).
+
+PROSTY JĘZYK (PO REDAKCJI):
+Cel wyznaczony dla Twojej organizacji, aby spełnić europejskie i polskie przepisy o dostępności cyfrowej (ustawa EAA).
+
+Wskazówka redakcyjna:
+Rozwinięcie skrótu EAA w zrozumiały kontekst prawny.
+--------------------------------------------------------------------------------
+ID: dashboard.tooltip.coverage_score
+Lokalizacja: Karta 2: Dymek przy etykiecie 'Pokrycie Audytowe'
+Typ elementu: Dymek (Tooltip)
+ORYGINALNY TEKST:
+Odsetek zidentyfikowanych procesów i ścieżek cyfrowych posiadających aktualny i ważny audyt WCAG.
+
+PROSTY JĘZYK (PO REDAKCJI):
+Odsetek usług i procesów internetowych, które mają aktualny i ważny audyt dostępności cyfrowej.
+
+Wskazówka redakcyjna:
+Zastąpienie 'zidentyfikowanych ścieżek cyfrowych' zrozumiałym sformułowaniem.
+--------------------------------------------------------------------------------
+ID: dashboard.tooltip.coverage_processes
+Lokalizacja: Karta 2: Dymek przy liczbie '142 procesy'
+Typ elementu: Dymek (Tooltip)
+ORYGINALNY TEKST:
+Łączna liczba zinwentaryzowanych procesów w Bazie Usług podlegających cyklicznemu monitoringowi dostępności.
+
+PROSTY JĘZYK (PO REDAKCJI):
+Tyle procesów (np. wniosków, płatności, formularzy) jest wpisanych do bazy i regularnie sprawdzanych.
+
+Wskazówka redakcyjna:
+Wyjaśnienie trudnego słowa 'zinwentaryzowanych' za pomocą prostych przykładów.
+--------------------------------------------------------------------------------
+ID: dashboard.tooltip.errors_open
+Lokalizacja: Karta 3: Dymek przy tytule 'Błędy Otwarte'
+Typ elementu: Dymek (Tooltip)
+ORYGINALNY TEKST:
+Łączna liczba zarejestrowanych, nierozwiązanych dotąd barier dostępności wykrytych we wszystkich audytowanych systemach.
+
+PROSTY JĘZYK (PO REDAKCJI):
+Wszystkie wykryte podczas audytów bariery i usterki, które nadal czekają na poprawienie przez programistów lub redaktorów.
+
+Wskazówka redakcyjna:
+Konkretne wyjaśnienie, kto i co musi z tym zrobić.
+--------------------------------------------------------------------------------
+ID: dashboard.tooltip.errors_trend
+Lokalizacja: Karta 3: Dymek przy dynamice '+12 m/m'
+Typ elementu: Dymek (Tooltip)
+ORYGINALNY TEKST:
+Porównanie miesiąc do miesiąca (m/m) – przyrost liczby otwartych błędów w stosunku do poprzedniego miesiąca.
+
+PROSTY JĘZYK (PO REDAKCJI):
+Różnica w porównaniu z poprzednim miesiącem. Wskazuje, o ile wzrosła lub zmalała liczba nierozwiązanych problemów.
+
+Wskazówka redakcyjna:
+Proste wyjaśnienie mechanizmu m/m.
+--------------------------------------------------------------------------------
+ID: dashboard.tooltip.audits_completed
+Lokalizacja: Karta 4: Dymek przy tytule 'Przeprowadzone Audyty'
+Typ elementu: Dymek (Tooltip)
+ORYGINALNY TEKST:
+Suma sfinalizowanych audytów certyfikacyjnych oraz re-audytów zarejestrowanych w systemie.
+
+PROSTY JĘZYK (PO REDAKCJI):
+Łączna liczba zakończonych audytów oraz audytów sprawdzających (re-audytów), które zostały odebrane w systemie.
+
+Wskazówka redakcyjna:
+Zastąpienie 'sfinalizowanych' polskim 'zakończonych'.
+--------------------------------------------------------------------------------
+ID: dashboard.tooltip.audits_period
+Lokalizacja: Karta 4: Dymek przy pigułce 'W tym kwartale'
+Typ elementu: Dymek (Tooltip)
+ORYGINALNY TEKST:
+Liczba formalnych audytów WCAG ukończonych i odebranych w bieżącym kwartale rozliczeniowym.
+
+PROSTY JĘZYK (PO REDAKCJI):
+Liczba audytów ukończonych i zatwierdzonych w obecnym kwartale roku.
+
+Wskazówka redakcyjna:
+Uproszczenie stylu urzędowego.
+--------------------------------------------------------------------------------
+ID: dashboard.tooltip.audits_in_progress
+Lokalizacja: Karta 4: Dymek przy statusie '4 w trakcie'
+Typ elementu: Dymek (Tooltip)
+ORYGINALNY TEKST:
+Audyty oraz re-audyty aktualnie realizowane przez zespół certyfikowanych audytorów WCAG.
+
+PROSTY JĘZYK (PO REDAKCJI):
+Audyty, nad którymi zespół certyfikowanych ekspertów pracuje w tej chwili.
+
+Wskazówka redakcyjna:
+Prostsza, żywsza konstrukcja gramatyczna.
+
+################################################################################
+### SEKCJA: PULPIT – WYKRESY
+################################################################################
+
+--------------------------------------------------------------------------------
+ID: dashboard.charts.trend.title
+Lokalizacja: Wykres 1: Nagłówek wykresu słupkowego
+Typ elementu: Tytuł
+ORYGINALNY TEKST:
+Trend dostępności vs Błędy w czasie
+
+PROSTY JĘZYK (PO REDAKCJI):
+Zmiany dostępności i liczby błędów w czasie
+
+Wskazówka redakcyjna:
+Zastąpienie obcego skrótu 'vs' polskim spójnikiem 'i' lub 'a'.
+--------------------------------------------------------------------------------
+ID: dashboard.charts.trend.tooltip
+Lokalizacja: Wykres 1: Dymek informacyjny obok tytułu wykresu
+Typ elementu: Dymek (Tooltip)
+ORYGINALNY TEKST:
+Zestawienie średniego wskaźnika zgodności WCAG (niebieskie słupki) z liczbą nowych wykrytych błędów (czerwone słupki) na przestrzeni ostatnich 12 miesięcy.
+
+PROSTY JĘZYK (PO REDAKCJI):
+Wykres pokazuje dwa wskaźniki z ostatnich 12 miesięcy: niebieskie słupki to średni poziom dostępności (w procentach), a czerwone słupki to liczba nowo wykrytych błędów.
+
+Wskazówka redakcyjna:
+Zwięzły i czytelny przewodnik po kolorach i osiach wykresu.
+--------------------------------------------------------------------------------
+ID: dashboard.charts.trend.subtitle
+Lokalizacja: Wykres 1: Podtytuł pod nagłówkiem
+Typ elementu: Podtytuł
+ORYGINALNY TEKST:
+Ostatnie 12 miesięcy w całej organizacji
+
+PROSTY JĘZYK (PO REDAKCJI):
+Dane z ostatnich 12 miesięcy dla całej organizacji
+
+Wskazówka redakcyjna:
+Krótkie doprecyzowanie kontekstu.
+--------------------------------------------------------------------------------
+ID: dashboard.charts.trend.hover_format
+Lokalizacja: Wykres 1: Treść dymka po najechaniu na pojedynczy miesiąc
+Typ elementu: Dymek (Hover)
+ORYGINALNY TEKST:
+Dostępność: {score}% | Błędy: {errors}
+
+PROSTY JĘZYK (PO REDAKCJI):
+Dostępność: {score}% | Nowe błędy: {errors}
+
+Wskazówka redakcyjna:
+Doprecyzowanie, że czerwony słupek to nowe błędy wykryte w danym miesiącu.
+--------------------------------------------------------------------------------
+ID: dashboard.charts.trend.legend_score
+Lokalizacja: Wykres 1: Etykieta niebieskiej kropki w legendzie
+Typ elementu: Legenda
+ORYGINALNY TEKST:
+% Dostępności
+
+PROSTY JĘZYK (PO REDAKCJI):
+Poziom dostępności (%)
+
+Wskazówka redakcyjna:
+Bardziej naturalny szyk słów.
+--------------------------------------------------------------------------------
+ID: dashboard.charts.trend.legend_errors
+Lokalizacja: Wykres 1: Etykieta czerwonego kwadracika w legendzie
+Typ elementu: Legenda
+ORYGINALNY TEKST:
+Liczba nowych błędów
+
+PROSTY JĘZYK (PO REDAKCJI):
+Liczba nowych błędów
+
+Wskazówka redakcyjna:
+Jasne, jednoznaczne określenie.
+--------------------------------------------------------------------------------
+ID: dashboard.charts.channels.title
+Lokalizacja: Wykres 2: Nagłówek poziomego wykresu kanałów
+Typ elementu: Tytuł
+ORYGINALNY TEKST:
+Zgodność kanałów
+
+PROSTY JĘZYK (PO REDAKCJI):
+Dostępność według kanałów
+
+Wskazówka redakcyjna:
+Słowo 'Zgodność' można zastąpić 'Dostępnością' lub 'Poziomem dostępności w kanałach'.
+--------------------------------------------------------------------------------
+ID: dashboard.charts.channels.tooltip
+Lokalizacja: Wykres 2: Dymek informacyjny obok tytułu
+Typ elementu: Dymek (Tooltip)
+ORYGINALNY TEKST:
+Średni poziom dostępności z podziałem na poszczególne kanały: serwis WWW, aplikacje mobilne (iOS, Android) oraz dokumenty cyfrowe (PDF/DOC).
+
+PROSTY JĘZYK (PO REDAKCJI):
+Średni wynik dostępności z podziałem na kanały kontaktu: stronę internetową, aplikacje na telefony (iOS i Android) oraz dokumenty do pobrania (PDF i Word).
+
+Wskazówka redakcyjna:
+Zastąpienie skrótów 'PDF/DOC' przyjaznym 'dokumenty do pobrania (PDF i Word)'.
+--------------------------------------------------------------------------------
+ID: dashboard.charts.channels.channel_web
+Lokalizacja: Wykres 2: Etykieta pierwszego paska
+Typ elementu: Etykieta
+ORYGINALNY TEKST:
+WWW
+
+PROSTY JĘZYK (PO REDAKCJI):
+Strona internetowa (WWW)
+
+Wskazówka redakcyjna:
+Ułatwienie dla użytkowników mniej technicznych.
+--------------------------------------------------------------------------------
+ID: dashboard.charts.channels.channel_ios
+Lokalizacja: Wykres 2: Etykieta drugiego paska
+Typ elementu: Etykieta
+ORYGINALNY TEKST:
+Aplikacja (iOS)
+
+PROSTY JĘZYK (PO REDAKCJI):
+Aplikacja na iPhone (iOS)
+
+Wskazówka redakcyjna:
+Dodanie czytelnego skojarzenia ze smartfonami Apple.
+--------------------------------------------------------------------------------
+ID: dashboard.charts.channels.channel_android
+Lokalizacja: Wykres 2: Etykieta trzeciego paska
+Typ elementu: Etykieta
+ORYGINALNY TEKST:
+Aplikacja (Android)
+
+PROSTY JĘZYK (PO REDAKCJI):
+Aplikacja na Androida
+
+Wskazówka redakcyjna:
+Spolszczona, naturalna odmiana nazwy systemu.
+--------------------------------------------------------------------------------
+ID: dashboard.charts.channels.channel_docs
+Lokalizacja: Wykres 2: Etykieta czwartego paska
+Typ elementu: Etykieta
+ORYGINALNY TEKST:
+Dokumenty (PDF/DOC)
+
+PROSTY JĘZYK (PO REDAKCJI):
+Dokumenty do pobrania (PDF, DOC)
+
+Wskazówka redakcyjna:
+Czytelniejsza kategoria.
+
+################################################################################
+### SEKCJA: PULPIT – KONSULTACJE Z AUDYTORAMI
+################################################################################
+
+--------------------------------------------------------------------------------
+ID: dashboard.tickets.widget_title
+Lokalizacja: Nagłówek kafelka modułu konsultacji
+Typ elementu: Tytuł
+ORYGINALNY TEKST:
+Konsultacje
+
+PROSTY JĘZYK (PO REDAKCJI):
+Konsultacje z audytorami
+
+Wskazówka redakcyjna:
+Doprecyzowanie, z kim użytkownik ma kontakt.
+--------------------------------------------------------------------------------
+ID: dashboard.tickets.widget_badge
+Lokalizacja: Zielona pulsująca pigułka powiadomienia
+Typ elementu: Licznik
+ORYGINALNY TEKST:
+{count} nowa odp.
+
+PROSTY JĘZYK (PO REDAKCJI):
+{count} nowa odpowiedź
+
+Wskazówka redakcyjna:
+Rozwinięcie skrótu 'odp.' do pełnego słowa.
+--------------------------------------------------------------------------------
+ID: dashboard.tickets.widget_description
+Lokalizacja: Podtytuł wprowadzający w module konsultacji
+Typ elementu: Opis
+ORYGINALNY TEKST:
+Bezpośredni kontakt merytoryczny z zespołem audytorów WCAG bez konieczności spotkań online.
+
+PROSTY JĘZYK (PO REDAKCJI):
+Zadawaj pytania ekspertom WCAG i wyjaśniaj wątpliwości na bieżąco, bez konieczności organizowania spotkań.
+
+Wskazówka redakcyjna:
+Bardziej bezpośredni, korzyściowy język mówiący do użytkownika.
+--------------------------------------------------------------------------------
+ID: dashboard.tickets.btn_new
+Lokalizacja: Niebieski przycisk akcji w widgecie
+Typ elementu: Przycisk
+ORYGINALNY TEKST:
+Nowa konsultacja
+
+PROSTY JĘZYK (PO REDAKCJI):
+Zadaj pytanie audytorowi
+
+Wskazówka redakcyjna:
+Forma czasownikowa jasno mówi użytkownikowi, co się stanie.
+--------------------------------------------------------------------------------
+ID: dashboard.tickets.btn_all
+Lokalizacja: Biały przycisk przejścia do pełnej listy
+Typ elementu: Przycisk
+ORYGINALNY TEKST:
+Wszystkie ({count})
+
+PROSTY JĘZYK (PO REDAKCJI):
+Wszystkie rozmowy ({count})
+
+Wskazówka redakcyjna:
+Zastąpienie bezosobowego 'Wszystkie' rzeczownikiem.
+--------------------------------------------------------------------------------
+ID: dashboard.tickets.banner_tag
+Lokalizacja: Pasek nowej odpowiedzi w ramce banera
+Typ elementu: Etykieta
+ORYGINALNY TEKST:
+Nowa odpowiedź audytora • #{id}
+
+PROSTY JĘZYK (PO REDAKCJI):
+Nowa odpowiedź od audytora • #{id}
+
+Wskazówka redakcyjna:
+Naturalna forma językowa.
+--------------------------------------------------------------------------------
+ID: dashboard.tickets.banner_open
+Lokalizacja: Link przejścia po prawej stronie banera
+Typ elementu: Link / Akcja
+ORYGINALNY TEKST:
+Otwórz
+
+PROSTY JĘZYK (PO REDAKCJI):
+Przeczytaj odpowiedź
+
+Wskazówka redakcyjna:
+Konkretna zapowiedź tego, co zobaczy użytkownik.
+--------------------------------------------------------------------------------
+ID: dashboard.tickets.manager_status
+Lokalizacja: Zielona kropka statusu przy nazwisku opiekuna
+Typ elementu: Status
+ORYGINALNY TEKST:
+Dostępny
+
+PROSTY JĘZYK (PO REDAKCJI):
+Dostępny teraz
+
+Wskazówka redakcyjna:
+Wskazuje gotowość opiekuna do kontaktu.
+--------------------------------------------------------------------------------
+ID: dashboard.tickets.manager_role
+Lokalizacja: Podpis pod nazwiskiem opiekuna
+Typ elementu: Etykieta
+ORYGINALNY TEKST:
+Dedykowany Opiekun Klienta
+
+PROSTY JĘZYK (PO REDAKCJI):
+Twój dedykowany opiekun
+
+Wskazówka redakcyjna:
+Cieplejszy, bardziej zorientowany na klienta zwrot.
+--------------------------------------------------------------------------------
+ID: dashboard.tickets.btn_schedule_meeting
+Lokalizacja: Przycisk planowania spotkania w stopce karty
+Typ elementu: Przycisk
+ORYGINALNY TEKST:
+Umów spotkanie
+
+PROSTY JĘZYK (PO REDAKCJI):
+Umów krótkie spotkanie
+
+Wskazówka redakcyjna:
+Zachęcające i obniżające barierę wejścia sformułowanie.
+--------------------------------------------------------------------------------
+ID: dashboard.tickets.toast_title
+Lokalizacja: Powiadomienie po kliknięciu 'Umów spotkanie' - Tytuł
+Typ elementu: Komunikat
+ORYGINALNY TEKST:
+Zaproszenie na spotkanie statusowe
+
+PROSTY JĘZYK (PO REDAKCJI):
+Wysłano prośbę o spotkanie
+
+Wskazówka redakcyjna:
+Proste potwierdzenie wykonania czynności.
+--------------------------------------------------------------------------------
+ID: dashboard.tickets.toast_desc
+Lokalizacja: Treść powiadomienia toast
+Typ elementu: Komunikat
+ORYGINALNY TEKST:
+Zaproszenie na spotkanie zostało przekazane do Tomasza Straszaka.
+
+PROSTY JĘZYK (PO REDAKCJI):
+Powiadomiliśmy Tomasza Straszaka. Wkrótce skontaktuje się z Tobą w sprawie terminu.
+
+Wskazówka redakcyjna:
+Zastąpienie strony biernej ('zostało przekazane') aktywną obietnicą kontaktu.
+
+################################################################################
+### SEKCJA: PULPIT – KOMUNIKATY & NOWOŚCI
+################################################################################
+
+--------------------------------------------------------------------------------
+ID: dashboard.announcements.widget_title
+Lokalizacja: Tytuł modułu po prawej stronie
+Typ elementu: Tytuł
+ORYGINALNY TEKST:
+Komunikaty & Nowości
+
+PROSTY JĘZYK (PO REDAKCJI):
+Komunikaty i aktualności
+
+Wskazówka redakcyjna:
+Zastąpienie znaku '&' spójnikiem 'i'.
+--------------------------------------------------------------------------------
+ID: dashboard.announcements.widget_badge
+Lokalizacja: Niebieska pigułka z liczbą nowych wiadomości
+Typ elementu: Licznik
+ORYGINALNY TEKST:
+{count} nowe
+
+PROSTY JĘZYK (PO REDAKCJI):
+{count} nowe wiadomości
+
+Wskazówka redakcyjna:
+Doprecyzowanie, czego dotyczy liczba.
+--------------------------------------------------------------------------------
+ID: dashboard.announcements.widget_description
+Lokalizacja: Podtytuł modułu komunikatów
+Typ elementu: Opis
+ORYGINALNY TEKST:
+Aktualizacje prawne, webinary i oferty.
+
+PROSTY JĘZYK (PO REDAKCJI):
+Ważne zmiany w prawie, zaproszenia na szkolenia i wskazówki.
+
+Wskazówka redakcyjna:
+Bardziej opisowe i przystępne podsumowanie.
+--------------------------------------------------------------------------------
+ID: dashboard.announcements.btn_all
+Lokalizacja: Przycisk w prawym górnym rogu modułu
+Typ elementu: Przycisk
+ORYGINALNY TEKST:
+Wszystkie ({count})
+
+PROSTY JĘZYK (PO REDAKCJI):
+Zobacz wszystkie ({count})
+
+Wskazówka redakcyjna:
+Dodanie czasownika akcji.
+--------------------------------------------------------------------------------
+ID: dashboard.announcements.badge_details
+Lokalizacja: Szary przycisk na dole kafelka komunikatu
+Typ elementu: Etykieta
+ORYGINALNY TEKST:
+Szczegóły
+
+PROSTY JĘZYK (PO REDAKCJI):
+Więcej informacji
+
+Wskazówka redakcyjna:
+Bardziej przyjazne sformułowanie.
+--------------------------------------------------------------------------------
+ID: dashboard.announcements.footer_note
+Lokalizacja: Informacja tekstowa po lewej stronie w stopce modułu
+Typ elementu: Podpis
+ORYGINALNY TEKST:
+Baza wiedzy & archiwum wytycznych
+
+PROSTY JĘZYK (PO REDAKCJI):
+Baza wiedzy i archiwum poradników
+
+Wskazówka redakcyjna:
+Zastąpienie '&' oraz formalnego słowa 'wytyczne' bardziej zrozumiałym 'poradniki'.
+--------------------------------------------------------------------------------
+ID: dashboard.announcements.btn_browse_all
+Lokalizacja: Niebieski link w stopce modułu
+Typ elementu: Przycisk
+ORYGINALNY TEKST:
+Przeglądaj wszystkie
+
+PROSTY JĘZYK (PO REDAKCJI):
+Otwórz pełne archiwum
+
+Wskazówka redakcyjna:
+Jasne wskazanie celu.
+
+################################################################################
+### SEKCJA: PULPIT – TABELE I RANKINGI
+################################################################################
+
+--------------------------------------------------------------------------------
+ID: dashboard.recent_audits.title
+Lokalizacja: Karta 1 w dolnym rzędzie: Nagłówek
+Typ elementu: Tytuł
+ORYGINALNY TEKST:
+Ostatnie audyty
+
+PROSTY JĘZYK (PO REDAKCJI):
+Ostatnie audyty
+
+Wskazówka redakcyjna:
+Zrozumiałe, jasne.
+--------------------------------------------------------------------------------
+ID: dashboard.recent_audits.subtitle
+Lokalizacja: Podtytuł pod nagłówkiem 'Ostatnie audyty'
+Typ elementu: Podtytuł
+ORYGINALNY TEKST:
+Szybki podgląd prowadzonych prac
+
+PROSTY JĘZYK (PO REDAKCJI):
+Ostatnio zakończone i trwające badania dostępności
+
+Wskazówka redakcyjna:
+Wyjaśnienie, czym są te prace w praktyce.
+--------------------------------------------------------------------------------
+ID: dashboard.recent_audits.status_completed
+Lokalizacja: Zielona etykieta statusu audytu
+Typ elementu: Status
+ORYGINALNY TEKST:
+Zakończony
+
+PROSTY JĘZYK (PO REDAKCJI):
+Zakończony
+
+Wskazówka redakcyjna:
+Jasny status.
+--------------------------------------------------------------------------------
+ID: dashboard.recent_audits.status_in_progress
+Lokalizacja: Pomarańczowa etykieta statusu audytu
+Typ elementu: Status
+ORYGINALNY TEKST:
+W trakcie
+
+PROSTY JĘZYK (PO REDAKCJI):
+W trakcie realizacji
+
+Wskazówka redakcyjna:
+Pełniejszy opis stanu badania.
+--------------------------------------------------------------------------------
+ID: dashboard.recent_audits.status_new
+Lokalizacja: Niebieska etykieta statusu audytu
+Typ elementu: Status
+ORYGINALNY TEKST:
+Nowy
+
+PROSTY JĘZYK (PO REDAKCJI):
+Zaplanowany (nowy)
+
+Wskazówka redakcyjna:
+Doprecyzowanie, że badanie dopiero się rozpoczyna.
+--------------------------------------------------------------------------------
+ID: dashboard.recent_audits.tooltip_critical
+Lokalizacja: Dymek na czerwonym liczniku błędów przy audycie
+Typ elementu: Dymek (Tooltip)
+ORYGINALNY TEKST:
+Błędy priorytetowe: {count}
+
+PROSTY JĘZYK (PO REDAKCJI):
+Błędy krytyczne (najpilniejsze do naprawy): {count}
+
+Wskazówka redakcyjna:
+Przypomnienie wagi tego typu błędów.
+--------------------------------------------------------------------------------
+ID: dashboard.recent_audits.tooltip_important
+Lokalizacja: Dymek na pomarańczowym liczniku błędów
+Typ elementu: Dymek (Tooltip)
+ORYGINALNY TEKST:
+Błędy ważne: {count}
+
+PROSTY JĘZYK (PO REDAKCJI):
+Błędy ważne: {count}
+
+Wskazówka redakcyjna:
+Zrozumiałe.
+--------------------------------------------------------------------------------
+ID: dashboard.recent_audits.tooltip_marginal
+Lokalizacja: Dymek na niebieskim liczniku błędów
+Typ elementu: Dymek (Tooltip)
+ORYGINALNY TEKST:
+Błędy marginalne: {count}
+
+PROSTY JĘZYK (PO REDAKCJI):
+Drobne usterki: {count}
+
+Wskazówka redakcyjna:
+Zastąpienie 'marginalnych' 'drobnymi usterkami'.
+--------------------------------------------------------------------------------
+ID: dashboard.recent_audits.btn_go_to_audits
+Lokalizacja: Przycisk na dole karty 'Ostatnie audyty'
+Typ elementu: Przycisk
+ORYGINALNY TEKST:
+Przejdź do modułu Audytów
+
+PROSTY JĘZYK (PO REDAKCJI):
+Zobacz wszystkie audyty
+
+Wskazówka redakcyjna:
+Usunięcie technicznego słowa 'moduł'.
+--------------------------------------------------------------------------------
+ID: dashboard.top_issues.title
+Lokalizacja: Karta 2 w dolnym rzędzie: Nagłówek
+Typ elementu: Tytuł
+ORYGINALNY TEKST:
+Wymagające uwagi (Top 5)
+
+PROSTY JĘZYK (PO REDAKCJI):
+Usługi wymagające pilnej naprawy (Top 5)
+
+Wskazówka redakcyjna:
+Wskazanie, na czym polega ta uwaga.
+--------------------------------------------------------------------------------
+ID: dashboard.top_issues.subtitle
+Lokalizacja: Podtytuł karty
+Typ elementu: Podtytuł
+ORYGINALNY TEKST:
+Usługi o najniższym procencie dostępności
+
+PROSTY JĘZYK (PO REDAKCJI):
+Usługi cyfrowe z najniższym wynikiem dostępności i największą liczbą błędów
+
+Wskazówka redakcyjna:
+Bardziej opisowe wyjaśnienie kryteriów doboru.
+--------------------------------------------------------------------------------
+ID: dashboard.top_issues.active_errors_suffix
+Lokalizacja: Podpis pod nazwą usługi w rankingu
+Typ elementu: Etykieta
+ORYGINALNY TEKST:
+{count} aktywnych błędów
+
+PROSTY JĘZYK (PO REDAKCJI):
+{count} nierozwiązanych błędów
+
+Wskazówka redakcyjna:
+Zamiast żargonowego 'aktywnych' proste słowo 'nierozwiązanych'.
+--------------------------------------------------------------------------------
+ID: dashboard.top_issues.btn_see_ranking
+Lokalizacja: Przycisk na dole rankingu Top 5
+Typ elementu: Przycisk
+ORYGINALNY TEKST:
+Zobacz pełny ranking w raportach
+
+PROSTY JĘZYK (PO REDAKCJI):
+Zobacz pełną listę usług w raportach
+
+Wskazówka redakcyjna:
+Zastąpienie obcego słowa 'ranking' określeniem 'pełna lista usług'.
+
+################################################################################
+### SEKCJA: ELEMENTY WSPÓLNE UI
+################################################################################
+
+--------------------------------------------------------------------------------
+ID: common.tooltip.more_info_aria
+Lokalizacja: Aria-label dla ikony dymka informacyjnego (InfoTooltip)
+Typ elementu: Dostępność (Aria)
+ORYGINALNY TEKST:
+Więcej informacji
+
+PROSTY JĘZYK (PO REDAKCJI):
+Więcej informacji (wskazówka)
+
+Wskazówka redakcyjna:
+Etykieta przycisku otwierającego dymek dla czytników ekranu.
+
+================================================================================
+KONIEC PLIKU - ŁĄCZNIE 104 POZYCJI
+================================================================================
