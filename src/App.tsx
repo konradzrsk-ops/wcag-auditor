@@ -9175,147 +9175,213 @@ function ReportSummaryView({ setView, onOpenReaudit, showToast }) {
       />
 
       <div className="flex-1 md:overflow-y-auto bg-[#f8fafc] w-full">
-        <div className="max-w-[1600px] mx-auto w-full p-4 sm:p-8 lg:p-12 flex flex-col gap-6">
+        <div className="max-w-[1600px] mx-auto w-full p-4 sm:p-6 lg:p-8 flex flex-col gap-5">
 
-      <div className="flex flex-wrap items-center gap-3 sm:gap-5 text-[12px] sm:text-[13px] font-bold text-slate-600 mb-5 bg-white border border-slate-200 p-3 sm:px-4 sm:py-3 rounded-xl w-max shadow-sm">
-        <div className="flex items-center gap-2">
-          <Calendar size={16} className="text-[#0038F8]" />{" "}
-          <span>01.03.2026 - 12.03.2026</span>
-        </div>
-        <div className="w-px h-4 bg-slate-200 hidden sm:block"></div>
-        <div className="flex items-center gap-2">
-          <User size={16} className="text-[#0038F8]" />{" "}
-          <span>Audytor: Piotr Smułkowski</span>
-        </div>
-        <div className="w-px h-4 bg-slate-200 hidden sm:block"></div>
-        <div className="flex items-center gap-2">
-          <ShieldCheck size={16} className="text-[#0038F8]" />{" "}
-          <span>WCAG 2.1 Poziom AA</span>
-        </div>
-      </div>
+          {/* KARTA PODSUMOWANIA WYKONAWCZEGO I METADANYCH AUDYTU */}
+          <Card className="bg-white border border-slate-200/90 rounded-xl shadow-xs overflow-hidden">
+            {/* Zintegrowany pasek metadanych audytu */}
+            <div className="bg-slate-50/80 border-b border-slate-200/80 px-4 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-3 text-xs">
+              <div className="flex flex-wrap items-center gap-3 sm:gap-5 font-semibold text-slate-600">
+                <div className="flex items-center gap-1.5">
+                  <Calendar size={14} className="text-[#0038F8]" />
+                  <span>01.03.2026 - 12.03.2026</span>
+                </div>
+                <div className="w-px h-3.5 bg-slate-200 hidden sm:block" />
+                <div className="flex items-center gap-1.5">
+                  <User size={14} className="text-[#0038F8]" />
+                  <span>Audytor: <strong className="text-slate-800 font-bold">Piotr Smułkowski</strong></span>
+                </div>
+                <div className="w-px h-3.5 bg-slate-200 hidden sm:block" />
+                <div className="flex items-center gap-1.5">
+                  <ShieldCheck size={14} className="text-[#0038F8]" />
+                  <span>Standard: <strong className="text-slate-800 font-bold">WCAG 2.1 Poziom AA</strong></span>
+                </div>
+                <div className="w-px h-3.5 bg-slate-200 hidden sm:block" />
+                <div className="flex items-center gap-1.5 text-slate-500">
+                  <span>Cykl: <strong>Q1 2026</strong></span>
+                </div>
+              </div>
 
-      <div className="bg-blue-50/50 border border-blue-100 p-4 sm:p-5 rounded-xl w-full mb-8">
-        <h3 className="text-xs font-bold text-[#0038F8] uppercase tracking-widest mb-2 flex items-center gap-2">
-          <Info size={14} /> Podsumowanie audytu
-        </h3>
-        <p className="text-[13px] sm:text-sm text-slate-700 leading-relaxed font-medium">
-          Audyt obejmował kluczowe ścieżki użytkownika na stronie głównej oraz w
-          formularzach kontaktowych. Zidentyfikowano głównie problemy związane z
-          niewystarczającym kontrastem elementów interaktywnych oraz brakiem
-          odpowiednich etykiet dla czytników ekranu w procesie logowania. Mimo
-          relatywnie wysokiego ogólnego wyniku dostępności, wdrożenie
-          rekomendacji dla 3 błędów priorytetowych (tzw. blokerów) jest
-          bezwzględnie wymagane do spełnienia normy ustawowej.
-        </p>
-      </div>
-
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 mb-8">
-        <Card className="p-4 sm:p-6 flex flex-col sm:flex-row items-center sm:items-start gap-3 sm:gap-5 text-center sm:text-left">
-          <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl bg-emerald-50 text-emerald-500 flex items-center justify-center shrink-0">
-            <CheckCircle2 size={24} className="sm:w-7 sm:h-7" />
-          </div>
-          <div className="flex flex-col">
-            <span className="text-[9px] sm:text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1">
-              Dostępność
-            </span>
-            <span className="text-xl sm:text-3xl font-extrabold text-slate-900">
-              77.5%
-            </span>
-          </div>
-        </Card>
-        <Card className="p-4 sm:p-6 flex flex-col sm:flex-row items-center sm:items-start gap-3 sm:gap-5 text-center sm:text-left">
-          <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl bg-red-50 text-red-500 flex items-center justify-center shrink-0">
-            <AlertOctagon size={24} className="sm:w-7 sm:h-7" />
-          </div>
-          <div className="flex flex-col">
-            <span className="text-[9px] sm:text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1">
-              Priorytetowe
-            </span>
-            <span className="text-xl sm:text-3xl font-extrabold text-slate-900">
-              3
-            </span>
-          </div>
-        </Card>
-        <Card className="p-4 sm:p-6 flex flex-col sm:flex-row items-center sm:items-start gap-3 sm:gap-5 text-center sm:text-left">
-          <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl bg-amber-50 text-amber-500 flex items-center justify-center shrink-0">
-            <AlertTriangle size={24} className="sm:w-7 sm:h-7" />
-          </div>
-          <div className="flex flex-col">
-            <span className="text-[9px] sm:text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1">
-              Ważne
-            </span>
-            <span className="text-xl sm:text-3xl font-extrabold text-slate-900">
-              1
-            </span>
-          </div>
-        </Card>
-        <Card className="p-4 sm:p-6 flex flex-col sm:flex-row items-center sm:items-start gap-3 sm:gap-5 text-center sm:text-left">
-          <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl bg-[#0038F8]/10 text-[#0038F8] flex items-center justify-center shrink-0">
-            <ListChecks size={24} className="sm:w-7 sm:h-7" />
-          </div>
-          <div className="flex flex-col">
-            <span className="text-[9px] sm:text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1">
-              Kryteria Złamane
-            </span>
-            <div className="flex items-baseline justify-center sm:justify-start gap-1">
-              <span className="text-xl sm:text-3xl font-extrabold text-slate-900">
-                11
-              </span>
-              <span className="text-sm sm:text-lg font-bold text-slate-400">
-                / 49
-              </span>
+              <div className="flex items-center gap-2">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                  <CheckCircle2 size={12} className="text-emerald-600" />
+                  <span>Audyt zatwierdzony</span>
+                </span>
+              </div>
             </div>
-          </div>
-        </Card>
-      </div>
 
-      <Card className="mb-8 p-4 sm:p-6 border-blue-100 bg-blue-50/30">
-        <div className="flex items-center justify-between mb-4 sm:mb-6">
-          <div className="flex items-center gap-2">
-            <History size={20} className="text-[#0038F8]" />
-            <h2 className="text-[16px] sm:text-[18px] font-bold text-slate-900">
-              Historia i Reaudyty ({reauditsList.length})
-            </h2>
-          </div>
-          <ReauditButton
-            onClick={handleTriggerReaudit}
-            variant="secondary"
-            className="hidden sm:inline-flex"
-          />
-        </div>
+            {/* Treść podsumowania audytora na czystym białym tle z akcentem */}
+            <div className="p-4 sm:p-6">
+              <div className="flex items-center gap-2.5 mb-2.5">
+                <div className="w-7 h-7 rounded-lg bg-[#0038F8]/10 text-[#0038F8] flex items-center justify-center shrink-0">
+                  <FileText size={15} />
+                </div>
+                <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
+                  Wnioski i podsumowanie wykonawcze audytora
+                </h3>
+              </div>
 
-        <div className="flex flex-col gap-3">
+              <p className="text-sm text-slate-700 leading-relaxed pl-1 sm:pl-9 font-normal">
+                Audyt obejmował kluczowe ścieżki użytkownika na stronie głównej oraz w formularzach kontaktowych. Zidentyfikowano głównie problemy związane z niewystarczającym kontrastem elementów interaktywnych oraz brakiem odpowiednich etykiet dla czytników ekranu w procesie logowania.
+              </p>
+
+              {/* Kluczowa rekomendacja */}
+              <div className="mt-3.5 ml-0 sm:ml-9 p-3 rounded-xl bg-amber-50/70 border border-amber-200/80 flex items-start gap-2.5 text-xs text-amber-950 leading-relaxed">
+                <AlertTriangle size={15} className="text-amber-600 shrink-0 mt-0.5" />
+                <div>
+                  <strong className="font-bold text-amber-950">Kluczowa rekomendacja:</strong> Mimo relatywnie wysokiego ogólnego wyniku dostępności (77.5%), wdrożenie rekomendacji dla <strong className="text-red-700">3 błędów priorytetowych</strong> (tzw. blokerów dostępności) jest bezwzględnie wymagane do spełnienia normy ustawowej przed odbiorem serwisu.
+                </div>
+              </div>
+            </div>
+          </Card>
+
+          {/* RZĄD 5 KART KPI - ZGODNOŚĆ + WSZYSTKIE 3 WAGI BŁĘDÓW + KRYTERIA */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+            {/* 1. Dostępność */}
+            <Card className="p-3.5 sm:p-4 hover:border-[#0038F8]/30 transition-all flex items-center gap-3.5">
+              <div className="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 border border-emerald-100">
+                <CheckCircle2 size={22} />
+              </div>
+              <div className="min-w-0">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block truncate">
+                  Dostępność
+                </span>
+                <span className="text-2xl font-black text-slate-900 leading-tight">
+                  77.5%
+                </span>
+                <span className="text-[10px] font-semibold text-emerald-600 block mt-0.5">
+                  Średnia zgodność
+                </span>
+              </div>
+            </Card>
+
+            {/* 2. Priorytetowe */}
+            <Card className="p-3.5 sm:p-4 hover:border-red-300 transition-all flex items-center gap-3.5">
+              <div className="w-11 h-11 rounded-xl bg-red-50 text-red-600 flex items-center justify-center shrink-0 border border-red-100">
+                <AlertOctagon size={22} />
+              </div>
+              <div className="min-w-0">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block truncate">
+                  Priorytetowe
+                </span>
+                <span className="text-2xl font-black text-red-600 leading-tight">
+                  3
+                </span>
+                <span className="text-[10px] font-semibold text-red-500 block mt-0.5">
+                  Wymaga akcji
+                </span>
+              </div>
+            </Card>
+
+            {/* 3. Ważne */}
+            <Card className="p-3.5 sm:p-4 hover:border-amber-300 transition-all flex items-center gap-3.5">
+              <div className="w-11 h-11 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0 border border-amber-100">
+                <AlertTriangle size={22} />
+              </div>
+              <div className="min-w-0">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block truncate">
+                  Ważne
+                </span>
+                <span className="text-2xl font-black text-amber-600 leading-tight">
+                  1
+                </span>
+                <span className="text-[10px] font-semibold text-amber-600 block mt-0.5">
+                  Do planu
+                </span>
+              </div>
+            </Card>
+
+            {/* 4. Marginalne */}
+            <Card className="p-3.5 sm:p-4 hover:border-blue-300 transition-all flex items-center gap-3.5">
+              <div className="w-11 h-11 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 border border-blue-100">
+                <Info size={22} />
+              </div>
+              <div className="min-w-0">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block truncate">
+                  Marginalne
+                </span>
+                <span className="text-2xl font-black text-blue-600 leading-tight">
+                  3
+                </span>
+                <span className="text-[10px] font-semibold text-blue-600 block mt-0.5">
+                  Niski wpływ
+                </span>
+              </div>
+            </Card>
+
+            {/* 5. Złamane kryteria */}
+            <Card className="p-3.5 sm:p-4 hover:border-[#0038F8]/30 transition-all flex items-center gap-3.5 col-span-2 sm:col-span-1">
+              <div className="w-11 h-11 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0 border border-indigo-100">
+                <ListChecks size={22} />
+              </div>
+              <div className="min-w-0">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block truncate">
+                  Złamane kryteria
+                </span>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-2xl font-black text-slate-900 leading-tight">
+                    11
+                  </span>
+                  <span className="text-xs font-bold text-slate-400">
+                    / 49
+                  </span>
+                </div>
+                <span className="text-[10px] font-semibold text-indigo-600 block mt-0.5">
+                  Kryteria WCAG 2.1
+                </span>
+              </div>
+            </Card>
+          </div>
+
+          {/* HISTORIA I REAUDYTY (BIAŁA KARTA ZAMIAST NIEBIESKIEGO TŁA) */}
+          <Card className="p-4 sm:p-5 bg-white border border-slate-200 rounded-xl shadow-xs">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <History size={18} className="text-[#0038F8]" />
+                <h2 className="text-[15px] sm:text-base font-bold text-slate-900">
+                  Historia i Reaudyty ({reauditsList.length})
+                </h2>
+              </div>
+              <ReauditButton
+                onClick={handleTriggerReaudit}
+                variant="secondary"
+                size="sm"
+                className="hidden sm:inline-flex text-xs py-1.5 px-3"
+              />
+            </div>
+
+            <div className="flex flex-col gap-2.5">
           {reauditsList.map((reaudit) => (
             <div
               key={reaudit.id}
-              className="flex flex-col sm:flex-row sm:items-center justify-between bg-white border border-slate-200 rounded-xl p-4 shadow-xs hover:shadow-md transition-shadow cursor-pointer gap-4 group"
+              className="flex flex-col sm:flex-row sm:items-center justify-between bg-slate-50/70 hover:bg-slate-100/80 border border-slate-200/80 hover:border-[#0038F8]/30 rounded-xl p-3 sm:p-3.5 transition-all cursor-pointer gap-4 group"
               onClick={() => setView("raport-szczegoly")}
             >
-              <div className="flex items-center gap-4 flex-1 min-w-[250px]">
-                <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#0038F8] group-hover:bg-[#0038F8] group-hover:text-white transition-colors flex items-center justify-center flex-shrink-0">
-                  <ClipboardCheck size={18} />
+              <div className="flex items-center gap-3.5 flex-1 min-w-[240px]">
+                <div className="w-9 h-9 rounded-xl bg-blue-50 text-[#0038F8] group-hover:bg-[#0038F8] group-hover:text-white transition-colors flex items-center justify-center flex-shrink-0">
+                  <ClipboardCheck size={17} />
                 </div>
-                <div className="min-w-0 pr-4">
-                  <div className="text-[15px] font-bold text-slate-800 leading-snug group-hover:text-[#0038F8] transition-colors truncate">
+                <div className="min-w-0 pr-3">
+                  <div className="text-[14px] font-bold text-slate-800 leading-snug group-hover:text-[#0038F8] transition-colors truncate">
                     {reaudit.name}
                   </div>
-                  <div className="flex items-center gap-2 text-[12px] text-slate-500 font-medium mt-1 truncate">
+                  <div className="flex items-center gap-2 text-[11px] text-slate-500 font-medium mt-0.5 truncate">
                     <span className="flex items-center gap-1 shrink-0">
-                      <Calendar size={12} /> {reaudit.date}
+                      <Calendar size={11} /> {reaudit.date}
                     </span>
-                    <span className="text-slate-300">|</span>
+                    <span className="text-slate-300">•</span>
                     <span className="flex items-center gap-1 shrink-0">
-                      <User size={12} /> {reaudit.auditor}
+                      <User size={11} /> {reaudit.auditor}
                     </span>
                   </div>
                 </div>
               </div>
-              <div className="flex flex-wrap items-center justify-between sm:justify-end gap-4 sm:gap-6 w-full sm:w-auto mt-2 sm:mt-0 pt-3 sm:pt-0 border-t border-slate-100 sm:border-none">
+              <div className="flex flex-wrap items-center justify-between sm:justify-end gap-3 sm:gap-5 w-full sm:w-auto mt-2 sm:mt-0 pt-2.5 sm:pt-0 border-t border-slate-200/60 sm:border-none">
                 <div className="flex flex-col hidden sm:flex shrink-0 items-center justify-center">
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">
+                  <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">
                     Złamane Kryt.
                   </span>
-                  <span className="text-[16px] font-extrabold text-slate-700 text-center">
+                  <span className="text-[15px] font-extrabold text-slate-700 text-center">
                     {reaudit.brokenCriteria}
                   </span>
                 </div>
@@ -9325,20 +9391,20 @@ function ReportSummaryView({ setView, onOpenReaudit, showToast }) {
                     variant={
                       reaudit.status === "Zakończony" ? "success" : "warning"
                     }
-                    className="!py-1 !px-3 !text-[11px] w-max"
+                    className="!py-0.5 !px-2.5 !text-[11px] w-max"
                   >
                     {reaudit.status}
                   </Badge>
                 </div>
 
                 <div className="flex shrink-0 items-center justify-end">
-                  <div className="flex items-center gap-3 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100">
+                  <div className="flex items-center gap-2.5 bg-white px-2.5 py-1 rounded-lg border border-slate-200/80 shadow-2xs">
                     <div
-                      className="relative group/tip flex items-center gap-1.5 border-r border-slate-200 pr-3 cursor-help"
+                      className="relative group/tip flex items-center gap-1.5 border-r border-slate-200 pr-2.5 cursor-help"
                       title={`Błędy priorytetowe: ${reaudit.criticalErrors}`}
                     >
-                      <AlertOctagon size={14} className="text-red-500" />
-                      <span className="text-[15px] font-black text-slate-800">
+                      <AlertOctagon size={13} className="text-red-500" />
+                      <span className="text-[14px] font-black text-slate-800">
                         {reaudit.criticalErrors}
                       </span>
                       <div
@@ -9350,11 +9416,11 @@ function ReportSummaryView({ setView, onOpenReaudit, showToast }) {
                       </div>
                     </div>
                     <div className="flex items-center gap-1.5">
-                      <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest hidden sm:block">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest hidden sm:block">
                         Zgodność:
                       </span>
                       <span
-                        className={`text-[15px] font-black ${
+                        className={`text-[14px] font-black ${
                           reaudit.score >= 80
                             ? "text-emerald-600"
                             : "text-amber-500"
@@ -9365,10 +9431,8 @@ function ReportSummaryView({ setView, onOpenReaudit, showToast }) {
                     </div>
                   </div>
                 </div>
-                <div className="w-10 flex justify-end shrink-0 hidden sm:flex ml-2">
-                  <button className="w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 group-hover:text-[#0038F8] group-hover:bg-blue-50 transition-colors">
-                    <ChevronRight size={20} />
-                  </button>
+                <div className="w-8 flex justify-end shrink-0 hidden sm:flex">
+                  <ChevronRight size={18} className="text-slate-400 group-hover:text-[#0038F8] transition-colors" />
                 </div>
               </div>
             </div>
@@ -9416,8 +9480,8 @@ function ReportSummaryView({ setView, onOpenReaudit, showToast }) {
         const totalMarginals = testedElements.reduce((acc, el) => acc + el.marginals, 0);
 
         return (
-          <Card className="p-4 sm:p-6" data-testid="tested-elements-card">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-5">
+          <Card className="p-4 sm:p-5 bg-white border border-slate-200 rounded-xl shadow-xs" data-testid="tested-elements-card">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-4">
               <div>
                 <div className="flex items-center gap-2.5">
                   <h2 className="text-[16px] sm:text-[18px] font-bold text-slate-900">

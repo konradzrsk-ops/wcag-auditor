@@ -139,108 +139,170 @@ export function AuditSummaryView() {
         </div>
       </div>
 
-      {/* Meta tags */}
-      <div className="flex flex-wrap items-center gap-3 sm:gap-5 text-xs sm:text-sm font-bold text-slate-600 mb-5 bg-white border border-slate-200 p-3 sm:px-4 sm:py-3 rounded-card w-max shadow-sm">
-        <div className="flex items-center gap-2">
-          <Calendar size={16} className="text-brand-500" />
-          <span>{currentAudit.startDate} — {currentAudit.endDate}</span>
-        </div>
-        <div className="w-px h-4 bg-slate-200 hidden sm:block" />
-        <div className="flex items-center gap-2">
-          <User size={16} className="text-brand-500" />
-          <span>Audytor: {currentAudit.auditor}</span>
-        </div>
-        <div className="w-px h-4 bg-slate-200 hidden sm:block" />
-        <div className="flex items-center gap-2">
-          <ShieldCheck size={16} className="text-brand-500" />
-          <span>WCAG 2.1 Poziom {currentAudit.wcagLevel}</span>
-        </div>
-      </div>
-
-      {/* Podsumowanie audytu callout */}
-      <div className="bg-brand-50/60 border border-brand-100 p-4 sm:p-5 rounded-card w-full mb-8">
-        <h2 className="text-xs font-bold text-brand-600 uppercase tracking-widest mb-2 flex items-center gap-2">
-          <Info size={14} /> Podsumowanie audytu
-        </h2>
-        <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-medium">
-          Audyt obejmował kluczowe ścieżki użytkownika na stronie głównej oraz w formularzach kontaktowych.
-          Zidentyfikowano głównie problemy związane z niewystarczającym kontrastem elementów interaktywnych
-          oraz brakiem odpowiednich etykiet dla czytników ekranu w procesie logowania. Mimo relatywnie wysokiego
-          ogólnego wyniku dostępności, wdrożenie rekomendacji dla błędów krytycznych (tzw. blokerów) jest
-          bezwzględnie wymagane do spełnienia normy ustawowej.
-        </p>
-      </div>
-
-      {/* KPI Cards Strip */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 mb-8">
-        <Card className="p-4 sm:p-6 flex flex-col sm:flex-row items-center sm:items-start gap-3 sm:gap-5 text-center sm:text-left">
-          <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-card bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
-            <CheckCircle2 size={24} className="sm:w-7 sm:h-7" />
+      {/* KARTA PODSUMOWANIA WYKONAWCZEGO I METADANYCH AUDYTU */}
+      <Card className="bg-white border border-slate-200/90 rounded-card shadow-xs overflow-hidden mb-5">
+        {/* Zintegrowany pasek metadanych audytu */}
+        <div className="bg-slate-50/80 border-b border-slate-200/80 px-4 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-3 text-xs">
+          <div className="flex flex-wrap items-center gap-3 sm:gap-5 font-semibold text-slate-600">
+            <div className="flex items-center gap-1.5">
+              <Calendar size={14} className="text-brand-500" />
+              <span>{currentAudit.startDate} — {currentAudit.endDate}</span>
+            </div>
+            <div className="w-px h-3.5 bg-slate-200 hidden sm:block" />
+            <div className="flex items-center gap-1.5">
+              <User size={14} className="text-brand-500" />
+              <span>Audytor: <strong className="text-slate-800 font-bold">{currentAudit.auditor}</strong></span>
+            </div>
+            <div className="w-px h-3.5 bg-slate-200 hidden sm:block" />
+            <div className="flex items-center gap-1.5">
+              <ShieldCheck size={14} className="text-brand-500" />
+              <span>Standard: <strong className="text-slate-800 font-bold">WCAG 2.1 Poziom {currentAudit.wcagLevel}</strong></span>
+            </div>
+            <div className="w-px h-3.5 bg-slate-200 hidden sm:block" />
+            <div className="flex items-center gap-1.5 text-slate-500">
+              <span>Cykl: <strong>Q1 2026</strong></span>
+            </div>
           </div>
-          <div className="flex flex-col">
-            <span className="text-tiny font-bold text-slate-400 uppercase tracking-widest mb-1">
+
+          <div className="flex items-center gap-2">
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+              <CheckCircle2 size={12} className="text-emerald-600" />
+              <span>Audyt zatwierdzony</span>
+            </span>
+          </div>
+        </div>
+
+        {/* Treść podsumowania audytora na czystym białym tle */}
+        <div className="p-4 sm:p-6">
+          <div className="flex items-center gap-2.5 mb-2.5">
+            <div className="w-7 h-7 rounded-lg bg-brand-50 text-brand-500 flex items-center justify-center shrink-0">
+              <FileText size={15} />
+            </div>
+            <h2 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
+              Wnioski i podsumowanie wykonawcze audytora
+            </h2>
+          </div>
+
+          <p className="text-sm text-slate-700 leading-relaxed pl-1 sm:pl-9 font-normal">
+            Audyt obejmował kluczowe ścieżki użytkownika na stronie głównej oraz w formularzach kontaktowych.
+            Zidentyfikowano głównie problemy związane z niewystarczającym kontrastem elementów interaktywnych
+            oraz brakiem odpowiednich etykiet dla czytników ekranu w procesie logowania.
+          </p>
+
+          {/* Kluczowa rekomendacja */}
+          <div className="mt-3.5 ml-0 sm:ml-9 p-3 rounded-xl bg-amber-50/70 border border-amber-200/80 flex items-start gap-2.5 text-xs text-amber-950 leading-relaxed">
+            <AlertTriangle size={15} className="text-amber-600 shrink-0 mt-0.5" />
+            <div>
+              <strong className="font-bold text-amber-950">Kluczowa rekomendacja:</strong> Mimo relatywnie wysokiego ogólnego wyniku dostępności ({currentAudit.score}%), wdrożenie rekomendacji dla <strong className="text-red-700">{currentAudit.criticalErrors} błędów priorytetowych</strong> (tzw. blokerów dostępności) jest bezwzględnie wymagane do spełnienia normy ustawowej przed odbiorem serwisu.
+            </div>
+          </div>
+        </div>
+      </Card>
+
+      {/* RZĄD 5 KART KPI - ZGODNOŚĆ + WSZYSTKIE 3 WAGI BŁĘDÓW + KRYTERIA */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 mb-5">
+        {/* 1. Dostępność */}
+        <Card className="p-3.5 sm:p-4 hover:border-brand-500/30 transition-all flex items-center gap-3.5">
+          <div className="w-11 h-11 rounded-card bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 border border-emerald-100">
+            <CheckCircle2 size={22} />
+          </div>
+          <div className="min-w-0">
+            <span className="text-tiny font-bold text-slate-400 uppercase tracking-widest block truncate">
               Dostępność
             </span>
-            <span className="text-xl sm:text-3xl font-extrabold text-slate-900">
+            <span className="text-2xl font-black text-slate-900 leading-tight">
               {currentAudit.score}%
             </span>
+            <span className="text-[10px] font-semibold text-emerald-600 block mt-0.5">
+              Średnia zgodność
+            </span>
           </div>
         </Card>
 
-        <Card className="p-4 sm:p-6 flex flex-col sm:flex-row items-center sm:items-start gap-3 sm:gap-5 text-center sm:text-left">
-          <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-card bg-red-50 text-red-600 flex items-center justify-center shrink-0">
-            <AlertOctagon size={24} className="sm:w-7 sm:h-7" />
+        {/* 2. Priorytetowe */}
+        <Card className="p-3.5 sm:p-4 hover:border-red-300 transition-all flex items-center gap-3.5">
+          <div className="w-11 h-11 rounded-card bg-red-50 text-red-600 flex items-center justify-center shrink-0 border border-red-100">
+            <AlertOctagon size={22} />
           </div>
-          <div className="flex flex-col">
-            <span className="text-tiny font-bold text-slate-400 uppercase tracking-widest mb-1">
-              Krytyczne
+          <div className="min-w-0">
+            <span className="text-tiny font-bold text-slate-400 uppercase tracking-widest block truncate">
+              Priorytetowe
             </span>
-            <span className="text-xl sm:text-3xl font-extrabold text-slate-900">
+            <span className="text-2xl font-black text-red-600 leading-tight">
               {currentAudit.criticalErrors}
             </span>
+            <span className="text-[10px] font-semibold text-red-500 block mt-0.5">
+              Wymaga akcji
+            </span>
           </div>
         </Card>
 
-        <Card className="p-4 sm:p-6 flex flex-col sm:flex-row items-center sm:items-start gap-3 sm:gap-5 text-center sm:text-left">
-          <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-card bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
-            <AlertTriangle size={24} className="sm:w-7 sm:h-7" />
+        {/* 3. Ważne */}
+        <Card className="p-3.5 sm:p-4 hover:border-amber-300 transition-all flex items-center gap-3.5">
+          <div className="w-11 h-11 rounded-card bg-amber-50 text-amber-600 flex items-center justify-center shrink-0 border border-amber-100">
+            <AlertTriangle size={22} />
           </div>
-          <div className="flex flex-col">
-            <span className="text-tiny font-bold text-slate-400 uppercase tracking-widest mb-1">
+          <div className="min-w-0">
+            <span className="text-tiny font-bold text-slate-400 uppercase tracking-widest block truncate">
               Ważne
             </span>
-            <span className="text-xl sm:text-3xl font-extrabold text-slate-900">
+            <span className="text-2xl font-black text-amber-600 leading-tight">
               {currentAudit.brokenCriteria > 5 ? 5 : 2}
+            </span>
+            <span className="text-[10px] font-semibold text-amber-600 block mt-0.5">
+              Do planu
             </span>
           </div>
         </Card>
 
-        <Card className="p-4 sm:p-6 flex flex-col sm:flex-row items-center sm:items-start gap-3 sm:gap-5 text-center sm:text-left">
-          <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-card bg-brand-50 text-brand-500 flex items-center justify-center shrink-0">
-            <ListChecks size={24} className="sm:w-7 sm:h-7" />
+        {/* 4. Marginalne */}
+        <Card className="p-3.5 sm:p-4 hover:border-blue-300 transition-all flex items-center gap-3.5">
+          <div className="w-11 h-11 rounded-card bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 border border-blue-100">
+            <Info size={22} />
           </div>
-          <div className="flex flex-col">
-            <span className="text-tiny font-bold text-slate-400 uppercase tracking-widest mb-1">
-              Kryteria Złamane
+          <div className="min-w-0">
+            <span className="text-tiny font-bold text-slate-400 uppercase tracking-widest block truncate">
+              Marginalne
             </span>
-            <div className="flex items-baseline justify-center sm:justify-start gap-1">
-              <span className="text-xl sm:text-3xl font-extrabold text-slate-900">
+            <span className="text-2xl font-black text-blue-600 leading-tight">
+              3
+            </span>
+            <span className="text-[10px] font-semibold text-blue-600 block mt-0.5">
+              Niski wpływ
+            </span>
+          </div>
+        </Card>
+
+        {/* 5. Złamane kryteria */}
+        <Card className="p-3.5 sm:p-4 hover:border-brand-500/30 transition-all flex items-center gap-3.5 col-span-2 sm:col-span-1">
+          <div className="w-11 h-11 rounded-card bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0 border border-indigo-100">
+            <ListChecks size={22} />
+          </div>
+          <div className="min-w-0">
+            <span className="text-tiny font-bold text-slate-400 uppercase tracking-widest block truncate">
+              Złamane kryteria
+            </span>
+            <div className="flex items-baseline gap-1">
+              <span className="text-2xl font-black text-slate-900 leading-tight">
                 {currentAudit.brokenCriteria}
               </span>
-              <span className="text-sm sm:text-lg font-bold text-slate-400">
+              <span className="text-xs font-bold text-slate-400">
                 / {currentAudit.totalCriteria}
               </span>
             </div>
+            <span className="text-[10px] font-semibold text-indigo-600 block mt-0.5">
+              Kryteria WCAG 2.1
+            </span>
           </div>
         </Card>
       </div>
 
-      {/* Historia i Reaudyty */}
-      <Card className="mb-8 p-4 sm:p-6 border-brand-100 bg-brand-50/20">
-        <div className="flex items-center justify-between mb-4 sm:mb-6">
+      {/* Historia i Reaudyty (Czysta biała karta) */}
+      <Card className="mb-5 p-4 sm:p-5 bg-white border border-slate-200 rounded-card shadow-xs">
+        <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <History size={20} className="text-brand-500" />
-            <h2 className="text-base sm:text-lg font-bold text-slate-900">
+            <History size={18} className="text-brand-500" />
+            <h2 className="text-sm sm:text-base font-bold text-slate-900">
               Historia i Reaudyty ({mockReaudits.length})
             </h2>
           </div>
@@ -254,7 +316,7 @@ export function AuditSummaryView() {
           </Button>
         </div>
 
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-2.5">
           {mockReaudits.map((reaudit) => (
             <div
               key={reaudit.id}
