@@ -5209,7 +5209,7 @@ function DashboardView({
             </div>
           </div>
           <div className="flex items-center gap-1 mb-1">
-            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-widest block">
+            <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider block">
               Średnia Dostępność
             </span>
             <InfoTooltip
@@ -5223,7 +5223,7 @@ function DashboardView({
               86.2%
             </span>
             <div className="flex items-center gap-1">
-              <span className="text-sm font-semibold text-slate-400">
+              <span className="text-sm font-semibold text-slate-600">
                 Cel: 90%
               </span>
               <InfoTooltip
@@ -5244,7 +5244,7 @@ function DashboardView({
               <ListChecks size={24} />
             </div>
             <div className="flex items-center gap-1 mt-1">
-              <span className="text-[11px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded">
+              <span className="text-[11px] font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded">
                 142 procesy
               </span>
               <InfoTooltip
@@ -5255,7 +5255,7 @@ function DashboardView({
             </div>
           </div>
           <div className="flex items-center gap-1 mb-1">
-            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-widest block">
+            <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider block">
               Pokrycie Audytowe
             </span>
             <InfoTooltip
@@ -5274,7 +5274,7 @@ function DashboardView({
         >
           <div className="flex justify-between items-start mb-2">
             <div className="flex items-center gap-1">
-              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-widest block">
+              <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider block">
                 Błędy Otwarte (Razem: 239)
               </span>
               <InfoTooltip
@@ -5298,38 +5298,38 @@ function DashboardView({
           <div className="grid grid-cols-3 gap-1.5 sm:gap-2 py-1">
             {/* Priorytetowe */}
             <div className="flex flex-col bg-red-50/70 p-2 sm:p-2.5 rounded-xl border border-red-100">
-              <div className="flex items-center gap-1 text-red-600 mb-1">
+              <div className="flex items-center gap-1 text-red-700 mb-1">
                 <AlertOctagon size={12} className="shrink-0" />
                 <span className="text-[10px] xl:text-[11px] font-bold text-red-700 tracking-tight whitespace-nowrap">
                   Priorytetowe
                 </span>
               </div>
               <span className="text-xl sm:text-2xl font-extrabold text-slate-900 leading-none">47</span>
-              <span className="text-[10px] font-semibold text-red-500 mt-1 whitespace-nowrap">Wymaga akcji</span>
+              <span className="text-[10px] font-bold text-red-700 mt-1 whitespace-nowrap">Wymaga akcji</span>
             </div>
 
             {/* Ważne */}
             <div className="flex flex-col bg-amber-50/70 p-2 sm:p-2.5 rounded-xl border border-amber-100">
-              <div className="flex items-center gap-1 text-amber-600 mb-1">
+              <div className="flex items-center gap-1 text-amber-800 mb-1">
                 <AlertTriangle size={12} className="shrink-0" />
-                <span className="text-[10px] xl:text-[11px] font-bold text-amber-700 tracking-tight whitespace-nowrap">
+                <span className="text-[10px] xl:text-[11px] font-bold text-amber-800 tracking-tight whitespace-nowrap">
                   Ważne
                 </span>
               </div>
               <span className="text-xl sm:text-2xl font-extrabold text-slate-900 leading-none">128</span>
-              <span className="text-[10px] font-semibold text-amber-600 mt-1 whitespace-nowrap">Do planu</span>
+              <span className="text-[10px] font-bold text-amber-800 mt-1 whitespace-nowrap">Do planu</span>
             </div>
 
             {/* Marginalne */}
             <div className="flex flex-col bg-blue-50/70 p-2 sm:p-2.5 rounded-xl border border-blue-100">
-              <div className="flex items-center gap-1 text-blue-600 mb-1">
+              <div className="flex items-center gap-1 text-blue-700 mb-1">
                 <Info size={12} className="shrink-0" />
                 <span className="text-[10px] xl:text-[11px] font-bold text-blue-700 tracking-tight whitespace-nowrap">
                   Marginalne
                 </span>
               </div>
               <span className="text-xl sm:text-2xl font-extrabold text-slate-900 leading-none">64</span>
-              <span className="text-[10px] font-semibold text-blue-600 mt-1 whitespace-nowrap">Niski wpływ</span>
+              <span className="text-[10px] font-bold text-blue-700 mt-1 whitespace-nowrap">Niski wpływ</span>
             </div>
           </div>
         </Card>
@@ -5343,7 +5343,7 @@ function DashboardView({
               <ClipboardCheck size={24} />
             </div>
             <div className="flex items-center gap-1 mt-1">
-              <span className="text-[11px] font-bold text-blue-600 bg-blue-100 px-2 py-0.5 rounded">
+              <span className="text-[11px] font-bold text-blue-700 bg-blue-100 px-2 py-0.5 rounded">
                 W tym kwartale
               </span>
               <InfoTooltip
@@ -5354,7 +5354,7 @@ function DashboardView({
             </div>
           </div>
           <div className="flex items-center gap-1 mb-1">
-            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-widest block">
+            <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider block">
               Przeprowadzone Audyty
             </span>
             <InfoTooltip
@@ -5366,7 +5366,7 @@ function DashboardView({
           <div className="flex items-baseline gap-2">
             <span className="text-3xl font-extrabold text-slate-900">12</span>
             <div className="flex items-center gap-1">
-              <span className="text-sm font-semibold text-slate-400">
+              <span className="text-sm font-semibold text-slate-600">
                 4 w trakcie
               </span>
               <InfoTooltip
@@ -9210,7 +9210,7 @@ function ReportSummaryView({ setView, onOpenReaudit, showToast }) {
               </div>
             </div>
 
-            {/* Treść podsumowania audytora na czystym białym tle z akcentem */}
+            {/* Treść podsumowania audytora na czystym białym tle */}
             <div className="p-4 sm:p-6">
               <div className="flex items-center gap-2.5 mb-2.5">
                 <div className="w-7 h-7 rounded-lg bg-[#0038F8]/10 text-[#0038F8] flex items-center justify-center shrink-0">
@@ -9222,34 +9222,26 @@ function ReportSummaryView({ setView, onOpenReaudit, showToast }) {
               </div>
 
               <p className="text-sm text-slate-700 leading-relaxed pl-1 sm:pl-9 font-normal">
-                Audyt obejmował kluczowe ścieżki użytkownika na stronie głównej oraz w formularzach kontaktowych. Zidentyfikowano głównie problemy związane z niewystarczającym kontrastem elementów interaktywnych oraz brakiem odpowiednich etykiet dla czytników ekranu w procesie logowania.
+                Audyt obejmował kluczowe ścieżki użytkownika na stronie głównej oraz w formularzach kontaktowych. Zidentyfikowano głównie problemy związane z niewystarczającym kontrastem elementów interaktywnych oraz brakiem odpowiednich etykiet dla czytników ekranu w procesie logowania. Mimo relatywnie wysokiego ogólnego wyniku dostępności (77.5%), wdrożenie rekomendacji dla 3 błędów priorytetowych (tzw. blokerów) jest bezwzględnie wymagane do spełnienia normy ustawowej.
               </p>
-
-              {/* Kluczowa rekomendacja */}
-              <div className="mt-3.5 ml-0 sm:ml-9 p-3 rounded-xl bg-amber-50/70 border border-amber-200/80 flex items-start gap-2.5 text-xs text-amber-950 leading-relaxed">
-                <AlertTriangle size={15} className="text-amber-600 shrink-0 mt-0.5" />
-                <div>
-                  <strong className="font-bold text-amber-950">Kluczowa rekomendacja:</strong> Mimo relatywnie wysokiego ogólnego wyniku dostępności (77.5%), wdrożenie rekomendacji dla <strong className="text-red-700">3 błędów priorytetowych</strong> (tzw. blokerów dostępności) jest bezwzględnie wymagane do spełnienia normy ustawowej przed odbiorem serwisu.
-                </div>
-              </div>
             </div>
           </Card>
 
-          {/* RZĄD 5 KART KPI - ZGODNOŚĆ + WSZYSTKIE 3 WAGI BŁĘDÓW + KRYTERIA */}
+          {/* RZĄD 5 KART KPI - ZGODNOŚĆ + WSZYSTKIE 3 WAGI BŁĘDÓW + KRYTERIA (PEŁEN KONTRAST WCAG AA) */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
             {/* 1. Dostępność */}
             <Card className="p-3.5 sm:p-4 hover:border-[#0038F8]/30 transition-all flex items-center gap-3.5">
-              <div className="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 border border-emerald-100">
+              <div className="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0 border border-emerald-200/80">
                 <CheckCircle2 size={22} />
               </div>
               <div className="min-w-0">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block truncate">
+                <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider block truncate">
                   Dostępność
                 </span>
                 <span className="text-2xl font-black text-slate-900 leading-tight">
                   77.5%
                 </span>
-                <span className="text-[10px] font-semibold text-emerald-600 block mt-0.5">
+                <span className="text-[11px] font-bold text-emerald-700 block mt-0.5">
                   Średnia zgodność
                 </span>
               </div>
@@ -9257,17 +9249,17 @@ function ReportSummaryView({ setView, onOpenReaudit, showToast }) {
 
             {/* 2. Priorytetowe */}
             <Card className="p-3.5 sm:p-4 hover:border-red-300 transition-all flex items-center gap-3.5">
-              <div className="w-11 h-11 rounded-xl bg-red-50 text-red-600 flex items-center justify-center shrink-0 border border-red-100">
+              <div className="w-11 h-11 rounded-xl bg-red-50 text-red-700 flex items-center justify-center shrink-0 border border-red-200/80">
                 <AlertOctagon size={22} />
               </div>
               <div className="min-w-0">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block truncate">
+                <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider block truncate">
                   Priorytetowe
                 </span>
-                <span className="text-2xl font-black text-red-600 leading-tight">
+                <span className="text-2xl font-black text-red-700 leading-tight">
                   3
                 </span>
-                <span className="text-[10px] font-semibold text-red-500 block mt-0.5">
+                <span className="text-[11px] font-bold text-red-700 block mt-0.5">
                   Wymaga akcji
                 </span>
               </div>
@@ -9275,17 +9267,17 @@ function ReportSummaryView({ setView, onOpenReaudit, showToast }) {
 
             {/* 3. Ważne */}
             <Card className="p-3.5 sm:p-4 hover:border-amber-300 transition-all flex items-center gap-3.5">
-              <div className="w-11 h-11 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0 border border-amber-100">
+              <div className="w-11 h-11 rounded-xl bg-amber-50 text-amber-800 flex items-center justify-center shrink-0 border border-amber-200/80">
                 <AlertTriangle size={22} />
               </div>
               <div className="min-w-0">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block truncate">
+                <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider block truncate">
                   Ważne
                 </span>
-                <span className="text-2xl font-black text-amber-600 leading-tight">
+                <span className="text-2xl font-black text-amber-800 leading-tight">
                   1
                 </span>
-                <span className="text-[10px] font-semibold text-amber-600 block mt-0.5">
+                <span className="text-[11px] font-bold text-amber-800 block mt-0.5">
                   Do planu
                 </span>
               </div>
@@ -9293,17 +9285,17 @@ function ReportSummaryView({ setView, onOpenReaudit, showToast }) {
 
             {/* 4. Marginalne */}
             <Card className="p-3.5 sm:p-4 hover:border-blue-300 transition-all flex items-center gap-3.5">
-              <div className="w-11 h-11 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 border border-blue-100">
+              <div className="w-11 h-11 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center shrink-0 border border-blue-200/80">
                 <Info size={22} />
               </div>
               <div className="min-w-0">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block truncate">
+                <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider block truncate">
                   Marginalne
                 </span>
-                <span className="text-2xl font-black text-blue-600 leading-tight">
+                <span className="text-2xl font-black text-blue-700 leading-tight">
                   3
                 </span>
-                <span className="text-[10px] font-semibold text-blue-600 block mt-0.5">
+                <span className="text-[11px] font-bold text-blue-700 block mt-0.5">
                   Niski wpływ
                 </span>
               </div>
@@ -9311,22 +9303,22 @@ function ReportSummaryView({ setView, onOpenReaudit, showToast }) {
 
             {/* 5. Złamane kryteria */}
             <Card className="p-3.5 sm:p-4 hover:border-[#0038F8]/30 transition-all flex items-center gap-3.5 col-span-2 sm:col-span-1">
-              <div className="w-11 h-11 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0 border border-indigo-100">
+              <div className="w-11 h-11 rounded-xl bg-indigo-50 text-indigo-700 flex items-center justify-center shrink-0 border border-indigo-200/80">
                 <ListChecks size={22} />
               </div>
               <div className="min-w-0">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block truncate">
+                <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider block truncate">
                   Złamane kryteria
                 </span>
                 <div className="flex items-baseline gap-1">
                   <span className="text-2xl font-black text-slate-900 leading-tight">
                     11
                   </span>
-                  <span className="text-xs font-bold text-slate-400">
+                  <span className="text-xs font-bold text-slate-600">
                     / 49
                   </span>
                 </div>
-                <span className="text-[10px] font-semibold text-indigo-600 block mt-0.5">
+                <span className="text-[11px] font-bold text-indigo-700 block mt-0.5">
                   Kryteria WCAG 2.1
                 </span>
               </div>
