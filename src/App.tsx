@@ -15399,7 +15399,7 @@ function ComplaintDetailsView({
     setComplaintsList(updated);
     setNewComment("");
     if (showToast) {
-      showToast("Dodano komentarz", "Wiadomość została opublikowana w historii ustaleń.");
+      showToast("Dodano komentarz", "Komentarz został pomyślnie dodany do historii zgłoszenia.");
     }
   };
 
@@ -15865,58 +15865,93 @@ function ComplaintDetailsView({
                 )}
               </Card>
 
-              {/* DYSKUSJA I TIMELINE */}
+              {/* HISTORIA ZGŁOSZENIA I KOMENTARZE */}
               <Card className="p-6 border border-slate-200">
-                <div className="flex items-center gap-2 mb-4 font-bold text-sm text-slate-900">
-                  <MessageSquare size={16} className="text-[#0038F8]" />
-                  <span>Dyskusja ze specjalistą WCAG i historia ustaleń ({complaint.comments?.length || 0})</span>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-100">
+                  <div className="flex items-center gap-2">
+                    <History size={18} className="text-[#0038F8]" />
+                    <h2 className="text-base font-bold text-slate-900">
+                      Historia zgłoszenia i komentarze ({complaint.comments?.length || 0})
+                    </h2>
+                  </div>
+                  <div className="flex items-center gap-1.5 text-xs text-slate-500 bg-slate-50 px-2.5 py-1 rounded-lg border border-slate-200/60">
+                    <Info size={13} className="text-blue-600 shrink-0" />
+                    <span>Dyskusje i konsultacje z audytorem są w osobnym oknie</span>
+                  </div>
                 </div>
 
-                <div className="space-y-3 mb-5">
+                {/* Lista wpisów historii */}
+                <div className="space-y-3 mb-6">
                   {(complaint.comments || []).map((comm) => (
                     <div
                       key={comm.id}
-                      className={`p-3.5 rounded-xl border text-xs ${
-                        comm.isStaff
-                          ? "bg-blue-50/50 border-blue-200 ml-4"
-                          : "bg-slate-50 border-slate-200 mr-4"
-                      }`}
+                      className="p-4 rounded-xl border border-slate-200/80 bg-slate-50/70 text-xs hover:bg-slate-50 transition-colors"
                     >
-                      <div className="flex items-center justify-between mb-1.5">
-                        <div className="flex items-center gap-1.5">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2">
+                          <div className="w-6 h-6 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center font-bold text-[10px]">
+                            {comm.author ? comm.author.charAt(0) : "U"}
+                          </div>
                           <span className="font-bold text-slate-900">{comm.author}</span>
-                          <span className="text-slate-400 font-medium">({comm.role})</span>
-                          {comm.isStaff && (
+                          <span className="text-slate-500 font-medium text-[11px]">({comm.role})</span>
+                          {comm.isStaff ? (
                             <span className="bg-[#0038F8] text-white text-[10px] font-bold px-1.5 py-0.5 rounded">
                               Audytor
                             </span>
+                          ) : (
+                            <span className="bg-slate-200/80 text-slate-700 text-[10px] font-bold px-1.5 py-0.5 rounded">
+                              Komentarz
+                            </span>
                           )}
                         </div>
-                        <span className="text-slate-400 font-medium">{comm.date}</span>
+                        <span className="text-slate-400 font-medium text-[11px]">{comm.date}</span>
                       </div>
-                      <p className="text-slate-700 leading-relaxed font-normal">{comm.text}</p>
+                      <p className="text-slate-700 leading-relaxed font-normal pl-8">{comm.text}</p>
                     </div>
                   ))}
                 </div>
 
-                {/* Formularz odpowiedzi */}
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-slate-600 block">
-                    Dodaj komentarz lub zadaj pytanie do audytora:
-                  </label>
+                {/* Formularz dodania nowego komentarza */}
+                <div className="space-y-2.5 pt-4 border-t border-slate-100">
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-bold text-slate-700 block">
+                      Dodaj komentarz do historii zgłoszenia:
+                    </label>
+                    <span className="text-[11px] text-slate-400">Widoczne w wewnętrznej historii sprawy</span>
+                  </div>
                   <textarea
                     rows={3}
                     value={newComment}
                     onChange={(e) => setNewComment(e.target.value)}
-                    placeholder="Wpisz treść wiadomości lub dopytaj o szczegóły rekomendacji..."
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
+                    placeholder="Wpisz treść komentarza lub notatki wewnętrznej..."
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50 focus:bg-white transition-colors"
                   />
-                  <div className="flex justify-end">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
+                    <div className="text-[11px] text-slate-500 flex items-center gap-1.5">
+                      {linkedTicket ? (
+                        <button
+                          type="button"
+                          onClick={() => onOpenTicket && onOpenTicket(linkedTicket.id)}
+                          className="text-[#0038F8] hover:underline font-bold inline-flex items-center gap-1 cursor-pointer"
+                        >
+                          <MessageSquareText size={12} /> Przejdź do osobnego okna dyskusji (#{linkedTicket.id})
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => onOpenNewTicket && onOpenNewTicket({ type: "complaint", id: complaint.id, title: complaint.title })}
+                          className="text-[#0038F8] hover:underline font-bold inline-flex items-center gap-1 cursor-pointer"
+                        >
+                          <MessageSquareText size={12} /> Otwórz osobną dyskusję / konsultację z audytorem
+                        </button>
+                      )}
+                    </div>
                     <button
+                      type="button"
                       onClick={handleAddComment}
-                      className="inline-flex items-center gap-1.5 bg-[#0038F8] hover:bg-[#002ECC] text-white px-4 py-2 rounded-xl font-bold text-xs shadow-sm transition-colors cursor-pointer"
+                      className="inline-flex items-center justify-center gap-1.5 bg-[#0038F8] hover:bg-[#002ECC] text-white px-4 py-2 rounded-xl font-bold text-xs shadow-sm transition-colors cursor-pointer shrink-0"
                     >
-                      <Send size={14} /> Wyślij wiadomość
+                      <Plus size={14} /> Dodaj komentarz
                     </button>
                   </div>
                 </div>
