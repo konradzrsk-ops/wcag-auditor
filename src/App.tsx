@@ -15794,25 +15794,6 @@ function ComplaintDetailsView({
                       </div>
                     </div>
 
-                    {/* Kluczowe elementy i atrybuty */}
-                    {complaint.recommendation.keyAttributes && (
-                      <div>
-                        <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">
-                          Rekomendowane atrybuty i elementy do wykorzystania
-                        </h3>
-                        <div className="flex flex-wrap gap-2">
-                          {complaint.recommendation.keyAttributes.map((attr, idx) => (
-                            <span
-                              key={idx}
-                              className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-mono font-semibold bg-slate-100 text-slate-800 border border-slate-200"
-                            >
-                              {attr}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
                     {/* Podsumowanie standardu */}
                     <div className="pt-3 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-slate-500">
                       <div>
@@ -15831,7 +15812,7 @@ function ComplaintDetailsView({
                       Rekomendacja audytora jest w przygotowaniu
                     </h3>
                     <p className="text-xs text-slate-500 max-w-md mx-auto leading-relaxed">
-                      Zgłoszenie jest analizowane przez audytora dostępności. Opis problemu oraz rekomendowane atrybuty i wytyczne semantyczne zostaną udostępnione w tym miejscu.
+                      Zgłoszenie jest analizowane przez audytora dostępności. Opis problemu oraz rekomendowane wytyczne semantyczne zostaną udostępnione w tym miejscu.
                     </p>
                     <button
                       onClick={() => {
