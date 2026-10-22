@@ -14938,9 +14938,9 @@ function ComplaintsModuleView({
   showToast,
 }) {
   const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState("all");
-  const [priorityFilter, setPriorityFilter] = useState("all");
-  const [serviceFilter, setServiceFilter] = useState("all");
+  const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]);
+  const [selectedPriorities, setSelectedPriorities] = useState<string[]>([]);
+  const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [devTeamFilter, setDevTeamFilter] = useState("all");
   const [sourceFilter, setSourceFilter] = useState("all");
   const [sortBy, setSortBy] = useState("newest");
@@ -14966,9 +14966,9 @@ function ComplaintsModuleView({
     setSearchTerm("");
     setSourceFilter("all");
     setDevTeamFilter("all");
-    setStatusFilter("all");
-    setPriorityFilter("all");
-    setServiceFilter("all");
+    setSelectedStatuses([]);
+    setSelectedPriorities([]);
+    setSelectedServices([]);
     setActiveDropdown(null);
   };
 
@@ -14976,18 +14976,18 @@ function ComplaintsModuleView({
     searchTerm.trim() ||
     sourceFilter !== "all" ||
     devTeamFilter !== "all" ||
-    statusFilter !== "all" ||
-    priorityFilter !== "all" ||
-    serviceFilter !== "all"
+    selectedStatuses.length > 0 ||
+    selectedPriorities.length > 0 ||
+    selectedServices.length > 0
   );
 
   const activeFilterCount =
     (searchTerm.trim() ? 1 : 0) +
     (sourceFilter !== "all" ? 1 : 0) +
     (devTeamFilter !== "all" ? 1 : 0) +
-    (statusFilter !== "all" ? 1 : 0) +
-    (priorityFilter !== "all" ? 1 : 0) +
-    (serviceFilter !== "all" ? 1 : 0);
+    selectedStatuses.length +
+    selectedPriorities.length +
+    selectedServices.length;
 
   const filteredComplaints = useMemo(() => {
     let list = complaintsList.filter((item) => {
@@ -14999,15 +14999,15 @@ function ComplaintsModuleView({
         (item.description && item.description.toLowerCase().includes(searchTerm.toLowerCase()));
 
       const matchesStatus =
-        statusFilter === "all" || item.status === statusFilter;
+        selectedStatuses.length === 0 || selectedStatuses.includes(item.status);
 
       const matchesPriority =
-        priorityFilter === "all" ||
-        item.priority === priorityFilter ||
-        (priorityFilter === "Priorytetowy" && item.priority === "Krytyczny");
+        selectedPriorities.length === 0 ||
+        selectedPriorities.includes(item.priority) ||
+        (selectedPriorities.includes("Priorytetowy") && item.priority === "Krytyczny");
 
       const matchesService =
-        serviceFilter === "all" || item.service === serviceFilter;
+        selectedServices.length === 0 || selectedServices.includes(item.service);
 
       const matchesDevTeam =
         devTeamFilter === "all" || (item.responsiblePerson || item.devTeam) === devTeamFilter;
@@ -15035,7 +15035,7 @@ function ComplaintsModuleView({
     }
 
     return list;
-  }, [complaintsList, searchTerm, statusFilter, priorityFilter, serviceFilter, devTeamFilter, sourceFilter, sortBy]);
+  }, [complaintsList, searchTerm, selectedStatuses, selectedPriorities, selectedServices, devTeamFilter, sourceFilter, sortBy]);
 
   const totalCount = complaintsList.length;
   const awaitingCount = complaintsList.filter(c => c.status === "Oczekuje na audytora" || !c.hasRecommendation).length;
@@ -15257,49 +15257,60 @@ function ComplaintsModuleView({
               type="button"
               onClick={() => toggleDropdown("status")}
               className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold border transition-colors cursor-pointer ${
-                statusFilter !== "all"
+                selectedStatuses.length > 0
                   ? "bg-[#0038F8] text-white border-[#0038F8] shadow-sm"
                   : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
               }`}
             >
-              <span>3. Status{statusFilter !== "all" ? `: ${statusFilter}` : ""}</span>
-              <ChevronDown size={14} className={statusFilter !== "all" ? "text-white" : "text-slate-400"} />
+              <span>3. Status{selectedStatuses.length === 1 ? `: ${selectedStatuses[0]}` : selectedStatuses.length > 1 ? ` (${selectedStatuses.length})` : ""}</span>
+              <ChevronDown size={14} className={selectedStatuses.length > 0 ? "text-white" : "text-slate-400"} />
             </button>
             {activeDropdown === "status" && (
-              <div className="absolute top-full left-0 mt-1.5 w-60 bg-white border border-slate-200 rounded-xl shadow-xl z-50 p-1.5 space-y-1 max-h-72 overflow-y-auto">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setStatusFilter("all");
-                    setActiveDropdown(null);
-                  }}
-                  className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold text-left transition-colors cursor-pointer ${
-                    statusFilter === "all"
-                      ? "bg-[#0038F8] text-white"
-                      : "hover:bg-slate-100 text-slate-700"
-                  }`}
-                >
-                  <span>Wszystkie statusy</span>
-                  {statusFilter === "all" && <CheckCircle2 size={13} className="text-white" />}
-                </button>
-                {COMPLAINT_STATUS_OPTIONS.map((opt) => (
-                  <button
-                    key={opt.value}
-                    type="button"
-                    onClick={() => {
-                      setStatusFilter(opt.value);
-                      setActiveDropdown(null);
-                    }}
-                    className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold text-left transition-colors cursor-pointer ${
-                      statusFilter === opt.value
-                        ? "bg-[#0038F8] text-white"
-                        : "hover:bg-slate-100 text-slate-700"
-                    }`}
-                  >
-                    <span>{opt.label}</span>
-                    {statusFilter === opt.value && <CheckCircle2 size={13} className="text-white" />}
-                  </button>
-                ))}
+              <div className="absolute top-full left-0 mt-1.5 w-64 bg-white border border-slate-200 rounded-xl shadow-xl z-50 p-2 space-y-1 max-h-72 overflow-y-auto">
+                <div className="flex items-center justify-between pb-1.5 mb-1 border-b border-slate-100 px-1 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                  <span>Wybierz statusy</span>
+                  {selectedStatuses.length > 0 && (
+                    <button
+                      type="button"
+                      onClick={() => setSelectedStatuses([])}
+                      className="text-[#0038F8] hover:underline normal-case font-semibold cursor-pointer"
+                    >
+                      Wyczyść ({selectedStatuses.length})
+                    </button>
+                  )}
+                </div>
+                {COMPLAINT_STATUS_OPTIONS.map((opt) => {
+                  const isChecked = selectedStatuses.includes(opt.value);
+                  return (
+                    <button
+                      key={opt.value}
+                      type="button"
+                      onClick={() => {
+                        setSelectedStatuses((prev) =>
+                          prev.includes(opt.value)
+                            ? prev.filter((s) => s !== opt.value)
+                            : [...prev, opt.value]
+                        );
+                      }}
+                      className={`w-full flex items-center justify-between px-2.5 py-2 rounded-lg text-xs font-semibold text-left transition-colors cursor-pointer ${
+                        isChecked
+                          ? "bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/20 font-bold"
+                          : "hover:bg-slate-50 text-slate-700 border border-transparent"
+                      }`}
+                    >
+                      <div className="flex items-center gap-2 min-w-0">
+                        <input
+                          type="checkbox"
+                          checked={isChecked}
+                          readOnly
+                          className="w-4 h-4 rounded text-[#0038F8] pointer-events-none accent-[#0038F8]"
+                        />
+                        <span className="truncate">{opt.label}</span>
+                      </div>
+                      {isChecked && <CheckCircle2 size={14} className="text-[#0038F8] shrink-0 ml-1.5" />}
+                    </button>
+                  );
+                })}
               </div>
             )}
           </div>
@@ -15310,49 +15321,58 @@ function ComplaintsModuleView({
               type="button"
               onClick={() => toggleDropdown("priority")}
               className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold border transition-colors cursor-pointer ${
-                priorityFilter !== "all"
+                selectedPriorities.length > 0
                   ? "bg-[#0038F8] text-white border-[#0038F8] shadow-sm"
                   : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
               }`}
             >
-              <span>4. Priorytet{priorityFilter !== "all" ? `: ${priorityFilter}` : ""}</span>
-              <ChevronDown size={14} className={priorityFilter !== "all" ? "text-white" : "text-slate-400"} />
+              <span>4. Priorytet{selectedPriorities.length === 1 ? `: ${selectedPriorities[0]}` : selectedPriorities.length > 1 ? ` (${selectedPriorities.length})` : ""}</span>
+              <ChevronDown size={14} className={selectedPriorities.length > 0 ? "text-white" : "text-slate-400"} />
             </button>
             {activeDropdown === "priority" && (
-              <div className="absolute top-full left-0 mt-1.5 w-52 bg-white border border-slate-200 rounded-xl shadow-xl z-50 p-1.5 space-y-1">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setPriorityFilter("all");
-                    setActiveDropdown(null);
-                  }}
-                  className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold text-left transition-colors cursor-pointer ${
-                    priorityFilter === "all"
-                      ? "bg-[#0038F8] text-white"
-                      : "hover:bg-slate-100 text-slate-700"
-                  }`}
-                >
-                  <span>Wszystkie priorytety</span>
-                  {priorityFilter === "all" && <CheckCircle2 size={13} className="text-white" />}
-                </button>
-                {["Priorytetowy", "Ważny", "Marginalny"].map((p) => (
-                  <button
-                    key={p}
-                    type="button"
-                    onClick={() => {
-                      setPriorityFilter(p);
-                      setActiveDropdown(null);
-                    }}
-                    className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold text-left transition-colors cursor-pointer ${
-                      priorityFilter === p
-                        ? "bg-[#0038F8] text-white"
-                        : "hover:bg-slate-100 text-slate-700"
-                    }`}
-                  >
-                    <span>{p}</span>
-                    {priorityFilter === p && <CheckCircle2 size={13} className="text-white" />}
-                  </button>
-                ))}
+              <div className="absolute top-full left-0 mt-1.5 w-56 bg-white border border-slate-200 rounded-xl shadow-xl z-50 p-2 space-y-1">
+                <div className="flex items-center justify-between pb-1.5 mb-1 border-b border-slate-100 px-1 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                  <span>Wybierz priorytety</span>
+                  {selectedPriorities.length > 0 && (
+                    <button
+                      type="button"
+                      onClick={() => setSelectedPriorities([])}
+                      className="text-[#0038F8] hover:underline normal-case font-semibold cursor-pointer"
+                    >
+                      Wyczyść ({selectedPriorities.length})
+                    </button>
+                  )}
+                </div>
+                {["Priorytetowy", "Ważny", "Marginalny"].map((p) => {
+                  const isChecked = selectedPriorities.includes(p);
+                  return (
+                    <button
+                      key={p}
+                      type="button"
+                      onClick={() => {
+                        setSelectedPriorities((prev) =>
+                          prev.includes(p) ? prev.filter((x) => x !== p) : [...prev, p]
+                        );
+                      }}
+                      className={`w-full flex items-center justify-between px-2.5 py-2 rounded-lg text-xs font-semibold text-left transition-colors cursor-pointer ${
+                        isChecked
+                          ? "bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/20 font-bold"
+                          : "hover:bg-slate-50 text-slate-700 border border-transparent"
+                      }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="checkbox"
+                          checked={isChecked}
+                          readOnly
+                          className="w-4 h-4 rounded text-[#0038F8] pointer-events-none accent-[#0038F8]"
+                        />
+                        <span>{p}</span>
+                      </div>
+                      {isChecked && <CheckCircle2 size={14} className="text-[#0038F8] shrink-0" />}
+                    </button>
+                  );
+                })}
               </div>
             )}
           </div>
@@ -15363,49 +15383,58 @@ function ComplaintsModuleView({
               type="button"
               onClick={() => toggleDropdown("service")}
               className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold border transition-colors cursor-pointer ${
-                serviceFilter !== "all"
+                selectedServices.length > 0
                   ? "bg-[#0038F8] text-white border-[#0038F8] shadow-sm"
                   : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
               }`}
             >
-              <span>5. Usługa{serviceFilter !== "all" ? `: ${serviceFilter}` : ""}</span>
-              <ChevronDown size={14} className={serviceFilter !== "all" ? "text-white" : "text-slate-400"} />
+              <span>5. Usługa{selectedServices.length === 1 ? `: ${selectedServices[0]}` : selectedServices.length > 1 ? ` (${selectedServices.length})` : ""}</span>
+              <ChevronDown size={14} className={selectedServices.length > 0 ? "text-white" : "text-slate-400"} />
             </button>
             {activeDropdown === "service" && (
-              <div className="absolute top-full left-0 mt-1.5 w-60 bg-white border border-slate-200 rounded-xl shadow-xl z-50 p-1.5 space-y-1">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setServiceFilter("all");
-                    setActiveDropdown(null);
-                  }}
-                  className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold text-left transition-colors cursor-pointer ${
-                    serviceFilter === "all"
-                      ? "bg-[#0038F8] text-white"
-                      : "hover:bg-slate-100 text-slate-700"
-                  }`}
-                >
-                  <span>Wszystkie usługi</span>
-                  {serviceFilter === "all" && <CheckCircle2 size={13} className="text-white" />}
-                </button>
-                {["Bankowość internetowa", "Aplikacja mobilna", "Kredyty i pożyczki", "Karty i dokumenty"].map((s) => (
-                  <button
-                    key={s}
-                    type="button"
-                    onClick={() => {
-                      setServiceFilter(s);
-                      setActiveDropdown(null);
-                    }}
-                    className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold text-left transition-colors cursor-pointer ${
-                      serviceFilter === s
-                        ? "bg-[#0038F8] text-white"
-                        : "hover:bg-slate-100 text-slate-700"
-                    }`}
-                  >
-                    <span>{s}</span>
-                    {serviceFilter === s && <CheckCircle2 size={13} className="text-white" />}
-                  </button>
-                ))}
+              <div className="absolute top-full left-0 mt-1.5 w-64 bg-white border border-slate-200 rounded-xl shadow-xl z-50 p-2 space-y-1">
+                <div className="flex items-center justify-between pb-1.5 mb-1 border-b border-slate-100 px-1 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                  <span>Wybierz usługi</span>
+                  {selectedServices.length > 0 && (
+                    <button
+                      type="button"
+                      onClick={() => setSelectedServices([])}
+                      className="text-[#0038F8] hover:underline normal-case font-semibold cursor-pointer"
+                    >
+                      Wyczyść ({selectedServices.length})
+                    </button>
+                  )}
+                </div>
+                {["Bankowość internetowa", "Aplikacja mobilna", "Kredyty i pożyczki", "Karty i dokumenty"].map((s) => {
+                  const isChecked = selectedServices.includes(s);
+                  return (
+                    <button
+                      key={s}
+                      type="button"
+                      onClick={() => {
+                        setSelectedServices((prev) =>
+                          prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s]
+                        );
+                      }}
+                      className={`w-full flex items-center justify-between px-2.5 py-2 rounded-lg text-xs font-semibold text-left transition-colors cursor-pointer ${
+                        isChecked
+                          ? "bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/20 font-bold"
+                          : "hover:bg-slate-50 text-slate-700 border border-transparent"
+                      }`}
+                    >
+                      <div className="flex items-center gap-2 min-w-0">
+                        <input
+                          type="checkbox"
+                          checked={isChecked}
+                          readOnly
+                          className="w-4 h-4 rounded text-[#0038F8] pointer-events-none accent-[#0038F8]"
+                        />
+                        <span className="truncate">{s}</span>
+                      </div>
+                      {isChecked && <CheckCircle2 size={14} className="text-[#0038F8] shrink-0 ml-1.5" />}
+                    </button>
+                  );
+                })}
               </div>
             )}
           </div>
@@ -15481,50 +15510,59 @@ function ComplaintsModuleView({
               </span>
             )}
 
-            {/* Chip: Status */}
-            {statusFilter !== "all" && (
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/20">
-                <span>Status: {statusFilter}</span>
+            {/* Chips: Statusy */}
+            {selectedStatuses.map((st) => (
+              <span
+                key={st}
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/20"
+              >
+                <span>Status: {st}</span>
                 <button
                   type="button"
-                  onClick={() => setStatusFilter("all")}
+                  onClick={() => setSelectedStatuses((prev) => prev.filter((s) => s !== st))}
                   className="hover:bg-[#0038F8]/20 p-0.5 rounded transition-colors cursor-pointer"
-                  title="Usuń filtr statusu"
+                  title={`Usuń filtr statusu: ${st}`}
                 >
                   <X size={12} />
                 </button>
               </span>
-            )}
+            ))}
 
-            {/* Chip: Priorytet */}
-            {priorityFilter !== "all" && (
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/20">
-                <span>Priorytet: {priorityFilter}</span>
+            {/* Chips: Priorytety */}
+            {selectedPriorities.map((p) => (
+              <span
+                key={p}
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/20"
+              >
+                <span>Priorytet: {p}</span>
                 <button
                   type="button"
-                  onClick={() => setPriorityFilter("all")}
+                  onClick={() => setSelectedPriorities((prev) => prev.filter((x) => x !== p))}
                   className="hover:bg-[#0038F8]/20 p-0.5 rounded transition-colors cursor-pointer"
-                  title="Usuń filtr priorytetu"
+                  title={`Usuń filtr priorytetu: ${p}`}
                 >
                   <X size={12} />
                 </button>
               </span>
-            )}
+            ))}
 
-            {/* Chip: Usługa */}
-            {serviceFilter !== "all" && (
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/20">
-                <span>Usługa: {serviceFilter}</span>
+            {/* Chips: Usługi */}
+            {selectedServices.map((s) => (
+              <span
+                key={s}
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/20"
+              >
+                <span>Usługa: {s}</span>
                 <button
                   type="button"
-                  onClick={() => setServiceFilter("all")}
+                  onClick={() => setSelectedServices((prev) => prev.filter((x) => x !== s))}
                   className="hover:bg-[#0038F8]/20 p-0.5 rounded transition-colors cursor-pointer"
-                  title="Usuń filtr usługi"
+                  title={`Usuń filtr usługi: ${s}`}
                 >
                   <X size={12} />
                 </button>
               </span>
-            )}
+            ))}
           </div>
         )}
       </div>
