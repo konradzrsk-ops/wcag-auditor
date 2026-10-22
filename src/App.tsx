@@ -8295,9 +8295,9 @@ function RaportyView({ setView, onOpenReaudit, showToast }) {
         </div>
 
         {/* POZIOME FILTRY DYNAMICZNE (Bez przycisku Zastosuj - reakcja natychmiastowa) */}
-        <div className="bg-slate-50 border border-slate-200 rounded-xl p-3 mb-4 shadow-sm relative z-30">
+        <div className="bg-white border border-slate-200 rounded-xl p-3 mb-4 shadow-xs relative z-30">
           <div className="flex flex-wrap items-center gap-2">
-            <div className="w-28 shrink-0 flex items-center gap-1.5 text-xs font-bold text-slate-500 uppercase tracking-wider whitespace-nowrap">
+            <div className="w-24 shrink-0 flex items-center gap-1.5 text-xs font-bold text-slate-500 uppercase tracking-wider whitespace-nowrap">
               <Filter size={14} className="text-[#0038F8]" />
               <span>Filtry:</span>
             </div>
@@ -8345,7 +8345,7 @@ function RaportyView({ setView, onOpenReaudit, showToast }) {
               )}
             </div>
 
-            {/* 3. Status audytu */}
+            {/* 2. Status audytu */}
             <div className="relative" data-dropdown-container="true">
               <button
                 type="button"
@@ -8356,7 +8356,7 @@ function RaportyView({ setView, onOpenReaudit, showToast }) {
                     : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
                 }`}
               >
-                <span>3. Status audytu{Object.values(selectedStatuses).filter(Boolean).length > 0 ? ` (${Object.values(selectedStatuses).filter(Boolean).length})` : ""}</span>
+                <span>2. Status audytu{Object.values(selectedStatuses).filter(Boolean).length > 0 ? ` (${Object.values(selectedStatuses).filter(Boolean).length})` : ""}</span>
                 <ChevronDown size={14} className={Object.values(selectedStatuses).some(Boolean) ? "text-white" : "text-slate-400"} />
               </button>
               {activeDropdown === "status" && (
@@ -8393,7 +8393,7 @@ function RaportyView({ setView, onOpenReaudit, showToast }) {
               )}
             </div>
 
-            {/* 4. Kanał */}
+            {/* 3. Kanał */}
             <div className="relative" data-dropdown-container="true">
               <button
                 type="button"
@@ -8404,7 +8404,7 @@ function RaportyView({ setView, onOpenReaudit, showToast }) {
                     : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
                 }`}
               >
-                <span>4. Kanał{Object.values(selectedChannels).filter(Boolean).length > 0 ? ` (${Object.values(selectedChannels).filter(Boolean).length})` : ""}</span>
+                <span>3. Kanał{Object.values(selectedChannels).filter(Boolean).length > 0 ? ` (${Object.values(selectedChannels).filter(Boolean).length})` : ""}</span>
                 <ChevronDown size={14} className={Object.values(selectedChannels).some(Boolean) ? "text-white" : "text-slate-400"} />
               </button>
               {activeDropdown === "kanal" && (
@@ -8441,7 +8441,7 @@ function RaportyView({ setView, onOpenReaudit, showToast }) {
               )}
             </div>
 
-            {/* 5. Czas */}
+            {/* 4. Czas */}
             <div className="relative" data-dropdown-container="true">
               <button
                 type="button"
@@ -8452,7 +8452,7 @@ function RaportyView({ setView, onOpenReaudit, showToast }) {
                     : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
                 }`}
               >
-                <span>5. Czas{activeTimeRange !== "all" ? `: ${activeTimeRange === "30d" ? "30 dni" : activeTimeRange === "60d" ? "60 dni" : "1 Rok"}` : (dateFrom || dateTo) ? ": Zakres" : ""}</span>
+                <span>4. Czas{activeTimeRange !== "all" ? `: ${activeTimeRange === "30d" ? "30 dni" : activeTimeRange === "60d" ? "60 dni" : "1 Rok"}` : (dateFrom || dateTo) ? ": Zakres" : ""}</span>
                 <ChevronDown size={14} className={activeTimeRange !== "all" || dateFrom || dateTo ? "text-white" : "text-slate-400"} />
               </button>
               {activeDropdown === "czas" && (
@@ -8514,7 +8514,7 @@ function RaportyView({ setView, onOpenReaudit, showToast }) {
               )}
             </div>
 
-            {/* 6. Błędy */}
+            {/* 5. Błędy */}
             <div className="relative">
               <button
                 type="button"
@@ -8526,7 +8526,7 @@ function RaportyView({ setView, onOpenReaudit, showToast }) {
                 }`}
               >
                 <AlertOctagon size={12} className={onlyCritical ? "text-white" : "text-slate-400"} />
-                <span>6. Tylko priorytetowe</span>
+                <span>5. Tylko priorytetowe</span>
                 {onlyCritical && <CheckCircle2 size={12} className="text-white" />}
               </button>
             </div>
@@ -10402,101 +10402,44 @@ function AuditsFilterSection({
   scopeSummaryText,
 }) {
   return (
-    <section
+    <div
       data-testid="audits-filter-section"
-      className={`rounded-xl border-2 transition-all p-4 sm:p-5 relative z-40 overflow-visible mb-6 shadow-sm ${
-        hasActiveFilters
-          ? "bg-blue-50/40 border-[#0038F8]/40 shadow-sm"
-          : "bg-slate-50 border-slate-200"
-      }`}
+      className="bg-white border border-slate-200 rounded-xl p-3 shadow-xs relative z-30 mb-4"
     >
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
-        <div className="flex items-center gap-3">
-          <div
-            className={`w-9 h-9 rounded-xl flex items-center justify-center font-black text-sm shrink-0 transition-all ${
-              hasActiveFilters
-                ? "bg-[#0038F8] text-white shadow-md shadow-[#0038F8]/25"
-                : "bg-white text-slate-700 border-2 border-slate-300"
-            }`}
-          >
-            {hasActiveFilters ? <CheckCircle2 size={18} className="text-white" /> : <Filter size={16} />}
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-extrabold text-slate-900">
-                Filtrowanie zakresu audytów i błędów WCAG
-              </span>
-            </div>
-            <p className="text-slate-500 text-xs mt-0.5">
-              {hasActiveFilters
-                ? `Aktywne kryteria: ${auditFiltersCount}. Wyniki poniżej uwzględniają odfiltrowany zakres.`
-                : "Dostosuj parametry audytów, kanałów, priorytetów i audytorów do wygenerowania raportu."}
-            </p>
-          </div>
-        </div>
-
-        {/* TYLKO JEDEN PRZYCISK WYCZYŚĆ FILTRY W CAŁEJ SEKCJI */}
-        <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
-          {hasActiveFilters ? (
-            <>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-extrabold bg-[#0038F8] text-white shadow-xs">
-                <CheckCircle2 size={13} />
-                Zakres aktywny ({auditFiltersCount})
-              </span>
-              <button
-                type="button"
-                onClick={clearAuditFilters}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-red-600 hover:text-red-800 bg-white hover:bg-red-50 border border-red-200 shadow-2xs transition-colors cursor-pointer"
-                title="Wyczyść wszystkie filtry audytów"
-              >
-                <X size={12} />
-                <span>Wyczyść filtry</span>
-              </button>
-            </>
-          ) : (
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-600 border border-slate-200 shadow-2xs">
-              <Filter size={13} className="text-slate-400" />
-              Wszystkie audyty (brak zawężenia)
-            </span>
-          )}
-        </div>
-      </div>
-
-      <div className="h-px bg-slate-200/80 my-3"></div>
-
-      {/* POZIOMY PASEK PRZYCISKÓW FILTRÓW */}
       <div
-        className="flex flex-wrap items-center gap-2.5 relative overflow-visible z-40"
+        className="flex flex-wrap items-center gap-2"
         data-reporting-dropdown="true"
       >
+        <div className="w-24 shrink-0 flex items-center gap-1.5 text-xs font-bold text-slate-500 uppercase tracking-wider whitespace-nowrap">
+          <Filter size={14} className="text-[#0038F8]" />
+          <span>Filtry:</span>
+        </div>
+
         {/* 1. Usługa / Proces */}
         <div className="relative">
           <button
             type="button"
             onClick={() => toggleDropdown("audit_usluga")}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold border-2 transition-all cursor-pointer shadow-xs ${
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold border transition-colors cursor-pointer ${
               auditService !== "all" || auditProcess !== "all"
-                ? "bg-[#0038F8] text-white border-[#0038F8] shadow-md shadow-[#0038F8]/20"
-                : "bg-white text-slate-800 border-slate-300 hover:border-slate-400 hover:bg-slate-50"
+                ? "bg-[#0038F8] text-white border-[#0038F8] shadow-sm"
+                : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
             }`}
           >
             <span>
               1. Usługa / Proces
-              {auditService !== "all" ? ` (${auditService === "s1" ? "Płatności" : "Kredyt"})` : ""}
+              {auditService !== "all" ? `: ${auditService === "s1" ? "Płatności" : "Kredyt"}` : ""}
             </span>
-            <ChevronDown size={14} className={auditService !== "all" || auditProcess !== "all" ? "text-white" : "text-slate-500"} />
+            <ChevronDown size={14} className={auditService !== "all" || auditProcess !== "all" ? "text-white" : "text-slate-400"} />
           </button>
           {activeDropdown === "audit_usluga" && (
-            <div
-              className="absolute top-full left-0 mt-2 w-80 bg-white border-2 border-slate-200 rounded-xl shadow-2xl p-4 space-y-3 animate-in fade-in zoom-in-95 duration-100"
-              style={{ zIndex: 100 }}
-            >
+            <div className="absolute top-full left-0 mt-1.5 w-80 bg-white border border-slate-200 rounded-xl shadow-xl z-50 p-3.5 space-y-3">
               <div>
                 <label className="text-xs text-slate-600 mb-1.5 font-bold block">Usługa</label>
                 <select
                   value={auditService}
                   onChange={(e) => setAuditService(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
                 >
                   <option value="all">Wszystkie usługi</option>
                   <option value="s1">Usługi płatnicze i powiązane z rachunkiem</option>
@@ -10508,7 +10451,7 @@ function AuditsFilterSection({
                 <select
                   value={auditProcess}
                   onChange={(e) => setAuditProcess(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
                 >
                   <option value="all">Wszystkie procesy</option>
                   <option value="p1">Otwarcie ROR i autoryzacja</option>
@@ -10525,23 +10468,20 @@ function AuditsFilterSection({
           <button
             type="button"
             onClick={() => toggleDropdown("audit_kanal")}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold border-2 transition-all cursor-pointer shadow-xs ${
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold border transition-colors cursor-pointer ${
               Object.values(auditChannels).some(Boolean)
-                ? "bg-[#0038F8] text-white border-[#0038F8] shadow-md shadow-[#0038F8]/20"
-                : "bg-white text-slate-800 border-slate-300 hover:border-slate-400 hover:bg-slate-50"
+                ? "bg-[#0038F8] text-white border-[#0038F8] shadow-sm"
+                : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
             }`}
           >
             <span>
               2. Kanał
               {Object.values(auditChannels).filter(Boolean).length > 0 ? ` (${Object.values(auditChannels).filter(Boolean).length})` : ""}
             </span>
-            <ChevronDown size={14} className={Object.values(auditChannels).some(Boolean) ? "text-white" : "text-slate-500"} />
+            <ChevronDown size={14} className={Object.values(auditChannels).some(Boolean) ? "text-white" : "text-slate-400"} />
           </button>
           {activeDropdown === "audit_kanal" && (
-            <div
-              className="absolute top-full left-0 mt-2 w-56 bg-white border-2 border-slate-200 rounded-xl shadow-2xl p-2.5 space-y-1.5"
-              style={{ zIndex: 100 }}
-            >
+            <div className="absolute top-full left-0 mt-1.5 w-56 bg-white border border-slate-200 rounded-xl shadow-xl z-50 p-2 space-y-1">
               {["WWW", "Aplikacja", "Dokument"].map((ch) => {
                 const isChecked = Boolean(auditChannels[ch]);
                 return (
@@ -10549,12 +10489,12 @@ function AuditsFilterSection({
                     key={ch}
                     type="button"
                     onClick={() => setAuditChannels((prev) => ({ ...prev, [ch]: !prev[ch] }))}
-                    className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-bold text-left transition-colors cursor-pointer ${
-                      isChecked ? "bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/30" : "hover:bg-slate-100 text-slate-700 border border-transparent"
+                    className={`w-full flex items-center justify-between px-2.5 py-2 rounded-lg text-xs font-semibold text-left transition-colors cursor-pointer ${
+                      isChecked ? "bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/20 font-bold" : "hover:bg-slate-50 text-slate-700 border border-transparent"
                     }`}
                   >
                     <div className="flex items-center gap-2">
-                      <input type="checkbox" checked={isChecked} readOnly className="w-4 h-4 rounded text-[#0038F8] pointer-events-none" />
+                      <input type="checkbox" checked={isChecked} readOnly className="w-4 h-4 rounded text-[#0038F8] pointer-events-none accent-[#0038F8]" />
                       <span>{ch === "Dokument" ? "Dokumenty / PDF" : ch}</span>
                     </div>
                     {isChecked && <CheckCircle2 size={14} className="text-[#0038F8]" />}
@@ -10570,23 +10510,20 @@ function AuditsFilterSection({
           <button
             type="button"
             onClick={() => toggleDropdown("audit_prio")}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold border-2 transition-all cursor-pointer shadow-xs ${
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold border transition-colors cursor-pointer ${
               Object.values(auditPriorities).some(Boolean)
-                ? "bg-[#0038F8] text-white border-[#0038F8] shadow-md shadow-[#0038F8]/20"
-                : "bg-white text-slate-800 border-slate-300 hover:border-slate-400 hover:bg-slate-50"
+                ? "bg-[#0038F8] text-white border-[#0038F8] shadow-sm"
+                : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
             }`}
           >
             <span>
               3. Priorytet błędu
               {Object.values(auditPriorities).filter(Boolean).length > 0 ? ` (${Object.values(auditPriorities).filter(Boolean).length})` : ""}
             </span>
-            <ChevronDown size={14} className={Object.values(auditPriorities).some(Boolean) ? "text-white" : "text-slate-500"} />
+            <ChevronDown size={14} className={Object.values(auditPriorities).some(Boolean) ? "text-white" : "text-slate-400"} />
           </button>
           {activeDropdown === "audit_prio" && (
-            <div
-              className="absolute top-full left-0 mt-2 w-60 bg-white border-2 border-slate-200 rounded-xl shadow-2xl p-2.5 space-y-1.5"
-              style={{ zIndex: 100 }}
-            >
+            <div className="absolute top-full left-0 mt-1.5 w-60 bg-white border border-slate-200 rounded-xl shadow-xl z-50 p-2 space-y-1">
               {[
                 { id: "Priorytetowy", label: "Priorytetowy", icon: AlertOctagon, color: "text-red-500" },
                 { id: "Ważny", label: "Ważny", icon: AlertTriangle, color: "text-amber-500" },
@@ -10599,12 +10536,12 @@ function AuditsFilterSection({
                     key={p.id}
                     type="button"
                     onClick={() => setAuditPriorities((prev) => ({ ...prev, [p.id]: !prev[p.id] }))}
-                    className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-bold text-left transition-colors cursor-pointer ${
-                      isChecked ? "bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/30" : "hover:bg-slate-100 text-slate-700 border border-transparent"
+                    className={`w-full flex items-center justify-between px-2.5 py-2 rounded-lg text-xs font-semibold text-left transition-colors cursor-pointer ${
+                      isChecked ? "bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/20 font-bold" : "hover:bg-slate-50 text-slate-700 border border-transparent"
                     }`}
                   >
                     <div className="flex items-center gap-2">
-                      <input type="checkbox" checked={isChecked} readOnly className="w-4 h-4 rounded text-[#0038F8] pointer-events-none" />
+                      <input type="checkbox" checked={isChecked} readOnly className="w-4 h-4 rounded text-[#0038F8] pointer-events-none accent-[#0038F8]" />
                       <Icon size={14} className={p.color} />
                       <span>{p.label}</span>
                     </div>
@@ -10621,23 +10558,20 @@ function AuditsFilterSection({
           <button
             type="button"
             onClick={() => toggleDropdown("audit_status")}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold border-2 transition-all cursor-pointer shadow-xs ${
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold border transition-colors cursor-pointer ${
               Object.values(auditStatuses).some(Boolean)
-                ? "bg-[#0038F8] text-white border-[#0038F8] shadow-md shadow-[#0038F8]/20"
-                : "bg-white text-slate-800 border-slate-300 hover:border-slate-400 hover:bg-slate-50"
+                ? "bg-[#0038F8] text-white border-[#0038F8] shadow-sm"
+                : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
             }`}
           >
             <span>
               4. Status błędu
               {Object.values(auditStatuses).filter(Boolean).length > 0 ? ` (${Object.values(auditStatuses).filter(Boolean).length})` : ""}
             </span>
-            <ChevronDown size={14} className={Object.values(auditStatuses).some(Boolean) ? "text-white" : "text-slate-500"} />
+            <ChevronDown size={14} className={Object.values(auditStatuses).some(Boolean) ? "text-white" : "text-slate-400"} />
           </button>
           {activeDropdown === "audit_status" && (
-            <div
-              className="absolute top-full left-0 mt-2 w-64 bg-white border-2 border-slate-200 rounded-xl shadow-2xl p-2.5 space-y-1.5"
-              style={{ zIndex: 100 }}
-            >
+            <div className="absolute top-full left-0 mt-1.5 w-60 bg-white border border-slate-200 rounded-xl shadow-xl z-50 p-2 space-y-1">
               {["Nowy", "W trakcie", "Gotowa rekomendacja", "Naprawiony"].map((st) => {
                 const isChecked = Boolean(auditStatuses[st]);
                 return (
@@ -10645,12 +10579,12 @@ function AuditsFilterSection({
                     key={st}
                     type="button"
                     onClick={() => setAuditStatuses((prev) => ({ ...prev, [st]: !prev[st] }))}
-                    className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-bold text-left transition-colors cursor-pointer ${
-                      isChecked ? "bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/30" : "hover:bg-slate-100 text-slate-700 border border-transparent"
+                    className={`w-full flex items-center justify-between px-2.5 py-2 rounded-lg text-xs font-semibold text-left transition-colors cursor-pointer ${
+                      isChecked ? "bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/20 font-bold" : "hover:bg-slate-50 text-slate-700 border border-transparent"
                     }`}
                   >
                     <div className="flex items-center gap-2">
-                      <input type="checkbox" checked={isChecked} readOnly className="w-4 h-4 rounded text-[#0038F8] pointer-events-none" />
+                      <input type="checkbox" checked={isChecked} readOnly className="w-4 h-4 rounded text-[#0038F8] pointer-events-none accent-[#0038F8]" />
                       <span>{st}</span>
                     </div>
                     {isChecked && <CheckCircle2 size={14} className="text-[#0038F8]" />}
@@ -10666,23 +10600,20 @@ function AuditsFilterSection({
           <button
             type="button"
             onClick={() => toggleDropdown("audit_zrodlo")}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold border-2 transition-all cursor-pointer shadow-xs ${
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold border transition-colors cursor-pointer ${
               Object.values(auditSources).some(Boolean)
-                ? "bg-[#0038F8] text-white border-[#0038F8] shadow-md shadow-[#0038F8]/20"
-                : "bg-white text-slate-800 border-slate-300 hover:border-slate-400 hover:bg-slate-50"
+                ? "bg-[#0038F8] text-white border-[#0038F8] shadow-sm"
+                : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
             }`}
           >
             <span>
               5. Źródło
               {Object.values(auditSources).filter(Boolean).length > 0 ? ` (${Object.values(auditSources).filter(Boolean).length})` : ""}
             </span>
-            <ChevronDown size={14} className={Object.values(auditSources).some(Boolean) ? "text-white" : "text-slate-500"} />
+            <ChevronDown size={14} className={Object.values(auditSources).some(Boolean) ? "text-white" : "text-slate-400"} />
           </button>
           {activeDropdown === "audit_zrodlo" && (
-            <div
-              className="absolute top-full left-0 mt-2 w-64 bg-white border-2 border-slate-200 rounded-xl shadow-2xl p-2.5 space-y-1.5"
-              style={{ zIndex: 100 }}
-            >
+            <div className="absolute top-full left-0 mt-1.5 w-60 bg-white border border-slate-200 rounded-xl shadow-xl z-50 p-2 space-y-1">
               {["Audyt", "Reaudyt", "Zgłoszenie użytkownika", "Skarga"].map((src) => {
                 const isChecked = Boolean(auditSources[src]);
                 return (
@@ -10690,12 +10621,12 @@ function AuditsFilterSection({
                     key={src}
                     type="button"
                     onClick={() => setAuditSources((prev) => ({ ...prev, [src]: !prev[src] }))}
-                    className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-bold text-left transition-colors cursor-pointer ${
-                      isChecked ? "bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/30" : "hover:bg-slate-100 text-slate-700 border border-transparent"
+                    className={`w-full flex items-center justify-between px-2.5 py-2 rounded-lg text-xs font-semibold text-left transition-colors cursor-pointer ${
+                      isChecked ? "bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/20 font-bold" : "hover:bg-slate-50 text-slate-700 border border-transparent"
                     }`}
                   >
                     <div className="flex items-center gap-2">
-                      <input type="checkbox" checked={isChecked} readOnly className="w-4 h-4 rounded text-[#0038F8] pointer-events-none" />
+                      <input type="checkbox" checked={isChecked} readOnly className="w-4 h-4 rounded text-[#0038F8] pointer-events-none accent-[#0038F8]" />
                       <span>{src}</span>
                     </div>
                     {isChecked && <CheckCircle2 size={14} className="text-[#0038F8]" />}
@@ -10711,29 +10642,26 @@ function AuditsFilterSection({
           <button
             type="button"
             onClick={() => toggleDropdown("audit_audytor")}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold border-2 transition-all cursor-pointer shadow-xs ${
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold border transition-colors cursor-pointer ${
               auditAuditor || auditScoreRange !== "all"
-                ? "bg-[#0038F8] text-white border-[#0038F8] shadow-md shadow-[#0038F8]/20"
-                : "bg-white text-slate-800 border-slate-300 hover:border-slate-400 hover:bg-slate-50"
+                ? "bg-[#0038F8] text-white border-[#0038F8] shadow-sm"
+                : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
             }`}
           >
             <span>
               6. Audytor i %
-              {auditAuditor ? ` (${auditAuditor.split(" ")[0]})` : ""}
+              {auditAuditor ? `: ${auditAuditor.split(" ")[0]}` : auditScoreRange !== "all" ? `: ${auditScoreRange === "low" ? "< 70%" : auditScoreRange === "medium" ? "70-89%" : "90%+"}` : ""}
             </span>
-            <ChevronDown size={14} className={auditAuditor || auditScoreRange !== "all" ? "text-white" : "text-slate-500"} />
+            <ChevronDown size={14} className={auditAuditor || auditScoreRange !== "all" ? "text-white" : "text-slate-400"} />
           </button>
           {activeDropdown === "audit_audytor" && (
-            <div
-              className="absolute top-full left-0 mt-2 w-72 bg-white border-2 border-slate-200 rounded-xl shadow-2xl p-4 space-y-3.5"
-              style={{ zIndex: 100 }}
-            >
+            <div className="absolute top-full left-0 mt-1.5 w-72 bg-white border border-slate-200 rounded-xl shadow-xl z-50 p-3.5 space-y-3">
               <div>
                 <label className="text-xs text-slate-600 mb-1.5 font-bold block">Audytor</label>
                 <select
                   value={auditAuditor}
                   onChange={(e) => setAuditAuditor(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
                 >
                   <option value="">Wszyscy audytorzy</option>
                   <option value="Piotr Smułkowski">Piotr Smułkowski</option>
@@ -10754,7 +10682,7 @@ function AuditsFilterSection({
                       key={item.id}
                       type="button"
                       onClick={() => setAuditScoreRange(item.id)}
-                      className={`px-2.5 py-1.5 rounded-xl text-xs font-bold border transition-colors cursor-pointer ${
+                      className={`px-2.5 py-1.5 rounded-lg text-xs font-bold border transition-colors cursor-pointer ${
                         auditScoreRange === item.id ? "bg-[#0038F8] text-white border-[#0038F8]" : "bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200"
                       }`}
                     >
@@ -10772,23 +10700,20 @@ function AuditsFilterSection({
           <button
             type="button"
             onClick={() => toggleDropdown("audit_czas")}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold border-2 transition-all cursor-pointer shadow-xs ${
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold border transition-colors cursor-pointer ${
               auditTimeRange !== "all" || auditDateFrom || auditDateTo
-                ? "bg-[#0038F8] text-white border-[#0038F8] shadow-md shadow-[#0038F8]/20"
-                : "bg-white text-slate-800 border-slate-300 hover:border-slate-400 hover:bg-slate-50"
+                ? "bg-[#0038F8] text-white border-[#0038F8] shadow-sm"
+                : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
             }`}
           >
             <span>
               7. Czas
               {auditTimeRange !== "all" ? `: ${auditTimeRange === "30d" ? "30 dni" : auditTimeRange === "60d" ? "60 dni" : "1 Rok"}` : (auditDateFrom || auditDateTo) ? ": Zakres" : ""}
             </span>
-            <ChevronDown size={14} className={auditTimeRange !== "all" || auditDateFrom || auditDateTo ? "text-white" : "text-slate-500"} />
+            <ChevronDown size={14} className={auditTimeRange !== "all" || auditDateFrom || auditDateTo ? "text-white" : "text-slate-400"} />
           </button>
           {activeDropdown === "audit_czas" && (
-            <div
-              className="absolute top-full left-0 mt-2 w-80 bg-white border-2 border-slate-200 rounded-xl shadow-2xl p-4 space-y-3.5"
-              style={{ zIndex: 100 }}
-            >
+            <div className="absolute top-full left-0 mt-1.5 w-72 bg-white border border-slate-200 rounded-xl shadow-xl z-50 p-3.5 space-y-3">
               <div>
                 <div className="text-xs text-slate-600 mb-1.5 font-bold">Szybki wybór okresu</div>
                 <div className="flex flex-wrap gap-1.5">
@@ -10806,8 +10731,8 @@ function AuditsFilterSection({
                         setAuditDateFrom("");
                         setAuditDateTo("");
                       }}
-                      className={`px-3 py-1 text-xs font-bold rounded-lg transition-colors border cursor-pointer ${
-                        auditTimeRange === tr.id ? "bg-[#0038F8] text-white border-[#0038F8]" : "bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200"
+                      className={`px-2.5 py-1 text-[11px] font-bold rounded-lg transition-colors border cursor-pointer ${
+                        auditTimeRange === tr.id ? "bg-[#0038F8] text-white border-[#0038F8]" : "bg-slate-100 hover:bg-slate-200 text-slate-600 border-slate-200"
                       }`}
                     >
                       {tr.label}
@@ -10826,9 +10751,9 @@ function AuditsFilterSection({
                       setAuditDateFrom(e.target.value);
                       setAuditTimeRange("custom");
                     }}
-                    className="w-full bg-slate-50 border border-slate-300 rounded-xl px-2.5 py-1.5 text-xs text-slate-700"
+                    className="w-full bg-white border border-slate-200 rounded-lg px-2 py-1 text-xs text-slate-700"
                   />
-                  <span className="text-slate-400 text-xs font-bold">-</span>
+                  <span className="text-slate-400 text-xs">-</span>
                   <input
                     type="date"
                     value={auditDateTo}
@@ -10836,25 +10761,42 @@ function AuditsFilterSection({
                       setAuditDateTo(e.target.value);
                       setAuditTimeRange("custom");
                     }}
-                    className="w-full bg-slate-50 border border-slate-300 rounded-xl px-2.5 py-1.5 text-xs text-slate-700"
+                    className="w-full bg-white border border-slate-200 rounded-lg px-2 py-1 text-xs text-slate-700"
                   />
                 </div>
               </div>
             </div>
           )}
         </div>
+
+        {/* Przycisk: Wyczyść */}
+        <div className="flex items-center gap-2 ml-auto">
+          <button
+            type="button"
+            onClick={clearAuditFilters}
+            disabled={!hasActiveFilters}
+            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg font-bold transition-colors text-xs border shadow-sm ${
+              hasActiveFilters
+                ? "bg-white hover:bg-slate-100 text-slate-700 border-slate-200 cursor-pointer"
+                : "bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed opacity-60"
+            }`}
+            title={hasActiveFilters ? "Zresetuj wszystkie aktywne filtry" : "Brak aktywnych filtrów"}
+          >
+            <X size={12} className={hasActiveFilters ? "text-slate-500" : "text-slate-400"} />
+            <span>Wyczyść</span>
+          </button>
+        </div>
       </div>
 
       {/* RZĄD CHIPÓW AKTYWNYCH FILTRÓW */}
       {hasActiveFilters && (
-        <div className="flex flex-wrap items-center gap-2 pt-3 mt-3 border-t border-slate-200/80">
-          <span className="text-xs font-extrabold text-slate-600 flex items-center gap-1.5 mr-1">
-            <Filter size={13} className="text-[#0038F8]" />
-            Wybrany zakres audytów:
-          </span>
+        <div className="flex flex-wrap items-center gap-2 pt-2.5 mt-2.5 border-t border-slate-200/80">
+          <div className="w-24 shrink-0 flex items-center text-xs font-bold text-slate-500 whitespace-nowrap">
+            <span>Wybrane filtry:</span>
+          </div>
 
           {auditService !== "all" && (
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/25 shadow-2xs">
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/20">
               <span>Usługa: {auditService === "s1" ? "Płatności" : "Kredyt"}</span>
               <button type="button" onClick={() => setAuditService("all")} className="hover:bg-[#0038F8]/20 p-0.5 rounded cursor-pointer">
                 <X size={12} />
@@ -10863,7 +10805,7 @@ function AuditsFilterSection({
           )}
 
           {auditProcess !== "all" && (
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/25 shadow-2xs">
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/20">
               <span>Proces: {auditProcess}</span>
               <button type="button" onClick={() => setAuditProcess("all")} className="hover:bg-[#0038F8]/20 p-0.5 rounded cursor-pointer">
                 <X size={12} />
@@ -10872,61 +10814,52 @@ function AuditsFilterSection({
           )}
 
           {Object.keys(auditPriorities).filter((k) => auditPriorities[k]).map((p) => (
-            <span key={p} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-red-50 text-red-700 border border-red-200 shadow-2xs">
+            <span key={p} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/20">
               <span>Priorytet: {p}</span>
-              <button type="button" onClick={() => setAuditPriorities((prev) => ({ ...prev, [p]: false }))} className="hover:bg-red-200/50 p-0.5 rounded cursor-pointer">
+              <button type="button" onClick={() => setAuditPriorities((prev) => ({ ...prev, [p]: false }))} className="hover:bg-[#0038F8]/20 p-0.5 rounded cursor-pointer">
                 <X size={12} />
               </button>
             </span>
           ))}
 
           {Object.keys(auditChannels).filter((k) => auditChannels[k]).map((ch) => (
-            <span key={ch} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100 text-slate-800 border border-slate-300 shadow-2xs">
+            <span key={ch} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/20">
               <span>Kanał: {ch}</span>
-              <button type="button" onClick={() => setAuditChannels((prev) => ({ ...prev, [ch]: false }))} className="hover:bg-slate-200 p-0.5 rounded cursor-pointer">
+              <button type="button" onClick={() => setAuditChannels((prev) => ({ ...prev, [ch]: false }))} className="hover:bg-[#0038F8]/20 p-0.5 rounded cursor-pointer">
                 <X size={12} />
               </button>
             </span>
           ))}
 
           {Object.keys(auditStatuses).filter((k) => auditStatuses[k]).map((st) => (
-            <span key={st} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200 shadow-2xs">
+            <span key={st} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/20">
               <span>Status: {st}</span>
-              <button type="button" onClick={() => setAuditStatuses((prev) => ({ ...prev, [st]: false }))} className="hover:bg-blue-200/50 p-0.5 rounded cursor-pointer">
+              <button type="button" onClick={() => setAuditStatuses((prev) => ({ ...prev, [st]: false }))} className="hover:bg-[#0038F8]/20 p-0.5 rounded cursor-pointer">
                 <X size={12} />
               </button>
             </span>
           ))}
 
           {auditAuditor && (
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200 shadow-2xs">
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/20">
               <span>Audytor: {auditAuditor}</span>
-              <button type="button" onClick={() => setAuditAuditor("")} className="hover:bg-blue-200/50 p-0.5 rounded cursor-pointer">
+              <button type="button" onClick={() => setAuditAuditor("")} className="hover:bg-[#0038F8]/20 p-0.5 rounded cursor-pointer">
                 <X size={12} />
               </button>
             </span>
           )}
 
           {auditTimeRange !== "all" && (
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100 text-slate-800 border border-slate-300 shadow-2xs">
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/20">
               <span>Okres: {auditTimeRange === "30d" ? "30 dni" : auditTimeRange === "60d" ? "60 dni" : "1 Rok"}</span>
-              <button type="button" onClick={() => setAuditTimeRange("all")} className="hover:bg-slate-200 p-0.5 rounded cursor-pointer">
+              <button type="button" onClick={() => setAuditTimeRange("all")} className="hover:bg-[#0038F8]/20 p-0.5 rounded cursor-pointer">
                 <X size={12} />
               </button>
             </span>
           )}
         </div>
       )}
-
-      {/* PODSUMOWANIE */}
-      <div className="flex items-center gap-2 pt-2.5 text-xs text-slate-500">
-        <span className="font-semibold">Bieżący zakres danych:</span>
-        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md font-bold bg-white text-slate-800 border border-slate-200 shadow-2xs">
-          <CheckCircle2 size={12} className="text-[#0038F8]" />
-          {scopeSummaryText}
-        </span>
-      </div>
-    </section>
+    </div>
   );
 }
 
@@ -10950,90 +10883,35 @@ function ServicesFilterSection({
   scopeSummaryText,
 }) {
   return (
-    <section
+    <div
       data-testid="services-filter-section"
-      className={`rounded-xl border-2 transition-all p-4 sm:p-5 relative z-40 overflow-visible mb-6 shadow-sm ${
-        hasActiveFilters
-          ? "bg-blue-50/40 border-[#0038F8]/40 shadow-sm"
-          : "bg-slate-50 border-slate-200"
-      }`}
+      className="bg-white border border-slate-200 rounded-xl p-3 shadow-xs relative z-30 mb-4"
     >
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
-        <div className="flex items-center gap-3">
-          <div
-            className={`w-9 h-9 rounded-xl flex items-center justify-center font-black text-sm shrink-0 transition-all ${
-              hasActiveFilters
-                ? "bg-[#0038F8] text-white shadow-md shadow-[#0038F8]/25"
-                : "bg-white text-slate-700 border-2 border-slate-300"
-            }`}
-          >
-            {hasActiveFilters ? <CheckCircle2 size={18} className="text-white" /> : <Layout size={16} />}
-          </div>
-          <div>
-            <span className="text-xs font-extrabold text-slate-900">
-              Zakres analizy operacyjnej usług i procesów biznesowych
-            </span>
-            <p className="text-slate-500 text-xs mt-0.5">
-              {hasActiveFilters
-                ? `Aktywne filtry: ${serviceFiltersCount}. Zestawienia dostępności usług uwzględniają ten zakres.`
-                : "Odfiltruj usługi, procesy biznesowe i kanały wdrożenia przed generowaniem analizy."}
-            </p>
-          </div>
-        </div>
-
-        {/* TYLKO JEDEN PRZYCISK WYCZYŚĆ */}
-        <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
-          {hasActiveFilters ? (
-            <>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-extrabold bg-[#0038F8] text-white shadow-xs">
-                <CheckCircle2 size={13} />
-                Zakres aktywny ({serviceFiltersCount})
-              </span>
-              <button
-                type="button"
-                onClick={clearServiceFilters}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-red-600 hover:text-red-800 bg-white hover:bg-red-50 border border-red-200 shadow-2xs transition-colors cursor-pointer"
-                title="Wyczyść wszystkie filtry usług"
-              >
-                <X size={12} />
-                <span>Wyczyść filtry</span>
-              </button>
-            </>
-          ) : (
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-600 border border-slate-200 shadow-2xs">
-              <Filter size={13} className="text-slate-400" />
-              Wszystkie usługi bankowe (domyślny)
-            </span>
-          )}
-        </div>
-      </div>
-
-      <div className="h-px bg-slate-200/80 my-3"></div>
-
-      {/* POZIOME PRZYCISKI FILTRÓW USŁUG */}
       <div
-        className="flex flex-wrap items-center gap-2.5 relative overflow-visible z-40"
+        className="flex flex-wrap items-center gap-2"
         data-reporting-dropdown="true"
       >
+        <div className="w-24 shrink-0 flex items-center gap-1.5 text-xs font-bold text-slate-500 uppercase tracking-wider whitespace-nowrap">
+          <Filter size={14} className="text-[#0038F8]" />
+          <span>Filtry:</span>
+        </div>
+
         {/* 1. Usługa */}
         <div className="relative">
           <button
             type="button"
             onClick={() => toggleDropdown("srv_usluga")}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold border-2 transition-all cursor-pointer shadow-xs ${
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold border transition-colors cursor-pointer ${
               serviceFilter !== "all"
-                ? "bg-[#0038F8] text-white border-[#0038F8] shadow-md shadow-[#0038F8]/20"
-                : "bg-white text-slate-800 border-slate-300 hover:border-slate-400 hover:bg-slate-50"
+                ? "bg-[#0038F8] text-white border-[#0038F8] shadow-sm"
+                : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
             }`}
           >
-            <span>1. Usługa bankowa{serviceFilter !== "all" ? `: ${serviceFilter === "s1" ? "Płatności" : "Kredyt"}` : ""}</span>
-            <ChevronDown size={14} className={serviceFilter !== "all" ? "text-white" : "text-slate-500"} />
+            <span>1. Usługa{serviceFilter !== "all" ? `: ${serviceFilter === "s1" ? "Płatności" : "Kredyt"}` : ""}</span>
+            <ChevronDown size={14} className={serviceFilter !== "all" ? "text-white" : "text-slate-400"} />
           </button>
           {activeDropdown === "srv_usluga" && (
-            <div
-              className="absolute top-full left-0 mt-2 w-72 bg-white border-2 border-slate-200 rounded-xl shadow-2xl p-2.5 space-y-1.5"
-              style={{ zIndex: 100 }}
-            >
+            <div className="absolute top-full left-0 mt-1.5 w-72 bg-white border border-slate-200 rounded-xl shadow-xl z-50 p-2 space-y-1">
               {[
                 { id: "all", label: "Wszystkie usługi (2)" },
                 { id: "s1", label: "Usługi płatnicze i powiązane z rachunkiem" },
@@ -11046,7 +10924,7 @@ function ServicesFilterSection({
                     setServiceFilter(opt.id);
                     toggleDropdown(null);
                   }}
-                  className={`w-full text-left px-3 py-2 rounded-xl text-xs font-bold transition-colors cursor-pointer ${
+                  className={`w-full text-left px-3 py-2 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
                     serviceFilter === opt.id ? "bg-[#0038F8] text-white" : "hover:bg-slate-100 text-slate-700"
                   }`}
                 >
@@ -11062,20 +10940,17 @@ function ServicesFilterSection({
           <button
             type="button"
             onClick={() => toggleDropdown("srv_proces")}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold border-2 transition-all cursor-pointer shadow-xs ${
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold border transition-colors cursor-pointer ${
               serviceProcess !== "all"
-                ? "bg-[#0038F8] text-white border-[#0038F8] shadow-md shadow-[#0038F8]/20"
-                : "bg-white text-slate-800 border-slate-300 hover:border-slate-400 hover:bg-slate-50"
+                ? "bg-[#0038F8] text-white border-[#0038F8] shadow-sm"
+                : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
             }`}
           >
-            <span>2. Proces biznesowy{serviceProcess !== "all" ? `: ${serviceProcess}` : ""}</span>
-            <ChevronDown size={14} className={serviceProcess !== "all" ? "text-white" : "text-slate-500"} />
+            <span>2. Proces{serviceProcess !== "all" ? `: ${serviceProcess}` : ""}</span>
+            <ChevronDown size={14} className={serviceProcess !== "all" ? "text-white" : "text-slate-400"} />
           </button>
           {activeDropdown === "srv_proces" && (
-            <div
-              className="absolute top-full left-0 mt-2 w-72 bg-white border-2 border-slate-200 rounded-xl shadow-2xl p-2.5 space-y-1.5"
-              style={{ zIndex: 100 }}
-            >
+            <div className="absolute top-full left-0 mt-1.5 w-72 bg-white border border-slate-200 rounded-xl shadow-xl z-50 p-2 space-y-1">
               {[
                 { id: "all", label: "Wszystkie procesy (14)" },
                 { id: "Otwarcie konta", label: "Otwarcie ROR i autoryzacja" },
@@ -11089,7 +10964,7 @@ function ServicesFilterSection({
                     setServiceProcess(opt.id);
                     toggleDropdown(null);
                   }}
-                  className={`w-full text-left px-3 py-2 rounded-xl text-xs font-bold transition-colors cursor-pointer ${
+                  className={`w-full text-left px-3 py-2 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
                     serviceProcess === opt.id ? "bg-[#0038F8] text-white" : "hover:bg-slate-100 text-slate-700"
                   }`}
                 >
@@ -11105,24 +10980,21 @@ function ServicesFilterSection({
           <button
             type="button"
             onClick={() => toggleDropdown("srv_kanal")}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold border-2 transition-all cursor-pointer shadow-xs ${
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold border transition-colors cursor-pointer ${
               serviceChannel !== "all"
-                ? "bg-[#0038F8] text-white border-[#0038F8] shadow-md shadow-[#0038F8]/20"
-                : "bg-white text-slate-800 border-slate-300 hover:border-slate-400 hover:bg-slate-50"
+                ? "bg-[#0038F8] text-white border-[#0038F8] shadow-sm"
+                : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
             }`}
           >
             <span>3. Kanał{serviceChannel !== "all" ? `: ${serviceChannel}` : ""}</span>
-            <ChevronDown size={14} className={serviceChannel !== "all" ? "text-white" : "text-slate-500"} />
+            <ChevronDown size={14} className={serviceChannel !== "all" ? "text-white" : "text-slate-400"} />
           </button>
           {activeDropdown === "srv_kanal" && (
-            <div
-              className="absolute top-full left-0 mt-2 w-56 bg-white border-2 border-slate-200 rounded-xl shadow-2xl p-2.5 space-y-1.5"
-              style={{ zIndex: 100 }}
-            >
+            <div className="absolute top-full left-0 mt-1.5 w-60 bg-white border border-slate-200 rounded-xl shadow-xl z-50 p-2 space-y-1">
               {[
                 { id: "all", label: "Wszystkie kanały" },
                 { id: "WWW", label: "Serwis WWW (Desktop)" },
-                { id: "Mobile", label: "Aplikacja Mobilna (iOS/Android)" },
+                { id: "Mobile", label: "Aplikacja Mobilna" },
                 { id: "Dokument", label: "Wzorce dokumentów / PDF" },
               ].map((opt) => (
                 <button
@@ -11132,7 +11004,7 @@ function ServicesFilterSection({
                     setServiceChannel(opt.id);
                     toggleDropdown(null);
                   }}
-                  className={`w-full text-left px-3 py-2 rounded-xl text-xs font-bold transition-colors cursor-pointer ${
+                  className={`w-full text-left px-3 py-2 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
                     serviceChannel === opt.id ? "bg-[#0038F8] text-white" : "hover:bg-slate-100 text-slate-700"
                   }`}
                 >
@@ -11148,22 +11020,19 @@ function ServicesFilterSection({
           <button
             type="button"
             onClick={() => toggleDropdown("srv_sla")}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold border-2 transition-all cursor-pointer shadow-xs ${
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold border transition-colors cursor-pointer ${
               serviceSla !== "all"
-                ? "bg-[#0038F8] text-white border-[#0038F8] shadow-md shadow-[#0038F8]/20"
-                : "bg-white text-slate-800 border-slate-300 hover:border-slate-400 hover:bg-slate-50"
+                ? "bg-[#0038F8] text-white border-[#0038F8] shadow-sm"
+                : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
             }`}
           >
-            <span>4. Zgodność SLA{serviceSla !== "all" ? `: ${serviceSla === "under80" ? "< 80%" : ">= 80%"}` : ""}</span>
-            <ChevronDown size={14} className={serviceSla !== "all" ? "text-white" : "text-slate-500"} />
+            <span>4. SLA{serviceSla !== "all" ? `: ${serviceSla === "under80" ? "< 80%" : ">= 80%"}` : ""}</span>
+            <ChevronDown size={14} className={serviceSla !== "all" ? "text-white" : "text-slate-400"} />
           </button>
           {activeDropdown === "srv_sla" && (
-            <div
-              className="absolute top-full left-0 mt-2 w-64 bg-white border-2 border-slate-200 rounded-xl shadow-2xl p-2.5 space-y-1.5"
-              style={{ zIndex: 100 }}
-            >
+            <div className="absolute top-full left-0 mt-1.5 w-60 bg-white border border-slate-200 rounded-xl shadow-xl z-50 p-2 space-y-1">
               {[
-                { id: "all", label: "Wszystkie progi zgodności" },
+                { id: "all", label: "Wszystkie progi SLA" },
                 { id: "under80", label: "Poniżej progu SLA (< 80%)" },
                 { id: "over80", label: "Zgodne z normą SLA (>= 80%)" },
               ].map((opt) => (
@@ -11174,7 +11043,7 @@ function ServicesFilterSection({
                     setServiceSla(opt.id);
                     toggleDropdown(null);
                   }}
-                  className={`w-full text-left px-3 py-2 rounded-xl text-xs font-bold transition-colors cursor-pointer ${
+                  className={`w-full text-left px-3 py-2 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
                     serviceSla === opt.id ? "bg-[#0038F8] text-white" : "hover:bg-slate-100 text-slate-700"
                   }`}
                 >
@@ -11190,20 +11059,17 @@ function ServicesFilterSection({
           <button
             type="button"
             onClick={() => toggleDropdown("srv_period")}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold border-2 transition-all cursor-pointer shadow-xs ${
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold border transition-colors cursor-pointer ${
               servicePeriod !== "q2_2026"
-                ? "bg-[#0038F8] text-white border-[#0038F8] shadow-md shadow-[#0038F8]/20"
-                : "bg-white text-slate-800 border-slate-300 hover:border-slate-400 hover:bg-slate-50"
+                ? "bg-[#0038F8] text-white border-[#0038F8] shadow-sm"
+                : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
             }`}
           >
-            <span>5. Cykl{servicePeriod === "q2_2026" ? ": Q2 2026 (Bieżący)" : servicePeriod === "q1_2026" ? ": Q1 2026" : ": Ostatnie 12 m-cy"}</span>
-            <ChevronDown size={14} className={servicePeriod !== "q2_2026" ? "text-white" : "text-slate-500"} />
+            <span>5. Cykl{servicePeriod === "q2_2026" ? ": Q2 2026" : servicePeriod === "q1_2026" ? ": Q1 2026" : ": 12 m-cy"}</span>
+            <ChevronDown size={14} className={servicePeriod !== "q2_2026" ? "text-white" : "text-slate-400"} />
           </button>
           {activeDropdown === "srv_period" && (
-            <div
-              className="absolute top-full left-0 mt-2 w-60 bg-white border-2 border-slate-200 rounded-xl shadow-2xl p-2.5 space-y-1.5"
-              style={{ zIndex: 100 }}
-            >
+            <div className="absolute top-full left-0 mt-1.5 w-60 bg-white border border-slate-200 rounded-xl shadow-xl z-50 p-2 space-y-1">
               {[
                 { id: "q2_2026", label: "Q2 2026 (Bieżący cykl)" },
                 { id: "q1_2026", label: "Q1 2026 (Poprzedni cykl)" },
@@ -11216,7 +11082,7 @@ function ServicesFilterSection({
                     setServicePeriod(opt.id);
                     toggleDropdown(null);
                   }}
-                  className={`w-full text-left px-3 py-2 rounded-xl text-xs font-bold transition-colors cursor-pointer ${
+                  className={`w-full text-left px-3 py-2 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
                     servicePeriod === opt.id ? "bg-[#0038F8] text-white" : "hover:bg-slate-100 text-slate-700"
                   }`}
                 >
@@ -11226,17 +11092,80 @@ function ServicesFilterSection({
             </div>
           )}
         </div>
+
+        {/* Przycisk: Wyczyść */}
+        <div className="flex items-center gap-2 ml-auto">
+          <button
+            type="button"
+            onClick={clearServiceFilters}
+            disabled={!hasActiveFilters}
+            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg font-bold transition-colors text-xs border shadow-sm ${
+              hasActiveFilters
+                ? "bg-white hover:bg-slate-100 text-slate-700 border-slate-200 cursor-pointer"
+                : "bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed opacity-60"
+            }`}
+            title={hasActiveFilters ? "Zresetuj wszystkie aktywne filtry" : "Brak aktywnych filtrów"}
+          >
+            <X size={12} className={hasActiveFilters ? "text-slate-500" : "text-slate-400"} />
+            <span>Wyczyść</span>
+          </button>
+        </div>
       </div>
 
-      {/* PODSUMOWANIE */}
-      <div className="flex items-center gap-2 pt-3 mt-3 border-t border-slate-200/80 text-xs text-slate-500">
-        <span className="font-semibold">Bieżący zakres usług:</span>
-        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md font-bold bg-white text-slate-800 border border-slate-200 shadow-2xs">
-          <CheckCircle2 size={12} className="text-[#0038F8]" />
-          {scopeSummaryText}
-        </span>
-      </div>
-    </section>
+      {/* RZĄD CHIPÓW AKTYWNYCH FILTRÓW */}
+      {hasActiveFilters && (
+        <div className="flex flex-wrap items-center gap-2 pt-2.5 mt-2.5 border-t border-slate-200/80">
+          <div className="w-24 shrink-0 flex items-center text-xs font-bold text-slate-500 whitespace-nowrap">
+            <span>Wybrane filtry:</span>
+          </div>
+
+          {serviceFilter !== "all" && (
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/20">
+              <span>Usługa: {serviceFilter === "s1" ? "Płatności" : "Kredyt"}</span>
+              <button type="button" onClick={() => setServiceFilter("all")} className="hover:bg-[#0038F8]/20 p-0.5 rounded cursor-pointer">
+                <X size={12} />
+              </button>
+            </span>
+          )}
+
+          {serviceProcess !== "all" && (
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/20">
+              <span>Proces: {serviceProcess}</span>
+              <button type="button" onClick={() => setServiceProcess("all")} className="hover:bg-[#0038F8]/20 p-0.5 rounded cursor-pointer">
+                <X size={12} />
+              </button>
+            </span>
+          )}
+
+          {serviceChannel !== "all" && (
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/20">
+              <span>Kanał: {serviceChannel}</span>
+              <button type="button" onClick={() => setServiceChannel("all")} className="hover:bg-[#0038F8]/20 p-0.5 rounded cursor-pointer">
+                <X size={12} />
+              </button>
+            </span>
+          )}
+
+          {serviceSla !== "all" && (
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/20">
+              <span>SLA: {serviceSla === "under80" ? "< 80%" : ">= 80%"}</span>
+              <button type="button" onClick={() => setServiceSla("all")} className="hover:bg-[#0038F8]/20 p-0.5 rounded cursor-pointer">
+                <X size={12} />
+              </button>
+            </span>
+          )}
+
+          {servicePeriod !== "q2_2026" && (
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/20">
+              <span>Cykl: {servicePeriod}</span>
+              <button type="button" onClick={() => setServicePeriod("q2_2026")} className="hover:bg-[#0038F8]/20 p-0.5 rounded cursor-pointer">
+                <X size={12} />
+              </button>
+            </span>
+          )}
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -12946,40 +12875,47 @@ function AuditReportView() {
       data-testid="audit-report-view"
       className="w-full"
     >
-      <Card className="mb-6 p-4 flex flex-col md:flex-row items-end md:items-center gap-4 sm:gap-6 bg-white border-slate-200">
-        <div className="flex-1 w-full">
-          <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-2">
-            Sortowanie audytów
-          </label>
-          <select
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value)}
-            className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
-          >
-            <option value="score_desc">Wynik dostępności: od najwyższego (%)</option>
-            <option value="score_asc">Wynik dostępności: od najniższego (%)</option>
-            <option value="date_desc">Data zakończenia: od najnowszych</option>
-            <option value="name_asc">Nazwa audytu (A-Z)</option>
-            <option value="errors_desc">Liczba błędów: od największej</option>
-          </select>
+      {/* Pasek wyników, sortowania i zagnieżdżenia - spójny z Audytami i Skargami */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+        <div className="flex items-center gap-2.5 flex-wrap">
+          <span className="text-sm font-bold text-slate-700">
+            Wyniki: <span className="text-[#0038F8] font-black">{mockAudits.length}</span> audytów
+          </span>
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/20">
+            <CheckCircle2 size={12} /> Zakres: 6 audytów • 47 błędów • Śr. zgodność 86.2%
+          </span>
         </div>
-        <div className="flex-1 w-full">
-          <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-2">
-            Forma wyniku (Zagnieżdżenie)
-          </label>
-          <select
-            value={detailLevel}
-            onChange={(e) => setDetailLevel(Number(e.target.value))}
-            className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
-          >
-            <option value={1}>
-              1. Tylko Raporty (Ogólne statystyki audytów)
-            </option>
-            <option value={2}>2. Raporty + Widoki w audycie</option>
-            <option value={3}>3. Raporty + Widoki + Błędy</option>
-          </select>
+
+        <div className="flex items-center gap-3 flex-wrap">
+          <div className="flex items-center gap-1.5">
+            <span className="text-xs font-semibold text-slate-400">Sortuj:</span>
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="bg-white border border-slate-200 py-1.5 px-3 rounded-xl text-xs font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50 cursor-pointer shadow-sm"
+            >
+              <option value="score_desc">Wynik: od najwyższego (%)</option>
+              <option value="score_asc">Wynik: od najniższego (%)</option>
+              <option value="date_desc">Data zakończenia: od najnowszych</option>
+              <option value="name_asc">Nazwa audytu (A-Z)</option>
+              <option value="errors_desc">Liczba błędów: od największej</option>
+            </select>
+          </div>
+
+          <div className="flex items-center gap-1.5">
+            <span className="text-xs font-semibold text-slate-400">Zagnieżdżenie:</span>
+            <select
+              value={detailLevel}
+              onChange={(e) => setDetailLevel(Number(e.target.value))}
+              className="bg-white border border-slate-200 py-1.5 px-3 rounded-xl text-xs font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50 cursor-pointer shadow-sm"
+            >
+              <option value={1}>1. Tylko Raporty</option>
+              <option value={2}>2. Raporty + Widoki w audycie</option>
+              <option value={3}>3. Raporty + Widoki + Błędy</option>
+            </select>
+          </div>
         </div>
-      </Card>
+      </div>
 
       <div className="flex flex-col gap-6">
         {mockAudits.map((audit) => (
@@ -13527,40 +13463,49 @@ function OperationalReport() {
       data-testid="operational-report"
       className="w-full"
     >
-      <Card className="mb-6 p-4 flex flex-col md:flex-row items-end md:items-center gap-4 sm:gap-6 bg-white border-slate-200">
-        <div className="flex-1 w-full">
-          <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-2">
-            Sortowanie wyników
-          </label>
-          <select
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value)}
-            className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
-          >
-            <option value="name">Alfabetycznie po nazwie usługi</option>
-            <option value="score_desc">
-              Dostępność usług malejąco (Najlepsze)
-            </option>
-          </select>
+      {/* Pasek wyników, sortowania i zagnieżdżenia - spójny z Audytami i Skargami */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+        <div className="flex items-center gap-2.5 flex-wrap">
+          <span className="text-sm font-bold text-slate-700">
+            Wyniki: <span className="text-[#0038F8] font-black">{data.length}</span> usług
+          </span>
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/20">
+            <CheckCircle2 size={12} /> Zakres: 6 usług • 18 procesów • Śr. zgodność 82.4%
+          </span>
         </div>
-        <div className="flex-1 w-full">
-          <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-2">
-            Forma wyniku (Poziom szczegółowości)
-          </label>
-          <select
-            value={detailLevel}
-            onChange={(e) => setDetailLevel(Number(e.target.value))}
-            className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
-          >
-            <option value={1}>1. Tylko Usługi (Ogólne podsumowanie)</option>
-            <option value={2}>2. Usługi + Procesy</option>
-            <option value={3}>3. Usługi + Procesy + Widoki</option>
-            <option value={4}>
-              4. Pełen wykaz (wraz ze szczegółami błędów)
-            </option>
-          </select>
+
+        <div className="flex items-center gap-3 flex-wrap">
+          <div className="flex items-center gap-1.5">
+            <span className="text-xs font-semibold text-slate-400">Sortuj:</span>
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="bg-white border border-slate-200 py-1.5 px-3 rounded-xl text-xs font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50 cursor-pointer shadow-sm"
+            >
+              <option value="name">Alfabetycznie po nazwie usługi</option>
+              <option value="score_desc">
+                Dostępność usług malejąco (Najlepsze)
+              </option>
+            </select>
+          </div>
+
+          <div className="flex items-center gap-1.5">
+            <span className="text-xs font-semibold text-slate-400">Zagnieżdżenie:</span>
+            <select
+              value={detailLevel}
+              onChange={(e) => setDetailLevel(Number(e.target.value))}
+              className="bg-white border border-slate-200 py-1.5 px-3 rounded-xl text-xs font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50 cursor-pointer shadow-sm"
+            >
+              <option value={1}>1. Tylko Usługi (Ogólne podsumowanie)</option>
+              <option value={2}>2. Usługi + Procesy</option>
+              <option value={3}>3. Usługi + Procesy + Widoki</option>
+              <option value={4}>
+                4. Pełen wykaz (wraz ze szczegółami błędów)
+              </option>
+            </select>
+          </div>
         </div>
-      </Card>
+      </div>
 
       <div className="flex flex-col gap-6">
         {data.map((service) => (
