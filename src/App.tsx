@@ -15518,84 +15518,6 @@ function ComplaintDetailsView({
           { label: "Skargi i reklamacje", onClick: () => setView("reklamacje") },
           { label: `Zgłoszenie #${complaint.id}` },
         ]}
-        topBanner={
-          <div className="bg-white border-2 border-slate-200/90 rounded-2xl p-3.5 sm:p-4 shadow-xs flex flex-wrap items-center justify-between gap-3">
-            <div className="flex flex-wrap items-center gap-2.5 sm:gap-4">
-              {/* 1. DATA WPŁYNIĘCIA (Mocno wyróżniona wyżej w nagłówku) */}
-              <div className="flex items-center gap-2.5 bg-slate-50 border border-slate-200/90 rounded-xl px-3.5 py-2">
-                <div className="w-8 h-8 rounded-lg bg-blue-50 text-[#0038F8] flex items-center justify-center shrink-0 border border-blue-100">
-                  <Calendar size={16} />
-                </div>
-                <div>
-                  <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
-                    Data wpłynięcia:
-                  </div>
-                  <div className="text-sm sm:text-base font-extrabold text-slate-900 tracking-tight">
-                    {complaint.date || "18.04.2026"}
-                  </div>
-                </div>
-              </div>
-
-              {/* 2. TERMIN ROZWIĄZANIA (SLA) (Mocno wyróżniony wyżej w nagłówku) */}
-              <div className="flex items-center gap-2.5 bg-amber-50/70 border border-amber-300/80 rounded-xl px-3.5 py-2">
-                <div className="w-8 h-8 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center shrink-0 border border-amber-200">
-                  <Clock size={16} />
-                </div>
-                <div>
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-amber-800">
-                      Termin rozwiązania (SLA):
-                    </span>
-                    <span className="text-[10px] font-extrabold px-1.5 py-0.2 rounded bg-amber-200 text-amber-900">
-                      SLA 14 dni
-                    </span>
-                  </div>
-                  <div className="text-sm sm:text-base font-extrabold text-amber-950 tracking-tight">
-                    {complaint.slaDeadline || "25.04.2026 (pozostało 4 dni)"}
-                  </div>
-                </div>
-              </div>
-
-              {/* 3. ŹRÓDŁO SKARGI / NADAWCA */}
-              <div className="flex items-center gap-2.5 bg-slate-50 border border-slate-200/90 rounded-xl px-3.5 py-2">
-                <div className="w-8 h-8 rounded-lg bg-slate-100 text-slate-700 flex items-center justify-center shrink-0 border border-slate-200">
-                  <Landmark size={15} />
-                </div>
-                <div>
-                  <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
-                    Źródło skargi / Nadawca:
-                  </div>
-                  <div className="text-xs sm:text-sm font-extrabold text-slate-900">
-                    {currentSource || complaint.source || "Rzecznik Klienta"}
-                  </div>
-                </div>
-              </div>
-
-              {/* 4. OSOBA ODPOWIEDZIALNA */}
-              <div className="flex items-center gap-2.5 bg-indigo-50/50 border border-indigo-200/90 rounded-xl px-3.5 py-2">
-                <div className="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-700 flex items-center justify-center shrink-0 border border-indigo-200">
-                  <User size={15} />
-                </div>
-                <div>
-                  <div className="text-[10px] font-bold uppercase tracking-wider text-indigo-700">
-                    Osoba odpowiedzialna:
-                  </div>
-                  <div className="text-xs sm:text-sm font-extrabold text-indigo-950 truncate max-w-[220px]">
-                    {currentResponsiblePerson || complaint.responsiblePerson || complaint.devTeam || "Marek Pawlak"}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Status sprawy */}
-            <div className="flex items-center gap-2">
-              <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs border ${statusBadge.bg}`}>
-                {statusBadge.icon}
-                <span>{currentStatus}</span>
-              </span>
-            </div>
-          </div>
-        }
         badges={
           <div className="flex items-center gap-2 flex-wrap">
             <PriorityBadge priority={complaint.priority} size="small" />
@@ -15699,6 +15621,83 @@ function ComplaintDetailsView({
 
       <div className="flex-1 md:overflow-y-auto bg-[#f8fafc] w-full">
         <div className="max-w-[1600px] mx-auto w-full p-4 sm:p-8 lg:p-12">
+          {/* Pierwsza sekcja na szarym tle: Karta z datami i kluczowymi informacjami */}
+          <div className="bg-white border-2 border-slate-200/90 rounded-2xl p-3.5 sm:p-4 shadow-xs flex flex-wrap items-center justify-between gap-3 mb-6">
+            <div className="flex flex-wrap items-center gap-2.5 sm:gap-4">
+              {/* 1. DATA WPŁYNIĘCIA (Mocno wyróżniona) */}
+              <div className="flex items-center gap-2.5 bg-slate-50 border border-slate-200/90 rounded-xl px-3.5 py-2">
+                <div className="w-8 h-8 rounded-lg bg-blue-50 text-[#0038F8] flex items-center justify-center shrink-0 border border-blue-100">
+                  <Calendar size={16} />
+                </div>
+                <div>
+                  <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                    Data wpłynięcia:
+                  </div>
+                  <div className="text-sm sm:text-base font-extrabold text-slate-900 tracking-tight">
+                    {complaint.date || "18.04.2026"}
+                  </div>
+                </div>
+              </div>
+
+              {/* 2. TERMIN ROZWIĄZANIA (SLA) (Mocno wyróżniony) */}
+              <div className="flex items-center gap-2.5 bg-amber-50/70 border border-amber-300/80 rounded-xl px-3.5 py-2">
+                <div className="w-8 h-8 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center shrink-0 border border-amber-200">
+                  <Clock size={16} />
+                </div>
+                <div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-amber-800">
+                      Termin rozwiązania (SLA):
+                    </span>
+                    <span className="text-[10px] font-extrabold px-1.5 py-0.2 rounded bg-amber-200 text-amber-900">
+                      SLA 14 dni
+                    </span>
+                  </div>
+                  <div className="text-sm sm:text-base font-extrabold text-amber-950 tracking-tight">
+                    {complaint.slaDeadline || "25.04.2026 (pozostało 4 dni)"}
+                  </div>
+                </div>
+              </div>
+
+              {/* 3. ŹRÓDŁO SKARGI / NADAWCA */}
+              <div className="flex items-center gap-2.5 bg-slate-50 border border-slate-200/90 rounded-xl px-3.5 py-2">
+                <div className="w-8 h-8 rounded-lg bg-slate-100 text-slate-700 flex items-center justify-center shrink-0 border border-slate-200">
+                  <Landmark size={15} />
+                </div>
+                <div>
+                  <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                    Źródło skargi / Nadawca:
+                  </div>
+                  <div className="text-xs sm:text-sm font-extrabold text-slate-900">
+                    {currentSource || complaint.source || "Rzecznik Klienta"}
+                  </div>
+                </div>
+              </div>
+
+              {/* 4. OSOBA ODPOWIEDZIALNA */}
+              <div className="flex items-center gap-2.5 bg-indigo-50/50 border border-indigo-200/90 rounded-xl px-3.5 py-2">
+                <div className="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-700 flex items-center justify-center shrink-0 border border-indigo-200">
+                  <User size={15} />
+                </div>
+                <div>
+                  <div className="text-[10px] font-bold uppercase tracking-wider text-indigo-700">
+                    Osoba odpowiedzialna:
+                  </div>
+                  <div className="text-xs sm:text-sm font-extrabold text-indigo-950 truncate max-w-[220px]">
+                    {currentResponsiblePerson || complaint.responsiblePerson || complaint.devTeam || "Marek Pawlak"}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Status sprawy */}
+            <div className="flex items-center gap-2">
+              <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs border ${statusBadge.bg}`}>
+                {statusBadge.icon}
+                <span>{currentStatus}</span>
+              </span>
+            </div>
+          </div>
           {/* Main Grid: Left content (2 cols), Right sidebar (1 col) */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Kolumna lewa (treść zgłoszenia + rekomendacja + komentarze) */}
