@@ -14943,14 +14943,60 @@ function ComplaintsModuleView({
   const [serviceFilter, setServiceFilter] = useState("all");
   const [devTeamFilter, setDevTeamFilter] = useState("all");
   const [sourceFilter, setSourceFilter] = useState("all");
+  const [sortBy, setSortBy] = useState("newest");
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+
+  // Bezpieczne zamykanie dropdownu przy kliknięciu poza niego (identycznie jak w Audytach)
+  useEffect(() => {
+    if (!activeDropdown) return;
+    const handleClickOutside = (e) => {
+      if (!e.target.closest("[data-dropdown-container]")) {
+        setActiveDropdown(null);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [activeDropdown]);
+
+  const toggleDropdown = (name) => {
+    setActiveDropdown((prev) => (prev === name ? null : name));
+  };
+
+  const handleClear = () => {
+    setSearchTerm("");
+    setSourceFilter("all");
+    setDevTeamFilter("all");
+    setStatusFilter("all");
+    setPriorityFilter("all");
+    setServiceFilter("all");
+    setActiveDropdown(null);
+  };
+
+  const hasActiveFilters = Boolean(
+    searchTerm.trim() ||
+    sourceFilter !== "all" ||
+    devTeamFilter !== "all" ||
+    statusFilter !== "all" ||
+    priorityFilter !== "all" ||
+    serviceFilter !== "all"
+  );
+
+  const activeFilterCount =
+    (searchTerm.trim() ? 1 : 0) +
+    (sourceFilter !== "all" ? 1 : 0) +
+    (devTeamFilter !== "all" ? 1 : 0) +
+    (statusFilter !== "all" ? 1 : 0) +
+    (priorityFilter !== "all" ? 1 : 0) +
+    (serviceFilter !== "all" ? 1 : 0);
 
   const filteredComplaints = useMemo(() => {
-    return complaintsList.filter((item) => {
+    let list = complaintsList.filter((item) => {
       const matchesSearch =
         item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.service.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.process.toLowerCase().includes(searchTerm.toLowerCase());
+        (item.process && item.process.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (item.description && item.description.toLowerCase().includes(searchTerm.toLowerCase()));
 
       const matchesStatus =
         statusFilter === "all" || item.status === statusFilter;
@@ -14971,7 +15017,25 @@ function ComplaintsModuleView({
 
       return matchesSearch && matchesStatus && matchesPriority && matchesService && matchesDevTeam && matchesSource;
     });
-  }, [complaintsList, searchTerm, statusFilter, priorityFilter, serviceFilter, devTeamFilter, sourceFilter]);
+
+    if (sortBy === "newest") {
+      list.sort((a, b) => (b.id || "").localeCompare(a.id || ""));
+    } else if (sortBy === "oldest") {
+      list.sort((a, b) => (a.id || "").localeCompare(b.id || ""));
+    } else if (sortBy === "priority") {
+      const pWeights = {
+        "Krytyczny": 3,
+        "Priorytetowy": 3,
+        "Ważny": 2,
+        "Marginalny": 1,
+      };
+      list.sort((a, b) => (pWeights[b.priority] || 0) - (pWeights[a.priority] || 0));
+    } else if (sortBy === "status") {
+      list.sort((a, b) => (a.status || "").localeCompare(b.status || ""));
+    }
+
+    return list;
+  }, [complaintsList, searchTerm, statusFilter, priorityFilter, serviceFilter, devTeamFilter, sourceFilter, sortBy]);
 
   const totalCount = complaintsList.length;
   const awaitingCount = complaintsList.filter(c => c.status === "Oczekuje na audytora" || !c.hasRecommendation).length;
@@ -15060,106 +15124,438 @@ function ComplaintsModuleView({
         </Card>
       </div>
 
-      {/* POZIOME FILTRY W MODULE REKLAMACJI */}
-      <Card className="p-4 border border-slate-200 bg-white">
-        <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
-          <div className="flex-1">
-            <Input
-              icon={Search}
-              placeholder="Wyszukaj zgłoszenie po tytule, usłudze lub identyfikatorze #RKL..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full"
-            />
+      {/* Wyszukiwarka */}
+      <div>
+        <Input
+          icon={Search}
+          placeholder="Wyszukaj zgłoszenie po tytule, usłudze, procesie lub identyfikatorze #RKL..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-full bg-white shadow-xs"
+        />
+      </div>
+
+      {/* POZIOME FILTRY DYNAMICZNE (Zgodne ze stylem Audytów) */}
+      <div className="bg-white border border-slate-200 rounded-xl p-3 shadow-xs relative z-30">
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="w-24 shrink-0 flex items-center gap-1.5 text-xs font-bold text-slate-500 uppercase tracking-wider whitespace-nowrap">
+            <Filter size={14} className="text-[#0038F8]" />
+            <span>Filtry:</span>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2">
-            {/* Źródło skargi / Nadawca Filter */}
-            <select
-              aria-label="Źródło skargi / Nadawca"
-              value={sourceFilter}
-              onChange={(e) => setSourceFilter(e.target.value)}
-              className="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
+          {/* 1. Źródło skargi */}
+          <div className="relative" data-dropdown-container="true">
+            <button
+              type="button"
+              onClick={() => toggleDropdown("source")}
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold border transition-colors cursor-pointer ${
+                sourceFilter !== "all"
+                  ? "bg-[#0038F8] text-white border-[#0038F8] shadow-sm"
+                  : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
+              }`}
             >
-              <option value="all">Źródło skargi / Nadawca: Wszystkie</option>
-              {COMPLAINT_SOURCES.map((src) => (
-                <option key={src} value={src}>{src}</option>
-              ))}
-            </select>
-
-            {/* Osoba odpowiedzialna Filter */}
-            <select
-              aria-label="Osoba odpowiedzialna"
-              value={devTeamFilter}
-              onChange={(e) => setDevTeamFilter(e.target.value)}
-              className="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
-            >
-              <option value="all">Osoba odpowiedzialna: Wszystkie</option>
-              {RESPONSIBLE_USERS_LIST.map((user) => (
-                <option key={user} value={user}>{user}</option>
-              ))}
-            </select>
-
-            {/* Status Filter */}
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
-            >
-              <option value="all">Status: Wszystkie</option>
-              {COMPLAINT_STATUS_OPTIONS.map((opt) => (
-                <option key={opt.value} value={opt.value}>{opt.label}</option>
-              ))}
-            </select>
-
-            {/* Priority Filter */}
-            <select
-              value={priorityFilter}
-              onChange={(e) => setPriorityFilter(e.target.value)}
-              className="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
-            >
-              <option value="all">Priorytet: Wszystkie</option>
-              <option value="Priorytetowy">Priorytetowy</option>
-              <option value="Ważny">Ważny</option>
-              <option value="Marginalny">Marginalny</option>
-            </select>
-
-            {/* Service Filter */}
-            <select
-              value={serviceFilter}
-              onChange={(e) => setServiceFilter(e.target.value)}
-              className="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
-            >
-              <option value="all">Usługa: Wszystkie</option>
-              <option value="Bankowość internetowa">Bankowość internetowa</option>
-              <option value="Aplikacja mobilna">Aplikacja mobilna</option>
-              <option value="Kredyty i pożyczki">Kredyty i pożyczki</option>
-              <option value="Karty i dokumenty">Karty i dokumenty</option>
-            </select>
-
-            {(searchTerm || statusFilter !== "all" || priorityFilter !== "all" || serviceFilter !== "all" || devTeamFilter !== "all" || sourceFilter !== "all") && (
-              <button
-                onClick={() => {
-                  setSearchTerm("");
-                  setStatusFilter("all");
-                  setPriorityFilter("all");
-                  setServiceFilter("all");
-                  setDevTeamFilter("all");
-                  setSourceFilter("all");
-                }}
-                className="text-xs font-bold text-[#0038F8] hover:text-[#002ECC] px-2 py-1 cursor-pointer"
-              >
-                Resetuj
-              </button>
+              <span>1. Źródło{sourceFilter !== "all" ? `: ${sourceFilter}` : " skargi"}</span>
+              <ChevronDown size={14} className={sourceFilter !== "all" ? "text-white" : "text-slate-400"} />
+            </button>
+            {activeDropdown === "source" && (
+              <div className="absolute top-full left-0 mt-1.5 w-64 bg-white border border-slate-200 rounded-xl shadow-xl z-50 p-1.5 space-y-1 max-h-72 overflow-y-auto">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSourceFilter("all");
+                    setActiveDropdown(null);
+                  }}
+                  className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold text-left transition-colors cursor-pointer ${
+                    sourceFilter === "all"
+                      ? "bg-[#0038F8] text-white"
+                      : "hover:bg-slate-100 text-slate-700"
+                  }`}
+                >
+                  <span>Wszystkie źródła</span>
+                  {sourceFilter === "all" && <CheckCircle2 size={13} className="text-white" />}
+                </button>
+                {COMPLAINT_SOURCES.map((src) => (
+                  <button
+                    key={src}
+                    type="button"
+                    onClick={() => {
+                      setSourceFilter(src);
+                      setActiveDropdown(null);
+                    }}
+                    className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold text-left transition-colors cursor-pointer ${
+                      sourceFilter === src
+                        ? "bg-[#0038F8] text-white"
+                        : "hover:bg-slate-100 text-slate-700"
+                    }`}
+                  >
+                    <span className="truncate mr-2">{src}</span>
+                    {sourceFilter === src && <CheckCircle2 size={13} className="text-white shrink-0" />}
+                  </button>
+                ))}
+              </div>
             )}
           </div>
+
+          {/* 2. Osoba odpowiedzialna */}
+          <div className="relative" data-dropdown-container="true">
+            <button
+              type="button"
+              onClick={() => toggleDropdown("devTeam")}
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold border transition-colors cursor-pointer ${
+                devTeamFilter !== "all"
+                  ? "bg-[#0038F8] text-white border-[#0038F8] shadow-sm"
+                  : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
+              }`}
+            >
+              <span>
+                2. Osoba{devTeamFilter !== "all" ? `: ${devTeamFilter.split(" (")[0]}` : " odpowiedzialna"}
+              </span>
+              <ChevronDown size={14} className={devTeamFilter !== "all" ? "text-white" : "text-slate-400"} />
+            </button>
+            {activeDropdown === "devTeam" && (
+              <div className="absolute top-full left-0 mt-1.5 w-72 bg-white border border-slate-200 rounded-xl shadow-xl z-50 p-1.5 space-y-1 max-h-72 overflow-y-auto">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setDevTeamFilter("all");
+                    setActiveDropdown(null);
+                  }}
+                  className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold text-left transition-colors cursor-pointer ${
+                    devTeamFilter === "all"
+                      ? "bg-[#0038F8] text-white"
+                      : "hover:bg-slate-100 text-slate-700"
+                  }`}
+                >
+                  <span>Wszyscy odpowiedzialni</span>
+                  {devTeamFilter === "all" && <CheckCircle2 size={13} className="text-white" />}
+                </button>
+                {RESPONSIBLE_USERS_LIST.map((user) => (
+                  <button
+                    key={user}
+                    type="button"
+                    onClick={() => {
+                      setDevTeamFilter(user);
+                      setActiveDropdown(null);
+                    }}
+                    className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold text-left transition-colors cursor-pointer ${
+                      devTeamFilter === user
+                        ? "bg-[#0038F8] text-white"
+                        : "hover:bg-slate-100 text-slate-700"
+                    }`}
+                  >
+                    <span className="truncate mr-2">{user}</span>
+                    {devTeamFilter === user && <CheckCircle2 size={13} className="text-white shrink-0" />}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* 3. Status skargi */}
+          <div className="relative" data-dropdown-container="true">
+            <button
+              type="button"
+              onClick={() => toggleDropdown("status")}
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold border transition-colors cursor-pointer ${
+                statusFilter !== "all"
+                  ? "bg-[#0038F8] text-white border-[#0038F8] shadow-sm"
+                  : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
+              }`}
+            >
+              <span>3. Status{statusFilter !== "all" ? `: ${statusFilter}` : ""}</span>
+              <ChevronDown size={14} className={statusFilter !== "all" ? "text-white" : "text-slate-400"} />
+            </button>
+            {activeDropdown === "status" && (
+              <div className="absolute top-full left-0 mt-1.5 w-60 bg-white border border-slate-200 rounded-xl shadow-xl z-50 p-1.5 space-y-1 max-h-72 overflow-y-auto">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setStatusFilter("all");
+                    setActiveDropdown(null);
+                  }}
+                  className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold text-left transition-colors cursor-pointer ${
+                    statusFilter === "all"
+                      ? "bg-[#0038F8] text-white"
+                      : "hover:bg-slate-100 text-slate-700"
+                  }`}
+                >
+                  <span>Wszystkie statusy</span>
+                  {statusFilter === "all" && <CheckCircle2 size={13} className="text-white" />}
+                </button>
+                {COMPLAINT_STATUS_OPTIONS.map((opt) => (
+                  <button
+                    key={opt.value}
+                    type="button"
+                    onClick={() => {
+                      setStatusFilter(opt.value);
+                      setActiveDropdown(null);
+                    }}
+                    className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold text-left transition-colors cursor-pointer ${
+                      statusFilter === opt.value
+                        ? "bg-[#0038F8] text-white"
+                        : "hover:bg-slate-100 text-slate-700"
+                    }`}
+                  >
+                    <span>{opt.label}</span>
+                    {statusFilter === opt.value && <CheckCircle2 size={13} className="text-white" />}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* 4. Priorytet */}
+          <div className="relative" data-dropdown-container="true">
+            <button
+              type="button"
+              onClick={() => toggleDropdown("priority")}
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold border transition-colors cursor-pointer ${
+                priorityFilter !== "all"
+                  ? "bg-[#0038F8] text-white border-[#0038F8] shadow-sm"
+                  : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
+              }`}
+            >
+              <span>4. Priorytet{priorityFilter !== "all" ? `: ${priorityFilter}` : ""}</span>
+              <ChevronDown size={14} className={priorityFilter !== "all" ? "text-white" : "text-slate-400"} />
+            </button>
+            {activeDropdown === "priority" && (
+              <div className="absolute top-full left-0 mt-1.5 w-52 bg-white border border-slate-200 rounded-xl shadow-xl z-50 p-1.5 space-y-1">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setPriorityFilter("all");
+                    setActiveDropdown(null);
+                  }}
+                  className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold text-left transition-colors cursor-pointer ${
+                    priorityFilter === "all"
+                      ? "bg-[#0038F8] text-white"
+                      : "hover:bg-slate-100 text-slate-700"
+                  }`}
+                >
+                  <span>Wszystkie priorytety</span>
+                  {priorityFilter === "all" && <CheckCircle2 size={13} className="text-white" />}
+                </button>
+                {["Priorytetowy", "Ważny", "Marginalny"].map((p) => (
+                  <button
+                    key={p}
+                    type="button"
+                    onClick={() => {
+                      setPriorityFilter(p);
+                      setActiveDropdown(null);
+                    }}
+                    className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold text-left transition-colors cursor-pointer ${
+                      priorityFilter === p
+                        ? "bg-[#0038F8] text-white"
+                        : "hover:bg-slate-100 text-slate-700"
+                    }`}
+                  >
+                    <span>{p}</span>
+                    {priorityFilter === p && <CheckCircle2 size={13} className="text-white" />}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* 5. Usługa */}
+          <div className="relative" data-dropdown-container="true">
+            <button
+              type="button"
+              onClick={() => toggleDropdown("service")}
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold border transition-colors cursor-pointer ${
+                serviceFilter !== "all"
+                  ? "bg-[#0038F8] text-white border-[#0038F8] shadow-sm"
+                  : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
+              }`}
+            >
+              <span>5. Usługa{serviceFilter !== "all" ? `: ${serviceFilter}` : ""}</span>
+              <ChevronDown size={14} className={serviceFilter !== "all" ? "text-white" : "text-slate-400"} />
+            </button>
+            {activeDropdown === "service" && (
+              <div className="absolute top-full left-0 mt-1.5 w-60 bg-white border border-slate-200 rounded-xl shadow-xl z-50 p-1.5 space-y-1">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setServiceFilter("all");
+                    setActiveDropdown(null);
+                  }}
+                  className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold text-left transition-colors cursor-pointer ${
+                    serviceFilter === "all"
+                      ? "bg-[#0038F8] text-white"
+                      : "hover:bg-slate-100 text-slate-700"
+                  }`}
+                >
+                  <span>Wszystkie usługi</span>
+                  {serviceFilter === "all" && <CheckCircle2 size={13} className="text-white" />}
+                </button>
+                {["Bankowość internetowa", "Aplikacja mobilna", "Kredyty i pożyczki", "Karty i dokumenty"].map((s) => (
+                  <button
+                    key={s}
+                    type="button"
+                    onClick={() => {
+                      setServiceFilter(s);
+                      setActiveDropdown(null);
+                    }}
+                    className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold text-left transition-colors cursor-pointer ${
+                      serviceFilter === s
+                        ? "bg-[#0038F8] text-white"
+                        : "hover:bg-slate-100 text-slate-700"
+                    }`}
+                  >
+                    <span>{s}</span>
+                    {serviceFilter === s && <CheckCircle2 size={13} className="text-white" />}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Przycisk: Wyczyść */}
+          <div className="flex items-center gap-2 ml-auto">
+            <button
+              type="button"
+              onClick={handleClear}
+              disabled={!hasActiveFilters}
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg font-bold transition-colors text-xs border shadow-sm ${
+                hasActiveFilters
+                  ? "bg-white hover:bg-slate-100 text-slate-700 border-slate-200 cursor-pointer"
+                  : "bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed opacity-60"
+              }`}
+              title={hasActiveFilters ? "Zresetuj wszystkie aktywne filtry" : "Brak aktywnych filtrów"}
+            >
+              <X size={12} className={hasActiveFilters ? "text-slate-500" : "text-slate-400"} />
+              <span>Wyczyść</span>
+            </button>
+          </div>
         </div>
 
-        <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 font-semibold">
-          <span>Znaleziono: {filteredComplaints.length} zgłoszeń skarg i reklamacji</span>
-          <span>Sortowanie: Od najnowszego</span>
+        {/* PASEK WYBRANYCH FILTRÓW */}
+        {hasActiveFilters && (
+          <div className="flex flex-wrap items-center gap-2 pt-2.5 mt-2.5 border-t border-slate-200/80">
+            <div className="w-24 shrink-0 flex items-center text-xs font-bold text-slate-500 whitespace-nowrap">
+              <span>Wybrane filtry:</span>
+            </div>
+
+            {/* Chip: Wyszukiwanie */}
+            {searchTerm.trim() && (
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/20">
+                <span>Szukaj: "{searchTerm}"</span>
+                <button
+                  type="button"
+                  onClick={() => setSearchTerm("")}
+                  className="hover:bg-[#0038F8]/20 p-0.5 rounded transition-colors cursor-pointer"
+                  title="Usuń ten filtr"
+                >
+                  <X size={12} />
+                </button>
+              </span>
+            )}
+
+            {/* Chip: Źródło */}
+            {sourceFilter !== "all" && (
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/20">
+                <span>Źródło: {sourceFilter}</span>
+                <button
+                  type="button"
+                  onClick={() => setSourceFilter("all")}
+                  className="hover:bg-[#0038F8]/20 p-0.5 rounded transition-colors cursor-pointer"
+                  title="Usuń filtr źródła"
+                >
+                  <X size={12} />
+                </button>
+              </span>
+            )}
+
+            {/* Chip: Osoba odpowiedzialna */}
+            {devTeamFilter !== "all" && (
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/20">
+                <span>Osoba: {devTeamFilter.split(" (")[0]}</span>
+                <button
+                  type="button"
+                  onClick={() => setDevTeamFilter("all")}
+                  className="hover:bg-[#0038F8]/20 p-0.5 rounded transition-colors cursor-pointer"
+                  title="Usuń filtr osoby odpowiedzialnej"
+                >
+                  <X size={12} />
+                </button>
+              </span>
+            )}
+
+            {/* Chip: Status */}
+            {statusFilter !== "all" && (
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/20">
+                <span>Status: {statusFilter}</span>
+                <button
+                  type="button"
+                  onClick={() => setStatusFilter("all")}
+                  className="hover:bg-[#0038F8]/20 p-0.5 rounded transition-colors cursor-pointer"
+                  title="Usuń filtr statusu"
+                >
+                  <X size={12} />
+                </button>
+              </span>
+            )}
+
+            {/* Chip: Priorytet */}
+            {priorityFilter !== "all" && (
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/20">
+                <span>Priorytet: {priorityFilter}</span>
+                <button
+                  type="button"
+                  onClick={() => setPriorityFilter("all")}
+                  className="hover:bg-[#0038F8]/20 p-0.5 rounded transition-colors cursor-pointer"
+                  title="Usuń filtr priorytetu"
+                >
+                  <X size={12} />
+                </button>
+              </span>
+            )}
+
+            {/* Chip: Usługa */}
+            {serviceFilter !== "all" && (
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/20">
+                <span>Usługa: {serviceFilter}</span>
+                <button
+                  type="button"
+                  onClick={() => setServiceFilter("all")}
+                  className="hover:bg-[#0038F8]/20 p-0.5 rounded transition-colors cursor-pointer"
+                  title="Usuń filtr usługi"
+                >
+                  <X size={12} />
+                </button>
+              </span>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* PASEK WYNIKÓW I SORTOWANIA */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="flex items-center gap-2.5 flex-wrap">
+          <span className="text-sm font-bold text-slate-700">
+            Wyniki: <span className="text-[#0038F8] font-black">{filteredComplaints.length}</span> z {complaintsList.length} zgłoszeń
+          </span>
+          {hasActiveFilters && (
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/20">
+              <CheckCircle2 size={12} /> Wyniki odfiltrowane ({activeFilterCount})
+            </span>
+          )}
         </div>
-      </Card>
+
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-semibold text-slate-400">Sortuj:</span>
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            className="bg-white border border-slate-200 py-1.5 px-3 rounded-xl text-xs font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50 cursor-pointer shadow-sm"
+          >
+            <option value="newest">Od najnowszego</option>
+            <option value="oldest">Od najstarszego</option>
+            <option value="priority">Po priorytecie</option>
+            <option value="status">Po statusie</option>
+          </select>
+        </div>
+      </div>
 
       {/* Lista zgłoszeń */}
       <div className="space-y-3">
