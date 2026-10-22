@@ -24,11 +24,11 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
         className="w-12 h-12 text-slate-300 mb-4 shrink-0"
         aria-hidden="true"
       />
-      <h3 className="text-lg font-bold text-slate-500 mb-2">
+      <h3 className="text-lg font-bold text-slate-700 mb-2">
         {title}
       </h3>
       {description && (
-        <p className="text-sm text-slate-400 max-w-md mb-0">
+        <p className="text-sm text-slate-600 max-w-md mb-0 font-medium">
           {description}
         </p>
       )}

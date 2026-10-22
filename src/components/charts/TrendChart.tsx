@@ -83,7 +83,7 @@ export function TrendChart({
         {/* Y-axis + Bars */}
         <div className="flex" style={{ height }}>
           {/* Y-axis labels */}
-          <div className="w-8 shrink-0 flex flex-col justify-between items-end pb-6 pr-2 text-micro font-bold text-slate-400 border-r border-slate-200">
+          <div className="w-8 shrink-0 flex flex-col justify-between items-end pb-6 pr-2 text-micro font-bold text-slate-600 border-r border-slate-200">
             <span className="leading-none">100</span>
             <span className="leading-none">50</span>
             <span className="leading-none">0</span>
@@ -142,7 +142,7 @@ export function TrendChart({
           {data.map((point) => (
             <div
               key={point.month}
-              className="flex-1 text-center text-micro sm:text-tiny font-bold text-slate-500"
+              className="flex-1 text-center text-micro sm:text-tiny font-bold text-slate-600"
               aria-hidden="true"
             >
               {point.month}
@@ -153,16 +153,16 @@ export function TrendChart({
 
       {/* Legend */}
       <div className="flex items-center justify-center gap-6 mt-3">
-        <div className="flex items-center gap-2 text-xs font-bold text-slate-600">
+        <div className="flex items-center gap-2 text-xs font-bold text-slate-700">
           <div
             className="w-3 h-3 rounded-full bg-brand-500"
             aria-hidden="true"
           />
           % Dostępności
         </div>
-        <div className="flex items-center gap-2 text-xs font-bold text-slate-600">
+        <div className="flex items-center gap-2 text-xs font-bold text-slate-700">
           <div
-            className="w-3 h-3 rounded bg-slate-300"
+            className="w-3 h-3 rounded bg-slate-400"
             aria-hidden="true"
           />
           Liczba błędów

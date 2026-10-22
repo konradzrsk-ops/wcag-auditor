@@ -20,7 +20,7 @@ export const Breadcrumbs = forwardRef<HTMLElement, BreadcrumbsProps>(
       <nav
         ref={ref}
         aria-label="Ścieżka nawigacyjna"
-        className={`flex items-center text-[13px] font-medium text-slate-500 ${className}`}
+        className={`flex items-center text-[13px] font-medium text-slate-600 ${className}`}
         {...rest}
       >
         <ol role="list" className="flex items-center flex-wrap gap-2 list-none m-0 p-0">
@@ -40,12 +40,12 @@ export const Breadcrumbs = forwardRef<HTMLElement, BreadcrumbsProps>(
                   <button
                     type="button"
                     onClick={item.onClick}
-                    className="text-slate-500 hover:text-slate-900 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-1 rounded-sm cursor-pointer"
+                    className="text-slate-600 hover:text-slate-900 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-1 rounded-sm cursor-pointer"
                   >
                     {item.label}
                   </button>
                 ) : (
-                  <span className="text-slate-500">
+                  <span className="text-slate-600">
                     {item.label}
                   </span>
                 )}

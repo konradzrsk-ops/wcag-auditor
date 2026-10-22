@@ -77,12 +77,12 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
             defaultValue={defaultValue}
             aria-invalid={Boolean(error)}
             aria-describedby={describedBy}
-            className={`w-full bg-white border rounded-control font-semibold text-slate-900 appearance-none cursor-pointer transition-colors outline-none focus:ring-2 disabled:bg-slate-50 disabled:text-slate-400 disabled:cursor-not-allowed ${
+            className={`w-full bg-white border rounded-control font-semibold text-slate-900 appearance-none cursor-pointer transition-colors outline-none focus:ring-2 disabled:bg-slate-50 disabled:text-slate-500 disabled:cursor-not-allowed ${
               sizeConfig.select
             } ${
               error
-                ? 'border-red-300 focus:border-red-500 focus:ring-red-500/50'
-                : 'border-slate-200 focus:ring-brand-500/50 focus:border-brand-500'
+                ? 'border-red-400 focus:border-red-600 focus:ring-red-500/50'
+                : 'border-slate-300 focus:ring-brand-500/50 focus:border-brand-500'
             } ${className}`}
             {...rest}
           >
@@ -103,7 +103,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
           </select>
 
           <div
-            className={`absolute ${sizeConfig.iconRight} pointer-events-none text-slate-400 flex items-center justify-center`}
+            className={`absolute ${sizeConfig.iconRight} pointer-events-none text-slate-500 flex items-center justify-center`}
             aria-hidden="true"
           >
             <ChevronDown size={sizeConfig.iconSize} />
@@ -111,13 +111,13 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
         </div>
 
         {error && (
-          <p id={errorId} role="alert" className="text-xs text-red-600 mt-1.5">
+          <p id={errorId} role="alert" className="text-xs text-red-700 font-semibold mt-1.5">
             {error}
           </p>
         )}
 
         {hint && !error && (
-          <p id={hintId} className="text-xs text-slate-400 mt-1.5">
+          <p id={hintId} className="text-xs text-slate-600 font-medium mt-1.5">
             {hint}
           </p>
         )}

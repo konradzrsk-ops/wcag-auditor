@@ -63,7 +63,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         <div className="relative flex items-center">
           {Icon && (
             <div
-              className={`absolute ${sizeConfig.iconLeft} pointer-events-none text-slate-400 flex items-center justify-center`}
+              className={`absolute ${sizeConfig.iconLeft} pointer-events-none text-slate-500 flex items-center justify-center`}
               aria-hidden="true"
             >
               <Icon size={sizeConfig.iconSize} />
@@ -76,25 +76,25 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             disabled={disabled}
             aria-invalid={Boolean(error)}
             aria-describedby={describedBy}
-            className={`w-full bg-white border rounded-control font-semibold text-slate-900 placeholder:text-slate-400 placeholder:font-medium transition-colors outline-none focus:ring-2 disabled:bg-slate-50 disabled:text-slate-400 disabled:cursor-not-allowed ${
+            className={`w-full bg-white border rounded-control font-semibold text-slate-900 placeholder:text-slate-500 placeholder:font-medium transition-colors outline-none focus:ring-2 disabled:bg-slate-50 disabled:text-slate-500 disabled:cursor-not-allowed ${
               sizeConfig.input
             } ${Icon ? sizeConfig.withIcon : ''} ${
               error
-                ? 'border-red-300 focus:border-red-500 focus:ring-red-500/50'
-                : 'border-slate-200 focus:ring-brand-500/50 focus:border-brand-500'
+                ? 'border-red-400 focus:border-red-600 focus:ring-red-500/50'
+                : 'border-slate-300 focus:ring-brand-500/50 focus:border-brand-500'
             } ${className}`}
             {...rest}
           />
         </div>
 
         {error && (
-          <p id={errorId} role="alert" className="text-xs text-red-600 mt-1.5">
+          <p id={errorId} role="alert" className="text-xs text-red-700 font-semibold mt-1.5">
             {error}
           </p>
         )}
 
         {hint && !error && (
-          <p id={hintId} className="text-xs text-slate-400 mt-1.5">
+          <p id={hintId} className="text-xs text-slate-600 font-medium mt-1.5">
             {hint}
           </p>
         )}

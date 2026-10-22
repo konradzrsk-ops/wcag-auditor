@@ -66,22 +66,22 @@ export function PriorityStats({
       label: 'Błędy priorytetowe',
       count: critical,
       Icon: AlertOctagon,
-      activeIconClass: 'text-red-500',
-      activeTextClass: 'text-red-600',
+      activeIconClass: 'text-red-700',
+      activeTextClass: 'text-red-700 font-bold',
     },
     {
       label: 'Błędy ważne',
       count: important,
       Icon: AlertTriangle,
-      activeIconClass: 'text-amber-500',
-      activeTextClass: 'text-amber-600',
+      activeIconClass: 'text-amber-800',
+      activeTextClass: 'text-amber-800 font-bold',
     },
     {
       label: 'Błędy marginalne',
       count: marginal,
       Icon: Info,
-      activeIconClass: 'text-blue-500',
-      activeTextClass: 'text-blue-600',
+      activeIconClass: 'text-blue-700',
+      activeTextClass: 'text-blue-700 font-bold',
     },
   ];
 
@@ -93,8 +93,8 @@ export function PriorityStats({
     >
       {items.map((item) => {
         const isZero = item.count === 0;
-        const iconClass = isZero ? 'text-slate-300' : item.activeIconClass;
-        const textClass = isZero ? 'text-slate-400' : item.activeTextClass;
+        const iconClass = isZero ? 'text-slate-500' : item.activeIconClass;
+        const textClass = isZero ? 'text-slate-600 font-bold' : item.activeTextClass;
 
         return (
           <div

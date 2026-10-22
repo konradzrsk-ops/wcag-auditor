@@ -117,7 +117,7 @@ export const TableHead = forwardRef<HTMLTableCellElement, TableHeadProps>(
         tabIndex={sortable ? 0 : undefined}
         onClick={handleClick}
         onKeyDown={handleKeyDown}
-        className={`px-5 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider ${
+        className={`px-5 py-3 text-left text-xs font-bold text-slate-600 uppercase tracking-wider ${
           sortable
             ? 'cursor-pointer hover:text-slate-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500'
             : ''

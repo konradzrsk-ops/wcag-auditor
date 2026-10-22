@@ -21,13 +21,13 @@ export function DashboardView() {
   return (
     <div data-testid="dashboard-view" className="max-w-[1600px] flex flex-col gap-6 w-full mx-auto">
       <div className="mb-2 sm:mb-4">
-        <nav aria-label="Ścieżka nawigacyjna" className="text-xs font-semibold text-slate-400 mb-1">
+        <nav aria-label="Ścieżka nawigacyjna" className="text-xs font-semibold text-slate-600 mb-1">
           <span>Pulpit</span>
         </nav>
         <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight mb-2">
           Witaj, Kinga
         </h1>
-        <p className="text-slate-500 text-sm">
+        <p className="text-slate-600 text-sm">
           Oto podsumowanie stanu dostępności w Twojej organizacji na dziś.
         </p>
       </div>
@@ -41,7 +41,7 @@ export function DashboardView() {
           aria-label="Średnia Dostępność: 86.2%. Kliknij, aby przejść do raportowania"
         >
           <div className="flex justify-between items-start mb-4">
-            <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center">
               <Activity size={24} aria-hidden="true" />
             </div>
             <div className="flex items-center gap-1">
@@ -49,18 +49,18 @@ export function DashboardView() {
                 +2.4% r/r
               </Badge>
               <Tooltip content="Porównanie rok do roku (r/r) – dynamika wzrostu ogólnej dostępności względem analogicznego okresu roku ubiegłego." position="bottom">
-                <span className="p-0.5 text-slate-400 hover:text-brand-500 cursor-help rounded-full">
+                <span className="p-0.5 text-slate-500 hover:text-brand-500 cursor-help rounded-full">
                   <Info size={12} />
                 </span>
               </Tooltip>
             </div>
           </div>
           <div className="flex items-center gap-1 mb-1">
-            <span className="text-tiny font-bold text-slate-400 uppercase tracking-widest block">
+            <span className="text-tiny font-bold text-slate-600 uppercase tracking-widest block">
               Średnia Dostępność
             </span>
             <Tooltip content="Zagregowany średni wskaźnik zgodności z kryteriami sukcesu WCAG 2.1 AA we wszystkich procesach." position="top">
-              <span className="p-0.5 text-slate-400 hover:text-brand-500 cursor-help rounded-full">
+              <span className="p-0.5 text-slate-500 hover:text-brand-500 cursor-help rounded-full">
                 <Info size={12} />
               </span>
             </Tooltip>
@@ -70,11 +70,11 @@ export function DashboardView() {
               86.2%
             </span>
             <div className="flex items-center gap-1">
-              <span className="text-sm font-semibold text-slate-400">
+              <span className="text-sm font-semibold text-slate-600">
                 Cel: 90%
               </span>
               <Tooltip content="Strategiczny cel organizacji zgodny ze standardem Europejskiego Aktu o Dostępności (EAA)." position="top">
-                <span className="p-0.5 text-slate-400 hover:text-brand-500 cursor-help rounded-full">
+                <span className="p-0.5 text-slate-500 hover:text-brand-500 cursor-help rounded-full">
                   <Info size={12} />
                 </span>
               </Tooltip>
@@ -89,26 +89,26 @@ export function DashboardView() {
           aria-label="Pokrycie audytowe: 92.0%, 142 procesy. Kliknij, aby przejść do bazy usług"
         >
           <div className="flex justify-between items-start mb-4">
-            <div className="w-12 h-12 rounded-xl bg-brand-50 text-brand-500 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center">
               <ListChecks size={24} aria-hidden="true" />
             </div>
             <div className="flex items-center gap-1 mt-1">
-              <span className="text-tiny font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-badge">
+              <span className="text-tiny font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-badge">
                 142 procesy
               </span>
               <Tooltip content="Łączna liczba zinwentaryzowanych procesów w Bazie Usług podlegających cyklicznemu monitoringowi dostępności." position="bottom">
-                <span className="p-0.5 text-slate-400 hover:text-brand-500 cursor-help rounded-full">
+                <span className="p-0.5 text-slate-500 hover:text-brand-500 cursor-help rounded-full">
                   <Info size={12} />
                 </span>
               </Tooltip>
             </div>
           </div>
           <div className="flex items-center gap-1 mb-1">
-            <span className="text-tiny font-bold text-slate-400 uppercase tracking-widest block">
+            <span className="text-tiny font-bold text-slate-600 uppercase tracking-widest block">
               Pokrycie Audytowe
             </span>
             <Tooltip content="Odsetek zidentyfikowanych procesów i ścieżek cyfrowych posiadających aktualny audyt WCAG." position="top">
-              <span className="p-0.5 text-slate-400 hover:text-brand-500 cursor-help rounded-full">
+              <span className="p-0.5 text-slate-500 hover:text-brand-500 cursor-help rounded-full">
                 <Info size={12} />
               </span>
             </Tooltip>
@@ -123,7 +123,7 @@ export function DashboardView() {
           aria-label="Krytyczne błędy otwarte: 47. Wymaga akcji! Kliknij, aby przejść do raportowania"
         >
           <div className="flex justify-between items-start mb-4">
-            <div className="w-12 h-12 rounded-xl bg-red-50 text-red-600 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-xl bg-red-50 text-red-700 flex items-center justify-center">
               <AlertOctagon size={24} aria-hidden="true" />
             </div>
             <div className="flex items-center gap-1">
@@ -131,25 +131,25 @@ export function DashboardView() {
                 +12 m/m
               </Badge>
               <Tooltip content="Porównanie miesiąc do miesiąca (m/m) – zmiana liczby zarejestrowanych otwartych barier od ostatniego miesiąca." position="bottom">
-                <span className="p-0.5 text-slate-400 hover:text-red-500 cursor-help rounded-full">
+                <span className="p-0.5 text-slate-500 hover:text-red-700 cursor-help rounded-full">
                   <Info size={12} />
                 </span>
               </Tooltip>
             </div>
           </div>
           <div className="flex items-center gap-1 mb-1">
-            <span className="text-tiny font-bold text-slate-400 uppercase tracking-widest block">
+            <span className="text-tiny font-bold text-slate-600 uppercase tracking-widest block">
               Krytyczne Błędy Otwarte
             </span>
             <Tooltip content="Błędy krytyczne (blokery) uniemożliwiające osobom z niepełnosprawnościami ukończenie operacji." position="top">
-              <span className="p-0.5 text-slate-400 hover:text-red-500 cursor-help rounded-full">
+              <span className="p-0.5 text-slate-500 hover:text-red-700 cursor-help rounded-full">
                 <Info size={12} />
               </span>
             </Tooltip>
           </div>
           <div className="flex items-baseline gap-2">
             <span className="text-3xl font-extrabold text-slate-900">47</span>
-            <span className="text-sm font-semibold text-red-600">
+            <span className="text-sm font-bold text-red-700">
               Wymaga akcji!
             </span>
           </div>
@@ -162,7 +162,7 @@ export function DashboardView() {
           aria-label="Przeprowadzone audyty: 12, 4 w trakcie. Kliknij, aby przejść do audytów"
         >
           <div className="flex justify-between items-start mb-4">
-            <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center">
               <ClipboardCheck size={24} aria-hidden="true" />
             </div>
             <div className="flex items-center gap-1 mt-1">
@@ -170,18 +170,18 @@ export function DashboardView() {
                 W tym kwartale
               </span>
               <Tooltip content="Liczba audytów sfinalizowanych i odebranych w bieżącym kwartale." position="bottom">
-                <span className="p-0.5 text-slate-400 hover:text-blue-500 cursor-help rounded-full">
+                <span className="p-0.5 text-slate-500 hover:text-blue-700 cursor-help rounded-full">
                   <Info size={12} />
                 </span>
               </Tooltip>
             </div>
           </div>
           <div className="flex items-center gap-1 mb-1">
-            <span className="text-tiny font-bold text-slate-400 uppercase tracking-widest block">
+            <span className="text-tiny font-bold text-slate-600 uppercase tracking-widest block">
               Przeprowadzone Audyty
             </span>
             <Tooltip content="Liczba zrealizowanych audytów certyfikacyjnych i okresowych zarejestrowanych w systemie." position="top">
-              <span className="p-0.5 text-slate-400 hover:text-blue-500 cursor-help rounded-full">
+              <span className="p-0.5 text-slate-500 hover:text-blue-700 cursor-help rounded-full">
                 <Info size={12} />
               </span>
             </Tooltip>
@@ -189,11 +189,11 @@ export function DashboardView() {
           <div className="flex items-baseline gap-2">
             <span className="text-3xl font-extrabold text-slate-900">12</span>
             <div className="flex items-center gap-1">
-              <span className="text-sm font-semibold text-slate-400">
+              <span className="text-sm font-semibold text-slate-600">
                 4 w trakcie
               </span>
               <Tooltip content="Audyty oraz re-audyty w trakcie realizacji przez audytorów WCAG." position="top">
-                <span className="p-0.5 text-slate-400 hover:text-blue-500 cursor-help rounded-full">
+                <span className="p-0.5 text-slate-500 hover:text-blue-700 cursor-help rounded-full">
                   <Info size={12} />
                 </span>
               </Tooltip>
@@ -324,10 +324,10 @@ export function DashboardView() {
                   <span
                     className={`text-sm font-extrabold ${
                       audit.score === "-"
-                        ? "text-slate-400"
+                        ? "text-slate-600 font-bold"
                         : parseFloat(audit.score) >= 80
-                        ? "text-emerald-600"
-                        : "text-amber-600"
+                        ? "text-emerald-700 font-bold"
+                        : "text-amber-800 font-bold"
                     }`}
                   >
                     {audit.score}

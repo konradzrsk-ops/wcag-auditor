@@ -47,7 +47,7 @@ const SIZE_CONFIG = {
 function getVariant(score: number) {
   if (score >= 80) {
     return {
-      colorClass: 'text-emerald-600',
+      colorClass: 'text-emerald-700',
       Icon: CheckCircle2,
       label: 'Wysoka zgodność',
       level: 'high' as const,
@@ -55,14 +55,14 @@ function getVariant(score: number) {
   }
   if (score >= 60) {
     return {
-      colorClass: 'text-amber-600',
+      colorClass: 'text-amber-800',
       Icon: AlertTriangle,
       label: 'Średnia zgodność',
       level: 'medium' as const,
     };
   }
   return {
-    colorClass: 'text-red-600',
+    colorClass: 'text-red-700',
     Icon: AlertOctagon,
     label: 'Niska zgodność',
     level: 'low' as const,

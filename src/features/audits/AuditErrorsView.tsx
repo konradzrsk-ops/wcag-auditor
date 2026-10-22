@@ -277,21 +277,21 @@ export function AuditErrorsView() {
                   onClick={() => setExpandedId(isExpanded ? null : err.id)}
                 >
                   <div className="flex items-start gap-3 sm:gap-4">
-                    <span className="text-xs sm:text-sm font-bold text-slate-400 mt-0.5">
+                    <span className="text-xs sm:text-sm font-bold text-slate-600 mt-0.5">
                       {err.id}
                     </span>
                     <div>
                       <h2 className="font-bold text-slate-900 text-sm sm:text-base mb-1 leading-snug">
                         {err.title}
                       </h2>
-                      <span className="text-xs text-slate-500 font-medium">
+                      <span className="text-xs text-slate-600 font-medium">
                         Kryterium: {err.criteria}
                       </span>
                     </div>
                   </div>
 
                   <div className="flex items-center justify-between sm:justify-end gap-4 sm:gap-6 border-t border-slate-100 sm:border-none pt-3 sm:pt-0 mt-1 sm:mt-0">
-                    <div className="flex items-center gap-1.5 text-slate-400 text-xs hidden lg:flex">
+                    <div className="flex items-center gap-1.5 text-slate-600 text-xs hidden lg:flex font-semibold">
                       <MonitorSmartphone size={15} />
                       <span>{err.devices}</span>
                     </div>

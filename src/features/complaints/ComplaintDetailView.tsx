@@ -135,7 +135,7 @@ export function ComplaintDetailView() {
             {/* Załączniki */}
             {complaint.attachments && complaint.attachments.length > 0 && (
               <div className="mt-5 pt-4 border-t border-slate-100">
-                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-2">
+                <span className="text-xs font-bold text-slate-600 uppercase tracking-wider block mb-2">
                   Załączniki dowodowe ({complaint.attachments.length})
                 </span>
                 <div className="flex flex-wrap gap-2">
@@ -144,7 +144,7 @@ export function ComplaintDetailView() {
                       key={att.id}
                       className="flex items-center gap-2 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-control text-xs text-slate-700 font-semibold"
                     >
-                      <FileText size={14} className="text-slate-400" />
+                      <FileText size={14} className="text-slate-500" />
                       <span>{att.name}</span>
                     </div>
                   ))}
@@ -234,7 +234,7 @@ export function ComplaintDetailView() {
                   <div className="flex-1 bg-slate-50 p-3 rounded-control border border-slate-100">
                     <div className="flex items-center justify-between mb-1">
                       <span className="font-bold text-slate-800">{act.author}</span>
-                      <span className="text-[11px] text-slate-400">
+                      <span className="text-[11px] text-slate-600 font-medium">
                         {new Date(act.createdAt).toLocaleString("pl-PL")}
                       </span>
                     </div>
@@ -249,23 +249,23 @@ export function ComplaintDetailView() {
         {/* PRAWA KOLUMNA: Informacje kontekstowe i powiązania */}
         <div className="space-y-6">
           <Card className="p-5 space-y-4">
-            <h2 className="text-xs font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 pb-2">
+            <h2 className="text-xs font-bold text-slate-600 uppercase tracking-widest border-b border-slate-100 pb-2">
               Szczegóły zgłoszenia
             </h2>
 
             <div>
-              <span className="text-micro font-bold text-slate-400 uppercase tracking-wider block mb-0.5">
+              <span className="text-micro font-bold text-slate-600 uppercase tracking-wider block mb-0.5">
                 Zgłaszający
               </span>
               <div className="flex items-center gap-1.5 text-sm font-bold text-slate-800">
-                <User size={14} className="text-slate-400" />
+                <User size={14} className="text-slate-500" />
                 <span>{complaint.reporter}</span>
               </div>
             </div>
 
             {complaint.assignee && (
               <div>
-                <span className="text-micro font-bold text-slate-400 uppercase tracking-wider block mb-0.5">
+                <span className="text-micro font-bold text-slate-600 uppercase tracking-wider block mb-0.5">
                   Przypisany audytor
                 </span>
                 <div className="flex items-center gap-1.5 text-sm font-bold text-brand-600">
@@ -277,10 +277,10 @@ export function ComplaintDetailView() {
 
             {complaint.slaDeadline && (
               <div>
-                <span className="text-micro font-bold text-slate-400 uppercase tracking-wider block mb-0.5">
+                <span className="text-micro font-bold text-slate-600 uppercase tracking-wider block mb-0.5">
                   Termin SLA
                 </span>
-                <div className="flex items-center gap-1.5 text-sm font-bold text-red-600">
+                <div className="flex items-center gap-1.5 text-sm font-bold text-red-700">
                   <Clock size={14} />
                   <span>{new Date(complaint.slaDeadline).toLocaleDateString("pl-PL")} (Pilne)</span>
                 </div>
@@ -288,10 +288,10 @@ export function ComplaintDetailView() {
             )}
 
             <div>
-              <span className="text-micro font-bold text-slate-400 uppercase tracking-wider block mb-0.5">
+              <span className="text-micro font-bold text-slate-600 uppercase tracking-wider block mb-0.5">
                 Data rejestracji
               </span>
-              <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-600">
+              <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-700">
                 <Calendar size={13} />
                 <span>{new Date(complaint.createdAt).toLocaleString("pl-PL")}</span>
               </div>
@@ -299,12 +299,12 @@ export function ComplaintDetailView() {
           </Card>
 
           <Card className="p-5 space-y-3.5 bg-slate-50/50">
-            <h2 className="text-xs font-bold text-slate-400 uppercase tracking-widest border-b border-slate-200 pb-2">
+            <h2 className="text-xs font-bold text-slate-600 uppercase tracking-widest border-b border-slate-200 pb-2">
               Powiązanie w systemie
             </h2>
 
             <div>
-              <span className="text-micro font-bold text-slate-400 uppercase tracking-wider block mb-0.5">
+              <span className="text-micro font-bold text-slate-600 uppercase tracking-wider block mb-0.5">
                 Usługa biznesowa
               </span>
               <span className="text-sm font-bold text-slate-800 block">
@@ -314,7 +314,7 @@ export function ComplaintDetailView() {
 
             {complaint.processName && (
               <div>
-                <span className="text-micro font-bold text-slate-400 uppercase tracking-wider block mb-0.5">
+                <span className="text-micro font-bold text-slate-600 uppercase tracking-wider block mb-0.5">
                   Proces
                 </span>
                 <span className="text-xs font-semibold text-slate-700 block">
@@ -325,7 +325,7 @@ export function ComplaintDetailView() {
 
             {complaint.viewName && (
               <div>
-                <span className="text-micro font-bold text-slate-400 uppercase tracking-wider block mb-0.5">
+                <span className="text-micro font-bold text-slate-600 uppercase tracking-wider block mb-0.5">
                   Ekran / Widok
                 </span>
                 <span className="text-xs font-semibold text-slate-700 block">
@@ -336,7 +336,7 @@ export function ComplaintDetailView() {
 
             {complaint.wcagCriteria && (
               <div>
-                <span className="text-micro font-bold text-slate-400 uppercase tracking-wider block mb-0.5">
+                <span className="text-micro font-bold text-slate-600 uppercase tracking-wider block mb-0.5">
                   Naruszone kryterium WCAG
                 </span>
                 <span className="text-xs font-bold text-brand-600 block">

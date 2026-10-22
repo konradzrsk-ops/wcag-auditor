@@ -56,9 +56,9 @@ function getBarColor(percentage: number): string {
 }
 
 function getTextColor(percentage: number): string {
-  if (percentage >= 80) return 'text-emerald-600';
-  if (percentage >= 60) return 'text-amber-600';
-  return 'text-red-600';
+  if (percentage >= 80) return 'text-emerald-700 font-bold';
+  if (percentage >= 60) return 'text-amber-800 font-bold';
+  return 'text-red-700 font-bold';
 }
 
 function getStatusLabel(percentage: number): string {
@@ -93,7 +93,7 @@ export function ChannelBars({ channels, className = '' }: ChannelBarsProps) {
               <div className="flex items-center gap-2">
                 <IconComponent
                   size={16}
-                  className="text-slate-400 shrink-0"
+                  className="text-slate-500 shrink-0"
                   aria-hidden="true"
                 />
                 <span className="text-sm font-bold text-slate-800">

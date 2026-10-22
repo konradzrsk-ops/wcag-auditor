@@ -407,36 +407,36 @@ export function AuditSummaryView() {
         const totalMarginals = mockTestedElements.reduce((acc, el) => acc + el.priorities.m, 0);
 
         return (
-          <Card className="p-4 sm:p-6" data-testid="tested-elements-card">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-5">
+          <Card className="p-4 sm:p-5 bg-white border border-slate-200 rounded-card shadow-xs" data-testid="tested-elements-card">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-4">
               <div>
                 <div className="flex items-center gap-2.5">
                   <h2 className="text-base sm:text-lg font-bold text-slate-900">
                     Przetestowane Ekrany / Podstrony
                   </h2>
-                  <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">
+                  <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
                     {mockTestedElements.length}
                   </span>
                 </div>
-                <p className="text-xs text-slate-500 mt-1">
+                <p className="text-xs text-slate-600 mt-1">
                   Wykaz zbadanych podstron i widoków z podziałem błędów według poziomu krytyczności
                 </p>
               </div>
 
-              {/* Legenda i łączne podsumowanie wag błędów z tooltipami */}
-              <div className="flex flex-wrap items-center gap-2 self-start md:self-auto bg-slate-50 border border-slate-200/80 p-1.5 px-3 rounded-xl text-xs">
-                <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mr-1 hidden sm:inline">
+              {/* Legenda i łączne podsumowanie wag błędów z pełnym kontrastem WCAG AA */}
+              <div className="flex flex-wrap items-center gap-2 self-start md:self-auto bg-slate-50 border border-slate-200 p-1.5 px-3 rounded-xl text-xs">
+                <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider mr-1 hidden sm:inline">
                   Łącznie błędów:
                 </span>
                 {/* Priorytetowe */}
                 <div className="relative group/tip flex items-center">
                   <div
-                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-red-50 text-red-700 border border-red-200/80 shadow-2xs cursor-help"
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-red-50 text-red-700 border border-red-200 shadow-2xs cursor-help"
                     title={`Błędy priorytetowe: ${totalPriorities}`}
                   >
-                    <AlertOctagon size={13} className="text-red-500 shrink-0" />
+                    <AlertOctagon size={13} className="text-red-700 shrink-0" />
                     <span>{totalPriorities}</span>
-                    <span className="font-semibold text-red-600/80 text-[11px] hidden sm:inline">priorytetowe</span>
+                    <span className="font-bold text-red-700 text-[11px] hidden sm:inline">priorytetowe</span>
                   </div>
                   <div
                     role="tooltip"
@@ -450,12 +450,12 @@ export function AuditSummaryView() {
                 {/* Ważne */}
                 <div className="relative group/tip flex items-center">
                   <div
-                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200/80 shadow-2xs cursor-help"
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-50 text-amber-800 border border-amber-200 shadow-2xs cursor-help"
                     title={`Błędy ważne: ${totalWarnings}`}
                   >
-                    <AlertTriangle size={13} className="text-amber-500 shrink-0" />
+                    <AlertTriangle size={13} className="text-amber-800 shrink-0" />
                     <span>{totalWarnings}</span>
-                    <span className="font-semibold text-amber-600/80 text-[11px] hidden sm:inline">ważny</span>
+                    <span className="font-bold text-amber-800 text-[11px] hidden sm:inline">ważny</span>
                   </div>
                   <div
                     role="tooltip"
@@ -469,12 +469,12 @@ export function AuditSummaryView() {
                 {/* Marginalne */}
                 <div className="relative group/tip flex items-center">
                   <div
-                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200/80 shadow-2xs cursor-help"
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200 shadow-2xs cursor-help"
                     title={`Błędy marginalne: ${totalMarginals}`}
                   >
-                    <Info size={13} className="text-blue-500 shrink-0" />
+                    <Info size={13} className="text-blue-700 shrink-0" />
                     <span>{totalMarginals}</span>
-                    <span className="font-semibold text-blue-600/80 text-[11px] hidden sm:inline">marginalne</span>
+                    <span className="font-bold text-blue-700 text-[11px] hidden sm:inline">marginalne</span>
                   </div>
                   <div
                     role="tooltip"
@@ -490,24 +490,24 @@ export function AuditSummaryView() {
             {/* Tabela elementów */}
             <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white">
               <table className="w-full text-left border-collapse min-w-[760px]">
-                <thead className="bg-slate-50 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                <thead className="bg-slate-50 border-b border-slate-200 text-xs font-bold text-slate-600 uppercase tracking-wider">
                   <tr>
                     <th className="px-5 py-3.5 w-[36%]">Przetestowany element / ekran</th>
                     <th className="px-3 py-3.5 text-center w-[14%]">
-                      <div className="inline-flex items-center gap-1.5 text-red-600" title="Błędy o najwyższym priorytecie – blokery dostępności">
-                        <AlertOctagon size={13} className="text-red-500 shrink-0" />
+                      <div className="inline-flex items-center gap-1.5 text-red-700" title="Błędy o najwyższym priorytecie – blokery dostępności">
+                        <AlertOctagon size={13} className="text-red-700 shrink-0" />
                         <span>Priorytetowe</span>
                       </div>
                     </th>
                     <th className="px-3 py-3.5 text-center w-[14%]">
-                      <div className="inline-flex items-center gap-1.5 text-amber-600" title="Błędy o znaczącym wpływie na dostępność">
-                        <AlertTriangle size={13} className="text-amber-500 shrink-0" />
+                      <div className="inline-flex items-center gap-1.5 text-amber-800" title="Błędy o znaczącym wpływie na dostępność">
+                        <AlertTriangle size={13} className="text-amber-800 shrink-0" />
                         <span>Ważne</span>
                       </div>
                     </th>
                     <th className="px-3 py-3.5 text-center w-[14%]">
-                      <div className="inline-flex items-center gap-1.5 text-blue-600" title="Drobne uchybienia o charakterze marginalnym">
-                        <Info size={13} className="text-blue-500 shrink-0" />
+                      <div className="inline-flex items-center gap-1.5 text-blue-700" title="Drobne uchybienia o charakterze marginalnym">
+                        <Info size={13} className="text-blue-700 shrink-0" />
                         <span>Marginalne</span>
                       </div>
                     </th>
@@ -541,10 +541,10 @@ export function AuditSummaryView() {
                       >
                         <td className="px-5 py-4">
                           <div className="flex items-center gap-3.5">
-                            <div className="w-9 h-9 bg-slate-100 group-hover:bg-[#0038F8]/10 group-hover:text-[#0038F8] rounded-xl flex items-center justify-center text-slate-500 transition-colors shrink-0">
+                            <div className="w-9 h-9 bg-slate-100 group-hover:bg-brand-50 group-hover:text-brand-500 rounded-xl flex items-center justify-center text-slate-600 transition-colors shrink-0">
                               <Layout size={18} />
                             </div>
-                            <span className="font-bold text-slate-800 text-[14px] group-hover:text-[#0038F8] transition-colors">
+                            <span className="font-bold text-slate-800 text-[14px] group-hover:text-brand-500 transition-colors">
                               {el.title}
                             </span>
                           </div>
@@ -554,16 +554,16 @@ export function AuditSummaryView() {
                           <div className="relative group/tip inline-flex items-center justify-center">
                             {el.priorities.c > 0 ? (
                               <span
-                                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-red-50 text-red-700 border border-red-200/80 shadow-2xs cursor-help"
+                                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-red-50 text-red-700 border border-red-200 shadow-2xs cursor-help"
                                 title={`Błędy priorytetowe: ${el.priorities.c}`}
                               >
-                                <AlertOctagon size={13} className="text-red-500 shrink-0" />
+                                <AlertOctagon size={13} className="text-red-700 shrink-0" />
                                 <span>{el.priorities.c}</span>
                               </span>
                             ) : (
                               <span
-                                className="inline-flex items-center justify-center w-7 h-7 rounded-lg text-xs font-semibold text-slate-300 bg-slate-50 cursor-help"
-                                title="Brak błędów priorytetowych"
+                                className="inline-flex items-center justify-center w-7 h-7 rounded-lg text-xs font-bold text-slate-600 bg-slate-100 border border-slate-200 cursor-help"
+                                title="Brak błędów priorytetowych (0)"
                               >
                                 0
                               </span>
@@ -583,16 +583,16 @@ export function AuditSummaryView() {
                           <div className="relative group/tip inline-flex items-center justify-center">
                             {el.priorities.w > 0 ? (
                               <span
-                                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200/80 shadow-2xs cursor-help"
+                                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-50 text-amber-800 border border-amber-200 shadow-2xs cursor-help"
                                 title={`Błędy ważne: ${el.priorities.w}`}
                               >
-                                <AlertTriangle size={13} className="text-amber-500 shrink-0" />
+                                <AlertTriangle size={13} className="text-amber-800 shrink-0" />
                                 <span>{el.priorities.w}</span>
                               </span>
                             ) : (
                               <span
-                                className="inline-flex items-center justify-center w-7 h-7 rounded-lg text-xs font-semibold text-slate-300 bg-slate-50 cursor-help"
-                                title="Brak błędów ważnych"
+                                className="inline-flex items-center justify-center w-7 h-7 rounded-lg text-xs font-bold text-slate-600 bg-slate-100 border border-slate-200 cursor-help"
+                                title="Brak błędów ważnych (0)"
                               >
                                 0
                               </span>
@@ -612,16 +612,16 @@ export function AuditSummaryView() {
                           <div className="relative group/tip inline-flex items-center justify-center">
                             {el.priorities.m > 0 ? (
                               <span
-                                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200/80 shadow-2xs cursor-help"
+                                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200 shadow-2xs cursor-help"
                                 title={`Błędy marginalne: ${el.priorities.m}`}
                               >
-                                <Info size={13} className="text-blue-500 shrink-0" />
+                                <Info size={13} className="text-blue-700 shrink-0" />
                                 <span>{el.priorities.m}</span>
                               </span>
                             ) : (
                               <span
-                                className="inline-flex items-center justify-center w-7 h-7 rounded-lg text-xs font-semibold text-slate-300 bg-slate-50 cursor-help"
-                                title="Brak błędów marginalnych"
+                                className="inline-flex items-center justify-center w-7 h-7 rounded-lg text-xs font-bold text-slate-600 bg-slate-100 border border-slate-200 cursor-help"
+                                title="Brak błędów marginalnych (0)"
                               >
                                 0
                               </span>

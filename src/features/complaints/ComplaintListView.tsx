@@ -167,7 +167,7 @@ export function ComplaintListView() {
         {/* Liczniki metryk ticketów */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 my-4">
           <Card className="p-3.5 bg-white">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-0.5">
+            <span className="text-[10px] font-bold text-slate-600 uppercase tracking-widest block mb-0.5">
               Wszystkie zgłoszenia
             </span>
             <span className="text-xl sm:text-2xl font-extrabold text-slate-900">
@@ -282,17 +282,17 @@ export function ComplaintListView() {
 
                   <div className="flex items-center justify-between sm:justify-end gap-6 border-t sm:border-none border-slate-100 pt-3 sm:pt-0 shrink-0">
                     <div className="text-left sm:text-right">
-                      <div className="flex items-center gap-1.5 text-xs text-slate-500">
+                      <div className="flex items-center gap-1.5 text-xs text-slate-600 font-medium">
                         <User size={13} />
                         <span>{item.reporter}</span>
                       </div>
-                      <div className="flex items-center gap-1 text-[11px] text-slate-400 mt-0.5">
+                      <div className="flex items-center gap-1 text-[11px] text-slate-600 mt-0.5 font-medium">
                         <Clock size={11} />
                         <span>{new Date(item.createdAt).toLocaleDateString("pl-PL")}</span>
                       </div>
                     </div>
 
-                    <div className="w-8 h-8 rounded-control bg-slate-100 group-hover:bg-brand-500 group-hover:text-white flex items-center justify-center text-slate-400 transition-colors">
+                    <div className="w-8 h-8 rounded-control bg-slate-100 group-hover:bg-brand-500 group-hover:text-white flex items-center justify-center text-slate-500 transition-colors">
                       <ChevronRight size={18} />
                     </div>
                   </div>

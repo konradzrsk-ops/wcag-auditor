@@ -162,7 +162,7 @@ export const HorizontalFilterBar = forwardRef<HTMLDivElement, HorizontalFilterBa
                 );
               })
             ) : (
-              <p className="text-xs text-slate-400 py-2">Brak opcji do wyboru</p>
+              <p className="text-xs text-slate-600 py-2">Brak opcji do wyboru</p>
             )}
           </div>
         );
@@ -195,7 +195,7 @@ export const HorizontalFilterBar = forwardRef<HTMLDivElement, HorizontalFilterBa
                     <span>{option.label}</span>
                     <div className="flex items-center gap-2">
                       {option.count !== undefined && (
-                        <span className="text-xs text-slate-400 font-normal">
+                        <span className="text-xs text-slate-600 font-semibold">
                           {option.count}
                         </span>
                       )}
@@ -207,7 +207,7 @@ export const HorizontalFilterBar = forwardRef<HTMLDivElement, HorizontalFilterBa
                 );
               })
             ) : (
-              <p className="text-xs text-slate-400 py-2">Brak opcji do wyboru</p>
+              <p className="text-xs text-slate-600 py-2">Brak opcji do wyboru</p>
             )}
           </div>
         );
@@ -315,7 +315,7 @@ export const HorizontalFilterBar = forwardRef<HTMLDivElement, HorizontalFilterBa
                     <ChevronDown
                       size={14}
                       className={`transition-transform duration-200 shrink-0 ${
-                        isOpen ? 'rotate-180 text-brand-500' : 'text-slate-400'
+                        isOpen ? 'rotate-180 text-brand-500' : 'text-slate-500'
                       }`}
                       aria-hidden="true"
                     />
@@ -336,7 +336,7 @@ export const HorizontalFilterBar = forwardRef<HTMLDivElement, HorizontalFilterBa
                           <button
                             type="button"
                             onClick={() => onFilterChange(filter.id, undefined)}
-                            className="text-micro font-bold text-slate-400 hover:text-red-600 transition-colors"
+                            className="text-micro font-bold text-slate-600 hover:text-red-700 transition-colors"
                           >
                             Wyczyść
                           </button>
@@ -370,7 +370,7 @@ export const HorizontalFilterBar = forwardRef<HTMLDivElement, HorizontalFilterBa
                   <ChevronDown
                     size={14}
                     className={`transition-transform duration-200 shrink-0 ${
-                      isMoreOpen ? 'rotate-180 text-brand-500' : 'text-slate-400'
+                      isMoreOpen ? 'rotate-180 text-brand-500' : 'text-slate-500'
                     }`}
                     aria-hidden="true"
                   />
@@ -392,7 +392,7 @@ export const HorizontalFilterBar = forwardRef<HTMLDivElement, HorizontalFilterBa
                             <button
                               type="button"
                               onClick={() => onFilterChange(filter.id, undefined)}
-                              className="text-micro font-bold text-slate-400 hover:text-red-600 transition-colors"
+                              className="text-micro font-bold text-slate-600 hover:text-red-700 transition-colors"
                             >
                               Wyczyść
                             </button>
@@ -428,7 +428,7 @@ export const HorizontalFilterBar = forwardRef<HTMLDivElement, HorizontalFilterBa
             className="flex items-center flex-wrap gap-2 pt-3 border-t border-slate-100 animate-fade-in"
             aria-label="Aktywne filtry"
           >
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider mr-1 select-none">
+            <span className="text-xs font-bold text-slate-600 uppercase tracking-wider mr-1 select-none">
               Aktywne:
             </span>
 
