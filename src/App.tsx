@@ -6132,29 +6132,29 @@ function DashboardView({
         </Card>
       </div>
 
-      {/* RZĄD 2.5: WSPÓŁPRACA Z AUDYTORAMI & KOMUNIKATY (skompresowane) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-4" data-testid="dashboard-collaboration-row">
+      {/* RZĄD 2.5: WSPÓŁPRACA Z AUDYTORAMI & KOMUNIKATY */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6" data-testid="dashboard-collaboration-row">
         {/* LEWY WIDGET (7 KOLUMN): KONSULTACJE & TICKETY Z AUDYTORAMI WCAG */}
-        <Card className="p-3.5 sm:p-4.5 lg:col-span-7 bg-white border border-slate-200 shadow-xs flex flex-col justify-between">
+        <Card className="p-5 sm:p-6 lg:col-span-7 bg-white border border-slate-200 shadow-xs flex flex-col justify-between">
           <div>
             {/* Nagłówek modułu ticketów */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 mb-3">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 border border-emerald-100">
-                  <MessageSquareText size={17} />
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 border border-emerald-100">
+                  <MessageSquareText size={20} />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <h3 className="text-sm sm:text-base font-bold text-slate-900 leading-tight">
+                    <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-tight">
                       Konsultacje
                     </h3>
                     {unreadTicketsCount > 0 && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-extrabold bg-emerald-600 text-white animate-pulse">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-emerald-600 text-white animate-pulse">
                         {unreadTicketsCount} nowa odp.
                       </span>
                     )}
                   </div>
-                  <p className="text-xs text-slate-600 font-medium">
+                  <p className="text-xs text-slate-600 font-medium mt-0.5">
                     Bezpośredni kontakt merytoryczny z zespołem audytorów WCAG bez konieczności spotkań online.
                   </p>
                 </div>
@@ -6164,18 +6164,18 @@ function DashboardView({
                 <button
                   type="button"
                   onClick={() => onOpenNewTicket && onOpenNewTicket()}
-                  className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-[#0038F8] hover:bg-[#002ECC] text-white rounded-lg text-xs font-bold shadow-xs transition-all cursor-pointer"
+                  className="inline-flex items-center gap-1.5 px-3 py-2 bg-[#0038F8] hover:bg-[#002ECC] text-white rounded-xl text-xs font-bold shadow-xs transition-all cursor-pointer"
                 >
-                  <Plus size={13} />
+                  <Plus size={14} />
                   <span>Nowa konsultacja</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => setView("tickety")}
-                  className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded-lg text-xs font-bold shadow-2xs transition-all cursor-pointer"
+                  className="inline-flex items-center gap-1.5 px-3 py-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded-xl text-xs font-bold shadow-2xs transition-all cursor-pointer"
                 >
                   <span>Wszystkie ({tickets.length})</span>
-                  <ArrowRight size={12} />
+                  <ArrowRight size={13} />
                 </button>
               </div>
             </div>
@@ -6184,10 +6184,10 @@ function DashboardView({
             {unreadTicketsCount > 0 && (
               <div
                 onClick={() => onOpenTicket && onOpenTicket("TCK-104")}
-                className="mb-2.5 p-2.5 bg-gradient-to-r from-emerald-50 via-emerald-50/80 to-white border border-emerald-200 rounded-lg cursor-pointer hover:border-emerald-300 hover:shadow-xs transition-all group"
+                className="mb-3.5 p-3 sm:p-3.5 bg-gradient-to-r from-emerald-50 via-emerald-50/80 to-white border border-emerald-200 rounded-xl cursor-pointer hover:border-emerald-300 hover:shadow-xs transition-all group"
               >
-                <div className="flex items-start justify-between gap-2.5">
-                  <div className="flex items-start gap-2.5">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-start gap-3">
                     <div
                       className="relative shrink-0 mt-0.5 cursor-pointer hover:opacity-90"
                       onClick={(e) => {
@@ -6201,35 +6201,35 @@ function DashboardView({
                       <img
                         src="https://wally.widzialni.eu//uploads/avatars/avatar_133_1760079096.jpg"
                         alt="Tomasz Straszak"
-                        className="w-7 h-7 rounded-full object-cover ring-2 ring-emerald-300"
+                        className="w-9 h-9 rounded-full object-cover ring-2 ring-emerald-300"
                       />
-                      <span className="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-emerald-500 ring-1 ring-white" />
+                      <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-white" />
                     </div>
                     <div>
-                      <div className="flex items-center gap-1.5 mb-0.5">
+                      <div className="flex items-center gap-2 mb-1">
                         <span className="text-xs font-extrabold uppercase tracking-wider text-emerald-800 bg-emerald-100/90 px-2 py-0.5 rounded">
                           Nowa odpowiedź • #TCK-104
                         </span>
                         <span className="text-xs font-semibold text-slate-500">15 min temu</span>
                       </div>
-                      <h4 className="text-xs font-bold text-slate-900 group-hover:text-emerald-800 transition-colors">
+                      <h4 className="text-xs sm:text-sm font-bold text-slate-900 group-hover:text-emerald-800 transition-colors">
                         Czy kontrast 3.8:1 dla aktywnego stanu checkboxa spełnia WCAG 2.2?
                       </h4>
-                      <p className="text-xs text-slate-700 line-clamp-1 mt-0.5 italic">
+                      <p className="text-xs text-slate-700 line-clamp-1 mt-1 italic">
                         Tomasz Straszak (Opiekun): "Skonsultowałem to z audytorem: współczynnik 3.8:1 jest w pełni zgodny z WCAG 2.1 oraz 2.2 AA..."
                       </p>
                     </div>
                   </div>
                   <span className="shrink-0 inline-flex items-center gap-1 text-xs font-bold text-emerald-800 group-hover:underline self-center">
                     <span>Otwórz</span>
-                    <ArrowRight size={12} />
+                    <ArrowRight size={13} />
                   </span>
                 </div>
               </div>
             )}
 
             {/* LISTA OSTATNICH TICKETÓW */}
-            <div className="space-y-1.5 mb-3">
+            <div className="space-y-2 mb-4">
               {tickets.slice(0, 3).map((ticket) => {
                 const isReply = ticket.status === "auditor_reply";
                 const isWaiting = ticket.status === "waiting_auditor";
@@ -6238,12 +6238,12 @@ function DashboardView({
                   <div
                     key={ticket.id}
                     onClick={() => onOpenTicket && onOpenTicket(ticket.id)}
-                    className="py-1.5 px-2.5 sm:px-3 bg-slate-50/70 hover:bg-slate-100/80 border border-slate-200/80 rounded-lg transition-all cursor-pointer flex items-center justify-between gap-2.5 group"
+                    className="py-2.5 px-3 sm:px-3.5 bg-slate-50/80 hover:bg-slate-100/90 border border-slate-200/80 rounded-xl transition-all cursor-pointer flex items-center justify-between gap-3 group"
                   >
-                    <div className="flex items-center gap-2.5 min-w-0">
+                    <div className="flex items-center gap-3 min-w-0">
                       <div className="shrink-0 flex flex-col items-center">
                         <span
-                          className={`w-2 h-2 rounded-full ${
+                          className={`w-2.5 h-2.5 rounded-full ${
                             isReply
                               ? "bg-emerald-500 ring-2 ring-emerald-200"
                               : isWaiting
@@ -6253,7 +6253,7 @@ function DashboardView({
                         />
                       </div>
                       <div className="min-w-0">
-                        <div className="flex items-center gap-1.5 mb-0.5 flex-wrap">
+                        <div className="flex items-center gap-1.5 mb-1 flex-wrap">
                           <span className="text-xs font-bold text-slate-900">
                             #{ticket.id}
                           </span>
@@ -6279,13 +6279,13 @@ function DashboardView({
                             {ticket.statusLabel}
                           </span>
                         </div>
-                        <h5 className="text-xs font-bold text-slate-800 group-hover:text-[#0038F8] transition-colors truncate">
+                        <h5 className="text-xs sm:text-sm font-bold text-slate-800 group-hover:text-[#0038F8] transition-colors truncate">
                           {ticket.title}
                         </h5>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-2.5 shrink-0">
+                    <div className="flex items-center gap-3 shrink-0">
                       <div
                         className="hidden sm:flex items-center gap-1.5 cursor-pointer hover:opacity-80"
                         onClick={(e) => {
@@ -6317,92 +6317,119 @@ function DashboardView({
           </div>
 
           {/* SPÓJNA STOPKA: DEDYKOWANY OPIEKUN KLIENTA */}
-          <div className="pt-2.5 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
-            <div
-              className="flex items-center gap-2.5 cursor-pointer group/opiekun"
-              onClick={() => {
-                if (onViewPersonProfile) {
-                  onViewPersonProfile("Tomasz Straszak");
-                }
-              }}
-              title="Kliknij, aby otworzyć profil Tomasza Straszaka"
-            >
-              <div className="relative shrink-0">
-                <img
-                  src="https://wally.widzialni.eu//uploads/avatars/avatar_133_1760079096.jpg"
-                  alt="Tomasz Straszak"
-                  className="w-8 h-8 rounded-full object-cover border-2 border-white shadow-2xs group-hover/opiekun:ring-2 group-hover/opiekun:ring-[#0038F8]"
-                />
-                <span
-                  className="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-emerald-500 ring-1 ring-white"
-                  title="Dostępny"
-                />
-              </div>
-              <div className="min-w-0">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-xs font-extrabold text-slate-900 group-hover/opiekun:text-[#0038F8] transition-colors truncate flex items-center gap-1">
-                    <span>Tomasz Straszak</span>
-                    <ExternalLink size={11} className="text-slate-400 group-hover/opiekun:text-[#0038F8]" />
-                  </span>
-                  <span className="text-xs font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block"></span>
-                    Dostępny
-                  </span>
-                </div>
-                <div className="text-xs font-medium text-slate-600 truncate">
-                  Dedykowany Opiekun Klienta • <a href="tel:+48795103017" onClick={(e) => e.stopPropagation()} className="text-[#0038F8] hover:underline font-semibold">795 103 017</a> • <a href="mailto:tomek@widzialni.eu" onClick={(e) => e.stopPropagation()} className="text-[#0038F8] hover:underline font-semibold">tomek@widzialni.eu</a>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-1.5 shrink-0 self-start sm:self-auto">
-              <button
-                type="button"
-                onClick={() => onOpenNewTicket && onOpenNewTicket()}
-                className="px-2.5 py-1.5 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-800 rounded-lg text-xs font-bold shadow-2xs transition-colors cursor-pointer flex items-center gap-1"
-              >
-                <MessageSquareText size={12} className="text-emerald-700" />
-                <span>Nowa konsultacja</span>
-              </button>
-              <button
-                type="button"
+          <div className="mt-4 pt-4 border-t border-slate-200">
+            <div className="p-3.5 sm:p-4 bg-slate-50/90 hover:bg-blue-50/30 rounded-xl border border-slate-200/90 flex flex-col md:flex-row md:items-center justify-between gap-3.5 transition-colors">
+              <div
+                className="flex items-center gap-3.5 cursor-pointer group/opiekun"
                 onClick={() => {
                   if (onViewPersonProfile) {
                     onViewPersonProfile("Tomasz Straszak");
-                  } else {
-                    setView("profil");
                   }
                 }}
-                className="px-3 py-1.5 bg-[#0038F8] hover:bg-[#002ECC] text-white rounded-lg text-xs font-bold shadow-2xs transition-colors cursor-pointer flex items-center gap-1"
-                title="Przejdź do profilu i umów spotkanie 30 min z Tomaszem Straszakiem"
+                title="Kliknij, aby otworzyć profil Tomasza Straszaka"
               >
-                <Calendar size={13} />
-                <span>Umów spotkanie 30 min</span>
-              </button>
+                <div className="relative shrink-0">
+                  <img
+                    src="https://wally.widzialni.eu//uploads/avatars/avatar_133_1760079096.jpg"
+                    alt="Tomasz Straszak"
+                    className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl object-cover border-2 border-white shadow-xs group-hover/opiekun:ring-2 group-hover/opiekun:ring-[#0038F8]"
+                  />
+                  <span
+                    className="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 ring-2 ring-white flex items-center justify-center text-white"
+                    title="Dostępny"
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-white inline-block"></span>
+                  </span>
+                </div>
+
+                <div className="min-w-0">
+                  <div className="flex flex-wrap items-center gap-2 mb-1">
+                    <span className="text-sm font-extrabold text-slate-900 group-hover/opiekun:text-[#0038F8] transition-colors truncate flex items-center gap-1.5">
+                      <span>Tomasz Straszak</span>
+                      <ExternalLink size={13} className="text-slate-400 group-hover/opiekun:text-[#0038F8]" />
+                    </span>
+                    <span className="text-xs font-bold text-slate-700 bg-white px-2 py-0.5 rounded-md border border-slate-200 shadow-2xs">
+                      Opiekun Klienta
+                    </span>
+                    <span className="text-xs font-bold text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-md border border-emerald-200 flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block"></span>
+                      Dostępny dzisiaj
+                    </span>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-x-3.5 gap-y-1 text-xs text-slate-600 font-medium">
+                    <a
+                      href="tel:+48795103017"
+                      onClick={(e) => e.stopPropagation()}
+                      className="inline-flex items-center gap-1.5 text-slate-700 hover:text-[#0038F8] font-semibold transition-colors"
+                    >
+                      <Phone size={13} className="text-[#0038F8]" />
+                      <span>795 103 017</span>
+                    </a>
+                    <span className="text-slate-300 hidden sm:inline">•</span>
+                    <a
+                      href="mailto:tomek@widzialni.eu"
+                      onClick={(e) => e.stopPropagation()}
+                      className="inline-flex items-center gap-1.5 text-slate-700 hover:text-[#0038F8] font-semibold transition-colors"
+                    >
+                      <Mail size={13} className="text-[#0038F8]" />
+                      <span>tomek@widzialni.eu</span>
+                    </a>
+                    <span className="text-slate-300 hidden sm:inline">•</span>
+                    <span className="text-slate-500 text-xs hidden sm:inline">Ustalenia, wyceny, dystrybucja zadań</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 shrink-0 self-start md:self-auto pt-1 md:pt-0">
+                <button
+                  type="button"
+                  onClick={() => onOpenNewTicket && onOpenNewTicket()}
+                  className="px-3.5 py-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-xl text-xs font-bold shadow-2xs transition-colors cursor-pointer flex items-center gap-1.5"
+                >
+                  <MessageSquareText size={13} className="text-[#0038F8]" />
+                  <span>Nowa konsultacja</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (onViewPersonProfile) {
+                      onViewPersonProfile("Tomasz Straszak");
+                    } else {
+                      setView("profil");
+                    }
+                  }}
+                  className="px-3.5 py-2 bg-[#0038F8] hover:bg-[#002ECC] text-white rounded-xl text-xs font-bold shadow-xs transition-colors cursor-pointer flex items-center gap-1.5"
+                  title="Przejdź do profilu i umów spotkanie 30 min z Tomaszem Straszakiem"
+                >
+                  <Calendar size={14} />
+                  <span>Umów spotkanie 30 min</span>
+                </button>
+              </div>
             </div>
           </div>
         </Card>
 
-        {/* PRAWY WIDGET (5 KOLUMN): KOMUNIKATY & NOWOŚCI (skompresowane) */}
-        <Card className="p-3.5 sm:p-4.5 lg:col-span-5 bg-gradient-to-br from-white via-white to-blue-50/20 border border-slate-200 shadow-xs flex flex-col justify-between" data-testid="announcements-teaser">
+        {/* PRAWY WIDGET (5 KOLUMN): KOMUNIKATY & NOWOŚCI */}
+        <Card className="p-5 sm:p-6 lg:col-span-5 bg-gradient-to-br from-white via-white to-blue-50/20 border border-slate-200 shadow-xs flex flex-col justify-between" data-testid="announcements-teaser">
           <div>
-            <div className="flex items-center justify-between gap-2.5 mb-3">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-[#0038F8]/10 text-[#0038F8] flex items-center justify-center shrink-0">
-                  <Sparkles size={17} />
+            <div className="flex items-center justify-between gap-3 mb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-[#0038F8]/10 text-[#0038F8] flex items-center justify-center shrink-0">
+                  <Sparkles size={20} />
                 </div>
                 <div>
-                  <div className="flex items-center gap-1.5">
-                    <h3 className="text-sm sm:text-base font-bold text-slate-900 leading-tight">
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-tight">
                       Komunikaty & Nowości
                     </h3>
                     {announcements.filter((a) => a.unread).length > 0 && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-extrabold bg-[#0038F8] text-white">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-[#0038F8] text-white">
                         {announcements.filter((a) => a.unread).length} nowe
                       </span>
                     )}
                   </div>
-                  <p className="text-xs text-slate-600 font-medium">
+                  <p className="text-xs text-slate-600 font-medium mt-0.5">
                     Aktualizacje prawne, webinary i oferty.
                   </p>
                 </div>
@@ -6411,29 +6438,29 @@ function DashboardView({
               <button
                 type="button"
                 onClick={onOpenAnnouncements}
-                className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-white hover:bg-slate-50 text-[#0038F8] border border-[#0038F8]/30 hover:border-[#0038F8] rounded-lg text-xs font-bold shadow-2xs transition-all cursor-pointer shrink-0"
+                className="inline-flex items-center gap-1.5 px-3 py-2 bg-white hover:bg-slate-50 text-[#0038F8] border border-[#0038F8]/30 hover:border-[#0038F8] rounded-xl text-xs font-bold shadow-2xs transition-all cursor-pointer shrink-0"
               >
                 <span>Wszystkie ({announcements.length})</span>
-                <ArrowRight size={12} />
+                <ArrowRight size={13} />
               </button>
             </div>
 
             {/* 2 KAFELKI OSTATNICH KOMUNIKATÓW */}
-            <div className="space-y-2 mb-2.5">
+            <div className="space-y-3 mb-3">
               {announcements.slice(0, 2).map((item) => {
                 const ItemIcon = item.icon || Sparkles;
                 return (
                   <div
                     key={item.id}
                     onClick={onOpenAnnouncements}
-                    className="bg-white border border-slate-200 rounded-lg p-2.5 sm:p-3 hover:shadow-xs hover:border-[#0038F8]/40 transition-all cursor-pointer flex flex-col justify-between group relative"
+                    className="bg-white border border-slate-200 rounded-xl p-3.5 sm:p-4 hover:shadow-xs hover:border-[#0038F8]/40 transition-all cursor-pointer flex flex-col justify-between group relative"
                   >
                     <div>
-                      <div className="flex items-center justify-between gap-2 mb-1">
+                      <div className="flex items-center justify-between gap-2 mb-1.5">
                         <span
-                          className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-bold border ${item.categoryColor}`}
+                          className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded text-xs font-bold border ${item.categoryColor}`}
                         >
-                          <ItemIcon size={11} />
+                          <ItemIcon size={12} />
                           <span>{item.categoryLabel}</span>
                         </span>
                         <span className="text-xs font-semibold text-slate-500">
@@ -6441,21 +6468,21 @@ function DashboardView({
                         </span>
                       </div>
 
-                      <h4 className="text-xs font-bold text-slate-900 group-hover:text-[#0038F8] transition-colors leading-snug line-clamp-1">
+                      <h4 className="text-xs sm:text-sm font-bold text-slate-900 group-hover:text-[#0038F8] transition-colors leading-snug line-clamp-1">
                         {item.title}
                       </h4>
 
-                      <p className="text-xs text-slate-700 mt-0.5 leading-snug line-clamp-1 sm:line-clamp-2">
+                      <p className="text-xs text-slate-700 mt-1 leading-relaxed line-clamp-2">
                         {item.description}
                       </p>
                     </div>
 
-                    <div className="mt-2 pt-1.5 border-t border-slate-100 flex items-center justify-between">
-                      <span className="text-xs font-bold text-[#0038F8] group-hover:underline inline-flex items-center gap-1">
+                    <div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between">
+                      <span className="text-xs font-bold text-[#0038F8] group-hover:underline inline-flex items-center gap-1.5">
                         <span>{item.ctaText}</span>
-                        <ArrowRight size={11} strokeWidth={2.5} />
+                        <ArrowRight size={12} strokeWidth={2.5} />
                       </span>
-                      <span className="text-xs font-semibold text-slate-600 bg-slate-100 px-2 py-0.5 rounded">
+                      <span className="text-xs font-semibold text-slate-600 bg-slate-100 px-2.5 py-0.5 rounded">
                         Szczegóły
                       </span>
                     </div>
@@ -6465,7 +6492,7 @@ function DashboardView({
             </div>
           </div>
 
-          <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600 font-medium">
+          <div className="mt-4 pt-3.5 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600 font-medium">
             <span>Baza wiedzy & wytyczne</span>
             <button
               type="button"
