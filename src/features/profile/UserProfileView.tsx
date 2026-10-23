@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   Building2,
   ShieldCheck,
@@ -17,6 +17,9 @@ import {
   Sparkles,
   Landmark,
   ArrowLeft,
+  ArrowRight,
+  AlertOctagon,
+  MessageSquareText,
   Key,
   Lock,
   Mail,
@@ -44,6 +47,9 @@ interface UserProfileViewProps {
     text: string,
     type?: "success" | "info" | "warning" | "danger"
   ) => void;
+  initialTab?: "branding" | "team" | "wcag" | "account" | "notifications";
+  onViewMemberErrors?: (member: TeamMember) => void;
+  onViewMemberTickets?: (member: TeamMember) => void;
 }
 
 // Domyślny zespół deweloperów i testerów organizacji
@@ -59,6 +65,7 @@ const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     status: "active",
     openErrorsCount: 12,
     resolvedErrorsCount: 28,
+    assignedTicketsCount: 2,
     avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Marek&backgroundColor=b6e3f4",
     phone: "+48 501 112 233",
   },
@@ -73,6 +80,7 @@ const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     status: "active",
     openErrorsCount: 6,
     resolvedErrorsCount: 19,
+    assignedTicketsCount: 1,
     avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Ola&backgroundColor=ffdfbf",
     phone: "+48 502 223 344",
   },
@@ -87,6 +95,7 @@ const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     status: "active",
     openErrorsCount: 8,
     resolvedErrorsCount: 14,
+    assignedTicketsCount: 1,
     avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Pawel&backgroundColor=d1d4f9",
     phone: "+48 503 334 455",
   },
@@ -101,6 +110,7 @@ const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     status: "active",
     openErrorsCount: 3,
     resolvedErrorsCount: 42,
+    assignedTicketsCount: 2,
     avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Magda&backgroundColor=ffd5dc",
     phone: "+48 504 445 566",
   },
@@ -115,6 +125,7 @@ const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     status: "active",
     openErrorsCount: 5,
     resolvedErrorsCount: 21,
+    assignedTicketsCount: 1,
     avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Kamil&backgroundColor=c0aede",
     phone: "+48 505 556 677",
   },
@@ -125,10 +136,19 @@ export function UserProfileView({
   clientProfile,
   setClientProfile,
   showToast,
+  initialTab,
+  onViewMemberErrors,
+  onViewMemberTickets,
 }: UserProfileViewProps) {
   const [activeTab, setActiveTab] = useState<
     "branding" | "team" | "wcag" | "account" | "notifications"
-  >("branding");
+  >(initialTab || "account");
+
+  useEffect(() => {
+    if (initialTab) {
+      setActiveTab(initialTab);
+    }
+  }, [initialTab]);
 
   // Kopia robocza formularza z gwarancją obecności zespołu
   const [formData, setFormData] = useState<ClientProfile>({
@@ -644,91 +664,6 @@ export function UserProfileView({
           {/* ======================================================== */}
           {activeTab === "branding" && (
             <div className="space-y-6">
-              {/* KARTA PODGLĄDU NA ŻYWO (LIVE PREVIEW) */}
-              <div className="bg-gradient-to-r from-blue-900 via-slate-900 to-indigo-950 text-white rounded-3xl p-6 sm:p-8 shadow-md relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-96 h-96 bg-[#0038F8]/20 rounded-full blur-3xl pointer-events-none" />
-
-                <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-                  <div>
-                    <div className="flex items-center gap-2 mb-2">
-                      <Sparkles size={16} className="text-yellow-400" />
-                      <span className="text-xs font-extrabold uppercase tracking-wider text-blue-200">
-                        Podgląd na żywo • Tak Twoja organizacja widnieje na Pulpicie
-                      </span>
-                    </div>
-
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-5 mt-4">
-                      {/* Kontener logo klienta - BEZ ZAOKRĄGLEŃ NA SAMYM OBRAZIE */}
-                      <div className="h-16 sm:h-20 px-3 bg-white rounded-xl flex items-center justify-center shadow-lg shrink-0 border border-white/20">
-                        {formData.orgLogo ? (
-                          <img
-                            src={formData.orgLogo}
-                            alt={
-                              formData.orgAltText ||
-                              `Logo ${formData.orgName}`
-                            }
-                            className="max-h-full w-auto max-w-[160px] object-contain block"
-                            style={{ borderRadius: 0 }}
-                            onError={(e) => {
-                              if (e.currentTarget.src !== "./logos/erste.png") {
-                                e.currentTarget.src = "./logos/erste.png";
-                              }
-                            }}
-                          />
-                        ) : (
-                          <Building2 size={32} className="text-slate-400" />
-                        )}
-                      </div>
-
-                      <div className="min-w-0">
-                        <div className="flex flex-wrap items-center gap-2">
-                          <h2 className="text-xl sm:text-2xl font-black tracking-tight text-white">
-                            {formData.orgName || "Nazwa Twojej Organizacji"}
-                          </h2>
-                          <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-white/20 text-white backdrop-blur-sm border border-white/30">
-                            {formData.orgShortName || "Klient"}
-                          </span>
-                        </div>
-                        <p className="text-blue-100/80 text-xs sm:text-sm mt-1">
-                          Sektor:{" "}
-                          <strong className="text-white font-semibold">
-                            {formData.sector}
-                          </strong>{" "}
-                          • Standard referencyjny:{" "}
-                          <strong className="text-white font-semibold">
-                            {formData.wcagStandard}
-                          </strong>{" "}
-                          • Cel dostępności:{" "}
-                          <strong className="text-emerald-400 font-bold">
-                            {formData.targetScore}%
-                          </strong>
-                        </p>
-                        <p className="text-blue-200/60 text-[11px] mt-1">
-                          Tekst alternatywny dla czytników:{" "}
-                          <span className="italic text-white">
-                            "{formData.orgAltText || `Logo ${formData.orgName}`}"
-                          </span>
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex sm:flex-col items-center sm:items-end justify-between gap-3 shrink-0 pt-4 lg:pt-0 border-t lg:border-t-0 border-white/10">
-                    <span className="text-xs font-bold text-blue-200">
-                      Pakiet Enterprise
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => handleSave(true)}
-                      className="inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-slate-100 text-slate-900 rounded-xl text-xs font-extrabold shadow-sm transition-all cursor-pointer"
-                    >
-                      <span>Zobacz na Pulpicie</span>
-                      <ExternalLink size={13} />
-                    </button>
-                  </div>
-                </div>
-              </div>
-
               {/* GŁÓWNA SEKCJA ZARZĄDZANIA LOGO */}
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
                 {/* LEWA KOLUMNA: EDYCJA I WGRANIE LOGO (7 kolumn) */}
@@ -1243,15 +1178,47 @@ export function UserProfileView({
                       </div>
                     </div>
 
-                    {/* Statystyki błędów i akcje */}
-                    <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
-                      <div className="flex items-center gap-3 text-xs">
-                        <span className="text-red-600 font-extrabold flex items-center gap-1">
-                          <span className="w-2 h-2 rounded-full bg-red-500 inline-block" />
-                          {member.openErrorsCount} otwartych
-                        </span>
-                        <span className="text-emerald-700 font-bold flex items-center gap-1">
-                          <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" />
+                    {/* Statystyki błędów, tickety i akcje koordynatora */}
+                    <div className="pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2.5">
+                      <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 text-xs">
+                        {/* PRZEJŚCIE DO ODFILTROWANYCH BŁĘDÓW DEWELOPERA */}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (onViewMemberErrors) {
+                              onViewMemberErrors(member);
+                            } else {
+                              setView("raport-bledy");
+                            }
+                          }}
+                          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-red-50 hover:bg-red-100/90 text-red-700 border border-red-200/80 font-bold transition-all cursor-pointer group shadow-2xs"
+                          title={`Przejdź do listy błędów przypisanych do dewelopera: ${member.name}`}
+                        >
+                          <AlertOctagon size={12} className="text-red-600 group-hover:scale-110 transition-transform" />
+                          <span>{member.openErrorsCount} otwartych</span>
+                          <ArrowRight size={11} className="text-red-400 group-hover:text-red-700 group-hover:translate-x-0.5 transition-all" />
+                        </button>
+
+                        {/* PRZEJŚCIE DO ODFILTROWANYCH TICKETÓW DEWELOPERA */}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (onViewMemberTickets) {
+                              onViewMemberTickets(member);
+                            } else {
+                              setView("tickety");
+                            }
+                          }}
+                          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-blue-50 hover:bg-blue-100/90 text-[#0038F8] border border-blue-200/80 font-bold transition-all cursor-pointer group shadow-2xs"
+                          title={`Przejdź do konsultacji i ticketów dla: ${member.name}`}
+                        >
+                          <MessageSquareText size={12} className="text-[#0038F8] group-hover:scale-110 transition-transform" />
+                          <span>{member.assignedTicketsCount || 2} tickety</span>
+                          <ArrowRight size={11} className="text-blue-400 group-hover:text-[#0038F8] group-hover:translate-x-0.5 transition-all" />
+                        </button>
+
+                        <span className="text-emerald-700 font-bold flex items-center gap-1 text-[11px] px-1 py-1" title="Liczba naprawionych błędów">
+                          <CheckCircle2 size={12} className="text-emerald-600" />
                           {member.resolvedErrorsCount} fixów
                         </span>
                       </div>

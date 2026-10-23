@@ -627,6 +627,7 @@ const INITIAL_AUDITOR_TICKETS = [
     contextTitle: "Błąd #ERR-204: Kontrast indykatora w formularzu przelewu",
     contextPath: "Audyty > Aplikacja Mobilna iOS > Formularz przelewu",
     contextView: "raport-bledy",
+    assignedDeveloper: "Marek Kowalski",
     status: "auditor_reply",
     statusLabel: "Nowa odpowiedź audytora",
     priority: "urgent",
@@ -677,6 +678,7 @@ const INITIAL_AUDITOR_TICKETS = [
     contextTitle: "Skarga #RKL-2026-089: Niedostępne wykresy notowań dla NVDA",
     contextPath: "Skargi i reklamacje > #RKL-2026-089",
     contextView: "reklamacja-szczegoly",
+    assignedDeveloper: "Kamil Bednarek",
     status: "waiting_auditor",
     statusLabel: "W analizie audytora",
     priority: "normal",
@@ -721,6 +723,7 @@ const INITIAL_AUDITOR_TICKETS = [
     contextTitle: "Audyt: Portal Klienta - Serwis Transakcyjny WWW",
     contextPath: "Audyty > Portal Klienta (Serwis Transakcyjny)",
     contextView: "raport-szczegoly",
+    assignedDeveloper: "Aleksandra Nowak",
     status: "resolved",
     statusLabel: "Rozwiązany",
     priority: "normal",
@@ -763,6 +766,7 @@ const INITIAL_AUDITOR_TICKETS = [
     contextType: "general",
     contextTitle: "Konsultacja ogólna: Deklaracja Dostępności Cyfrowej",
     contextPath: "Baza wiedzy & Regulacje EAA",
+    assignedDeveloper: "Marek Kowalski",
     status: "resolved",
     statusLabel: "Rozwiązany",
     priority: "low",
@@ -1477,6 +1481,7 @@ const INITIAL_CLIENT_PROFILE: ClientProfile = {
       status: "active",
       openErrorsCount: 12,
       resolvedErrorsCount: 28,
+      assignedTicketsCount: 2,
       avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Marek&backgroundColor=b6e3f4",
       phone: "+48 501 112 233",
     },
@@ -1491,6 +1496,7 @@ const INITIAL_CLIENT_PROFILE: ClientProfile = {
       status: "active",
       openErrorsCount: 6,
       resolvedErrorsCount: 19,
+      assignedTicketsCount: 1,
       avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Ola&backgroundColor=ffdfbf",
       phone: "+48 502 223 344",
     },
@@ -1505,6 +1511,7 @@ const INITIAL_CLIENT_PROFILE: ClientProfile = {
       status: "active",
       openErrorsCount: 8,
       resolvedErrorsCount: 14,
+      assignedTicketsCount: 1,
       avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Pawel&backgroundColor=d1d4f9",
       phone: "+48 503 334 455",
     },
@@ -1519,6 +1526,7 @@ const INITIAL_CLIENT_PROFILE: ClientProfile = {
       status: "active",
       openErrorsCount: 3,
       resolvedErrorsCount: 42,
+      assignedTicketsCount: 2,
       avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Magda&backgroundColor=ffd5dc",
       phone: "+48 504 445 566",
     },
@@ -1533,6 +1541,7 @@ const INITIAL_CLIENT_PROFILE: ClientProfile = {
       status: "active",
       openErrorsCount: 5,
       resolvedErrorsCount: 21,
+      assignedTicketsCount: 1,
       avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Kamil&backgroundColor=c0aede",
       phone: "+48 505 556 677",
     },
@@ -1583,6 +1592,11 @@ export default function App() {
   const [selectedTicketId, setSelectedTicketId] = useState("TCK-104");
   const [isNewTicketModalOpen, setIsNewTicketModalOpen] = useState(false);
   const [newTicketInitialContext, setNewTicketInitialContext] = useState(null);
+
+  // Filtry kontekstowe dla Koordynatora (wg deweloperów z zespołu)
+  const [developerErrorFilter, setDeveloperErrorFilter] = useState(null);
+  const [developerTicketFilter, setDeveloperTicketFilter] = useState(null);
+  const [profileInitialTab, setProfileInitialTab] = useState("account");
 
   const unreadTicketsCount = tickets.filter((t) => t.unreadByClient).length;
 
@@ -1681,6 +1695,8 @@ export default function App() {
               setSelectedTicketId={setSelectedTicketId}
               onOpenNewTicket={handleOpenNewTicket}
               showToast={showToast}
+              developerFilter={developerTicketFilter}
+              setDeveloperFilter={setDeveloperTicketFilter}
             />
           )}
           {currentView === "komunikaty" && (
@@ -1722,6 +1738,8 @@ export default function App() {
               onOpenTicket={handleOpenTicketThread}
               onOpenNewTicket={handleOpenNewTicket}
               showToast={showToast}
+              developerFilter={developerErrorFilter}
+              setDeveloperFilter={setDeveloperErrorFilter}
             />
           )}
           {currentView === "raportowanie" && (
@@ -1771,6 +1789,15 @@ export default function App() {
               clientProfile={clientProfile}
               setClientProfile={setClientProfile}
               showToast={showToast}
+              initialTab={profileInitialTab}
+              onViewMemberErrors={(member) => {
+                setDeveloperErrorFilter(member.name);
+                setCurrentView("raport-bledy");
+              }}
+              onViewMemberTickets={(member) => {
+                setDeveloperTicketFilter(member.name);
+                setCurrentView("tickety");
+              }}
             />
           )}
         </main>
@@ -3107,6 +3134,8 @@ function TicketsPageView({
   setSelectedTicketId,
   onOpenNewTicket,
   showToast,
+  developerFilter = null,
+  setDeveloperFilter = null,
 }) {
   const [activeFilterStatus, setActiveFilterStatus] = useState("all");
   const [activeFilterContext, setActiveFilterContext] = useState("all");
@@ -3144,7 +3173,12 @@ function TicketsPageView({
       ticket.title.toLowerCase().includes(q) ||
       ticket.contextTitle.toLowerCase().includes(q) ||
       ticket.assignedAuditor.name.toLowerCase().includes(q);
-    return matchesStatus && matchesContext && matchesSearch;
+    const matchesDeveloper =
+      !developerFilter ||
+      ticket.assignedDeveloper === developerFilter ||
+      ticket.title.toLowerCase().includes(developerFilter.toLowerCase()) ||
+      ticket.contextTitle?.toLowerCase().includes(developerFilter.toLowerCase());
+    return matchesStatus && matchesContext && matchesSearch && matchesDeveloper;
   });
 
   const handleSendReply = (e) => {
@@ -3338,6 +3372,31 @@ function TicketsPageView({
             </div>
           </div>
         </div>
+
+        {/* Baner odfiltrowania dla dewelopera */}
+        {developerFilter && (
+          <div className="max-w-[1600px] w-full mx-auto px-4 sm:px-8 lg:px-12 pb-2">
+            <div className="p-3 bg-gradient-to-r from-blue-50 via-indigo-50/50 to-white border border-blue-200 rounded-xl flex items-center justify-between gap-3 shadow-2xs">
+              <div className="flex items-center gap-2.5">
+                <Users size={16} className="text-[#0038F8]" />
+                <span className="text-xs font-bold text-slate-900">
+                  Odfiltrowano tickety przypisane do dewelopera: <strong className="text-[#0038F8]">{developerFilter}</strong>
+                </span>
+                <span className="text-[10px] font-bold text-blue-700 bg-blue-100 px-2 py-0.5 rounded">
+                  {filteredTickets.length} wyników
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setDeveloperFilter && setDeveloperFilter(null)}
+                className="text-xs font-bold text-[#0038F8] hover:text-red-600 flex items-center gap-1 cursor-pointer"
+              >
+                <X size={13} />
+                <span>Wyczyść filtr dewelopera</span>
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Główny obszar dwukolumnowy: dokładnie ten sam padding poziomy px-4 sm:px-8 lg:px-12 */}
         <div className="flex-1 overflow-hidden max-w-[1600px] w-full mx-auto px-4 sm:px-8 lg:px-12 pt-1 pb-4 sm:pb-6 flex flex-col md:flex-row gap-4 sm:gap-6 min-h-0">
@@ -4896,40 +4955,6 @@ function TopNavbar({
                 W-ally
               </span>
             </button>
-
-            {/* LOGO KLIENTA (NP. ERSTE) W NAGŁÓWKU - BEZ ZAOKRĄGLEŃ I BEZ PRZYCINANIA */}
-            {clientProfile && (
-              <div className="hidden lg:flex items-center gap-3 pl-4 border-l border-slate-200">
-                {clientProfile.orgLogo && (
-                  <button
-                    type="button"
-                    onClick={() => setCurrentView("profil")}
-                    className="h-8 flex items-center justify-center shrink-0 cursor-pointer focus:outline-none"
-                    title="Przejdź do profilu organizacji"
-                  >
-                    <img
-                      src={clientProfile.orgLogo}
-                      alt={clientProfile.orgAltText || clientProfile.orgName}
-                      className="h-7 w-auto max-h-7 max-w-[130px] object-contain block"
-                      style={{ borderRadius: 0 }}
-                      onError={(e) => {
-                        if (e.currentTarget.src !== "./logos/erste.png") {
-                          e.currentTarget.src = "./logos/erste.png";
-                        }
-                      }}
-                    />
-                  </button>
-                )}
-                <button
-                  type="button"
-                  onClick={() => setCurrentView("profil")}
-                  className="text-xs font-bold text-slate-700 hover:text-[#0038F8] transition-colors cursor-pointer flex items-center gap-1.5"
-                  title="Konfiguracja organizacji i logo"
-                >
-                  <span>{clientProfile.orgShortName || clientProfile.orgName}</span>
-                </button>
-              </div>
-            )}
           </div>
 
           {/* ŚRODEK: POZIOME MENU (DESKTOP) */}
@@ -5103,9 +5128,10 @@ function TopNavbar({
                     <button
                       onClick={() => {
                         setIsProfileMenuOpen(false);
+                        setProfileInitialTab("account");
                         setCurrentView("profil");
                       }}
-                      className={`w-full flex items-center justify-between px-4 py-2 text-xs font-bold transition-colors cursor-pointer ${
+                      className={`w-full flex items-center justify-between px-4 py-2.5 text-xs font-bold transition-colors cursor-pointer ${
                         currentView === "profil"
                           ? "bg-blue-50 text-[#0038F8]"
                           : "text-slate-700 hover:bg-slate-50"
@@ -5120,38 +5146,11 @@ function TopNavbar({
                               : "text-slate-500"
                           }
                         />
-                        <span>Mój profil</span>
+                        <span>Zarządzaj kontem</span>
                       </div>
                       <span className="text-[10px] text-slate-400 font-semibold">
-                        Konto
+                        Profil & Zespół
                       </span>
-                    </button>
-                    <button
-                      onClick={() => {
-                        setIsProfileMenuOpen(false);
-                        setCurrentView("profil");
-                      }}
-                      className="w-full flex items-center justify-between px-4 py-2 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
-                    >
-                      <div className="flex items-center gap-2.5">
-                        <Building2 size={15} className="text-[#0038F8]" />
-                        <span>Logo i profil organizacji</span>
-                      </div>
-                      {clientProfile?.orgLogo && (
-                        <div className="h-5 flex items-center justify-center shrink-0">
-                          <img
-                            src={clientProfile.orgLogo}
-                            alt=""
-                            className="max-h-5 w-auto max-w-[45px] object-contain block"
-                            style={{ borderRadius: 0 }}
-                            onError={(e) => {
-                              if (e.currentTarget.src !== "./logos/erste.png") {
-                                e.currentTarget.src = "./logos/erste.png";
-                              }
-                            }}
-                          />
-                        </div>
-                      )}
                     </button>
                     <button
                       onClick={() => {
@@ -5473,14 +5472,6 @@ function DashboardView({
         }
         actions={
           <>
-            <button
-              onClick={() => setView("profil")}
-              className="flex items-center gap-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 px-3.5 py-2.5 rounded-xl text-sm font-bold shadow-xs transition-colors cursor-pointer group"
-              title="Konfiguruj profil organizacji i logo klienta"
-            >
-              <Building2 size={16} className="text-[#0038F8] group-hover:scale-110 transition-transform" />
-              <span>Profil organizacji & Logo</span>
-            </button>
             <button
               onClick={() => setView("raportowanie")}
               className="flex items-center gap-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 px-4 py-2.5 rounded-xl text-sm font-bold shadow-xs transition-colors cursor-pointer"
@@ -10250,7 +10241,56 @@ function ReportErrorsView({
   onOpenTicket,
   onOpenNewTicket,
   showToast,
+  developerFilter = null,
+  setDeveloperFilter = null,
 }) {
+  const allErrors = [
+    {
+      id: "ERR-204",
+      title: "Kontrast indykatora w formularzu przelewu (aktywny stan checkboxa)",
+      subtext: "1.4.11 Kontrast elementów nietekstowych (WCAG 2.1 / 2.2 AA)",
+      initialExpanded: true,
+      initialStatus: "W pracach Dev",
+      initialDevTeam: "Zespół Bankowości Internetowej (Frontend)",
+      assignedDeveloper: "Marek Kowalski",
+      initialJiraUrl: "https://jira.bank.pl/browse/FE-1082",
+    },
+    {
+      id: "#001",
+      title: "Brak alternatywy tekstowej dla obrazka promocyjnego.",
+      subtext: "1.1.1 Treść nietekstowa, 1.4.3 Kontrast",
+      initialExpanded: false,
+      initialStatus: "W pracach Dev",
+      initialDevTeam: "Zespół Bankowości Internetowej (Frontend)",
+      assignedDeveloper: "Marek Kowalski",
+      initialJiraUrl: "https://jira.bank.pl/browse/FE-1082",
+    },
+    {
+      id: "#002",
+      title: "Zbyt niski kontrast tekstu w stopce.",
+      subtext: "1.4.3 Kontrast (Minimalny)",
+      initialExpanded: false,
+      initialStatus: "Poprawione (do re-audytu)",
+      initialDevTeam: "Zespół Aplikacji Mobilnych (iOS)",
+      assignedDeveloper: "Aleksandra Nowak",
+      initialJiraUrl: "https://jira.bank.pl/browse/FE-1044",
+    },
+    {
+      id: "#003",
+      title: "Brak widocznego fokusa na przycisku zatwierdzenia",
+      subtext: "2.4.7 Widoczny fokus",
+      initialExpanded: false,
+      initialStatus: "Do naprawy",
+      initialDevTeam: "Zespół Aplikacji Mobilnych (Android)",
+      assignedDeveloper: "Paweł Wiśniewski",
+      initialJiraUrl: "",
+    },
+  ];
+
+  const displayedErrors = developerFilter
+    ? allErrors.filter((e) => e.assignedDeveloper === developerFilter)
+    : allErrors;
+
   return (
     <div data-testid="report-errors-view" className="flex-1 flex flex-col md:h-full w-full md:overflow-hidden">
       <ViewHeader
@@ -10258,22 +10298,40 @@ function ReportErrorsView({
           { label: "Pulpit", onClick: () => setView("przeglad") },
           { label: "Audyty", onClick: () => setView("raporty") },
           { label: "Portal informacyjny", onClick: () => setView("raport-szczegoly") },
-          { label: 'Błędy: Podstrona "konta"' },
+          { label: developerFilter ? `Błędy dewelopera: ${developerFilter}` : 'Błędy: Podstrona "konta"' },
         ]}
         badges={
-          <Badge variant="neutral">
-            <User size={13} className="text-slate-400 shrink-0" /> Piotr Smułkowski
-          </Badge>
+          <div className="flex items-center gap-2">
+            <Badge variant="neutral">
+              <User size={13} className="text-slate-400 shrink-0" /> Piotr Smułkowski
+            </Badge>
+            {developerFilter && (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-extrabold bg-blue-50 text-[#0038F8] border border-blue-200">
+                <Users size={13} /> {developerFilter}
+              </span>
+            )}
+          </div>
         }
-        title='Edytor elementu: Podstrona "konta"'
-        subtitle="Zidentyfikowane błędy i niezgodności ze standardem WCAG 2.1 AA na wybranej podstronie."
+        title={developerFilter ? `Błędy przypisane: ${developerFilter}` : 'Edytor elementu: Podstrona "konta"'}
+        subtitle={
+          developerFilter
+            ? `Lista otwartych barier dostępności i zadań naprawczych przypisanych do dewelopera ${developerFilter}.`
+            : "Zidentyfikowane błędy i niezgodności ze standardem WCAG 2.1 AA na wybranej podstronie."
+        }
         actions={
           <div className="flex items-center gap-2 flex-wrap">
             <button
-              onClick={() => setView("raport-szczegoly")}
+              onClick={() => {
+                if (developerFilter) {
+                  setDeveloperFilter && setDeveloperFilter(null);
+                  setView("profil");
+                } else {
+                  setView("raport-szczegoly");
+                }
+              }}
               className="flex items-center gap-1.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 px-3.5 py-2 rounded-lg font-bold shadow-xs transition-colors text-xs cursor-pointer"
             >
-              <ArrowLeft size={14} /> <span>Wróć</span>
+              <ArrowLeft size={14} /> <span>{developerFilter ? "Wróć do Zespołu" : "Wróć"}</span>
             </button>
             <button
               onClick={() =>
@@ -10303,7 +10361,7 @@ function ReportErrorsView({
             <div className="flex items-center bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-lg gap-2 text-xs font-bold">
               <span className="text-slate-400">KANAŁ: <span className="text-slate-700 font-extrabold">WWW</span></span>
               <span className="text-slate-300">|</span>
-              <span className="text-red-600 font-extrabold">PRIORYTETOWE: 2</span>
+              <span className="text-red-600 font-extrabold">WYNIKI: {displayedErrors.length}</span>
               <span className="text-slate-300">|</span>
               <span className="text-emerald-600 font-extrabold">89%</span>
             </div>
@@ -10313,6 +10371,39 @@ function ReportErrorsView({
 
       <div className="flex-1 md:overflow-y-auto bg-[#f8fafc] w-full">
         <div className="max-w-[1600px] mx-auto w-full p-4 sm:p-8 lg:p-12 flex flex-col gap-6">
+
+          {/* BANER ODFILTROWANIA DLA DEWELOPERA */}
+          {developerFilter && (
+            <div className="p-4 bg-gradient-to-r from-blue-50 via-indigo-50/50 to-white border border-blue-200 rounded-2xl flex items-center justify-between gap-4 shadow-xs">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-blue-100 text-[#0038F8] flex items-center justify-center shrink-0">
+                  <Users size={20} />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-extrabold text-slate-900">
+                      Odfiltrowano błędy dla dewelopera: <strong className="text-[#0038F8]">{developerFilter}</strong>
+                    </span>
+                    <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded bg-blue-100 text-[#0038F8]">
+                      {displayedErrors.length} otwartych zadań
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-500 font-medium mt-0.5">
+                    Wyświetlasz wyłącznie błędy przypisane do tego członka Twojego zespołu.
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setDeveloperFilter && setDeveloperFilter(null)}
+                className="px-3 py-1.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-xl text-xs font-bold shadow-2xs transition-colors flex items-center gap-1.5 cursor-pointer shrink-0"
+              >
+                <X size={14} className="text-slate-400" />
+                <span>Wyczyść filtr (pokaż wszystkie)</span>
+              </button>
+            </div>
+          )}
+
           <Card className="p-4 sm:p-5">
         <div className="flex flex-col lg:flex-row lg:items-end gap-4">
           <div className="flex-1 w-full">
@@ -10367,70 +10458,31 @@ function ReportErrorsView({
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4 sm:mb-6">
           <h2 className="text-[16px] sm:text-lg font-bold text-slate-900">
-            Zgłoszone błędy (4)
+            Zgłoszone błędy ({displayedErrors.length})
           </h2>
           <span className="text-xs font-bold text-slate-500 bg-slate-100 px-3 py-1 rounded-xl">
-            Znaleziono: 4 błędy
+            Znaleziono: {displayedErrors.length} błędy
           </span>
         </div>
         <div className="flex flex-col gap-3 sm:gap-4">
-          {/* BŁĄD ERR-204 POWIĄZANY Z TICKETEM TCK-104 */}
-          <ErrorAccordionItem
-            id="ERR-204"
-            title="Kontrast indykatora w formularzu przelewu (aktywny stan checkboxa)"
-            subtext="1.4.11 Kontrast elementów nietekstowych (WCAG 2.1 / 2.2 AA)"
-            initialExpanded={true}
-            initialStatus="W pracach Dev"
-            initialDevTeam="Zespół Bankowości Internetowej (Frontend)"
-            initialJiraUrl="https://jira.bank.pl/browse/FE-1082"
-            onOpenReaudit={onOpenReaudit}
-            tickets={tickets}
-            onOpenTicket={onOpenTicket}
-            onOpenNewTicket={onOpenNewTicket}
-            showToast={showToast}
-          />
-          <ErrorAccordionItem
-            id="#001"
-            title="Brak alternatywy tekstowej dla obrazka promocyjnego."
-            subtext="1.1.1 Treść nietekstowa, 1.4.3 Kontrast"
-            initialExpanded={false}
-            initialStatus="W pracach Dev"
-            initialDevTeam="Zespół Bankowości Internetowej (Frontend)"
-            initialJiraUrl="https://jira.bank.pl/browse/FE-1082"
-            onOpenReaudit={onOpenReaudit}
-            tickets={tickets}
-            onOpenTicket={onOpenTicket}
-            onOpenNewTicket={onOpenNewTicket}
-            showToast={showToast}
-          />
-          <ErrorAccordionItem
-            id="#002"
-            title="Zbyt niski kontrast tekstu w stopce."
-            subtext="1.4.3 Kontrast (Minimalny)"
-            initialExpanded={false}
-            initialStatus="Poprawione (do re-audytu)"
-            initialDevTeam="Zespół Bankowości Internetowej (Frontend)"
-            initialJiraUrl="https://jira.bank.pl/browse/FE-1044"
-            onOpenReaudit={onOpenReaudit}
-            tickets={tickets}
-            onOpenTicket={onOpenTicket}
-            onOpenNewTicket={onOpenNewTicket}
-            showToast={showToast}
-          />
-          <ErrorAccordionItem
-            id="#003"
-            title="Brak widocznego fokusa na przycisku zatwierdzenia"
-            subtext="2.4.7 Widoczny fokus"
-            initialExpanded={false}
-            initialStatus="Do naprawy"
-            initialDevTeam="Zespół Bankowości Internetowej (Frontend)"
-            initialJiraUrl=""
-            onOpenReaudit={onOpenReaudit}
-            tickets={tickets}
-            onOpenTicket={onOpenTicket}
-            onOpenNewTicket={onOpenNewTicket}
-            showToast={showToast}
-          />
+          {displayedErrors.map((err) => (
+            <ErrorAccordionItem
+              key={err.id}
+              id={err.id}
+              title={err.title}
+              subtext={err.subtext}
+              initialExpanded={err.initialExpanded}
+              initialStatus={err.initialStatus}
+              initialDevTeam={err.initialDevTeam}
+              assignedDeveloper={err.assignedDeveloper}
+              initialJiraUrl={err.initialJiraUrl}
+              onOpenReaudit={onOpenReaudit}
+              tickets={tickets}
+              onOpenTicket={onOpenTicket}
+              onOpenNewTicket={onOpenNewTicket}
+              showToast={showToast}
+            />
+          ))}
         </div>
       </div>
         </div>
@@ -10446,6 +10498,7 @@ function ErrorAccordionItem({
   initialExpanded = false,
   initialStatus = "Do naprawy",
   initialDevTeam = DEV_TEAMS_LIST[0],
+  assignedDeveloper = "",
   initialJiraUrl = "",
   onOpenReaudit,
   tickets = [],
@@ -10544,6 +10597,14 @@ function ErrorAccordionItem({
             <Code2 size={12} className="shrink-0" />
             <span>{remediationStatus}</span>
           </span>
+
+          {/* Przypisany deweloper */}
+          {assignedDeveloper && (
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+              <User size={12} className="text-[#0038F8]" />
+              <span>{assignedDeveloper}</span>
+            </span>
+          )}
 
           {/* Ticket badge on error header */}
           {linkedTicket ? (

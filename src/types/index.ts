@@ -218,6 +218,7 @@ export interface TeamMember {
   status: "active" | "invited";
   openErrorsCount: number;
   resolvedErrorsCount: number;
+  assignedTicketsCount?: number;
   avatar?: string;
   phone?: string;
 }
