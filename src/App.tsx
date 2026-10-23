@@ -8137,20 +8137,20 @@ function BazaUslugContainer({ currentView, setView, onOpenReaudit, showToast }) 
                 <Library size={24} />
               </div>
               <h3 className="text-base font-extrabold text-slate-800">
-                {selectedCategory !== "all"
+                {activeCategory !== "all_processes" && activeCategory !== null
                   ? `Brak procesów w kategorii: ${currentCategoryObj.label}`
                   : "Brak procesów spełniających wybrane kryteria"}
               </h3>
               <p className="text-xs sm:text-sm text-slate-500 max-w-lg mx-auto mt-1.5 leading-relaxed">
-                {selectedCategory !== "all"
+                {activeCategory !== "all_processes" && activeCategory !== null
                   ? `W wybranym obszarze bankowym nie zarejestrowano jeszcze procesów cyfrowych w bazie lub procesy oczekują na wstępny audyt EAA / WCAG.`
                   : "W wybranej kombinacji filtrów lub zapytaniu wyszukiwania nie znaleziono pasujących procesów."}
               </p>
               <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
-                {selectedCategory !== "all" && (
+                {activeCategory !== "all_processes" && activeCategory !== null && (
                   <button
                     type="button"
-                    onClick={() => setSelectedCategory("platnicze")}
+                    onClick={() => setActiveCategory("platnicze")}
                     className="px-4 py-2.5 bg-blue-50 hover:bg-blue-100 text-[#0038F8] text-xs font-bold rounded-xl transition-colors cursor-pointer border border-blue-200"
                   >
                     Wróć do: Usługi płatnicze (50 procesów)
@@ -8159,7 +8159,7 @@ function BazaUslugContainer({ currentView, setView, onOpenReaudit, showToast }) 
                 <button
                   type="button"
                   onClick={() => {
-                    setSelectedCategory("all");
+                    setActiveCategory("all_processes");
                     setSearchQuery("");
                     setChannelFilter("all");
                     setScoreFilter("all");
@@ -9048,7 +9048,6 @@ function RaportyView({ setView, onOpenReaudit, showToast }) {
     activeTimeRange,
     dateFrom,
     dateTo,
-    onlyCritical,
     sortBy,
   ]);
 
@@ -11656,10 +11655,6 @@ function ServicesFilterSection({
   setServiceProcess,
   serviceChannel,
   setServiceChannel,
-  serviceSla,
-  setServiceSla,
-  servicePeriod,
-  setServicePeriod,
   activeDropdown,
   toggleDropdown,
   clearServiceFilters,
@@ -12752,10 +12747,6 @@ function ReportingModuleView({ setView, showToast }) {
                 setServiceProcess={setServiceProcess}
                 serviceChannel={serviceChannel}
                 setServiceChannel={setServiceChannel}
-                serviceSla={serviceSla}
-                setServiceSla={setServiceSla}
-                servicePeriod={servicePeriod}
-                setServicePeriod={setServicePeriod}
                 activeDropdown={activeDropdown}
                 toggleDropdown={toggleDropdown}
                 clearServiceFilters={clearServiceFilters}
