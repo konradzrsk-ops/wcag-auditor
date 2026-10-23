@@ -81,6 +81,27 @@ const DEFAULT_TOMASZ_PROFILE: PersonProfileData = {
   bio: "Główny opiekun klienta i pierwsza osoba do kontaktu dla Koordynatora Dostępności. Odpowiada za budowanie ustaleń biznesowych i formalnych, kalkulacje oraz wyceny pakietów audytów, formalności umowne oraz sprawną dystrybucję i zlecanie prac dedykowanym audytorom WCAG w W-ally.",
 };
 
+// Domyślny profil Piotra Smułkowskiego (Lead WCAG Auditor)
+const DEFAULT_PIOTR_AUDITOR_PROFILE: PersonProfileData = {
+  id: "piotr-smulkowski",
+  name: "Piotr Smułkowski",
+  role: "Lead WCAG Auditor & Accessibility Expert",
+  type: "auditor",
+  avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=PiotrSmulkowski&backgroundColor=b6e3f4",
+  email: "p.smulkowski@wcag-auditor.pl",
+  phone: "+48 601 234 567",
+  organization: "W-ally / Zespół Audytorów WCAG",
+  location: "Warszawa / Zdalnie",
+  status: "Dostępny do konsultacji technicznych",
+  specialization: "auditor",
+  specializationLabel: "Certyfikowany Audytor WCAG 2.1 / 2.2 AA (IAAP WAS / CPACC)",
+  assignedServices: ["Serwis transakcyjny banku", "Aplikacja mobilna iOS & Android", "Formularze i wnioski"],
+  openErrorsCount: 6,
+  resolvedErrorsCount: 142,
+  assignedTicketsCount: 4,
+  bio: "Główny audytor dostępności cyfrowej (Lead WCAG Auditor). Certyfikowany ekspert IAAP (WAS – Web Accessibility Specialist, CPACC). Odpowiada za bezpośrednie audytowanie systemów bankowości cyfrowej, zaawansowane testy z technologiami asystującymi (NVDA, JAWS, VoiceOver), analizę semantyki HTML5/WAI-ARIA oraz przygotowywanie formalnych rekomendacji technicznych dla zespołów deweloperskich.",
+};
+
 // Domyślny profil Koordynatora (Kinga Wróblewska)
 const createCoordinatorProfile = (clientProfile?: ClientProfile): PersonProfileData => ({
   id: "kinga-wroblewska",
@@ -110,6 +131,13 @@ export function PersonProfileView({
 }: PersonProfileViewProps) {
   // Rozpoznanie danych osoby na podstawie wejścia
   const profileData: PersonProfileData = React.useMemo(() => {
+    if (
+      person === "Piotr Smułkowski" ||
+      (typeof person === "object" && "name" in person && person.name === "Piotr Smułkowski") ||
+      (typeof person === "object" && "type" in person && person.type === "auditor")
+    ) {
+      return DEFAULT_PIOTR_AUDITOR_PROFILE;
+    }
     if (!person || person === "Tomasz Straszak" || (typeof person === "object" && "name" in person && person.name === "Tomasz Straszak")) {
       return DEFAULT_TOMASZ_PROFILE;
     }
@@ -143,7 +171,8 @@ export function PersonProfileView({
 
   const isAccountManager = profileData.type === "manager" || profileData.name.includes("Tomasz Straszak");
   const isCoordinator = profileData.type === "coordinator" || profileData.name.includes("Kinga Wróblewska");
-  const isDeveloper = !isAccountManager && !isCoordinator;
+  const isAuditor = profileData.type === "auditor" || profileData.name.includes("Piotr Smułkowski");
+  const isDeveloper = !isAccountManager && !isCoordinator && !isAuditor;
 
   // Stan formularza rezerwacji 30-minutowego spotkania z Tomaszem
   const [selectedDate, setSelectedDate] = useState("2026-10-24");
@@ -221,6 +250,8 @@ export function PersonProfileView({
     if (backView === "profil") return "Wróć do: Zarządzaj kontem / Zespół";
     if (backView === "tickety") return "Wróć do: Konsultacje i tickety";
     if (backView === "raport-bledy") return "Wróć do: Rejestr błędów";
+    if (backView === "reklamacja-szczegoly") return "Wróć do: Szczegóły reklamacji";
+    if (backView === "reklamacje") return "Wróć do: Rejestr skarg i reklamacji";
     return "Wróć do: Pulpit";
   };
 
@@ -252,18 +283,28 @@ export function PersonProfileView({
                   ? "bg-blue-50 text-[#0038F8] border-blue-200"
                   : isCoordinator
                   ? "bg-blue-50 text-[#0038F8] border-blue-200"
+                  : isAuditor
+                  ? "bg-emerald-50 text-emerald-800 border-emerald-200"
                   : "bg-purple-50 text-purple-800 border-purple-200"
               }`}
             >
               <span
                 className={`w-2 h-2 rounded-full ${
-                  isAccountManager ? "bg-[#0038F8]" : isCoordinator ? "bg-[#0038F8]" : "bg-purple-600"
+                  isAccountManager
+                    ? "bg-[#0038F8]"
+                    : isCoordinator
+                    ? "bg-[#0038F8]"
+                    : isAuditor
+                    ? "bg-emerald-600"
+                    : "bg-purple-600"
                 } inline-block animate-pulse`}
               />
               {isAccountManager
                 ? "Dedykowany Opiekun Klienta W-ally"
                 : isCoordinator
                 ? "Koordynator Klienta"
+                : isAuditor
+                ? "Certyfikowany Audytor WCAG W-ally"
                 : "Członek Zespołu Dev"}
             </span>
           </div>
@@ -794,6 +835,217 @@ export function PersonProfileView({
                       </span>
                     </div>
                   ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ======================================================== */}
+        {/* SEKCJA DEDYKOWANA DLA AUDYTORA WCAG (PIOTR SMUŁKOWSKI)    */}
+        {/* ======================================================== */}
+        {isAuditor && (
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <div className="lg:col-span-8 flex flex-col gap-6">
+              {/* KARTA KOMPETENCJI I METODOLOGII AUDYTORSKIEJ */}
+              <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs">
+                <div className="flex items-center gap-2.5 mb-4">
+                  <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0 border border-emerald-200">
+                    <Award size={20} />
+                  </div>
+                  <div>
+                    <h2 className="text-base font-bold text-slate-900">
+                      Certyfikaty i metodologia audytorska
+                    </h2>
+                    <p className="text-xs text-slate-500">
+                      Standardy badania dostępności cyfrowej dla: {profileData.organization}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 mb-5">
+                  <div className="p-3.5 bg-emerald-50/50 rounded-xl border border-emerald-200/80">
+                    <span className="text-[11px] font-bold text-emerald-800 uppercase tracking-wider block">
+                      Certyfikacja IAAP
+                    </span>
+                    <span className="text-sm font-extrabold text-slate-900 mt-1 block">
+                      WAS & CPACC
+                    </span>
+                    <span className="text-[11px] text-emerald-700 font-medium mt-1 block">
+                      Międzynarodowy certyfikat eksperta
+                    </span>
+                  </div>
+
+                  <div className="p-3.5 bg-blue-50/50 rounded-xl border border-blue-200/80">
+                    <span className="text-[11px] font-bold text-[#0038F8] uppercase tracking-wider block">
+                      Zakres audytów
+                    </span>
+                    <span className="text-sm font-extrabold text-slate-900 mt-1 block">
+                      WCAG 2.1 / 2.2 AA & EAA
+                    </span>
+                    <span className="text-[11px] text-slate-600 font-medium mt-1 block">
+                      Pełna zgodność z Europejskim Aktem
+                    </span>
+                  </div>
+
+                  <div className="p-3.5 bg-indigo-50/50 rounded-xl border border-indigo-200/80">
+                    <span className="text-[11px] font-bold text-indigo-700 uppercase tracking-wider block">
+                      Zatwierdzone poprawki
+                    </span>
+                    <span className="text-sm font-extrabold text-slate-900 mt-1 block">
+                      142 pomyślne re-audyty
+                    </span>
+                    <span className="text-[11px] text-indigo-600 font-medium mt-1 block">
+                      98.4% skuteczności fixów
+                    </span>
+                  </div>
+                </div>
+
+                <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-2.5">
+                  Środowiska testowe i technologie asystujące:
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200/70 flex items-center gap-2.5">
+                    <CheckCircle2 size={16} className="text-emerald-600 shrink-0" />
+                    <div>
+                      <span className="font-bold text-slate-800 block">Czytniki ekranu: NVDA & JAWS</span>
+                      <span className="text-[11px] text-slate-500">Testy w Chrome, Firefox i Edge pod Windows 11</span>
+                    </div>
+                  </div>
+                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200/70 flex items-center gap-2.5">
+                    <CheckCircle2 size={16} className="text-emerald-600 shrink-0" />
+                    <div>
+                      <span className="font-bold text-slate-800 block">Apple VoiceOver & TalkBack</span>
+                      <span className="text-[11px] text-slate-500">Testy gestów dotykowych na iOS 17/18 i Android 14/15</span>
+                    </div>
+                  </div>
+                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200/70 flex items-center gap-2.5">
+                    <CheckCircle2 size={16} className="text-emerald-600 shrink-0" />
+                    <div>
+                      <span className="font-bold text-slate-800 block">Klawiatura i pułapki fokusu</span>
+                      <span className="text-[11px] text-slate-500">Kryteria 2.1.1, 2.1.2, 2.4.3, 2.4.7 oraz 2.4.11</span>
+                    </div>
+                  </div>
+                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200/70 flex items-center gap-2.5">
+                    <CheckCircle2 size={16} className="text-emerald-600 shrink-0" />
+                    <div>
+                      <span className="font-bold text-slate-800 block">Analiza semantyki WAI-ARIA 1.2</span>
+                      <span className="text-[11px] text-slate-500">Struktura nagłówków, aria-live, aria-describedby i role</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* AKTYWNE USŁUGI I REKOMENDACJE PRZYPISANE AUDYTOROWI */}
+              <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs">
+                <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3">
+                  Serwisy objęte nadzorem audytorskim:
+                </h3>
+                <div className="space-y-3">
+                  {[
+                    {
+                      name: "Serwis transakcyjny Erste Group (Bankowość Internetowa)",
+                      channel: "Desktop WWW",
+                      status: "Bieżąca obsługa skarg i re-audytów",
+                      score: "85.2%",
+                    },
+                    {
+                      name: "Aplikacja mobilna (Android & iOS)",
+                      channel: "Mobile App",
+                      status: "Przygotowanie rekomendacji dla modułu BLIK i tokenów kolorów",
+                      score: "82.0%",
+                    },
+                    {
+                      name: "Formularze wniosków kredytowych i ROR",
+                      channel: "Web & Mobile",
+                      status: "Weryfikacja dostępności formularzy i komunikatów walidacji",
+                      score: "88.5%",
+                    },
+                  ].map((srv, idx) => (
+                    <div
+                      key={idx}
+                      className="p-3.5 bg-slate-50 rounded-xl border border-slate-200/70 flex items-center justify-between gap-3"
+                    >
+                      <div>
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="text-xs font-extrabold text-slate-900">{srv.name}</span>
+                          <span className="text-[10px] font-bold bg-slate-200/70 text-slate-700 px-2 py-0.5 rounded">
+                            {srv.channel}
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-slate-500">{srv.status}</p>
+                      </div>
+                      <span className="text-sm font-black text-[#0038F8] shrink-0 bg-white px-2.5 py-1 rounded-lg border border-slate-200">
+                        {srv.score}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* KOLUMNA PRAWA - KONSULTACJE TECHNICZNE */}
+            <div className="lg:col-span-4 flex flex-col gap-6">
+              <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs">
+                <div className="flex items-center gap-2 mb-3">
+                  <MessageSquareText size={18} className="text-[#0038F8]" />
+                  <h3 className="text-sm font-bold text-slate-900">
+                    Konsultacja techniczna z audytorem
+                  </h3>
+                </div>
+                <p className="text-xs text-slate-500 mb-4 leading-relaxed">
+                  Masz pytanie dotyczące interpretacji kryteriów WCAG, specyfiki czytnika NVDA lub poprawności kodu? Zadaj pytanie bezpośrednio audytorowi.
+                </p>
+
+                <form onSubmit={handleSendConsultation} className="space-y-3">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">
+                      Temat pytania:
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={consultationSubject}
+                      onChange={(e) => setConsultationSubject(e.target.value)}
+                      placeholder="np. Interpretacja kryterium 1.4.11 w kontrolce..."
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/40"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">
+                      Treść pytania / propozycja kodu:
+                    </label>
+                    <textarea
+                      required
+                      rows={4}
+                      value={consultationMessage}
+                      onChange={(e) => setConsultationMessage(e.target.value)}
+                      placeholder="Opisz wątpliwość techniczną lub wklej fragment kodu..."
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs text-slate-800 leading-relaxed focus:outline-none focus:ring-2 focus:ring-[#0038F8]/40"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="w-full bg-[#0038F8] hover:bg-[#002ECC] text-white py-2.5 rounded-xl font-bold text-xs shadow-xs transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    <Send size={14} />
+                    <span>Przekaż pytanie do audytora</span>
+                  </button>
+                </form>
+              </div>
+
+              {/* BEZPOŚREDNIE DANE KONTAKTOWE */}
+              <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs text-xs space-y-2.5">
+                <span className="font-bold text-slate-800 block">Dedykowane wsparcie eksperckie</span>
+                <div className="text-slate-500">
+                  <span className="block font-semibold text-slate-700">Dni robocze:</span>
+                  <span>Poniedziałek – Piątek, 09:00 – 17:00</span>
+                </div>
+                <div className="text-slate-500">
+                  <span className="block font-semibold text-slate-700">Gwarantowany czas odpowiedzi:</span>
+                  <span className="text-emerald-700 font-bold">Do 4 godzin roboczych (SLA Enterprise)</span>
                 </div>
               </div>
             </div>

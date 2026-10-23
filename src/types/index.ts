@@ -260,5 +260,16 @@ export interface ClientProfile {
 
   // Zespół deweloperski i wykonawczy (Koordynator)
   teamMembers?: TeamMember[];
+
+  // Procedura i kroki rozpatrywania skargi WCAG
+  complaintProcessSteps?: ComplaintProcessStep[];
+}
+
+export interface ComplaintProcessStep {
+  id: string;
+  stepNumber: number;
+  title: string;
+  description: string;
+  responsibleRole?: string;
 }
 

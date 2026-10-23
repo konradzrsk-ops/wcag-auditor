@@ -35,8 +35,11 @@ import {
   X,
   Camera,
   Layers,
+  ArrowUp,
+  ArrowDown,
+  ListOrdered,
 } from "lucide-react";
-import { ClientProfile, TeamMember } from "../../types";
+import { ClientProfile, TeamMember, ComplaintProcessStep } from "../../types";
 
 interface UserProfileViewProps {
   setView: (view: string) => void;
@@ -47,11 +50,50 @@ interface UserProfileViewProps {
     text: string,
     type?: "success" | "info" | "warning" | "danger"
   ) => void;
-  initialTab?: "branding" | "team" | "wcag" | "account" | "notifications";
+  initialTab?: "branding" | "team" | "wcag" | "account" | "notifications" | "complaints";
   onViewMemberErrors?: (member: TeamMember) => void;
   onViewMemberTickets?: (member: TeamMember) => void;
   onViewPersonProfile?: (person: any) => void;
 }
+
+// Domyślna procedura rozpatrywania skargi WCAG w organizacji
+export const DEFAULT_COMPLAINT_PROCESS_STEPS: ComplaintProcessStep[] = [
+  {
+    id: "step-1",
+    stepNumber: 1,
+    title: "Rejestracja skargi i wstępna weryfikacja",
+    description: "Wprowadzenie zgłoszenia klienta, mapowanie na usługę cyfrową i proces biznesowy z Bazy Usług oraz wskazanie naruszonych kryteriów WCAG.",
+    responsibleRole: "Koordynator Dostępności",
+  },
+  {
+    id: "step-2",
+    stepNumber: 2,
+    title: "Analiza ekspercka i diagnoza audytora",
+    description: "Audytor WCAG bada zachowanie kodu, testuje z czytnikami ekranu (NVDA/JAWS/VoiceOver) i formułuje oficjalną rekomendację naprawczą.",
+    responsibleRole: "Certyfikowany Audytor WCAG",
+  },
+  {
+    id: "step-3",
+    stepNumber: 3,
+    title: "Przekazanie do zespołu technicznego i wdrożenie poprawki",
+    description: "Koordynator podpina zadanie w Jira i wyznacza programistę. Deweloper wdraża poprawkę semantyczną i wskaźnik fokusu.",
+    responsibleRole: "Lead Developer / Zespół Frontend",
+  },
+  {
+    id: "step-4",
+    stepNumber: 4,
+    title: "Weryfikacja powdrożeniowa (Re-audyt)",
+    description: "Oficjalny re-audyt przeprowadzony przez audytora potwierdzający usunięcie bariery i zgodność z kryterium sukcesu WCAG.",
+    responsibleRole: "Audytor WCAG & QA",
+  },
+  {
+    id: "step-5",
+    stepNumber: 5,
+    title: "Zamknięcie zgłoszenia i odpowiedź dla klienta",
+    description: "Formalne poinformowanie klienta o sposobie rozwiązania, zaktualizowanie Deklaracji Dostępności banku oraz wpis do Rejestru Skarg.",
+    responsibleRole: "Koordynator Dostępności / Dział Prawny",
+  },
+];
 
 // Domyślny zespół deweloperów i testerów organizacji
 const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
@@ -143,7 +185,7 @@ export function UserProfileView({
   onViewPersonProfile,
 }: UserProfileViewProps) {
   const [activeTab, setActiveTab] = useState<
-    "branding" | "team" | "wcag" | "account" | "notifications"
+    "branding" | "team" | "wcag" | "account" | "notifications" | "complaints"
   >(initialTab || "account");
 
   useEffect(() => {
@@ -152,13 +194,17 @@ export function UserProfileView({
     }
   }, [initialTab]);
 
-  // Kopia robocza formularza z gwarancją obecności zespołu
+  // Kopia robocza formularza z gwarancją obecności zespołu i procedury skarg
   const [formData, setFormData] = useState<ClientProfile>({
     ...clientProfile,
     teamMembers:
       clientProfile.teamMembers && clientProfile.teamMembers.length > 0
         ? clientProfile.teamMembers
         : DEFAULT_TEAM_MEMBERS,
+    complaintProcessSteps:
+      clientProfile.complaintProcessSteps && clientProfile.complaintProcessSteps.length > 0
+        ? clientProfile.complaintProcessSteps
+        : DEFAULT_COMPLAINT_PROCESS_STEPS,
   });
 
   const [hasChanges, setHasChanges] = useState(false);
@@ -198,6 +244,81 @@ export function UserProfileView({
   ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
     setHasChanges(true);
+  };
+
+  // Obsługa edycji i zarządzania krokami procedury skarg (indywidualne dla każdego banku)
+  const handleUpdateStep = (id: string, updates: Partial<ComplaintProcessStep>) => {
+    setFormData((prev) => ({
+      ...prev,
+      complaintProcessSteps: (prev.complaintProcessSteps || DEFAULT_COMPLAINT_PROCESS_STEPS).map(
+        (step) => (step.id === id ? { ...step, ...updates } : step)
+      ),
+    }));
+    setHasChanges(true);
+  };
+
+  const handleAddStep = () => {
+    const currentSteps = formData.complaintProcessSteps || DEFAULT_COMPLAINT_PROCESS_STEPS;
+    const newStepNumber = currentSteps.length + 1;
+    const newStep: ComplaintProcessStep = {
+      id: "step-" + Date.now(),
+      stepNumber: newStepNumber,
+      title: `Nowy etap procedury #${newStepNumber}`,
+      description: "Opisz wymagane działania, weryfikację lub formalności w tym kroku...",
+      responsibleRole: "Koordynator Dostępności",
+    };
+    setFormData((prev) => ({
+      ...prev,
+      complaintProcessSteps: [...currentSteps, newStep],
+    }));
+    setHasChanges(true);
+  };
+
+  const handleRemoveStep = (id: string) => {
+    const currentSteps = formData.complaintProcessSteps || DEFAULT_COMPLAINT_PROCESS_STEPS;
+    if (currentSteps.length <= 1) {
+      if (showToast) {
+        showToast("Nie można usunąć", "Procedura musi zawierać co najmniej jeden krok.", "warning");
+      }
+      return;
+    }
+    const filtered = currentSteps.filter((s) => s.id !== id);
+    const renumbered = filtered.map((s, idx) => ({ ...s, stepNumber: idx + 1 }));
+    setFormData((prev) => ({
+      ...prev,
+      complaintProcessSteps: renumbered,
+    }));
+    setHasChanges(true);
+  };
+
+  const handleMoveStep = (id: string, direction: "up" | "down") => {
+    const currentSteps = [...(formData.complaintProcessSteps || DEFAULT_COMPLAINT_PROCESS_STEPS)];
+    const index = currentSteps.findIndex((s) => s.id === id);
+    if (index === -1) return;
+    const targetIndex = direction === "up" ? index - 1 : index + 1;
+    if (targetIndex < 0 || targetIndex >= currentSteps.length) return;
+
+    const temp = currentSteps[index];
+    currentSteps[index] = currentSteps[targetIndex];
+    currentSteps[targetIndex] = temp;
+
+    const renumbered = currentSteps.map((s, idx) => ({ ...s, stepNumber: idx + 1 }));
+    setFormData((prev) => ({
+      ...prev,
+      complaintProcessSteps: renumbered,
+    }));
+    setHasChanges(true);
+  };
+
+  const handleResetSteps = () => {
+    setFormData((prev) => ({
+      ...prev,
+      complaintProcessSteps: DEFAULT_COMPLAINT_PROCESS_STEPS,
+    }));
+    setHasChanges(true);
+    if (showToast) {
+      showToast("Przywrócono domyślne", "Kroki procedury skarg zostały zresetowane do standardu banku.", "info");
+    }
   };
 
   // Obsługa wgrania pliku logo z dysku komputera
@@ -620,6 +741,22 @@ export function UserProfileView({
             >
               <Bell size={16} />
               <span>Powiadomienia</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveTab("complaints")}
+              className={`flex items-center gap-2 px-4 py-3 border-b-2 font-bold text-sm transition-all whitespace-nowrap cursor-pointer ${
+                activeTab === "complaints"
+                  ? "border-[#0038F8] text-[#0038F8]"
+                  : "border-transparent text-slate-600 hover:text-slate-900 hover:border-slate-300"
+              }`}
+            >
+              <ListOrdered size={16} />
+              <span>Procedura skarg</span>
+              <span className="ml-1 px-2 py-0.2 rounded-full text-[11px] font-extrabold bg-blue-100 text-[#0038F8]">
+                {formData.complaintProcessSteps?.length || 5}
+              </span>
             </button>
           </div>
         </div>
@@ -1771,6 +1908,155 @@ export function UserProfileView({
                       </label>
                     </div>
                   ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ZAKŁADKA: PROCEDURA ROZPATRYWANIA SKARG (BANK-SPECIFIC WORKFLOW) */}
+          {activeTab === "complaints" && (
+            <div className="max-w-4xl space-y-6">
+              <div className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs space-y-5">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+                  <div>
+                    <h3 className="text-base font-extrabold text-slate-900 flex items-center gap-2">
+                      <ListOrdered size={18} className="text-[#0038F8]" />
+                      Procedura i etapy rozpatrywania skargi WCAG
+                    </h3>
+                    <p className="text-xs text-slate-500 font-medium mt-0.5">
+                      Dostosuj kroki postępowania dla organizacji <strong>{formData.orgName}</strong>. Zdefiniowane tutaj kroki wyświetlają się w bocznym panelu formularza dodawania nowej skargi jako instrukcja procesu.
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <button
+                      type="button"
+                      onClick={handleResetSteps}
+                      className="px-3 py-1.5 text-xs font-bold text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors cursor-pointer flex items-center gap-1.5"
+                      title="Przywróć rekomendowane kroki bankowe"
+                    >
+                      <RotateCcw size={13} />
+                      <span>Przywróć domyślne</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleAddStep}
+                      className="px-3.5 py-1.5 text-xs font-bold text-white bg-[#0038F8] hover:bg-[#002ECC] rounded-xl transition-colors cursor-pointer flex items-center gap-1.5 shadow-2xs"
+                    >
+                      <Plus size={14} />
+                      <span>Dodaj krok</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div className="p-3.5 bg-blue-50/70 border border-blue-200/80 rounded-xl text-xs text-blue-900 flex items-start gap-2.5">
+                  <Sparkles size={16} className="text-[#0038F8] shrink-0 mt-0.5" />
+                  <div>
+                    <span className="font-bold block mb-0.5">Procedura bankowa dopasowana do Twojej organizacji:</span>
+                    Każdy bank lub instytucja finansowa posiada własne regulacje dotyczące obsługi wniosków i skarg o zapewnienie dostępności (zgodnie z EAA i Ustawą o Dostępności Cyfrowej). Możesz zmieniać kolejność kroków, ich nazwy, opisy oraz wskazywać role odpowiedzialne (np. Koordynator, Zespół Dev, Audytor WCAG, Dział Prawny).
+                  </div>
+                </div>
+
+                {/* Lista edytowalnych kroków */}
+                <div className="space-y-4 pt-1">
+                  {(formData.complaintProcessSteps || DEFAULT_COMPLAINT_PROCESS_STEPS).map((step, idx, arr) => (
+                    <div
+                      key={step.id}
+                      className="p-5 bg-slate-50/70 rounded-2xl border border-slate-200/80 hover:border-slate-300 transition-colors space-y-4"
+                    >
+                      <div className="flex items-center justify-between gap-3">
+                        <div className="flex items-center gap-2.5">
+                          <span className="w-7 h-7 rounded-lg bg-[#0038F8] text-white flex items-center justify-center font-black text-xs">
+                            {step.stepNumber}
+                          </span>
+                          <span className="font-extrabold text-sm text-slate-900">
+                            Etap {step.stepNumber}: {step.title}
+                          </span>
+                        </div>
+
+                        <div className="flex items-center gap-1">
+                          <button
+                            type="button"
+                            disabled={idx === 0}
+                            onClick={() => handleMoveStep(step.id, "up")}
+                            className="p-1.5 text-slate-500 hover:text-slate-800 disabled:opacity-30 disabled:hover:text-slate-500 rounded-lg hover:bg-slate-200/70 cursor-pointer disabled:cursor-not-allowed"
+                            title="Przesuń krok w górę"
+                          >
+                            <ArrowUp size={14} />
+                          </button>
+                          <button
+                            type="button"
+                            disabled={idx === arr.length - 1}
+                            onClick={() => handleMoveStep(step.id, "down")}
+                            className="p-1.5 text-slate-500 hover:text-slate-800 disabled:opacity-30 disabled:hover:text-slate-500 rounded-lg hover:bg-slate-200/70 cursor-pointer disabled:cursor-not-allowed"
+                            title="Przesuń krok w dół"
+                          >
+                            <ArrowDown size={14} />
+                          </button>
+                          <button
+                            type="button"
+                            disabled={arr.length <= 1}
+                            onClick={() => handleRemoveStep(step.id)}
+                            className="p-1.5 text-red-500 hover:text-red-700 disabled:opacity-30 disabled:hover:text-red-500 rounded-lg hover:bg-red-50 cursor-pointer disabled:cursor-not-allowed ml-1"
+                            title="Usuń ten krok procedury"
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div className="sm:col-span-2">
+                          <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">
+                            Tytuł etapu:
+                          </label>
+                          <input
+                            type="text"
+                            value={step.title}
+                            onChange={(e) => handleUpdateStep(step.id, { title: e.target.value })}
+                            className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/40"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">
+                            Rola odpowiedzialna:
+                          </label>
+                          <input
+                            type="text"
+                            value={step.responsibleRole || ""}
+                            onChange={(e) => handleUpdateStep(step.id, { responsibleRole: e.target.value })}
+                            placeholder="np. Koordynator Dostępności"
+                            className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/40"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">
+                          Opis instrukcji / działań wymaganych w tym etapie:
+                        </label>
+                        <textarea
+                          rows={2}
+                          value={step.description}
+                          onChange={(e) => handleUpdateStep(step.id, { description: e.target.value })}
+                          className="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs text-slate-800 leading-relaxed focus:outline-none focus:ring-2 focus:ring-[#0038F8]/40"
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Podgląd podsumowujący */}
+                <div className="p-4 bg-slate-100/80 rounded-xl border border-slate-200/80 text-xs">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-bold text-slate-700">Podsumowanie procedury:</span>
+                    <span className="text-[11px] font-extrabold text-[#0038F8]">
+                      Liczba kroków: {formData.complaintProcessSteps?.length || 0}
+                    </span>
+                  </div>
+                  <p className="text-slate-500 leading-relaxed text-[11px]">
+                    Zapisane zmiany będą natychmiast widoczne w module <strong>Skargi i Reklamacje → Nowe zgłoszenie</strong> w prawym panelu instruktażowym.
+                  </p>
                 </div>
               </div>
             </div>

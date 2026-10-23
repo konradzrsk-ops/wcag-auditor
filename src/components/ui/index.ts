@@ -52,3 +52,7 @@ export type {
 
 export { Tooltip } from './Tooltip';
 export type { TooltipProps, TooltipPosition } from './Tooltip';
+
+export { WcagCriteriaCombobox, ALL_WCAG_CRITERIA, normalizeCriterion } from './WcagCriteriaCombobox';
+export type { WcagCriteriaComboboxProps, WcagCriterion } from './WcagCriteriaCombobox';
+

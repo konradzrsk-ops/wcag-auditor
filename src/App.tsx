@@ -87,8 +87,9 @@ import {
   RefreshCw,
   Building2,
 } from "lucide-react";
-import { UserProfileView } from "./features/profile/UserProfileView";
+import { UserProfileView, DEFAULT_COMPLAINT_PROCESS_STEPS } from "./features/profile/UserProfileView";
 import { PersonProfileView } from "./features/profile/PersonProfileView";
+import { WcagCriteriaCombobox, ALL_WCAG_CRITERIA, normalizeCriterion } from "./components/ui/WcagCriteriaCombobox";
 import { ClientProfile } from "./types";
 
 // ==========================================
@@ -1157,14 +1158,27 @@ function ComplaintEditModal({ isOpen, onClose, complaint, onSave }) {
     source: COMPLAINT_SOURCES[0],
     status: "Gotowa rekomendacja",
     priority: "Priorytetowy",
-    wcagCriterion: "2.1.1 Klawiatura (Poziom A)",
     channel: "Desktop WWW",
     device: "Desktop Chrome 124 / NVDA 2023.3",
     jiraUrl: "",
+    date: "",
+    slaDeadline: "",
+    service: "",
+    process: "",
+    view: "",
   });
+  const [selectedCriteria, setSelectedCriteria] = useState<string[]>([]);
 
   useEffect(() => {
     if (complaint) {
+      const criteriaList = complaint.wcagCriteriaList && complaint.wcagCriteriaList.length > 0
+        ? complaint.wcagCriteriaList
+        : complaint.wcagCriterion
+        ? complaint.wcagCriterion.split(",").map((s) => s.trim())
+        : ["2.1.1 Klawiatura (Poziom A)"];
+
+      setSelectedCriteria(criteriaList);
+
       setFormData({
         title: complaint.title || "",
         description: complaint.description || "",
@@ -1172,13 +1186,77 @@ function ComplaintEditModal({ isOpen, onClose, complaint, onSave }) {
         source: complaint.source || COMPLAINT_SOURCES[0],
         status: complaint.status || "Gotowa rekomendacja",
         priority: complaint.priority || "Priorytetowy",
-        wcagCriterion: complaint.wcagCriterion || "2.1.1 Klawiatura (Poziom A)",
         channel: complaint.channel || "Desktop WWW",
         device: complaint.device || "Desktop Chrome 124 / NVDA 2023.3",
         jiraUrl: complaint.jiraUrl || "",
+        date: complaint.date || new Date().toLocaleDateString("pl-PL"),
+        slaDeadline: complaint.slaDeadline || "14 dni (SLA standard)",
+        service: complaint.service || complaint.serviceName || mockSharedServicesData[0]?.name || "Usługi płatnicze i powiązane z rachunkiem",
+        process: complaint.process || complaint.processName || "Otwarcie ROR (istniejący)",
+        view: complaint.view || complaint.viewName || "Strona główna ing.pl",
       });
     }
   }, [complaint]);
+
+  // Usługi, procesy i widoki pobierane dynamicznie z Bazy Usług
+  const availableServices = useMemo(() => {
+    const list = mockSharedServicesData.map((s) => s.name);
+    if (formData.service && !list.includes(formData.service)) {
+      return [formData.service, ...list];
+    }
+    return list;
+  }, [formData.service]);
+
+  const availableProcesses = useMemo(() => {
+    const currentServiceObj = mockSharedServicesData.find((s) => s.name === formData.service);
+    if (!currentServiceObj || !currentServiceObj.processes) {
+      return formData.process ? [formData.process] : [];
+    }
+    const list = currentServiceObj.processes.map((p) => p.name);
+    if (formData.process && !list.includes(formData.process)) {
+      return [formData.process, ...list];
+    }
+    return list;
+  }, [formData.service, formData.process]);
+
+  const availableViews = useMemo(() => {
+    const currentServiceObj = mockSharedServicesData.find((s) => s.name === formData.service);
+    if (!currentServiceObj || !currentServiceObj.processes) {
+      return formData.view ? [formData.view] : [];
+    }
+    const currentProcessObj = currentServiceObj.processes.find((p) => p.name === formData.process);
+    if (!currentProcessObj || !currentProcessObj.views) {
+      return formData.view ? [formData.view] : [];
+    }
+    const list = currentProcessObj.views.map((v) => v.name);
+    if (formData.view && !list.includes(formData.view)) {
+      return [formData.view, ...list];
+    }
+    return list;
+  }, [formData.service, formData.process, formData.view]);
+
+  const handleServiceChange = (newService: string) => {
+    const sObj = mockSharedServicesData.find((s) => s.name === newService);
+    const firstProc = sObj?.processes?.[0]?.name || "";
+    const firstView = sObj?.processes?.[0]?.views?.[0]?.name || "";
+    setFormData((prev) => ({
+      ...prev,
+      service: newService,
+      process: firstProc,
+      view: firstView,
+    }));
+  };
+
+  const handleProcessChange = (newProcess: string) => {
+    const sObj = mockSharedServicesData.find((s) => s.name === formData.service);
+    const pObj = sObj?.processes?.find((p) => p.name === newProcess);
+    const firstView = pObj?.views?.[0]?.name || "";
+    setFormData((prev) => ({
+      ...prev,
+      process: newProcess,
+      view: firstView,
+    }));
+  };
 
   if (!isOpen || !complaint) return null;
 
@@ -1186,6 +1264,8 @@ function ComplaintEditModal({ isOpen, onClose, complaint, onSave }) {
     e.preventDefault();
     const ticketKey = (formData.jiraUrl || "").replace(/https?:\/\/[^/]+\/browse\//, "").trim();
     const fullUrl = formData.jiraUrl ? (formData.jiraUrl.startsWith("http") ? formData.jiraUrl : `https://jira.bank.pl/browse/${formData.jiraUrl}`) : "";
+    const criteriaJoined = selectedCriteria.length > 0 ? selectedCriteria.join(", ") : "2.1.1 Klawiatura (Poziom A)";
+
     if (onSave) {
       onSave({
         ...complaint,
@@ -1193,6 +1273,8 @@ function ComplaintEditModal({ isOpen, onClose, complaint, onSave }) {
         responsiblePerson: formData.devTeam,
         jiraUrl: fullUrl,
         jiraTicket: ticketKey,
+        wcagCriterion: criteriaJoined,
+        wcagCriteriaList: selectedCriteria,
       });
     }
   };
@@ -1223,10 +1305,10 @@ function ComplaintEditModal({ isOpen, onClose, complaint, onSave }) {
                 </span>
               </div>
               <h2 id="edit-complaint-title" className="text-lg sm:text-xl font-extrabold text-slate-900 leading-snug">
-                Edycja zgłoszenia i przypisanie osoby odpowiedzialnej
+                Edycja zgłoszenia reklamacji WCAG
               </h2>
               <p className="text-xs text-slate-500 font-medium mt-0.5">
-                Modyfikuj treść skargi, przypisz osobę odpowiedzialną za wdrożenie lub zmień status postępowania.
+                Modyfikuj treść skargi, datę wpłynięcia, SLA, powiązanie z Bazą Usług i kryteria WCAG.
               </p>
             </div>
           </div>
@@ -1250,6 +1332,114 @@ function ComplaintEditModal({ isOpen, onClose, complaint, onSave }) {
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
               className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
+            />
+          </div>
+
+          {/* Daty: Data wpłynięcia i Termin rozwiązania (SLA) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-1.5 flex items-center gap-1.5">
+                <Calendar size={13} className="text-[#0038F8]" />
+                <span>Data wpłynięcia skargi:</span>
+              </label>
+              <input
+                type="text"
+                value={formData.date}
+                onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                placeholder="np. 20.04.2026"
+                className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-1.5 flex items-center gap-1.5">
+                <Clock size={13} className="text-amber-600" />
+                <span>Termin rozwiązania (SLA):</span>
+              </label>
+              <input
+                type="text"
+                value={formData.slaDeadline}
+                onChange={(e) => setFormData({ ...formData, slaDeadline: e.target.value })}
+                placeholder="np. 27.04.2026 (pozostało 5 dni)"
+                className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
+              />
+            </div>
+          </div>
+
+          {/* Mapowanie z Bazy Usług: Usługa -> Proces -> Widok */}
+          <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200/80 space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                <Layers size={13} className="text-[#0038F8]" />
+                <span>Mapowanie architektury (Baza Usług):</span>
+              </span>
+              <span className="text-[10px] text-blue-700 font-bold bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
+                Pobierane z modułu Baza Usług
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div>
+                <label className="block text-[11px] font-bold text-slate-600 mb-1">
+                  Usługa cyfrowa:
+                </label>
+                <select
+                  value={formData.service}
+                  onChange={(e) => handleServiceChange(e.target.value)}
+                  className="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
+                >
+                  {availableServices.map((srv) => (
+                    <option key={srv} value={srv}>
+                      {srv}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-bold text-slate-600 mb-1">
+                  Proces biznesowy:
+                </label>
+                <select
+                  value={formData.process}
+                  onChange={(e) => handleProcessChange(e.target.value)}
+                  className="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
+                >
+                  {availableProcesses.map((proc) => (
+                    <option key={proc} value={proc}>
+                      {proc}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-bold text-slate-600 mb-1">
+                  Ekran / Widok:
+                </label>
+                <select
+                  value={formData.view}
+                  onChange={(e) => setFormData({ ...formData, view: e.target.value })}
+                  className="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
+                >
+                  {availableViews.map((vw) => (
+                    <option key={vw} value={vw}>
+                      {vw}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
+
+          {/* Kryteria WCAG - WcagCriteriaCombobox Multi-Select */}
+          <div>
+            <WcagCriteriaCombobox
+              selectedCriteria={selectedCriteria}
+              onChange={setSelectedCriteria}
+              label="Dotknięte kryteria WCAG (Wyszukiwarka i wybór wielu):"
+              placeholder="Wyszukaj i wybierz kryteria sukcesu WCAG 2.1 / 2.2 AA..."
+              helperText="Zaznacz wszystkie kryteria WCAG powiązane z tą skargą. Możesz wyszukiwać po numerze (np. 1.4.3) lub nazwie."
             />
           </div>
 
@@ -1355,14 +1545,18 @@ function ComplaintEditModal({ isOpen, onClose, complaint, onSave }) {
 
             <div>
               <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                Dotknięte kryterium WCAG:
+                Kanał dostępu:
               </label>
-              <input
-                type="text"
-                value={formData.wcagCriterion}
-                onChange={(e) => setFormData({ ...formData, wcagCriterion: e.target.value })}
-                className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
-              />
+              <select
+                value={formData.channel}
+                onChange={(e) => setFormData({ ...formData, channel: e.target.value })}
+                className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
+              >
+                <option value="Desktop WWW">Desktop WWW</option>
+                <option value="Android">Aplikacja Android</option>
+                <option value="iOS">Aplikacja iOS</option>
+                <option value="Dokumenty">Dokumenty PDF</option>
+              </select>
             </div>
           </div>
 
@@ -1379,34 +1573,16 @@ function ComplaintEditModal({ isOpen, onClose, complaint, onSave }) {
             />
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                Kanał:
-              </label>
-              <select
-                value={formData.channel}
-                onChange={(e) => setFormData({ ...formData, channel: e.target.value })}
-                className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
-              >
-                <option value="Desktop WWW">Desktop WWW</option>
-                <option value="Android">Aplikacja Android</option>
-                <option value="iOS">Aplikacja iOS</option>
-                <option value="Dokumenty">Dokumenty PDF</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                Środowisko i czytnik:
-              </label>
-              <input
-                type="text"
-                value={formData.device}
-                onChange={(e) => setFormData({ ...formData, device: e.target.value })}
-                className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
-              />
-            </div>
+          <div>
+            <label className="block text-xs font-bold text-slate-700 mb-1.5">
+              Środowisko i czytnik ekranu:
+            </label>
+            <input
+              type="text"
+              value={formData.device}
+              onChange={(e) => setFormData({ ...formData, device: e.target.value })}
+              className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
+            />
           </div>
 
           <div className="pt-3 border-t border-slate-200 flex items-center justify-end gap-3">
@@ -1548,6 +1724,9 @@ const INITIAL_CLIENT_PROFILE: ClientProfile = {
       phone: "+48 505 556 677",
     },
   ],
+
+  // Procedura i kroki rozpatrywania skargi WCAG
+  complaintProcessSteps: DEFAULT_COMPLAINT_PROCESS_STEPS,
 };
 
 // ==========================================
@@ -1599,11 +1778,11 @@ export default function App() {
   const [developerErrorFilter, setDeveloperErrorFilter] = useState(null);
   const [developerTicketFilter, setDeveloperTicketFilter] = useState(null);
   const [profileInitialTab, setProfileInitialTab] = useState<
-    "branding" | "team" | "wcag" | "account" | "notifications"
+    "branding" | "team" | "wcag" | "account" | "notifications" | "complaints"
   >("account");
 
   const handleOpenProfile = (
-    tab: "branding" | "team" | "wcag" | "account" | "notifications" = "account"
+    tab: "branding" | "team" | "wcag" | "account" | "notifications" | "complaints" = "account"
   ) => {
     setProfileInitialTab(tab);
     setCurrentView("profil");
@@ -1801,6 +1980,7 @@ export default function App() {
               }}
               onOpenReaudit={handleOpenReaudit}
               showToast={showToast}
+              onViewPersonProfile={(person) => handleViewPersonProfile(person, "reklamacja-szczegoly")}
             />
           )}
           {currentView === "reklamacja-nowa" && (
@@ -1809,6 +1989,8 @@ export default function App() {
               setComplaintsList={setComplaintsList}
               setSelectedComplaintId={setSelectedComplaintId}
               showToast={showToast}
+              clientProfile={clientProfile}
+              onOpenProfile={handleOpenProfile}
             />
           )}
           {currentView === "profil" && (
@@ -16604,6 +16786,7 @@ function ComplaintDetailsView({
   onEditComplaint,
   onOpenReaudit,
   showToast,
+  onViewPersonProfile,
 }) {
   const complaint = complaintsList.find((c) => c.id === complaintId) || complaintsList[0];
   const [newComment, setNewComment] = useState("");
@@ -16978,7 +17161,7 @@ function ComplaintDetailsView({
             <div className="lg:col-span-2 space-y-6">
               {/* Karta zgłoszenia klienta */}
               <Card className="p-6 border border-slate-200">
-                <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
                     <FileText size={18} className="text-[#0038F8]" />
                     <h2 className="text-base font-bold text-slate-900">Treść zgłoszonej skargi</h2>
@@ -16986,6 +17169,25 @@ function ComplaintDetailsView({
                   <Badge variant="neutral">
                     Kanał: {complaint.channel}
                   </Badge>
+                </div>
+
+                {/* Mapowanie z Bazy Usług: Usługa › Proces › Widok */}
+                <div className="flex items-center gap-2 text-xs font-semibold text-slate-600 mb-4 bg-slate-50 px-3 py-2 rounded-xl border border-slate-200/70 flex-wrap">
+                  <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
+                    <Layers size={13} className="text-[#0038F8]" />
+                    <span>Lokalizacja (Baza Usług):</span>
+                  </span>
+                  <span className="font-extrabold text-slate-900">
+                    {complaint.service || complaint.serviceName || "Bankowość internetowa"}
+                  </span>
+                  <span className="text-slate-400">›</span>
+                  <span className="font-extrabold text-slate-900">
+                    {complaint.process || complaint.processName || "Przelewy krajowe Elixir"}
+                  </span>
+                  <span className="text-slate-400">›</span>
+                  <span className="font-extrabold text-[#0038F8]">
+                    {complaint.view || complaint.viewName || "Ekran potwierdzenia autoryzacji SMS"}
+                  </span>
                 </div>
 
                 <div className="bg-slate-50 border border-slate-200/80 rounded-xl p-4 mb-4">
@@ -17001,8 +17203,24 @@ function ComplaintDetailsView({
                     <span className="font-bold text-slate-800">{complaint.device || "Desktop Chrome 124 / Czytnik NVDA"}</span>
                   </div>
                   <div>
-                    <span className="text-slate-400 font-semibold block mb-0.5">Dotknięte kryterium WCAG:</span>
-                    <span className="font-bold text-[#0038F8]">{complaint.wcagCriterion}</span>
+                    <span className="text-slate-400 font-semibold block mb-1">Dotknięte kryteria WCAG:</span>
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      {(complaint.wcagCriteriaList && complaint.wcagCriteriaList.length > 0
+                        ? complaint.wcagCriteriaList
+                        : (complaint.wcagCriterion || "").split(",")
+                      ).map((cStr, idx) => {
+                        const trimmed = cStr.trim();
+                        if (!trimmed) return null;
+                        return (
+                          <span
+                            key={idx}
+                            className="inline-flex items-center gap-1 bg-blue-50 text-[#0038F8] px-2 py-0.5 rounded-md text-xs font-bold border border-blue-200/80"
+                          >
+                            {trimmed}
+                          </span>
+                        );
+                      })}
+                    </div>
                   </div>
                   <div>
                     <span className="text-slate-400 font-semibold block mb-0.5">Zgłaszający koordynator:</span>
@@ -17038,11 +17256,27 @@ function ComplaintDetailsView({
 
                 {complaint.hasRecommendation && complaint.recommendation ? (
                   <div className="space-y-5">
-                    {/* Informacja o audytorze */}
+                    {/* Informacja o audytorze z bezpośrednim linkiem do profilu audytora */}
                     <div className="flex items-center justify-between text-xs text-slate-600 bg-slate-50 rounded-lg p-3 border border-slate-200/80">
                       <div className="flex items-center gap-2">
                         <User size={13} className="text-[#0038F8]" />
-                        <span className="font-bold text-slate-800">{complaint.recommendation.author}</span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (onViewPersonProfile) {
+                              onViewPersonProfile({
+                                name: complaint.recommendation.author || "Piotr Smułkowski",
+                                role: complaint.recommendation.role || "Lead WCAG Auditor",
+                                type: "auditor",
+                              });
+                            }
+                          }}
+                          className="font-bold text-slate-900 hover:text-[#0038F8] hover:underline cursor-pointer flex items-center gap-1 group"
+                          title="Kliknij, aby otworzyć szczegółowy profil audytora WCAG"
+                        >
+                          <span>{complaint.recommendation.author}</span>
+                          <ExternalLink size={12} className="text-slate-400 group-hover:text-[#0038F8] transition-colors" />
+                        </button>
                         <span className="text-slate-400 font-medium">({complaint.recommendation.role})</span>
                       </div>
                       <span className="text-slate-400 font-semibold">{complaint.recommendation.date}</span>
@@ -17262,12 +17496,20 @@ function ComplaintDetailsView({
                 </select>
               </div>
 
-              <div className="p-3 bg-slate-50 rounded-lg border border-slate-100 text-xs space-y-1.5">
+              <div className="p-3 bg-slate-50 rounded-lg border border-slate-100 text-xs space-y-2">
                 <div className="flex items-center justify-between text-slate-500">
-                  <span>Kanał powiadomień:</span>
-                  <span className="font-semibold text-slate-700">Jira / E-mail</span>
+                  <span className="flex items-center gap-1 font-semibold">
+                    <Calendar size={12} className="text-[#0038F8]" /> Data wpłynięcia:
+                  </span>
+                  <span className="font-bold text-slate-800">{complaint.date || "18.04.2026"}</span>
                 </div>
                 <div className="flex items-center justify-between text-slate-500">
+                  <span className="flex items-center gap-1 font-semibold">
+                    <Clock size={12} className="text-amber-600" /> Termin (SLA):
+                  </span>
+                  <span className="font-bold text-amber-800">{complaint.slaDeadline || "25.04.2026 (pozostało 4 dni)"}</span>
+                </div>
+                <div className="flex items-center justify-between text-slate-500 pt-1.5 border-t border-slate-200/60">
                   <span>Status przekazania:</span>
                   <span className="font-bold text-emerald-600">Zsynchronizowane</span>
                 </div>
@@ -17587,22 +17829,88 @@ function ComplaintDetailsView({
   );
 }
 
-function ComplaintCreateView({ setView, setComplaintsList, setSelectedComplaintId, showToast }) {
+function ComplaintCreateView({
+  setView,
+  setComplaintsList,
+  setSelectedComplaintId,
+  showToast,
+  clientProfile,
+  onOpenProfile,
+}) {
   const [formData, setFormData] = useState({
     title: "",
-    service: "Bankowość internetowa",
-    process: "Przelewy krajowe Elixir",
-    view: "Ekran autoryzacji transakcji",
+    service: mockSharedServicesData[0]?.name || "Usługi płatnicze i powiązane z rachunkiem",
+    process: mockSharedServicesData[0]?.processes?.[0]?.name || "Otwarcie ROR (istniejący)",
+    view: mockSharedServicesData[0]?.processes?.[0]?.views?.[0]?.name || "Strona główna ing.pl",
     channel: "Desktop WWW",
     source: COMPLAINT_SOURCES[0],
     responsiblePerson: RESPONSIBLE_USERS_LIST[0],
     devTeam: RESPONSIBLE_USERS_LIST[0],
-    wcagCriterion: "2.1.1 Klawiatura (Poziom A)",
     priority: "Priorytetowy",
     device: "Windows 11 / Chrome 124 / NVDA 2024",
     description: "",
     jiraUrl: "",
+    date: new Date().toLocaleDateString("pl-PL"),
+    slaDeadline: "7 dni (SLA priorytet)",
   });
+
+  const [selectedCriteria, setSelectedCriteria] = useState<string[]>([
+    "2.1.1 Klawiatura (Poziom A)",
+  ]);
+
+  // Usługi, procesy i widoki pobierane dynamicznie z Bazy Usług (mapowanie usług)
+  const availableServices = useMemo(() => {
+    return mockSharedServicesData.map((s) => s.name);
+  }, []);
+
+  const availableProcesses = useMemo(() => {
+    const currentServiceObj = mockSharedServicesData.find((s) => s.name === formData.service);
+    if (!currentServiceObj || !currentServiceObj.processes) return [];
+    return currentServiceObj.processes.map((p) => p.name);
+  }, [formData.service]);
+
+  const availableViews = useMemo(() => {
+    const currentServiceObj = mockSharedServicesData.find((s) => s.name === formData.service);
+    if (!currentServiceObj || !currentServiceObj.processes) return [];
+    const currentProcessObj = currentServiceObj.processes.find((p) => p.name === formData.process);
+    if (!currentProcessObj || !currentProcessObj.views) return [];
+    return currentProcessObj.views.map((v) => v.name);
+  }, [formData.service, formData.process]);
+
+  const handleServiceChange = (newService: string) => {
+    const sObj = mockSharedServicesData.find((s) => s.name === newService);
+    const firstProc = sObj?.processes?.[0]?.name || "";
+    const firstView = sObj?.processes?.[0]?.views?.[0]?.name || "";
+    setFormData((prev) => ({
+      ...prev,
+      service: newService,
+      process: firstProc,
+      view: firstView,
+    }));
+  };
+
+  const handleProcessChange = (newProcess: string) => {
+    const sObj = mockSharedServicesData.find((s) => s.name === formData.service);
+    const pObj = sObj?.processes?.find((p) => p.name === newProcess);
+    const firstView = pObj?.views?.[0]?.name || "";
+    setFormData((prev) => ({
+      ...prev,
+      process: newProcess,
+      view: firstView,
+    }));
+  };
+
+  const handlePriorityChange = (newPriority: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      priority: newPriority,
+      slaDeadline: newPriority === "Priorytetowy" ? "7 dni (SLA priorytet)" : "14 dni (SLA standard)",
+    }));
+  };
+
+  const processSteps = clientProfile?.complaintProcessSteps && clientProfile.complaintProcessSteps.length > 0
+    ? clientProfile.complaintProcessSteps
+    : DEFAULT_COMPLAINT_PROCESS_STEPS;
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -17613,6 +17921,7 @@ function ComplaintCreateView({ setView, setComplaintsList, setSelectedComplaintI
 
     const ticketKey = (formData.jiraUrl || "").replace(/https?:\/\/[^/]+\/browse\//, "").trim();
     const fullUrl = formData.jiraUrl ? (formData.jiraUrl.startsWith("http") ? formData.jiraUrl : `https://jira.bank.pl/browse/${formData.jiraUrl}`) : "";
+    const criteriaJoined = selectedCriteria.length > 0 ? selectedCriteria.join(", ") : "2.1.1 Klawiatura (Poziom A)";
 
     const newId = "RKL-2026-0" + (Math.floor(Math.random() * 800) + 100);
     const newComplaint = {
@@ -17625,28 +17934,29 @@ function ComplaintCreateView({ setView, setComplaintsList, setSelectedComplaintI
       source: formData.source,
       responsiblePerson: formData.responsiblePerson,
       devTeam: formData.responsiblePerson,
-      wcagCriterion: formData.wcagCriterion,
+      wcagCriterion: criteriaJoined,
+      wcagCriteriaList: selectedCriteria,
       priority: formData.priority,
       status: "Nowe",
       jiraUrl: fullUrl,
       jiraTicket: ticketKey,
-      reporter: "Katarzyna Wiśniewska (Koordynator Dostępności)",
+      reporter: (clientProfile?.auditCoordinatorName || "Katarzyna Wiśniewska") + " (Koordynator Dostępności)",
       auditor: "Piotr Smułkowski (Lead WCAG Auditor)",
-      date: new Date().toLocaleDateString("pl-PL"),
-      slaDeadline: formData.priority === "Priorytetowy" ? "7 dni (SLA priorytet)" : "14 dni (SLA standard)",
+      date: formData.date,
+      slaDeadline: formData.slaDeadline,
       device: formData.device,
       description: formData.description,
       hasRecommendation: false,
       comments: [
         {
           id: 1,
-          author: "Katarzyna Wiśniewska",
+          author: clientProfile?.auditCoordinatorName || "Katarzyna Wiśniewska",
           role: "Koordynator Dostępności",
           date: "Przed chwilą",
-          text: `Zgłoszenie zarejestrowane ze źródła "${formData.source}". Osoba odpowiedzialna: "${formData.responsiblePerson}". Oczekuje na analizę audytora.`,
-          isStaff: false
-        }
-      ]
+          text: `Zgłoszenie zarejestrowane ze źródła "${formData.source}". Osoba odpowiedzialna: "${formData.responsiblePerson}". Zgodnie z procedurą sprawa oczekuje na analizę audytora WCAG.`,
+          isStaff: false,
+        },
+      ],
     };
 
     setComplaintsList((prev) => [newComplaint, ...prev]);
@@ -17654,7 +17964,7 @@ function ComplaintCreateView({ setView, setComplaintsList, setSelectedComplaintI
     if (showToast) {
       showToast(
         "Utworzono zgłoszenie skargi",
-        `Zgłoszenie #${newId} zostało utworzone ze źródła "${formData.source}". Osoba odpowiedzialna: ${formData.responsiblePerson}.`
+        `Zgłoszenie #${newId} zostało utworzone dla usługi: ${formData.service} › ${formData.process}.`
       );
     }
     setView("reklamacja-szczegoly");
@@ -17669,7 +17979,7 @@ function ComplaintCreateView({ setView, setComplaintsList, setSelectedComplaintI
           { label: "Nowe zgłoszenie" },
         ]}
         title="Nowe zgłoszenie skargi / reklamacji"
-        subtitle="Opisz problem dostępności zgłoszony przez klienta. Nasi audytorzy WCAG przeanalizują kod i przygotują gotowe rekomendacje techniczne."
+        subtitle="Opisz problem dostępności zgłoszony przez klienta. Nasi certyfikowani audytorzy WCAG przeanalizują kod i przygotują gotowe rekomendacje techniczne."
         actions={
           <button
             type="button"
@@ -17682,238 +17992,375 @@ function ComplaintCreateView({ setView, setComplaintsList, setSelectedComplaintI
       />
 
       <div className="flex-1 md:overflow-y-auto bg-[#f8fafc] w-full">
-        <div className="max-w-[1600px] mx-auto w-full p-4 sm:p-8 lg:p-12">
-          <Card className="max-w-4xl mx-auto p-6 sm:p-8 border border-slate-200">
-            <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Tytuł */}
-          <div>
-            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-              Tytuł reklamacji / błędu *
-            </label>
-            <input
-              type="text"
-              required
-              value={formData.title}
-              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-              placeholder="np. Brak możliwości zatwierdzenia wniosku przez czytnik ekranu NVDA..."
-              className="w-full bg-white border border-slate-200 rounded-lg px-4 py-2.5 text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
-            />
+        <div className="max-w-[1600px] mx-auto w-full p-4 sm:p-6 lg:p-8">
+          {/* UKŁAD 2-KOLUMNOWY: FORMULARZ PO LEWEJ, INSTRUKCJA I KROKI PROCEDURY PO PRAWEJ */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            {/* KOLUMNA LEWA: GŁÓWNY FORMULARZ ZGŁOSZENIA */}
+            <div className="lg:col-span-8">
+              <Card className="p-6 sm:p-8 border border-slate-200 shadow-xs">
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  {/* Tytuł zgłoszenia */}
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                      Tytuł reklamacji / błędu *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.title}
+                      onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                      placeholder="np. Brak możliwości zatwierdzenia wniosku przez czytnik ekranu NVDA..."
+                      className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
+                    />
+                  </div>
+
+                  {/* Pola dat: Data wpłynięcia i Termin rozwiązania (SLA) */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                        <Calendar size={13} className="text-[#0038F8]" />
+                        <span>Data wpłynięcia zgłoszenia *</span>
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={formData.date}
+                        onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                        placeholder="np. 20.04.2026"
+                        className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                        <Clock size={13} className="text-amber-600" />
+                        <span>Termin rozwiązania (SLA) *</span>
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={formData.slaDeadline}
+                        onChange={(e) => setFormData({ ...formData, slaDeadline: e.target.value })}
+                        placeholder="np. 7 dni (SLA priorytet) lub 14 dni"
+                        className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Dynamiczne mapowanie usług z modułu Baza Usług: Usługa -> Proces -> Widok */}
+                  <div className="p-4 bg-slate-50/80 rounded-2xl border border-slate-200/80 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
+                        <Layers size={14} className="text-[#0038F8]" />
+                        <span>Lokalizacja w architekturze (Baza Usług) *</span>
+                      </span>
+                      <span className="text-[10px] font-extrabold text-[#0038F8] bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
+                        Czerpane z Bazy Usług
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      <div>
+                        <label className="block text-[11px] font-bold text-slate-600 mb-1">
+                          Usługa cyfrowa:
+                        </label>
+                        <select
+                          value={formData.service}
+                          onChange={(e) => handleServiceChange(e.target.value)}
+                          className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
+                        >
+                          {availableServices.map((srv) => (
+                            <option key={srv} value={srv}>
+                              {srv}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-bold text-slate-600 mb-1">
+                          Proces biznesowy:
+                        </label>
+                        <select
+                          value={formData.process}
+                          onChange={(e) => handleProcessChange(e.target.value)}
+                          className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
+                        >
+                          {availableProcesses.map((proc) => (
+                            <option key={proc} value={proc}>
+                              {proc}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-bold text-slate-600 mb-1">
+                          Ekran / Widok procesu:
+                        </label>
+                        <select
+                          value={formData.view}
+                          onChange={(e) => setFormData({ ...formData, view: e.target.value })}
+                          className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
+                        >
+                          {availableViews.map((vw) => (
+                            <option key={vw} value={vw}>
+                              {vw}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Kryteria WCAG - WcagCriteriaCombobox Multi-Select */}
+                  <div>
+                    <WcagCriteriaCombobox
+                      selectedCriteria={selectedCriteria}
+                      onChange={setSelectedCriteria}
+                      label="Naruszone kryteria WCAG (Wyszukiwarka i wybór wielu) *"
+                      placeholder="Wyszukaj i wybierz kryteria sukcesu WCAG 2.1 / 2.2 AA (np. 1.4.3, kontrast, klawiatura)..."
+                      helperText="Wybierz jedno lub więcej kryteriów WCAG. Możesz filtrować po numerze lub nazwie, a także korzystać z szybkiego wyboru najczęstszych."
+                    />
+                  </div>
+
+                  {/* Grid: Priorytet, Osoba odpowiedzialna, Źródło skargi, Kanał */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                        Priorytet zgłoszenia *
+                      </label>
+                      <select
+                        value={formData.priority}
+                        onChange={(e) => handlePriorityChange(e.target.value)}
+                        className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
+                      >
+                        <option value="Priorytetowy">🚨 Priorytetowy (Bloker)</option>
+                        <option value="Ważny">🟠 Ważny</option>
+                        <option value="Marginalny">🔵 Marginalny</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                        Osoba odpowiedzialna *
+                      </label>
+                      <select
+                        value={formData.responsiblePerson}
+                        onChange={(e) => setFormData({ ...formData, responsiblePerson: e.target.value, devTeam: e.target.value })}
+                        className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
+                      >
+                        {RESPONSIBLE_USERS_LIST.map((user) => (
+                          <option key={user} value={user}>
+                            {user}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                        Źródło skargi *
+                      </label>
+                      <select
+                        value={formData.source}
+                        onChange={(e) => setFormData({ ...formData, source: e.target.value })}
+                        className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
+                      >
+                        {COMPLAINT_SOURCES.map((src) => (
+                          <option key={src} value={src}>
+                            {src}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                        Kanał dostępu *
+                      </label>
+                      <select
+                        value={formData.channel}
+                        onChange={(e) => setFormData({ ...formData, channel: e.target.value })}
+                        className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
+                      >
+                        <option value="Desktop WWW">Desktop WWW</option>
+                        <option value="Android">Aplikacja Android</option>
+                        <option value="iOS">Aplikacja iOS</option>
+                        <option value="Dokumenty">Dokumenty PDF</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Opis sytuacji od klienta */}
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                      Szczegółowy opis reklamacji klienta *
+                    </label>
+                    <textarea
+                      required
+                      rows={4}
+                      value={formData.description}
+                      onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                      placeholder="Dokładnie opisz, co zgłaszał klient, z jakiej technologii asystującej korzystał (np. NVDA, JAWS, VoiceOver) i w którym momencie nastąpiła blokada..."
+                      className="w-full bg-white border border-slate-200 rounded-xl p-3.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50 leading-relaxed font-normal"
+                    />
+                  </div>
+
+                  {/* Środowisko techniczne */}
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                      Urządzenie / Przeglądarka / Czytnik ekranu
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.device}
+                      onChange={(e) => setFormData({ ...formData, device: e.target.value })}
+                      placeholder="np. Windows 11, Chrome 124, NVDA 2024.1"
+                      className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
+                    />
+                  </div>
+
+                  {/* Powiązane zadanie w Jira */}
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2 flex items-center justify-between">
+                      <span className="flex items-center gap-1.5">
+                        <Link2 size={13} className="text-[#0038F8]" />
+                        <span>Link do zadania w Jira (opcjonalnie)</span>
+                      </span>
+                      <span className="text-[10px] text-slate-400 font-semibold normal-case">Dla zespołu Dev</span>
+                    </label>
+                    <div className="relative">
+                      <Link2 size={14} className="absolute left-3 top-3 text-slate-400" />
+                      <input
+                        type="text"
+                        value={formData.jiraUrl}
+                        onChange={(e) => setFormData({ ...formData, jiraUrl: e.target.value })}
+                        placeholder="np. https://jira.bank.pl/browse/ACC-104 lub ACC-104"
+                        className="w-full bg-white border border-slate-200 rounded-xl pl-9 pr-3 py-2.5 text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
+                      />
+                    </div>
+                    <p className="text-[11px] text-slate-400 mt-1">
+                      Pozwala koordynatorowi na późniejszą bezpośrednią weryfikację stanu naprawy błędu przez zespół techniczny przed zgłoszeniem do re-audytu.
+                    </p>
+                  </div>
+
+                  {/* Mockup strefy uploadu plików */}
+                  <div className="border-2 border-dashed border-slate-200 hover:border-[#0038F8]/50 rounded-xl p-6 text-center cursor-pointer transition-colors bg-slate-50/50">
+                    <FileText size={28} className="mx-auto text-slate-400 mb-2" />
+                    <div className="text-xs font-bold text-slate-700">
+                      Przeciągnij zrzuty ekranu, logi konsoli lub nagrania czytnika ekranu
+                    </div>
+                    <div className="text-[11px] text-slate-400 mt-1">
+                      PNG, JPG, PDF, TXT do 25 MB
+                    </div>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+                    <button
+                      type="button"
+                      onClick={() => setView("reklamacje")}
+                      className="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-5 py-2.5 rounded-xl font-bold text-xs shadow-sm transition-colors cursor-pointer"
+                    >
+                      Anuluj
+                    </button>
+                    <button
+                      type="submit"
+                      className="inline-flex items-center gap-2 bg-[#0038F8] hover:bg-[#002ECC] text-white px-6 py-2.5 rounded-xl font-bold text-xs shadow-md transition-all hover:shadow-lg cursor-pointer"
+                    >
+                      <Send size={14} />
+                      <span>Utwórz zgłoszenie i przekaż do audytora WCAG</span>
+                    </button>
+                  </div>
+                </form>
+              </Card>
+            </div>
+
+            {/* KOLUMNA PRAWA: BOCZNY BLOK Z INSTRUKCJĄ I KROKAMI PROCEDURY BANKOWEJ */}
+            <div className="lg:col-span-4 space-y-6">
+              <Card className="p-6 border border-slate-200 shadow-xs space-y-5">
+                <div className="pb-3 border-b border-slate-100 flex items-start justify-between gap-3">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-lg bg-blue-50 text-[#0038F8] flex items-center justify-center shrink-0 border border-blue-200">
+                      <ListOrdered size={16} />
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-extrabold text-slate-900 leading-snug">
+                        Procedura rozpatrywania skargi
+                      </h3>
+                      <p className="text-[11px] text-slate-500 font-medium">
+                        Standard bankowy: {clientProfile?.orgName || "Erste Group Bank AG"}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Poniższy schemat przedstawia formalny proces obsługi skargi o zapewnienie dostępności cyfrowej zgodnie z wytycznymi organizacji:
+                </p>
+
+                {/* Lista kroków procedury */}
+                <div className="space-y-4 relative before:absolute before:left-3.5 before:top-3 before:bottom-3 before:w-0.5 before:bg-slate-200">
+                  {processSteps.map((st, idx) => (
+                    <div key={st.id || idx} className="relative flex items-start gap-3.5 pl-0.5 group">
+                      <div className="w-7 h-7 rounded-full bg-[#0038F8] text-white flex items-center justify-center font-black text-xs shrink-0 ring-4 ring-white shadow-2xs z-10">
+                        {st.stepNumber || idx + 1}
+                      </div>
+                      <div className="flex-1 min-w-0 bg-slate-50/80 p-3 rounded-xl border border-slate-200/70 space-y-1">
+                        <div className="flex items-center justify-between gap-2">
+                          <h4 className="text-xs font-bold text-slate-900">
+                            {st.title}
+                          </h4>
+                          {st.responsibleRole && (
+                            <span className="text-[10px] font-bold text-[#0038F8] bg-blue-50 px-1.5 py-0.5 rounded border border-blue-100 whitespace-nowrap">
+                              {st.responsibleRole}
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-[11px] text-slate-600 leading-relaxed font-normal">
+                          {st.description}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Przycisk dostosowania kroków w profilu konta */}
+                <div className="pt-3 border-t border-slate-100 space-y-3">
+                  <div className="p-3 bg-amber-50/60 rounded-xl border border-amber-200/70 text-[11px] text-amber-900 leading-relaxed">
+                    <strong>Uwaga bankowa:</strong> Każda instytucja może posiadać własny schemat obiegu skarg i odpowiedzialności.
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (onOpenProfile) {
+                        onOpenProfile("complaints");
+                      } else {
+                        setView("profil");
+                      }
+                    }}
+                    className="w-full inline-flex items-center justify-center gap-2 bg-white hover:bg-slate-50 border border-slate-200 hover:border-slate-300 text-slate-800 py-2.5 px-4 rounded-xl font-bold text-xs shadow-2xs transition-all cursor-pointer group"
+                  >
+                    <Sliders size={14} className="text-[#0038F8] group-hover:rotate-45 transition-transform" />
+                    <span>Dostosuj kroki procedury w profilu</span>
+                  </button>
+                </div>
+              </Card>
+
+              {/* Dodatkowy boks pomocniczy dot. SLA i EAA */}
+              <Card className="p-5 border border-slate-200 shadow-xs space-y-2.5 text-xs bg-slate-50/50">
+                <div className="flex items-center gap-2">
+                  <ShieldCheck size={16} className="text-emerald-600" />
+                  <span className="font-bold text-slate-900">Ustawowe terminy SLA (EAA)</span>
+                </div>
+                <p className="text-slate-600 text-[11px] leading-relaxed">
+                  Zgodnie z ustawą o dostępności cyfrowej oraz Europejskim Aktem o Dostępności, podmiot ma obowiązek rozpatrzenia wniosku bez zbędnej zwłoki, nie później niż w ciągu 7-14 dni roboczych.
+                </p>
+              </Card>
+            </div>
           </div>
-
-          {/* Grid: Priorytet, Osoba odpowiedzialna, Źródło skargi, Kanał, Kryterium WCAG */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-                Priorytet zgłoszenia *
-              </label>
-              <select
-                value={formData.priority}
-                onChange={(e) => setFormData({ ...formData, priority: e.target.value })}
-                className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
-              >
-                <option value="Priorytetowy">🚨 Priorytetowy (Bloker)</option>
-                <option value="Ważny">🟠 Ważny</option>
-                <option value="Marginalny">🔵 Marginalny</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-                Osoba odpowiedzialna *
-              </label>
-              <select
-                value={formData.responsiblePerson}
-                onChange={(e) => setFormData({ ...formData, responsiblePerson: e.target.value, devTeam: e.target.value })}
-                className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
-              >
-                {RESPONSIBLE_USERS_LIST.map((user) => (
-                  <option key={user} value={user}>
-                    {user}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-                Źródło skargi / Nadawca *
-              </label>
-              <select
-                value={formData.source}
-                onChange={(e) => setFormData({ ...formData, source: e.target.value })}
-                className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
-              >
-                {COMPLAINT_SOURCES.map((src) => (
-                  <option key={src} value={src}>
-                    {src}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-                Kanał dostępu *
-              </label>
-              <select
-                value={formData.channel}
-                onChange={(e) => setFormData({ ...formData, channel: e.target.value })}
-                className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
-              >
-                <option value="Desktop WWW">Desktop WWW</option>
-                <option value="Android">Android</option>
-                <option value="iOS">iOS</option>
-                <option value="Dokumenty">Dokumenty PDF</option>
-              </select>
-            </div>
-
-            <div className="sm:col-span-2">
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-                Kryterium WCAG 2.1
-              </label>
-              <select
-                value={formData.wcagCriterion}
-                onChange={(e) => setFormData({ ...formData, wcagCriterion: e.target.value })}
-                className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
-              >
-                <option value="2.1.1 Klawiatura (Poziom A)">2.1.1 Klawiatura (A)</option>
-                <option value="1.4.3 Kontrast minimalny (Poziom AA)">1.4.3 Kontrast minimalny (AA)</option>
-                <option value="4.1.2 Nazwa, rola, wartość (Poziom A)">4.1.2 Nazwa, rola, wartość (A)</option>
-                <option value="1.3.1 Informacje i relacje (Poziom A)">1.3.1 Informacje i relacje (A)</option>
-                <option value="3.3.1 Identyfikacja błędu (Poziom A)">3.3.1 Identyfikacja błędu (A)</option>
-                <option value="Inne / Do weryfikacji przez audytora">Inne / Do weryfikacji przez audytora</option>
-              </select>
-            </div>
-          </div>
-
-          {/* Usługa, Proces, Widok */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-                Usługa cyfrowa
-              </label>
-              <select
-                value={formData.service}
-                onChange={(e) => setFormData({ ...formData, service: e.target.value })}
-                className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
-              >
-                <option value="Bankowość internetowa">Bankowość internetowa</option>
-                <option value="Aplikacja mobilna">Aplikacja mobilna</option>
-                <option value="Kredyty i pożyczki">Kredyty i pożyczki</option>
-                <option value="Karty i dokumenty">Karty i dokumenty</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-                Proces biznesowy
-              </label>
-              <input
-                type="text"
-                value={formData.process}
-                onChange={(e) => setFormData({ ...formData, process: e.target.value })}
-                placeholder="np. Przelewy krajowe Elixir"
-                className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-                Ekran / Krok procesu
-              </label>
-              <input
-                type="text"
-                value={formData.view}
-                onChange={(e) => setFormData({ ...formData, view: e.target.value })}
-                placeholder="np. Ekran potwierdzenia autoryzacji"
-                className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
-              />
-            </div>
-          </div>
-
-          {/* Opis sytuacji od klienta */}
-          <div>
-            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-              Szczegółowy opis reklamacji klienta *
-            </label>
-            <textarea
-              required
-              rows={4}
-              value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              placeholder="Dokładnie opisz, co zgłaszał klient, z jakiej technologii asystującej korzystał (np. NVDA, JAWS, VoiceOver) i w którym momencie nastąpiła blokada..."
-              className="w-full bg-white border border-slate-200 rounded-xl p-3.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50 leading-relaxed font-normal"
-            />
-          </div>
-
-          {/* Środowisko techniczne */}
-          <div>
-            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-              Urządzenie / Przeglądarka / Czytnik ekranu
-            </label>
-            <input
-              type="text"
-              value={formData.device}
-              onChange={(e) => setFormData({ ...formData, device: e.target.value })}
-              placeholder="np. Windows 11, Chrome 124, NVDA 2024.1"
-              className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
-            />
-          </div>
-
-          {/* Powiązane zadanie w Jira */}
-          <div>
-            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2 flex items-center justify-between">
-              <span className="flex items-center gap-1.5">
-                <Link2 size={13} className="text-[#0038F8]" />
-                <span>Link do zadania w Jira (opcjonalnie)</span>
-              </span>
-              <span className="text-[10px] text-slate-400 font-semibold normal-case">Dla zespołu Dev</span>
-            </label>
-            <div className="relative">
-              <Link2 size={14} className="absolute left-3 top-3 text-slate-400" />
-              <input
-                type="text"
-                value={formData.jiraUrl}
-                onChange={(e) => setFormData({ ...formData, jiraUrl: e.target.value })}
-                placeholder="np. https://jira.bank.pl/browse/ACC-104 lub ACC-104"
-                className="w-full bg-white border border-slate-200 rounded-xl pl-9 pr-3 py-2.5 text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
-              />
-            </div>
-            <p className="text-[11px] text-slate-400 mt-1">
-              Pozwala koordynatorowi na późniejszą bezpośrednią weryfikację stanu naprawy błędu przez zespół techniczny przed zgłoszeniem do re-audytu.
-            </p>
-          </div>
-
-          {/* Mockup strefy uploadu plików */}
-          <div className="border-2 border-dashed border-slate-200 hover:border-[#0038F8]/50 rounded-xl p-6 text-center cursor-pointer transition-colors bg-slate-50/50">
-            <FileText size={28} className="mx-auto text-slate-400 mb-2" />
-            <div className="text-xs font-bold text-slate-700">
-              Przeciągnij zrzuty ekranu, logi konsoli lub nagrania czytnika ekranu
-            </div>
-            <div className="text-[11px] text-slate-400 mt-1">
-              PNG, JPG, PDF, TXT do 25 MB
-            </div>
-          </div>
-
-          {/* Actions */}
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
-            <button
-              type="button"
-              onClick={() => setView("reklamacje")}
-              className="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-5 py-2.5 rounded-xl font-bold text-xs shadow-sm transition-colors"
-            >
-              Anuluj
-            </button>
-            <button
-              type="submit"
-              className="inline-flex items-center gap-2 bg-[#0038F8] hover:bg-[#002ECC] text-white px-6 py-2.5 rounded-xl font-bold text-xs shadow-md transition-all hover:shadow-lg"
-            >
-              <Send size={14} />
-              Utwórz zgłoszenie i prześlij do audytora WCAG
-            </button>
-          </div>
-        </form>
-      </Card>
         </div>
       </div>
     </div>
