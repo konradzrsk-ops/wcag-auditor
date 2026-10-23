@@ -11364,55 +11364,7 @@ function AuditsFilterSection({
           <span>Filtry:</span>
         </div>
 
-        {/* 1. Usługa / Proces */}
-        <div className="relative">
-          <button
-            type="button"
-            onClick={() => toggleDropdown("audit_usluga")}
-            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold border transition-colors cursor-pointer ${
-              auditService !== "all" || auditProcess !== "all"
-                ? "bg-[#0038F8] text-white border-[#0038F8] shadow-sm"
-                : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
-            }`}
-          >
-            <span>
-              1. Usługa / Proces
-              {auditService !== "all" ? `: ${auditService === "s1" ? "Płatności" : "Kredyt"}` : ""}
-            </span>
-            <ChevronDown size={14} className={auditService !== "all" || auditProcess !== "all" ? "text-white" : "text-slate-400"} />
-          </button>
-          {activeDropdown === "audit_usluga" && (
-            <div className="absolute top-full left-0 mt-1.5 w-80 bg-white border border-slate-200 rounded-xl shadow-xl z-50 p-3.5 space-y-3">
-              <div>
-                <label className="text-xs text-slate-600 mb-1.5 font-bold block">Usługa</label>
-                <select
-                  value={auditService}
-                  onChange={(e) => setAuditService(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
-                >
-                  <option value="all">Wszystkie usługi</option>
-                  <option value="s1">Usługi płatnicze i powiązane z rachunkiem</option>
-                  <option value="s2">Kredyt hipoteczny</option>
-                </select>
-              </div>
-              <div>
-                <label className="text-xs text-slate-600 mb-1.5 font-bold block">Proces biznesowy</label>
-                <select
-                  value={auditProcess}
-                  onChange={(e) => setAuditProcess(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
-                >
-                  <option value="all">Wszystkie procesy</option>
-                  <option value="p1">Otwarcie ROR i autoryzacja</option>
-                  <option value="p2">Przelew krajowy Elixir</option>
-                  <option value="p3">Wniosek o kredyt hipoteczny</option>
-                </select>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* 2. Kanał */}
+        {/* 1. Kanał */}
         <div className="relative">
           <button
             type="button"
@@ -11424,7 +11376,7 @@ function AuditsFilterSection({
             }`}
           >
             <span>
-              2. Kanał
+              1. Kanał
               {Object.values(auditChannels).filter(Boolean).length > 0 ? ` (${Object.values(auditChannels).filter(Boolean).length})` : ""}
             </span>
             <ChevronDown size={14} className={Object.values(auditChannels).some(Boolean) ? "text-white" : "text-slate-400"} />
@@ -11454,7 +11406,7 @@ function AuditsFilterSection({
           )}
         </div>
 
-        {/* 3. Priorytet */}
+        {/* 2. Priorytet błędu */}
         <div className="relative">
           <button
             type="button"
@@ -11466,7 +11418,7 @@ function AuditsFilterSection({
             }`}
           >
             <span>
-              3. Priorytet błędu
+              2. Priorytet błędu
               {Object.values(auditPriorities).filter(Boolean).length > 0 ? ` (${Object.values(auditPriorities).filter(Boolean).length})` : ""}
             </span>
             <ChevronDown size={14} className={Object.values(auditPriorities).some(Boolean) ? "text-white" : "text-slate-400"} />
@@ -11502,149 +11454,91 @@ function AuditsFilterSection({
           )}
         </div>
 
-        {/* 4. Status */}
-        <div className="relative">
-          <button
-            type="button"
-            onClick={() => toggleDropdown("audit_status")}
-            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold border transition-colors cursor-pointer ${
-              Object.values(auditStatuses).some(Boolean)
-                ? "bg-[#0038F8] text-white border-[#0038F8] shadow-sm"
-                : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
-            }`}
-          >
-            <span>
-              4. Status błędu
-              {Object.values(auditStatuses).filter(Boolean).length > 0 ? ` (${Object.values(auditStatuses).filter(Boolean).length})` : ""}
-            </span>
-            <ChevronDown size={14} className={Object.values(auditStatuses).some(Boolean) ? "text-white" : "text-slate-400"} />
-          </button>
-          {activeDropdown === "audit_status" && (
-            <div className="absolute top-full left-0 mt-1.5 w-60 bg-white border border-slate-200 rounded-xl shadow-xl z-50 p-2 space-y-1">
-              {["Nowy", "W trakcie", "Gotowa rekomendacja", "Naprawiony"].map((st) => {
-                const isChecked = Boolean(auditStatuses[st]);
-                return (
-                  <button
-                    key={st}
-                    type="button"
-                    onClick={() => setAuditStatuses((prev) => ({ ...prev, [st]: !prev[st] }))}
-                    className={`w-full flex items-center justify-between px-2.5 py-2 rounded-lg text-xs font-semibold text-left transition-colors cursor-pointer ${
-                      isChecked ? "bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/20 font-bold" : "hover:bg-slate-50 text-slate-700 border border-transparent"
-                    }`}
-                  >
-                    <div className="flex items-center gap-2">
-                      <input type="checkbox" checked={isChecked} readOnly className="w-4 h-4 rounded text-[#0038F8] pointer-events-none accent-[#0038F8]" />
-                      <span>{st}</span>
-                    </div>
-                    {isChecked && <CheckCircle2 size={14} className="text-[#0038F8]" />}
-                  </button>
-                );
-              })}
-            </div>
-          )}
-        </div>
-
-        {/* 5. Źródło */}
-        <div className="relative">
-          <button
-            type="button"
-            onClick={() => toggleDropdown("audit_zrodlo")}
-            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold border transition-colors cursor-pointer ${
-              Object.values(auditSources).some(Boolean)
-                ? "bg-[#0038F8] text-white border-[#0038F8] shadow-sm"
-                : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
-            }`}
-          >
-            <span>
-              5. Źródło
-              {Object.values(auditSources).filter(Boolean).length > 0 ? ` (${Object.values(auditSources).filter(Boolean).length})` : ""}
-            </span>
-            <ChevronDown size={14} className={Object.values(auditSources).some(Boolean) ? "text-white" : "text-slate-400"} />
-          </button>
-          {activeDropdown === "audit_zrodlo" && (
-            <div className="absolute top-full left-0 mt-1.5 w-60 bg-white border border-slate-200 rounded-xl shadow-xl z-50 p-2 space-y-1">
-              {["Audyt", "Reaudyt", "Zgłoszenie użytkownika", "Skarga"].map((src) => {
-                const isChecked = Boolean(auditSources[src]);
-                return (
-                  <button
-                    key={src}
-                    type="button"
-                    onClick={() => setAuditSources((prev) => ({ ...prev, [src]: !prev[src] }))}
-                    className={`w-full flex items-center justify-between px-2.5 py-2 rounded-lg text-xs font-semibold text-left transition-colors cursor-pointer ${
-                      isChecked ? "bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/20 font-bold" : "hover:bg-slate-50 text-slate-700 border border-transparent"
-                    }`}
-                  >
-                    <div className="flex items-center gap-2">
-                      <input type="checkbox" checked={isChecked} readOnly className="w-4 h-4 rounded text-[#0038F8] pointer-events-none accent-[#0038F8]" />
-                      <span>{src}</span>
-                    </div>
-                    {isChecked && <CheckCircle2 size={14} className="text-[#0038F8]" />}
-                  </button>
-                );
-              })}
-            </div>
-          )}
-        </div>
-
-        {/* 6. Audytor i % */}
+        {/* 3. Audytor */}
         <div className="relative">
           <button
             type="button"
             onClick={() => toggleDropdown("audit_audytor")}
             className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold border transition-colors cursor-pointer ${
-              auditAuditor || auditScoreRange !== "all"
+              auditAuditor
                 ? "bg-[#0038F8] text-white border-[#0038F8] shadow-sm"
                 : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
             }`}
           >
             <span>
-              6. Audytor i %
-              {auditAuditor ? `: ${auditAuditor.split(" ")[0]}` : auditScoreRange !== "all" ? `: ${auditScoreRange === "low" ? "< 70%" : auditScoreRange === "medium" ? "70-89%" : "90%+"}` : ""}
+              3. Audytor{auditAuditor ? `: ${auditAuditor}` : ""}
             </span>
-            <ChevronDown size={14} className={auditAuditor || auditScoreRange !== "all" ? "text-white" : "text-slate-400"} />
+            <ChevronDown size={14} className={auditAuditor ? "text-white" : "text-slate-400"} />
           </button>
           {activeDropdown === "audit_audytor" && (
-            <div className="absolute top-full left-0 mt-1.5 w-72 bg-white border border-slate-200 rounded-xl shadow-xl z-50 p-3.5 space-y-3">
-              <div>
-                <label className="text-xs text-slate-600 mb-1.5 font-bold block">Audytor</label>
-                <select
-                  value={auditAuditor}
-                  onChange={(e) => setAuditAuditor(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
+            <div className="absolute top-full left-0 mt-1.5 w-60 bg-white border border-slate-200 rounded-xl shadow-xl z-50 p-2 space-y-1">
+              {[
+                { id: "", label: "Wszyscy audytorzy" },
+                { id: "Piotr Smułkowski", label: "Piotr Smułkowski" },
+                { id: "Anna Nowak", label: "Anna Nowak" },
+                { id: "Jan Kowalski", label: "Jan Kowalski" },
+              ].map((opt) => (
+                <button
+                  key={opt.id}
+                  type="button"
+                  onClick={() => {
+                    setAuditAuditor(opt.id);
+                    toggleDropdown(null);
+                  }}
+                  className={`w-full text-left px-3 py-2 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
+                    auditAuditor === opt.id ? "bg-[#0038F8] text-white" : "hover:bg-slate-100 text-slate-700"
+                  }`}
                 >
-                  <option value="">Wszyscy audytorzy</option>
-                  <option value="Piotr Smułkowski">Piotr Smułkowski</option>
-                  <option value="Anna Nowak">Anna Nowak</option>
-                  <option value="Jan Kowalski">Jan Kowalski</option>
-                </select>
-              </div>
-              <div>
-                <label className="text-xs text-slate-600 mb-1.5 font-bold block">Zakres % zgodności WCAG</label>
-                <div className="grid grid-cols-2 gap-1.5">
-                  {[
-                    { id: "all", label: "Wszystkie" },
-                    { id: "low", label: "< 70%" },
-                    { id: "medium", label: "70% - 89%" },
-                    { id: "high", label: "90%+" },
-                  ].map((item) => (
-                    <button
-                      key={item.id}
-                      type="button"
-                      onClick={() => setAuditScoreRange(item.id)}
-                      className={`px-2.5 py-1.5 rounded-lg text-xs font-bold border transition-colors cursor-pointer ${
-                        auditScoreRange === item.id ? "bg-[#0038F8] text-white border-[#0038F8]" : "bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200"
-                      }`}
-                    >
-                      {item.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
+                  {opt.label}
+                </button>
+              ))}
             </div>
           )}
         </div>
 
-        {/* 7. Czas */}
+        {/* 4. Zgodność WCAG */}
+        <div className="relative">
+          <button
+            type="button"
+            onClick={() => toggleDropdown("audit_zgodnosc")}
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold border transition-colors cursor-pointer ${
+              auditScoreRange !== "all"
+                ? "bg-[#0038F8] text-white border-[#0038F8] shadow-sm"
+                : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
+            }`}
+          >
+            <span>
+              4. Zgodność WCAG{auditScoreRange !== "all" ? `: ${auditScoreRange === "low" ? "< 70%" : auditScoreRange === "medium" ? "70-89%" : "90%+"}` : ""}
+            </span>
+            <ChevronDown size={14} className={auditScoreRange !== "all" ? "text-white" : "text-slate-400"} />
+          </button>
+          {activeDropdown === "audit_zgodnosc" && (
+            <div className="absolute top-full left-0 mt-1.5 w-60 bg-white border border-slate-200 rounded-xl shadow-xl z-50 p-2 space-y-1">
+              {[
+                { id: "all", label: "Wszystkie przedziały" },
+                { id: "low", label: "< 70% (Niski poziom)" },
+                { id: "medium", label: "70% - 89% (Średni poziom)" },
+                { id: "high", label: "90%+ (Wysoka zgodność)" },
+              ].map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => {
+                    setAuditScoreRange(item.id);
+                    toggleDropdown(null);
+                  }}
+                  className={`w-full text-left px-3 py-2 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
+                    auditScoreRange === item.id ? "bg-[#0038F8] text-white" : "hover:bg-slate-100 text-slate-700"
+                  }`}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* 5. Czas */}
         <div className="relative">
           <button
             type="button"
@@ -11656,7 +11550,7 @@ function AuditsFilterSection({
             }`}
           >
             <span>
-              7. Czas
+              5. Czas
               {auditTimeRange !== "all" ? `: ${auditTimeRange === "30d" ? "30 dni" : auditTimeRange === "60d" ? "60 dni" : "1 Rok"}` : (auditDateFrom || auditDateTo) ? ": Zakres" : ""}
             </span>
             <ChevronDown size={14} className={auditTimeRange !== "all" || auditDateFrom || auditDateTo ? "text-white" : "text-slate-400"} />
@@ -11744,23 +11638,14 @@ function AuditsFilterSection({
             <span>Wybrane filtry:</span>
           </div>
 
-          {auditService !== "all" && (
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/20">
-              <span>Usługa: {auditService === "s1" ? "Płatności" : "Kredyt"}</span>
-              <button type="button" onClick={() => setAuditService("all")} className="hover:bg-[#0038F8]/20 p-0.5 rounded cursor-pointer">
+          {Object.keys(auditChannels).filter((k) => auditChannels[k]).map((ch) => (
+            <span key={ch} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/20">
+              <span>Kanał: {ch}</span>
+              <button type="button" onClick={() => setAuditChannels((prev) => ({ ...prev, [ch]: false }))} className="hover:bg-[#0038F8]/20 p-0.5 rounded cursor-pointer">
                 <X size={12} />
               </button>
             </span>
-          )}
-
-          {auditProcess !== "all" && (
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/20">
-              <span>Proces: {auditProcess}</span>
-              <button type="button" onClick={() => setAuditProcess("all")} className="hover:bg-[#0038F8]/20 p-0.5 rounded cursor-pointer">
-                <X size={12} />
-              </button>
-            </span>
-          )}
+          ))}
 
           {Object.keys(auditPriorities).filter((k) => auditPriorities[k]).map((p) => (
             <span key={p} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/20">
@@ -11771,28 +11656,19 @@ function AuditsFilterSection({
             </span>
           ))}
 
-          {Object.keys(auditChannels).filter((k) => auditChannels[k]).map((ch) => (
-            <span key={ch} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/20">
-              <span>Kanał: {ch}</span>
-              <button type="button" onClick={() => setAuditChannels((prev) => ({ ...prev, [ch]: false }))} className="hover:bg-[#0038F8]/20 p-0.5 rounded cursor-pointer">
-                <X size={12} />
-              </button>
-            </span>
-          ))}
-
-          {Object.keys(auditStatuses).filter((k) => auditStatuses[k]).map((st) => (
-            <span key={st} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/20">
-              <span>Status: {st}</span>
-              <button type="button" onClick={() => setAuditStatuses((prev) => ({ ...prev, [st]: false }))} className="hover:bg-[#0038F8]/20 p-0.5 rounded cursor-pointer">
-                <X size={12} />
-              </button>
-            </span>
-          ))}
-
           {auditAuditor && (
             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/20">
               <span>Audytor: {auditAuditor}</span>
               <button type="button" onClick={() => setAuditAuditor("")} className="hover:bg-[#0038F8]/20 p-0.5 rounded cursor-pointer">
+                <X size={12} />
+              </button>
+            </span>
+          )}
+
+          {auditScoreRange !== "all" && (
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/20">
+              <span>Zgodność WCAG: {auditScoreRange === "low" ? "< 70%" : auditScoreRange === "medium" ? "70% - 89%" : "90%+"}</span>
+              <button type="button" onClick={() => setAuditScoreRange("all")} className="hover:bg-[#0038F8]/20 p-0.5 rounded cursor-pointer">
                 <X size={12} />
               </button>
             </span>
@@ -11965,84 +11841,6 @@ function ServicesFilterSection({
           )}
         </div>
 
-        {/* 4. Próg zgodności SLA */}
-        <div className="relative">
-          <button
-            type="button"
-            onClick={() => toggleDropdown("srv_sla")}
-            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold border transition-colors cursor-pointer ${
-              serviceSla !== "all"
-                ? "bg-[#0038F8] text-white border-[#0038F8] shadow-sm"
-                : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
-            }`}
-          >
-            <span>4. SLA{serviceSla !== "all" ? `: ${serviceSla === "under80" ? "< 80%" : ">= 80%"}` : ""}</span>
-            <ChevronDown size={14} className={serviceSla !== "all" ? "text-white" : "text-slate-400"} />
-          </button>
-          {activeDropdown === "srv_sla" && (
-            <div className="absolute top-full left-0 mt-1.5 w-60 bg-white border border-slate-200 rounded-xl shadow-xl z-50 p-2 space-y-1">
-              {[
-                { id: "all", label: "Wszystkie progi SLA" },
-                { id: "under80", label: "Poniżej progu SLA (< 80%)" },
-                { id: "over80", label: "Zgodne z normą SLA (>= 80%)" },
-              ].map((opt) => (
-                <button
-                  key={opt.id}
-                  type="button"
-                  onClick={() => {
-                    setServiceSla(opt.id);
-                    toggleDropdown(null);
-                  }}
-                  className={`w-full text-left px-3 py-2 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
-                    serviceSla === opt.id ? "bg-[#0038F8] text-white" : "hover:bg-slate-100 text-slate-700"
-                  }`}
-                >
-                  {opt.label}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* 5. Okres */}
-        <div className="relative">
-          <button
-            type="button"
-            onClick={() => toggleDropdown("srv_period")}
-            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold border transition-colors cursor-pointer ${
-              servicePeriod !== "q2_2026"
-                ? "bg-[#0038F8] text-white border-[#0038F8] shadow-sm"
-                : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
-            }`}
-          >
-            <span>5. Cykl{servicePeriod === "q2_2026" ? ": Q2 2026" : servicePeriod === "q1_2026" ? ": Q1 2026" : ": 12 m-cy"}</span>
-            <ChevronDown size={14} className={servicePeriod !== "q2_2026" ? "text-white" : "text-slate-400"} />
-          </button>
-          {activeDropdown === "srv_period" && (
-            <div className="absolute top-full left-0 mt-1.5 w-60 bg-white border border-slate-200 rounded-xl shadow-xl z-50 p-2 space-y-1">
-              {[
-                { id: "q2_2026", label: "Q2 2026 (Bieżący cykl)" },
-                { id: "q1_2026", label: "Q1 2026 (Poprzedni cykl)" },
-                { id: "year", label: "Ostatnie 12 miesięcy (Trend)" },
-              ].map((opt) => (
-                <button
-                  key={opt.id}
-                  type="button"
-                  onClick={() => {
-                    setServicePeriod(opt.id);
-                    toggleDropdown(null);
-                  }}
-                  className={`w-full text-left px-3 py-2 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
-                    servicePeriod === opt.id ? "bg-[#0038F8] text-white" : "hover:bg-slate-100 text-slate-700"
-                  }`}
-                >
-                  {opt.label}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-
         {/* Przycisk: Wyczyść */}
         <div className="flex items-center gap-2 ml-auto">
           <button
@@ -12091,24 +11889,6 @@ function ServicesFilterSection({
             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/20">
               <span>Kanał: {serviceChannel}</span>
               <button type="button" onClick={() => setServiceChannel("all")} className="hover:bg-[#0038F8]/20 p-0.5 rounded cursor-pointer">
-                <X size={12} />
-              </button>
-            </span>
-          )}
-
-          {serviceSla !== "all" && (
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/20">
-              <span>SLA: {serviceSla === "under80" ? "< 80%" : ">= 80%"}</span>
-              <button type="button" onClick={() => setServiceSla("all")} className="hover:bg-[#0038F8]/20 p-0.5 rounded cursor-pointer">
-                <X size={12} />
-              </button>
-            </span>
-          )}
-
-          {servicePeriod !== "q2_2026" && (
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/20">
-              <span>Cykl: {servicePeriod}</span>
-              <button type="button" onClick={() => setServicePeriod("q2_2026")} className="hover:bg-[#0038F8]/20 p-0.5 rounded cursor-pointer">
                 <X size={12} />
               </button>
             </span>
@@ -12674,12 +12454,8 @@ function ReportingModuleView({ setView, showToast }) {
   const [auditDateTo, setAuditDateTo] = useState("");
 
   const clearAuditFilters = () => {
-    setAuditService("all");
-    setAuditProcess("all");
     setAuditChannels({});
     setAuditPriorities({});
-    setAuditStatuses({});
-    setAuditSources({});
     setAuditAuditor("");
     setAuditScoreRange("all");
     setAuditTimeRange("all");
@@ -12689,11 +12465,7 @@ function ReportingModuleView({ setView, showToast }) {
   };
 
   const auditFiltersCount =
-    (auditService !== "all" ? 1 : 0) +
-    (auditProcess !== "all" ? 1 : 0) +
-    Object.values(auditSources).filter(Boolean).length +
     Object.values(auditPriorities).filter(Boolean).length +
-    Object.values(auditStatuses).filter(Boolean).length +
     Object.values(auditChannels).filter(Boolean).length +
     (auditAuditor ? 1 : 0) +
     (auditScoreRange !== "all" ? 1 : 0) +
@@ -12703,24 +12475,18 @@ function ReportingModuleView({ setView, showToast }) {
   const [serviceFilter, setServiceFilter] = useState("all");
   const [serviceProcess, setServiceProcess] = useState("all");
   const [serviceChannel, setServiceChannel] = useState("all");
-  const [serviceSla, setServiceSla] = useState("all");
-  const [servicePeriod, setServicePeriod] = useState("q2_2026");
 
   const clearServiceFilters = () => {
     setServiceFilter("all");
     setServiceProcess("all");
     setServiceChannel("all");
-    setServiceSla("all");
-    setServicePeriod("q2_2026");
     setActiveDropdown(null);
   };
 
   const serviceFiltersCount =
     (serviceFilter !== "all" ? 1 : 0) +
     (serviceProcess !== "all" ? 1 : 0) +
-    (serviceChannel !== "all" ? 1 : 0) +
-    (serviceSla !== "all" ? 1 : 0) +
-    (servicePeriod !== "q2_2026" ? 1 : 0);
+    (serviceChannel !== "all" ? 1 : 0);
 
   // 3. STAN DLA: ZARZĄDCZE
   const [mgmtUnit, setMgmtUnit] = useState("all");
@@ -13831,9 +13597,6 @@ function AuditReportView() {
         <div className="flex items-center gap-2.5 flex-wrap">
           <span className="text-sm font-bold text-slate-700">
             Wyniki: <span className="text-[#0038F8] font-black">{mockAudits.length}</span> audytów
-          </span>
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#0038F8]/10 text-[#0038F8] border border-[#0038F8]/20">
-            <CheckCircle2 size={12} /> Zakres: 6 audytów • 47 błędów • Śr. zgodność 86.2%
           </span>
         </div>
 
