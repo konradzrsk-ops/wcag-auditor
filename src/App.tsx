@@ -84,7 +84,10 @@ import {
   Sparkles,
   Send,
   RefreshCw,
+  Building2,
 } from "lucide-react";
+import { UserProfileView } from "./features/profile/UserProfileView";
+import { ClientProfile } from "./types";
 
 // ==========================================
 // GENERATORY DANYCH TESTOWYCH
@@ -1423,12 +1426,61 @@ function ComplaintEditModal({ isOpen, onClose, complaint, onSave }) {
 }
 
 // ==========================================
+// DOMYŚLNY PROFIL KLIENTA I ORGANIZACJI (ERSTE GROUP)
+// ==========================================
+
+const INITIAL_CLIENT_PROFILE: ClientProfile = {
+  // 1. Profil organizacji & Branding (Erste Group jako domyślne)
+  orgName: "Erste Group Bank AG",
+  orgShortName: "Erste",
+  orgLogo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHgYtVh9h9eIsSNsP76-1aodQJJzy5gNNVXR6n_oyQ0g&s",
+  orgAltText: "Logo Erste Group Bank",
+  taxId: "PL 525-000-00-00",
+  sector: "Bankowość i finanse",
+  domain: "https://www.erstegroup.com",
+  accountTier: "Enterprise EAA & WCAG 2.1 AA",
+
+  // 2. Standardy audytowe & WCAG
+  wcagStandard: "WCAG 2.1 AA",
+  targetScore: 90,
+  auditCoordinatorName: "Kinga Wróblewska",
+  auditCoordinatorEmail: "kinga.wroblewska@erstegroup.com",
+  auditCoordinatorPhone: "+48 22 500 12 34",
+  department: "Departament Transformacji Cyfrowej i UX",
+  declarationDate: "2026-03-15",
+  declarationUrl: "https://www.erstegroup.com/pl/deklaracja-dostepnosci",
+
+  // 3. Profil użytkownika
+  userName: "Kinga Wróblewska",
+  userRole: "Koordynator Dostępności Cyfrowej",
+  userEmail: "kinga.wroblewska@erstegroup.com",
+  userPhone: "+48 601 234 567",
+  userAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix&backgroundColor=b6e3f4",
+  twoFactorEnabled: true,
+
+  // 4. Powiadomienia & Raportowanie
+  notifyCriticalErrors: true,
+  notifyAuditorReplies: true,
+  weeklyDigest: true,
+  declarationReminders: true,
+};
+
+// ==========================================
 // GŁÓWNY LAYOUT (ZARZĄDZANIE STANEM LOGOWANIA)
 // ==========================================
 
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentView, setCurrentView] = useState("przeglad");
+  const [clientProfile, setClientProfile] = useState<ClientProfile>(() => {
+    try {
+      const saved = localStorage.getItem("wcag_auditor_client_profile");
+      if (saved) return JSON.parse(saved);
+    } catch {
+      // ignore
+    }
+    return INITIAL_CLIENT_PROFILE;
+  });
   const [selectedComplaintId, setSelectedComplaintId] = useState("RKL-2026-089");
   const [complaintsList, setComplaintsList] = useState(initialComplaintsData);
   const [isAnnouncementsOpen, setIsAnnouncementsOpen] = useState(false);
@@ -1517,6 +1569,7 @@ export default function App() {
           isHelpOpen={isHelpOpen}
           setIsHelpOpen={setIsHelpOpen}
           showToast={showToast}
+          clientProfile={clientProfile}
         />
 
         {/* GŁÓWNA ZAWARTOŚĆ - TŁO 100VW */}
@@ -1536,6 +1589,7 @@ export default function App() {
               onOpenTicket={handleOpenTicketThread}
               onOpenNewTicket={handleOpenNewTicket}
               showToast={showToast}
+              clientProfile={clientProfile}
             />
           )}
           {currentView === "tickety" && (
@@ -1628,6 +1682,14 @@ export default function App() {
               setView={setCurrentView}
               setComplaintsList={setComplaintsList}
               setSelectedComplaintId={setSelectedComplaintId}
+              showToast={showToast}
+            />
+          )}
+          {currentView === "profil" && (
+            <UserProfileView
+              setView={setCurrentView}
+              clientProfile={clientProfile}
+              setClientProfile={setClientProfile}
               showToast={showToast}
             />
           )}
@@ -4182,6 +4244,50 @@ const VIEW_GUIDES = {
       "Dokładny opis środowiska asystującego (np. NVDA 2024 na Chrome) przyspiesza diagnozę o 80%.",
     ],
   },
+  profil: {
+    id: "profil",
+    title: "Mój Profil i Ustawienia Organizacji",
+    category: "Konfiguracja i Branding",
+    summary: "Panel zarządzania logo klienta na pulpicie, tożsamością instytucji, standardami WCAG oraz kontem koordynatora.",
+    purpose:
+      "Umożliwia klientowi personalizację platformy W-ally poprzez wgranie własnego logo, określenie docelowego progu dostępności WCAG oraz wyznaczenie osób odpowiedzialnych za deklarację dostępności.",
+    keyElements: [
+      {
+        name: "Logo Klienta & Branding",
+        badge: "Identyfikacja",
+        desc: "Wprowadź adres URL logo (np. Erste) lub wgraj plik z dysku. Logo jest prezentowane na pulpicie i w nagłówkach raportów.",
+      },
+      {
+        name: "Wymóg WCAG 1.1.1 (Tekst alternatywny)",
+        badge: "Dostępność",
+        desc: "Każde logo musi posiadać opis alternatywny odczytywany przez czytniki ekranu osób z niepełnosprawnością wzroku.",
+      },
+      {
+        name: "Standard Referencyjny (WCAG 2.1 / 2.2 / EAA)",
+        badge: "Zgodność",
+        desc: "Wybór wytycznych będących podstawą audytów i obliczania wskaźników dojrzałości cyfrowej.",
+      },
+      {
+        name: "Strategiczny cel zgodności (%)",
+        badge: "Cel KPI",
+        desc: "Docelowy próg spełnienia kryteriów sukcesu (np. 90%), widoczny na głównym kafelku na pulpicie.",
+      },
+      {
+        name: "Koordynator ds. Dostępności",
+        badge: "Kontakt",
+        desc: "Dane osoby odpowiedzialnej za kontakt w sprawach dostępności cyfrowej zgodnie z art. 10 ustawy.",
+      },
+    ],
+    steps: [
+      "Krok 1: W zakładce 'Logo & Branding' wklej link do logo lub wybierz plik z dysku.",
+      "Krok 2: Uzupełnij tekst alternatywny dla logo (zgodnie z WCAG 1.1.1).",
+      "Krok 3: W zakładce 'Standardy WCAG' ustaw docelowy próg dostępności dla organizacji.",
+      "Krok 4: Kliknij 'Zapisz i przejdź do pulpitu', aby natychmiast zobaczyć nowe logo.",
+    ],
+    tips: [
+      "Wgranie pliku w formacie SVG lub transparentnego PNG zapewnia idealną ostrość logo na każdym ekranie.",
+    ],
+  },
 };
 
 const FAQ_ITEMS = [
@@ -4674,6 +4780,7 @@ function TopNavbar({
   isHelpOpen,
   setIsHelpOpen,
   showToast,
+  clientProfile,
 }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
@@ -4697,7 +4804,7 @@ function TopNavbar({
       <div className="max-w-[1600px] mx-auto px-4 sm:px-8 lg:px-12">
         <div className="flex items-center justify-between h-16">
           {/* LEWA STRONA: LOGO */}
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-4 sm:gap-6">
             <button
               onClick={() => setCurrentView("przeglad")}
               className="flex items-center gap-3 text-left focus:outline-none group cursor-pointer"
@@ -4709,6 +4816,34 @@ function TopNavbar({
                 W-ally
               </span>
             </button>
+
+            {/* LOGO KLIENTA (NP. ERSTE) W NAGŁÓWKU */}
+            {clientProfile && (
+              <div className="hidden lg:flex items-center gap-2.5 pl-4 border-l border-slate-200">
+                {clientProfile.orgLogo && (
+                  <div className="w-7 h-7 rounded-lg bg-white border border-slate-200/90 p-0.5 flex items-center justify-center shrink-0 shadow-2xs">
+                    <img
+                      src={clientProfile.orgLogo}
+                      alt={clientProfile.orgAltText || clientProfile.orgName}
+                      className="max-h-full max-w-full object-contain rounded"
+                      onError={(e) => {
+                        if (e.currentTarget.src !== "./logos/erste.png") {
+                          e.currentTarget.src = "./logos/erste.png";
+                        }
+                      }}
+                    />
+                  </div>
+                )}
+                <button
+                  type="button"
+                  onClick={() => setCurrentView("profil")}
+                  className="text-xs font-bold text-slate-700 hover:text-[#0038F8] transition-colors cursor-pointer flex items-center gap-1.5"
+                  title="Konfiguracja organizacji i logo"
+                >
+                  <span>{clientProfile.orgShortName || clientProfile.orgName}</span>
+                </button>
+              </div>
+            )}
           </div>
 
           {/* ŚRODEK: POZIOME MENU (DESKTOP) */}
@@ -4838,16 +4973,19 @@ function TopNavbar({
                 className="flex items-center gap-2.5 p-1.5 rounded-xl hover:bg-slate-100 transition-colors focus:outline-none cursor-pointer"
               >
                 <img
-                  src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix&backgroundColor=b6e3f4"
-                  alt="P. Smułkowski"
+                  src={
+                    clientProfile?.userAvatar ||
+                    "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix&backgroundColor=b6e3f4"
+                  }
+                  alt={clientProfile?.userName || "Użytkownik"}
                   className="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 object-cover flex-shrink-0"
                 />
                 <div className="hidden sm:flex flex-col text-left">
                   <span className="text-xs font-bold text-slate-800 leading-tight">
-                    P. Smułkowski
+                    {clientProfile?.userName || "Kinga Wróblewska"}
                   </span>
                   <span className="text-[10px] font-semibold text-slate-600">
-                    Koordynator Dostępności
+                    {clientProfile?.userRole || "Koordynator Dostępności"}
                   </span>
                 </div>
                 <ChevronDown
@@ -4864,21 +5002,69 @@ function TopNavbar({
                     className="fixed inset-0 z-40"
                     onClick={() => setIsProfileMenuOpen(false)}
                   />
-                  <div className="absolute right-0 mt-2 w-56 bg-white border border-slate-200 shadow-xl rounded-xl z-50 py-1.5 animate-fadeIn">
+                  <div className="absolute right-0 mt-2 w-60 bg-white border border-slate-200 shadow-xl rounded-xl z-50 py-1.5 animate-fadeIn">
                     <div className="px-4 py-2 border-b border-slate-100 sm:hidden">
                       <div className="text-xs font-bold text-slate-800">
-                        P. Smułkowski
+                        {clientProfile?.userName || "Kinga Wróblewska"}
                       </div>
                       <div className="text-[11px] text-slate-600 font-medium">
-                        Koordynator Dostępności
+                        {clientProfile?.userRole || "Koordynator Dostępności"}
+                      </div>
+                      <div className="text-[10px] text-[#0038F8] font-bold mt-0.5">
+                        {clientProfile?.orgName || "Erste Group Bank"}
                       </div>
                     </div>
                     <button
-                      onClick={() => setIsProfileMenuOpen(false)}
-                      className="w-full flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
+                      onClick={() => {
+                        setIsProfileMenuOpen(false);
+                        setCurrentView("profil");
+                      }}
+                      className={`w-full flex items-center justify-between px-4 py-2 text-xs font-bold transition-colors cursor-pointer ${
+                        currentView === "profil"
+                          ? "bg-blue-50 text-[#0038F8]"
+                          : "text-slate-700 hover:bg-slate-50"
+                      }`}
                     >
-                      <User size={15} className="text-slate-500" />
-                      Mój profil
+                      <div className="flex items-center gap-2.5">
+                        <User
+                          size={15}
+                          className={
+                            currentView === "profil"
+                              ? "text-[#0038F8]"
+                              : "text-slate-500"
+                          }
+                        />
+                        <span>Mój profil</span>
+                      </div>
+                      <span className="text-[10px] text-slate-400 font-semibold">
+                        Konto
+                      </span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        setIsProfileMenuOpen(false);
+                        setCurrentView("profil");
+                      }}
+                      className="w-full flex items-center justify-between px-4 py-2 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <Building2 size={15} className="text-[#0038F8]" />
+                        <span>Logo i profil organizacji</span>
+                      </div>
+                      {clientProfile?.orgLogo && (
+                        <div className="w-5 h-5 rounded bg-white border border-slate-200 p-0.5 flex items-center justify-center shrink-0">
+                          <img
+                            src={clientProfile.orgLogo}
+                            alt=""
+                            className="max-h-full max-w-full object-contain"
+                            onError={(e) => {
+                              if (e.currentTarget.src !== "./logos/erste.png") {
+                                e.currentTarget.src = "./logos/erste.png";
+                              }
+                            }}
+                          />
+                        </div>
+                      )}
                     </button>
                     <button
                       onClick={() => {
@@ -4910,6 +5096,26 @@ function TopNavbar({
         {/* ROZWIJANE MENU MOBILNE */}
         {isMobileMenuOpen && (
           <div className="md:hidden py-3 border-t border-slate-200 space-y-1">
+            <button
+              onClick={() => {
+                setIsMobileMenuOpen(false);
+                setCurrentView("profil");
+              }}
+              className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-bold transition-all cursor-pointer ${
+                currentView === "profil"
+                  ? "bg-blue-50 text-[#0038F8]"
+                  : "text-slate-700 hover:bg-slate-50"
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <Building2 size={18} className="text-[#0038F8]" />
+                <span>Mój profil & Logo organizacji</span>
+              </div>
+              <span className="text-xs text-slate-400 font-semibold">
+                {clientProfile?.orgShortName || "Erste"}
+              </span>
+            </button>
+
             <button
               onClick={() => {
                 setIsMobileMenuOpen(false);
@@ -5157,6 +5363,7 @@ function DashboardView({
   onOpenTicket,
   onOpenNewTicket,
   showToast,
+  clientProfile,
 }) {
   return (
     <div data-testid="dashboard-view" className="flex-1 flex flex-col md:h-full w-full md:overflow-hidden">
@@ -5164,10 +5371,29 @@ function DashboardView({
         breadcrumbs={[
           { label: "Pulpit" },
         ]}
-        title="Witaj, Kinga"
-        subtitle="Oto aktualny stan dostępności cyfrowej i wskaźniki zgodności WCAG 2.1 AA w Twojej organizacji."
+        title={`Witaj, ${clientProfile?.userName || "Kinga"}`}
+        subtitle={`Oto aktualny stan dostępności cyfrowej dla organizacji ${clientProfile?.orgName || "Erste Group Bank"} (${clientProfile?.sector || "Bankowość i finanse"}). Obowiązujący standard: ${clientProfile?.wcagStandard || "WCAG 2.1 AA"}.`}
+        badges={
+          <div className="flex items-center gap-2">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-extrabold bg-blue-50 text-[#0038F8] border border-blue-200/80 shadow-2xs">
+              <Landmark size={13} />
+              {clientProfile?.orgName || "Erste Group Bank AG"}
+            </span>
+            <span className="text-[11px] font-bold text-slate-500 bg-slate-100 px-2.5 py-1 rounded-xl border border-slate-200/80">
+              {clientProfile?.wcagStandard || "WCAG 2.1 AA"}
+            </span>
+          </div>
+        }
         actions={
           <>
+            <button
+              onClick={() => setView("profil")}
+              className="flex items-center gap-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 px-3.5 py-2.5 rounded-xl text-sm font-bold shadow-xs transition-colors cursor-pointer group"
+              title="Konfiguruj profil organizacji i logo klienta"
+            >
+              <Building2 size={16} className="text-[#0038F8] group-hover:scale-110 transition-transform" />
+              <span>Profil organizacji & Logo</span>
+            </button>
             <button
               onClick={() => setView("raportowanie")}
               className="flex items-center gap-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 px-4 py-2.5 rounded-xl text-sm font-bold shadow-xs transition-colors cursor-pointer"
@@ -5188,6 +5414,100 @@ function DashboardView({
 
       <div className="flex-1 md:overflow-y-auto bg-[#f8fafc] w-full">
         <div className="max-w-[1600px] mx-auto w-full p-4 sm:p-8 lg:p-12 flex flex-col gap-6">
+
+        {/* BANER TOŻSAMOŚCI ORGANIZACJI KLIENTA Z LOGO (NP. ERSTE) */}
+        <div
+          data-testid="client-org-banner"
+          className="bg-white border border-slate-200/90 rounded-2xl p-4 sm:p-5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4 relative overflow-hidden"
+        >
+          <div className="flex items-center gap-4 sm:gap-5 min-w-0">
+            {/* LOGO KLIENTA (NP. ERSTE) */}
+            <div
+              className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-slate-50 border border-slate-200/80 p-2 flex items-center justify-center shrink-0 shadow-2xs group cursor-pointer"
+              onClick={() => setView("profil")}
+              title="Kliknij, aby zmienić logo lub dane w profilu"
+            >
+              {clientProfile?.orgLogo ? (
+                <img
+                  src={clientProfile.orgLogo}
+                  alt={clientProfile.orgAltText || `Logo ${clientProfile.orgName}`}
+                  className="max-h-full max-w-full object-contain rounded-lg transition-transform group-hover:scale-105"
+                  onError={(e) => {
+                    if (e.currentTarget.src !== "./logos/erste.png") {
+                      e.currentTarget.src = "./logos/erste.png";
+                    }
+                  }}
+                />
+              ) : (
+                <Building2 size={28} className="text-slate-400" />
+              )}
+            </div>
+
+            <div className="min-w-0">
+              <div className="flex flex-wrap items-center gap-2 mb-1">
+                <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#0038F8] bg-blue-50 px-2 py-0.5 rounded-md border border-blue-100">
+                  Przestrzeń Klienta
+                </span>
+                <span className="text-xs font-semibold text-slate-500">
+                  {clientProfile?.sector || "Bankowość i finanse"}
+                </span>
+                <span className="text-xs font-semibold text-slate-400">•</span>
+                <span className="text-xs font-semibold text-slate-500">
+                  NIP: {clientProfile?.taxId || "PL 525-000-00-00"}
+                </span>
+              </div>
+
+              <h2 className="text-base sm:text-lg font-black text-slate-900 tracking-tight flex items-center gap-2">
+                <span>{clientProfile?.orgName || "Erste Group Bank AG"}</span>
+                <span className="text-xs font-bold text-slate-500 font-normal">
+                  ({clientProfile?.orgShortName || "Erste"})
+                </span>
+              </h2>
+
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-600 font-medium mt-1">
+                <span>
+                  Koordynator organizacji:{" "}
+                  <strong className="text-slate-900 font-bold">
+                    {clientProfile?.auditCoordinatorName || "Kinga Wróblewska"}
+                  </strong>
+                </span>
+                <span className="hidden sm:inline text-slate-300">|</span>
+                <span>
+                  Opiekun W-ally:{" "}
+                  <strong className="text-slate-900 font-bold">
+                    Tomasz Straszak
+                  </strong>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* PRAWA STRONA BANERU: WSKAŹNIK CELU I PRZYCISK EDYCJI */}
+          <div className="flex items-center gap-3 shrink-0 pt-3 md:pt-0 border-t md:border-t-0 border-slate-100 justify-between md:justify-end">
+            <div className="text-right hidden sm:block">
+              <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">
+                Docelowy próg dojrzałości
+              </span>
+              <div className="flex items-center justify-end gap-1.5 mt-0.5">
+                <span className="text-sm font-extrabold text-[#0038F8]">
+                  Cel: {clientProfile?.targetScore || 90}%
+                </span>
+                <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100">
+                  Aktualnie: 86.2%
+                </span>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setView("profil")}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-slate-50 hover:bg-blue-50 text-slate-700 hover:text-[#0038F8] border border-slate-200 hover:border-[#0038F8]/40 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-2xs group"
+            >
+              <Pencil size={13} className="text-slate-500 group-hover:text-[#0038F8]" />
+              <span>Zmień logo w profilu</span>
+            </button>
+          </div>
+        </div>
 
       {/* RZĄD 1: Główne KPI */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
@@ -5226,10 +5546,10 @@ function DashboardView({
             </span>
             <div className="flex items-center gap-1">
               <span className="text-sm font-semibold text-slate-600">
-                Cel: 90%
+                Cel: {clientProfile?.targetScore || 90}%
               </span>
               <InfoTooltip
-                text="Strategiczny cel organizacji zgodny z wymaganiami Europejskiego Aktu o Dostępności (EAA)."
+                text={`Strategiczny cel organizacji (${clientProfile?.orgName || "Erste Group"}) zdefiniowany w profilu organizacji, zgodny z wymaganiami ${clientProfile?.wcagStandard || "WCAG 2.1 AA"}.`}
                 position="top"
                 align="left"
               />

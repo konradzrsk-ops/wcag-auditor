@@ -202,3 +202,44 @@ export interface FlatError {
   auditStart: string;
   auditEnd: string;
 }
+
+// ==========================================
+// Client Profile & Organization Types
+// ==========================================
+
+export interface ClientProfile {
+  // Profil organizacji & Branding
+  orgName: string;
+  orgShortName: string;
+  orgLogo: string;
+  orgAltText: string;
+  taxId: string;
+  sector: string;
+  domain: string;
+  accountTier: string;
+
+  // Ustawienia audytowe & WCAG
+  wcagStandard: string;
+  targetScore: number;
+  auditCoordinatorName: string;
+  auditCoordinatorEmail: string;
+  auditCoordinatorPhone: string;
+  department: string;
+  declarationDate: string;
+  declarationUrl: string;
+
+  // Profil użytkownika
+  userName: string;
+  userRole: string;
+  userEmail: string;
+  userPhone: string;
+  userAvatar: string;
+  twoFactorEnabled: boolean;
+
+  // Powiadomienia & Subskrypcje
+  notifyCriticalErrors: boolean;
+  notifyAuditorReplies: boolean;
+  weeklyDigest: boolean;
+  declarationReminders: boolean;
+}
+
