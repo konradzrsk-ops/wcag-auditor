@@ -5887,19 +5887,8 @@ function DashboardView({
         breadcrumbs={[
           { label: "Pulpit" },
         ]}
-        title={`Witaj, ${clientProfile?.userName || "Kinga"}`}
-        subtitle={`Oto aktualny stan dostępności cyfrowej dla organizacji ${clientProfile?.orgName || "Erste Group Bank"} (${clientProfile?.sector || "Bankowość i finanse"}). Obowiązujący standard: ${clientProfile?.wcagStandard || "WCAG 2.1 AA"}.`}
-        badges={
-          <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-extrabold bg-blue-50 text-[#0038F8] border border-blue-200/80 shadow-2xs">
-              <Landmark size={13} />
-              {clientProfile?.orgName || "Erste Group Bank AG"}
-            </span>
-            <span className="text-xs font-bold text-slate-600 bg-slate-100 px-2.5 py-1 rounded-xl border border-slate-200/80">
-              {clientProfile?.wcagStandard || "WCAG 2.1 AA"}
-            </span>
-          </div>
-        }
+        title={`Witaj, ${clientProfile?.userName ? clientProfile.userName.split(" ")[0] : "Kinga"}`}
+        subtitle={`Oto aktualny stan dostępności cyfrowej dla organizacji ${clientProfile?.orgName || "Erste Group Bank"}.`}
         actions={
           <>
             <button
@@ -5956,24 +5945,8 @@ function DashboardView({
             </div>
 
             <div className="min-w-0 border-l border-slate-200 pl-4 sm:pl-5">
-              <div className="flex flex-wrap items-center gap-2 mb-1">
-                <span className="text-xs font-extrabold uppercase tracking-wider text-[#0038F8] bg-blue-50 px-2.5 py-0.5 rounded-md border border-blue-200/80">
-                  Przestrzeń Klienta
-                </span>
-                <span className="text-xs font-semibold text-slate-600">
-                  {clientProfile?.sector || "Bankowość i finanse"}
-                </span>
-                <span className="text-xs font-semibold text-slate-300">•</span>
-                <span className="text-xs font-semibold text-slate-500">
-                  NIP: {clientProfile?.taxId || "PL 525-000-00-00"}
-                </span>
-              </div>
-
               <h2 className="text-base sm:text-lg font-black text-slate-900 tracking-tight flex items-center gap-2">
                 <span>{clientProfile?.orgName || "Erste Group Bank AG"}</span>
-                <span className="text-xs font-semibold text-slate-500 font-normal">
-                  ({clientProfile?.orgShortName || "Erste"})
-                </span>
               </h2>
 
               <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-slate-700 font-medium mt-1.5">
@@ -6018,25 +5991,8 @@ function DashboardView({
             </div>
           </div>
 
-          {/* PRAWA STRONA BANERU: WSKAŹNIK CELU I PRZYCISK ZARZĄDZANIA */}
-          <div className="flex items-center gap-4 sm:gap-5 shrink-0 pt-3 md:pt-0 border-t md:border-t-0 border-slate-100 justify-between md:justify-end">
-            <div className="text-left sm:text-right">
-              <span className="text-xs font-extrabold text-slate-500 uppercase tracking-wider block mb-1">
-                Docelowy próg dojrzałości
-              </span>
-              <div className="flex items-center sm:justify-end gap-2.5">
-                <span className="text-sm sm:text-base font-black text-[#0038F8]">
-                  Cel: {clientProfile?.targetScore || 90}%
-                </span>
-                <span className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-200 shadow-2xs">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block"></span>
-                  Aktualnie: 86.2%
-                </span>
-              </div>
-            </div>
-
-            <div className="h-8 w-px bg-slate-200 hidden md:block" />
-
+          {/* PRAWA STRONA BANERU: PRZYCISK ZARZĄDZANIA */}
+          <div className="flex items-center gap-4 sm:gap-5 shrink-0 pt-3 md:pt-0 border-t md:border-t-0 border-slate-100 justify-end">
             <button
               type="button"
               onClick={() => {
@@ -6061,16 +6017,6 @@ function DashboardView({
           <div className="flex justify-between items-start mb-2.5">
             <div className="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-500 flex items-center justify-center">
               <Activity size={20} />
-            </div>
-            <div className="flex items-center gap-1">
-              <Badge variant="success">
-                +2.4% r/r
-              </Badge>
-              <InfoTooltip
-                text="Porównanie rok do roku (r/r) – dynamika wzrostu ogólnego poziomu dostępności względem analogicznego okresu w ubiegłym roku."
-                position="bottom"
-                align="right"
-              />
             </div>
           </div>
           <div className="flex items-center gap-1 mb-0.5">
@@ -6140,22 +6086,12 @@ function DashboardView({
           <div className="flex justify-between items-start mb-2">
             <div className="flex items-center gap-1">
               <span className="text-xs font-bold text-slate-700 uppercase tracking-wider block">
-                Błędy Otwarte (Razem: 239)
+                Błędy
               </span>
               <InfoTooltip
                 text="Łączna liczba zarejestrowanych, nierozwiązanych dotąd barier dostępności wykrytych we wszystkich audytowanych systemach."
                 position="top"
                 align="left"
-              />
-            </div>
-            <div className="flex items-center gap-1">
-              <Badge variant="danger" className="!px-2 !py-0.5 !text-xs font-bold">
-                +12 m/m
-              </Badge>
-              <InfoTooltip
-                text="Porównanie miesiąc do miesiąca (m/m) – przyrost liczby otwartych błędów w stosunku do poprzedniego miesiąca."
-                position="bottom"
-                align="right"
               />
             </div>
           </div>
@@ -6170,7 +6106,6 @@ function DashboardView({
                 </span>
               </div>
               <span className="text-lg sm:text-xl font-extrabold text-slate-900 leading-none">47</span>
-              <span className="text-[11px] font-bold text-red-700 mt-1 whitespace-nowrap">Wymaga akcji</span>
             </div>
 
             {/* Ważne */}
@@ -6182,7 +6117,6 @@ function DashboardView({
                 </span>
               </div>
               <span className="text-lg sm:text-xl font-extrabold text-slate-900 leading-none">128</span>
-              <span className="text-[11px] font-bold text-amber-800 mt-1 whitespace-nowrap">Do planu</span>
             </div>
 
             {/* Marginalne */}
@@ -6194,7 +6128,6 @@ function DashboardView({
                 </span>
               </div>
               <span className="text-lg sm:text-xl font-extrabold text-slate-900 leading-none">64</span>
-              <span className="text-[11px] font-bold text-blue-700 mt-1 whitespace-nowrap">Niski wpływ</span>
             </div>
           </div>
         </Card>
@@ -6206,16 +6139,6 @@ function DashboardView({
           <div className="flex justify-between items-start mb-2.5">
             <div className="w-9 h-9 rounded-lg bg-blue-50 text-blue-500 flex items-center justify-center">
               <ClipboardCheck size={20} />
-            </div>
-            <div className="flex items-center gap-1">
-              <span className="text-xs font-bold text-blue-700 bg-blue-100 px-2 py-0.5 rounded">
-                W tym kwartale
-              </span>
-              <InfoTooltip
-                text="Liczba formalnych audytów WCAG ukończonych i odebranych w bieżącym kwartale rozliczeniowym."
-                position="bottom"
-                align="right"
-              />
             </div>
           </div>
           <div className="flex items-center gap-1 mb-0.5">
@@ -6244,7 +6167,218 @@ function DashboardView({
         </Card>
       </div>
 
-      {/* RZĄD 2: Trendy i Kanały */}
+      {/* RZĄD 2: Listy akcji i ostatnie audyty */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6">
+        <Card className="p-5 sm:p-6 flex flex-col">
+          <div className="flex items-center justify-between mb-3">
+            <div>
+              <h3 className="text-sm sm:text-base font-bold text-slate-900">
+                Ostatnie audyty
+              </h3>
+              <span className="text-xs text-slate-600 font-medium">
+                Szybki podgląd prowadzonych prac
+              </span>
+            </div>
+            <button className="text-[#0038F8] bg-[#0038F8]/5 hover:bg-[#0038F8]/10 p-1.5 rounded-lg transition-colors">
+              <Plus size={16} />
+            </button>
+          </div>
+
+          <div className="flex flex-col gap-2 flex-1">
+            {[
+              {
+                id: 1,
+                date: "12.03.2026",
+                status: "Zakończony",
+                title: "Portal informacyjny - wybrane podstrony",
+                score: "77.5%",
+                statusVariant: "success",
+                critical: 3,
+                important: 7,
+                marginal: 4,
+              },
+              {
+                id: 2,
+                date: "15.04.2026",
+                status: "W trakcie",
+                title: "Serwis transakcyjny - Nowy Dashboard",
+                score: "62.1%",
+                statusVariant: "warning",
+                critical: 5,
+                important: 14,
+                marginal: 8,
+              },
+              {
+                id: 3,
+                date: "05.06.2026",
+                status: "Nowy",
+                title: "Proces reklamacyjny - formularze",
+                score: "-",
+                statusVariant: "info",
+                critical: 8,
+                important: 19,
+                marginal: 11,
+              },
+            ].map((audit) => (
+              <div
+                key={audit.id}
+                className="flex flex-col sm:flex-row sm:items-center justify-between py-2 px-2.5 sm:px-3 rounded-lg hover:bg-slate-50 border border-slate-100 transition-colors cursor-pointer group"
+                onClick={() => setView("raport-szczegoly")}
+              >
+                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-1.5 sm:mb-0 min-w-0">
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <Badge variant={audit.statusVariant} className="!px-2.5 !py-0.5 !text-xs font-bold">
+                      {audit.status}
+                    </Badge>
+                  </div>
+                  <span className="text-xs sm:text-sm font-bold text-slate-800 group-hover:text-[#0038F8] transition-colors truncate">
+                    {audit.title}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between sm:justify-end gap-2.5 sm:gap-3 w-full sm:w-auto shrink-0">
+                  {/* Rozbicie na 3 wagi błędów z tooltipami */}
+                  <div className="flex items-center gap-1">
+                    {/* Priorytetowe */}
+                    <div className="relative group/tip flex items-center">
+                      <span
+                        className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded text-xs font-bold bg-red-50 text-red-700 border border-red-200 cursor-help"
+                        title={`Błędy priorytetowe: ${audit.critical}`}
+                      >
+                        <AlertOctagon size={11} className="text-red-600" />
+                        {audit.critical}
+                      </span>
+                      <div
+                        role="tooltip"
+                        className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 pointer-events-none opacity-0 invisible group-hover/tip:opacity-100 group-hover/tip:visible transition-all duration-150 z-50 bg-slate-900 text-white text-xs font-semibold px-2.5 py-1 rounded shadow-xl whitespace-nowrap"
+                      >
+                        Błędy priorytetowe: {audit.critical}
+                      </div>
+                    </div>
+
+                    {/* Ważne */}
+                    <div className="relative group/tip flex items-center">
+                      <span
+                        className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded text-xs font-bold bg-amber-50 text-amber-800 border border-amber-200 cursor-help"
+                        title={`Błędy ważne: ${audit.important}`}
+                      >
+                        <AlertTriangle size={11} className="text-amber-800" />
+                        {audit.important}
+                      </span>
+                      <div
+                        role="tooltip"
+                        className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 pointer-events-none opacity-0 invisible group-hover/tip:opacity-100 group-hover/tip:visible transition-all duration-150 z-50 bg-slate-900 text-white text-xs font-semibold px-2.5 py-1 rounded shadow-xl whitespace-nowrap"
+                      >
+                        Błędy ważne: {audit.important}
+                      </div>
+                    </div>
+
+                    {/* Marginalne */}
+                    <div className="relative group/tip flex items-center">
+                      <span
+                        className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200 cursor-help"
+                        title={`Błędy marginalne: ${audit.marginal}`}
+                      >
+                        <Info size={11} className="text-blue-700" />
+                        {audit.marginal}
+                      </span>
+                      <div
+                        role="tooltip"
+                        className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 pointer-events-none opacity-0 invisible group-hover/tip:opacity-100 group-hover/tip:visible transition-all duration-150 z-50 bg-slate-900 text-white text-xs font-semibold px-2.5 py-1 rounded shadow-xl whitespace-nowrap"
+                      >
+                        Błędy marginalne: {audit.marginal}
+                      </div>
+                    </div>
+                  </div>
+
+                  <span className="text-xs font-semibold text-slate-600 flex items-center gap-1">
+                    <Calendar size={12} /> {audit.date}
+                  </span>
+                  <span
+                    className={`text-xs sm:text-sm font-extrabold ${
+                      audit.score === "-"
+                        ? "text-slate-600 font-bold"
+                        : parseFloat(audit.score) >= 80
+                        ? "text-emerald-700 font-bold"
+                        : "text-amber-800 font-bold"
+                    }`}
+                  >
+                    {audit.score}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+          <button
+            onClick={() => setView("raporty")}
+            className="w-full mt-2.5 text-xs font-bold text-[#0038F8] hover:bg-[#0038F8]/5 py-2 rounded-lg transition-colors border border-[#0038F8]/10 cursor-pointer"
+          >
+            Przejdź do Audytów
+          </button>
+        </Card>
+
+        <Card className="p-5 sm:p-6 flex flex-col">
+          <div className="flex items-center justify-between mb-3">
+            <div>
+              <h3 className="text-sm sm:text-base font-bold text-slate-900">
+                Wymagające uwagi (Top 5)
+              </h3>
+              <span className="text-xs text-slate-600 font-medium">
+                Usługi o najniższym procencie dostępności
+              </span>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-1.5 flex-1">
+            {[
+              { name: "Kredyt hipoteczny (Kalkulator)", score: 42.5, err: 54 },
+              { name: "Otwarcie rachunku firmowego", score: 58.2, err: 32 },
+              { name: "Panel wymiany walut (Kantor)", score: 64.0, err: 28 },
+              { name: "Proces reklamacyjny", score: 68.5, err: 21 },
+              { name: "Usługi płatnicze - BLIK", score: 72.1, err: 15 },
+            ].map((u, i) => (
+              <div
+                key={i}
+                className="flex items-center justify-between py-1.5 px-2.5 rounded-lg hover:bg-slate-50 border border-transparent hover:border-slate-100 transition-colors cursor-pointer"
+                onClick={() => setView("baza-uslug")}
+              >
+                <div className="flex items-center gap-2.5">
+                  <div className="w-5 h-5 rounded bg-red-50 text-red-700 flex items-center justify-center text-xs font-bold shrink-0">
+                    {i + 1}
+                  </div>
+                  <div>
+                    <div className="text-xs sm:text-sm font-bold text-slate-800 line-clamp-1">
+                      {u.name}
+                    </div>
+                    <div className="text-xs text-slate-600 font-semibold">
+                      {u.err} aktywnych błędów
+                    </div>
+                  </div>
+                </div>
+                <Badge
+                  variant={
+                    u.score < 50
+                      ? "danger"
+                      : u.score < 70
+                      ? "warning"
+                      : "success"
+                  }
+                  className="w-14 justify-center !py-0.5 !text-xs font-bold shrink-0 ml-2"
+                >
+                  {u.score}%
+                </Badge>
+              </div>
+            ))}
+          </div>
+          <button
+            onClick={() => setView("raportowanie")}
+            className="w-full mt-2.5 text-xs font-bold text-[#0038F8] hover:bg-[#0038F8]/5 py-2 rounded-lg transition-colors border border-[#0038F8]/10 cursor-pointer"
+          >
+            Zobacz pełny ranking w raportach
+          </button>
+        </Card>
+      </div>
+
+      {/* RZĄD 3: Trendy i Kanały */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 sm:gap-6">
         {/* Wykres Liniowy: Trend */}
         <Card className="p-5 sm:p-6 flex flex-col h-[280px] sm:h-[305px] lg:col-span-2">
@@ -6451,7 +6585,7 @@ function DashboardView({
         </Card>
       </div>
 
-      {/* RZĄD 2.5: WSPÓŁPRACA Z AUDYTORAMI & KOMUNIKATY */}
+      {/* RZĄD 4: WSPÓŁPRACA Z AUDYTORAMI & KOMUNIKATY */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6" data-testid="dashboard-collaboration-row">
         {/* LEWY WIDGET (7 KOLUMN): KONSULTACJE & TICKETY Z AUDYTORAMI WCAG */}
         <Card className="p-5 sm:p-6 lg:col-span-7 bg-white border border-slate-200 shadow-xs flex flex-col justify-between">
@@ -6822,217 +6956,6 @@ function DashboardView({
               <ArrowRight size={12} />
             </button>
           </div>
-        </Card>
-      </div>
-
-      {/* RZĄD 3: Listy akcji i ostatnie audyty */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6">
-        <Card className="p-5 sm:p-6 flex flex-col">
-          <div className="flex items-center justify-between mb-3">
-            <div>
-              <h3 className="text-sm sm:text-base font-bold text-slate-900">
-                Ostatnie audyty
-              </h3>
-              <span className="text-xs text-slate-600 font-medium">
-                Szybki podgląd prowadzonych prac
-              </span>
-            </div>
-            <button className="text-[#0038F8] bg-[#0038F8]/5 hover:bg-[#0038F8]/10 p-1.5 rounded-lg transition-colors">
-              <Plus size={16} />
-            </button>
-          </div>
-
-          <div className="flex flex-col gap-2 flex-1">
-            {[
-              {
-                id: 1,
-                date: "12.03.2026",
-                status: "Zakończony",
-                title: "Portal informacyjny - wybrane podstrony",
-                score: "77.5%",
-                statusVariant: "success",
-                critical: 3,
-                important: 7,
-                marginal: 4,
-              },
-              {
-                id: 2,
-                date: "15.04.2026",
-                status: "W trakcie",
-                title: "Serwis transakcyjny - Nowy Dashboard",
-                score: "62.1%",
-                statusVariant: "warning",
-                critical: 5,
-                important: 14,
-                marginal: 8,
-              },
-              {
-                id: 3,
-                date: "05.06.2026",
-                status: "Nowy",
-                title: "Proces reklamacyjny - formularze",
-                score: "-",
-                statusVariant: "info",
-                critical: 8,
-                important: 19,
-                marginal: 11,
-              },
-            ].map((audit) => (
-              <div
-                key={audit.id}
-                className="flex flex-col sm:flex-row sm:items-center justify-between py-2 px-2.5 sm:px-3 rounded-lg hover:bg-slate-50 border border-slate-100 transition-colors cursor-pointer group"
-                onClick={() => setView("raport-szczegoly")}
-              >
-                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-1.5 sm:mb-0 min-w-0">
-                  <div className="flex items-center gap-1.5 shrink-0">
-                    <Badge variant={audit.statusVariant} className="!px-2.5 !py-0.5 !text-xs font-bold">
-                      {audit.status}
-                    </Badge>
-                  </div>
-                  <span className="text-xs sm:text-sm font-bold text-slate-800 group-hover:text-[#0038F8] transition-colors truncate">
-                    {audit.title}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between sm:justify-end gap-2.5 sm:gap-3 w-full sm:w-auto shrink-0">
-                  {/* Rozbicie na 3 wagi błędów z tooltipami */}
-                  <div className="flex items-center gap-1">
-                    {/* Priorytetowe */}
-                    <div className="relative group/tip flex items-center">
-                      <span
-                        className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded text-xs font-bold bg-red-50 text-red-700 border border-red-200 cursor-help"
-                        title={`Błędy priorytetowe: ${audit.critical}`}
-                      >
-                        <AlertOctagon size={11} className="text-red-600" />
-                        {audit.critical}
-                      </span>
-                      <div
-                        role="tooltip"
-                        className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 pointer-events-none opacity-0 invisible group-hover/tip:opacity-100 group-hover/tip:visible transition-all duration-150 z-50 bg-slate-900 text-white text-xs font-semibold px-2.5 py-1 rounded shadow-xl whitespace-nowrap"
-                      >
-                        Błędy priorytetowe: {audit.critical}
-                      </div>
-                    </div>
-
-                    {/* Ważne */}
-                    <div className="relative group/tip flex items-center">
-                      <span
-                        className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded text-xs font-bold bg-amber-50 text-amber-800 border border-amber-200 cursor-help"
-                        title={`Błędy ważne: ${audit.important}`}
-                      >
-                        <AlertTriangle size={11} className="text-amber-800" />
-                        {audit.important}
-                      </span>
-                      <div
-                        role="tooltip"
-                        className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 pointer-events-none opacity-0 invisible group-hover/tip:opacity-100 group-hover/tip:visible transition-all duration-150 z-50 bg-slate-900 text-white text-xs font-semibold px-2.5 py-1 rounded shadow-xl whitespace-nowrap"
-                      >
-                        Błędy ważne: {audit.important}
-                      </div>
-                    </div>
-
-                    {/* Marginalne */}
-                    <div className="relative group/tip flex items-center">
-                      <span
-                        className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200 cursor-help"
-                        title={`Błędy marginalne: ${audit.marginal}`}
-                      >
-                        <Info size={11} className="text-blue-700" />
-                        {audit.marginal}
-                      </span>
-                      <div
-                        role="tooltip"
-                        className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 pointer-events-none opacity-0 invisible group-hover/tip:opacity-100 group-hover/tip:visible transition-all duration-150 z-50 bg-slate-900 text-white text-xs font-semibold px-2.5 py-1 rounded shadow-xl whitespace-nowrap"
-                      >
-                        Błędy marginalne: {audit.marginal}
-                      </div>
-                    </div>
-                  </div>
-
-                  <span className="text-xs font-semibold text-slate-600 flex items-center gap-1">
-                    <Calendar size={12} /> {audit.date}
-                  </span>
-                  <span
-                    className={`text-xs sm:text-sm font-extrabold ${
-                      audit.score === "-"
-                        ? "text-slate-600 font-bold"
-                        : parseFloat(audit.score) >= 80
-                        ? "text-emerald-700 font-bold"
-                        : "text-amber-800 font-bold"
-                    }`}
-                  >
-                    {audit.score}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-          <button
-            onClick={() => setView("raporty")}
-            className="w-full mt-2.5 text-xs font-bold text-[#0038F8] hover:bg-[#0038F8]/5 py-2 rounded-lg transition-colors border border-[#0038F8]/10 cursor-pointer"
-          >
-            Przejdź do modułu Audytów
-          </button>
-        </Card>
-
-        <Card className="p-5 sm:p-6 flex flex-col">
-          <div className="flex items-center justify-between mb-3">
-            <div>
-              <h3 className="text-sm sm:text-base font-bold text-slate-900">
-                Wymagające uwagi (Top 5)
-              </h3>
-              <span className="text-xs text-slate-600 font-medium">
-                Usługi o najniższym procencie dostępności
-              </span>
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-1.5 flex-1">
-            {[
-              { name: "Kredyt hipoteczny (Kalkulator)", score: 42.5, err: 54 },
-              { name: "Otwarcie rachunku firmowego", score: 58.2, err: 32 },
-              { name: "Panel wymiany walut (Kantor)", score: 64.0, err: 28 },
-              { name: "Proces reklamacyjny", score: 68.5, err: 21 },
-              { name: "Usługi płatnicze - BLIK", score: 72.1, err: 15 },
-            ].map((u, i) => (
-              <div
-                key={i}
-                className="flex items-center justify-between py-1.5 px-2.5 rounded-lg hover:bg-slate-50 border border-transparent hover:border-slate-100 transition-colors cursor-pointer"
-                onClick={() => setView("baza-uslug")}
-              >
-                <div className="flex items-center gap-2.5">
-                  <div className="w-5 h-5 rounded bg-red-50 text-red-700 flex items-center justify-center text-xs font-bold shrink-0">
-                    {i + 1}
-                  </div>
-                  <div>
-                    <div className="text-xs sm:text-sm font-bold text-slate-800 line-clamp-1">
-                      {u.name}
-                    </div>
-                    <div className="text-xs text-slate-600 font-semibold">
-                      {u.err} aktywnych błędów
-                    </div>
-                  </div>
-                </div>
-                <Badge
-                  variant={
-                    u.score < 50
-                      ? "danger"
-                      : u.score < 70
-                      ? "warning"
-                      : "success"
-                  }
-                  className="w-14 justify-center !py-0.5 !text-xs font-bold shrink-0 ml-2"
-                >
-                  {u.score}%
-                </Badge>
-              </div>
-            ))}
-          </div>
-          <button
-            onClick={() => setView("raportowanie")}
-            className="w-full mt-2.5 text-xs font-bold text-[#0038F8] hover:bg-[#0038F8]/5 py-2 rounded-lg transition-colors border border-[#0038F8]/10 cursor-pointer"
-          >
-            Zobacz pełny ranking w raportach
-          </button>
         </Card>
       </div>
         </div>

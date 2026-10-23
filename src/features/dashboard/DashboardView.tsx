@@ -44,16 +44,6 @@ export function DashboardView() {
             <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center">
               <Activity size={24} aria-hidden="true" />
             </div>
-            <div className="flex items-center gap-1">
-              <Badge variant="success" size="sm">
-                +2.4% r/r
-              </Badge>
-              <Tooltip content="Porównanie rok do roku (r/r) – dynamika wzrostu ogólnej dostępności względem analogicznego okresu roku ubiegłego." position="bottom">
-                <span className="p-0.5 text-slate-500 hover:text-brand-500 cursor-help rounded-full">
-                  <Info size={12} />
-                </span>
-              </Tooltip>
-            </div>
           </div>
           <div className="flex items-center gap-1 mb-1">
             <span className="text-tiny font-bold text-slate-600 uppercase tracking-widest block">
@@ -120,28 +110,18 @@ export function DashboardView() {
           className="p-6 hover:border-red-300 transition-colors"
           hoverable
           onClick={() => navigate("/raportowanie")}
-          aria-label="Krytyczne błędy otwarte: 47. Wymaga akcji! Kliknij, aby przejść do raportowania"
+          aria-label="Błędy: 47. Kliknij, aby przejść do raportowania"
         >
           <div className="flex justify-between items-start mb-4">
             <div className="w-12 h-12 rounded-xl bg-red-50 text-red-700 flex items-center justify-center">
               <AlertOctagon size={24} aria-hidden="true" />
             </div>
-            <div className="flex items-center gap-1">
-              <Badge variant="danger" size="sm">
-                +12 m/m
-              </Badge>
-              <Tooltip content="Porównanie miesiąc do miesiąca (m/m) – zmiana liczby zarejestrowanych otwartych barier od ostatniego miesiąca." position="bottom">
-                <span className="p-0.5 text-slate-500 hover:text-red-700 cursor-help rounded-full">
-                  <Info size={12} />
-                </span>
-              </Tooltip>
-            </div>
           </div>
           <div className="flex items-center gap-1 mb-1">
             <span className="text-tiny font-bold text-slate-600 uppercase tracking-widest block">
-              Krytyczne Błędy Otwarte
+              Błędy
             </span>
-            <Tooltip content="Błędy krytyczne (blokery) uniemożliwiające osobom z niepełnosprawnościami ukończenie operacji." position="top">
+            <Tooltip content="Łączna liczba zarejestrowanych barier dostępności." position="top">
               <span className="p-0.5 text-slate-500 hover:text-red-700 cursor-help rounded-full">
                 <Info size={12} />
               </span>
@@ -149,9 +129,6 @@ export function DashboardView() {
           </div>
           <div className="flex items-baseline gap-2">
             <span className="text-3xl font-extrabold text-slate-900">47</span>
-            <span className="text-sm font-bold text-red-700">
-              Wymaga akcji!
-            </span>
           </div>
         </Card>
 
@@ -164,16 +141,6 @@ export function DashboardView() {
           <div className="flex justify-between items-start mb-4">
             <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center">
               <ClipboardCheck size={24} aria-hidden="true" />
-            </div>
-            <div className="flex items-center gap-1 mt-1">
-              <span className="text-tiny font-bold text-blue-700 bg-blue-100 px-2 py-0.5 rounded-badge">
-                W tym kwartale
-              </span>
-              <Tooltip content="Liczba audytów sfinalizowanych i odebranych w bieżącym kwartale." position="bottom">
-                <span className="p-0.5 text-slate-500 hover:text-blue-700 cursor-help rounded-full">
-                  <Info size={12} />
-                </span>
-              </Tooltip>
             </div>
           </div>
           <div className="flex items-center gap-1 mb-1">
@@ -202,40 +169,7 @@ export function DashboardView() {
         </Card>
       </div>
 
-      {/* RZĄD 2: Trendy i Kanały */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Wykres Liniowy / Słupkowy: Trend */}
-        <Card className="p-4 sm:p-6 flex flex-col min-h-[380px] lg:col-span-2">
-          <div className="mb-4">
-            <h2 className="text-lg font-bold text-slate-900">
-              Trend dostępności vs Błędy w czasie
-            </h2>
-            <span className="text-xs text-slate-500 font-medium">
-              Ostatnie 12 miesięcy w całej organizacji
-            </span>
-          </div>
-          <div className="flex-1 flex flex-col justify-end">
-            <TrendChart data={chartTrendData} height={220} />
-          </div>
-        </Card>
-
-        {/* Wykres Paskowy Poziomy: Kanały */}
-        <Card className="p-6 flex flex-col min-h-[380px]">
-          <div className="mb-6">
-            <h2 className="text-lg font-bold text-slate-900">
-              Zgodność kanałów
-            </h2>
-            <span className="text-xs text-slate-500 font-medium">
-              Stan wdrożenia wytycznych wg platform
-            </span>
-          </div>
-          <div className="flex-1 flex flex-col justify-center">
-            <ChannelBars channels={mockChannelData} />
-          </div>
-        </Card>
-      </div>
-
-      {/* RZĄD 3: Listy akcji i ostatnie audyty */}
+      {/* RZĄD 2: Listy akcji i ostatnie audyty */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card className="p-4 sm:p-6 flex flex-col">
           <div className="flex items-center justify-between mb-6">
@@ -340,7 +274,7 @@ export function DashboardView() {
             onClick={() => navigate("/audyty")}
             className="w-full mt-4 text-sm font-bold text-brand-500 hover:bg-brand-50 py-2.5 rounded-control transition-colors border border-brand-500/20"
           >
-            Przejdź do modułu Audytów
+            Przejdź do Audytów
           </button>
         </Card>
 
@@ -412,6 +346,39 @@ export function DashboardView() {
           >
             Zobacz pełny ranking w raportach
           </button>
+        </Card>
+      </div>
+
+      {/* RZĄD 3: Trendy i Kanały */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Wykres Liniowy / Słupkowy: Trend */}
+        <Card className="p-4 sm:p-6 flex flex-col min-h-[380px] lg:col-span-2">
+          <div className="mb-4">
+            <h2 className="text-lg font-bold text-slate-900">
+              Trend dostępności vs Błędy w czasie
+            </h2>
+            <span className="text-xs text-slate-500 font-medium">
+              Ostatnie 12 miesięcy w całej organizacji
+            </span>
+          </div>
+          <div className="flex-1 flex flex-col justify-end">
+            <TrendChart data={chartTrendData} height={220} />
+          </div>
+        </Card>
+
+        {/* Wykres Paskowy Poziomy: Kanały */}
+        <Card className="p-6 flex flex-col min-h-[380px]">
+          <div className="mb-6">
+            <h2 className="text-lg font-bold text-slate-900">
+              Zgodność kanałów
+            </h2>
+            <span className="text-xs text-slate-500 font-medium">
+              Stan wdrożenia wytycznych wg platform
+            </span>
+          </div>
+          <div className="flex-1 flex flex-col justify-center">
+            <ChannelBars channels={mockChannelData} />
+          </div>
         </Card>
       </div>
     </div>
