@@ -3,6 +3,7 @@ import {
   Building2,
   ShieldCheck,
   User,
+  Users,
   Bell,
   Upload,
   Globe,
@@ -23,8 +24,16 @@ import {
   FileText,
   HelpCircle,
   ExternalLink,
+  Plus,
+  UserPlus,
+  Edit3,
+  Search,
+  Check,
+  X,
+  Camera,
+  Layers,
 } from "lucide-react";
-import { ClientProfile } from "../../types";
+import { ClientProfile, TeamMember } from "../../types";
 
 interface UserProfileViewProps {
   setView: (view: string) => void;
@@ -37,47 +46,77 @@ interface UserProfileViewProps {
   ) => void;
 }
 
-// Predefiniowane presety logotypów dla szybkiego testowania przez klienta
-const PRESET_LOGOS = [
+// Domyślny zespół deweloperów i testerów organizacji
+const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
   {
-    id: "erste",
-    name: "Erste Group",
-    shortName: "Erste",
-    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHgYtVh9h9eIsSNsP76-1aodQJJzy5gNNVXR6n_oyQ0g&s",
-    alt: "Logo Erste Group Bank",
-    sector: "Bankowość i finanse",
-    taxId: "PL 525-000-00-00",
-    domain: "https://www.erstegroup.com",
+    id: "tm-1",
+    name: "Marek Kowalski",
+    email: "m.kowalski@erstegroup.com",
+    role: "Lead Frontend Developer (React / Next.js)",
+    specialization: "frontend",
+    specializationLabel: "Frontend WWW",
+    assignedServices: ["Serwis transakcyjny", "Portal informacyjny", "Kalkulator kredytowy"],
+    status: "active",
+    openErrorsCount: 12,
+    resolvedErrorsCount: 28,
+    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Marek&backgroundColor=b6e3f4",
+    phone: "+48 501 112 233",
   },
   {
-    id: "mbank",
-    name: "mBank S.A.",
-    shortName: "mBank",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/MBank_logo.svg/320px-MBank_logo.svg.png",
-    alt: "Logo mBank S.A.",
-    sector: "Bankowość i finanse",
-    taxId: "PL 526-021-50-88",
-    domain: "https://www.mbank.pl",
+    id: "tm-2",
+    name: "Aleksandra Nowak",
+    email: "a.nowak@erstegroup.com",
+    role: "Senior iOS Developer (Swift)",
+    specialization: "mobile",
+    specializationLabel: "Aplikacja iOS",
+    assignedServices: ["Aplikacja mobilna iOS", "Moduł BLIK"],
+    status: "active",
+    openErrorsCount: 6,
+    resolvedErrorsCount: 19,
+    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Ola&backgroundColor=ffdfbf",
+    phone: "+48 502 223 344",
   },
   {
-    id: "pko",
-    name: "PKO Bank Polski",
-    shortName: "PKO BP",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/PKO_Bank_Polski_logo.svg/320px-PKO_Bank_Polski_logo.svg.png",
-    alt: "Logo PKO Bank Polski",
-    sector: "Bankowość i finanse",
-    taxId: "PL 525-000-77-38",
-    domain: "https://www.pkobp.pl",
+    id: "tm-3",
+    name: "Paweł Wiśniewski",
+    email: "p.wisniewski@erstegroup.com",
+    role: "Senior Android Developer (Kotlin)",
+    specialization: "mobile",
+    specializationLabel: "Aplikacja Android",
+    assignedServices: ["Aplikacja mobilna Android", "Autoryzacja mobilna"],
+    status: "active",
+    openErrorsCount: 8,
+    resolvedErrorsCount: 14,
+    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Pawel&backgroundColor=d1d4f9",
+    phone: "+48 503 334 455",
   },
   {
-    id: "gov",
-    name: "Ministerstwo Cyfryzacji",
-    shortName: "MC Gov",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Herb_Polski.svg/200px-Herb_Polski.svg.png",
-    alt: "Godło Rzeczypospolitej Polskiej - Ministerstwo Cyfryzacji",
-    sector: "Sektor publiczny - Administracja Rządowa",
-    taxId: "PL 526-289-51-99",
-    domain: "https://www.gov.pl/cyfryzacja",
+    id: "tm-4",
+    name: "Magdalena Ciesielska",
+    email: "m.ciesielska@erstegroup.com",
+    role: "QA Accessibility Specialist / Tester",
+    specialization: "qa",
+    specializationLabel: "Dostępność QA (NVDA/TalkBack)",
+    assignedServices: ["Wszystkie serwisy", "Formularze wnioskowe"],
+    status: "active",
+    openErrorsCount: 3,
+    resolvedErrorsCount: 42,
+    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Magda&backgroundColor=ffd5dc",
+    phone: "+48 504 445 566",
+  },
+  {
+    id: "tm-5",
+    name: "Kamil Bednarek",
+    email: "k.bednarek@erstegroup.com",
+    role: "Senior UI/UX Designer (Design System)",
+    specialization: "design",
+    specializationLabel: "Design System & Kontrasty",
+    assignedServices: ["Komponenty UI", "Tokeny kolorów", "Formularze"],
+    status: "active",
+    openErrorsCount: 5,
+    resolvedErrorsCount: 21,
+    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Kamil&backgroundColor=c0aede",
+    phone: "+48 505 556 677",
   },
 ];
 
@@ -88,16 +127,49 @@ export function UserProfileView({
   showToast,
 }: UserProfileViewProps) {
   const [activeTab, setActiveTab] = useState<
-    "branding" | "wcag" | "account" | "notifications"
+    "branding" | "team" | "wcag" | "account" | "notifications"
   >("branding");
 
-  // Kopia robocza formularza
-  const [formData, setFormData] = useState<ClientProfile>({ ...clientProfile });
+  // Kopia robocza formularza z gwarancją obecności zespołu
+  const [formData, setFormData] = useState<ClientProfile>({
+    ...clientProfile,
+    teamMembers:
+      clientProfile.teamMembers && clientProfile.teamMembers.length > 0
+        ? clientProfile.teamMembers
+        : DEFAULT_TEAM_MEMBERS,
+  });
+
   const [hasChanges, setHasChanges] = useState(false);
   const [previewBgDark, setPreviewBgDark] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Zmiana pojedynczego pola
+  // Referencje do ukrytych inputów plików
+  const logoFileInputRef = useRef<HTMLInputElement>(null);
+  const avatarFileInputRef = useRef<HTMLInputElement>(null);
+
+  // Stan dla modułu Zespołu
+  const [teamSearch, setTeamSearch] = useState("");
+  const [teamFilter, setTeamFilter] = useState<string>("all");
+  const [isMemberModalOpen, setIsMemberModalOpen] = useState(false);
+  const [editingMember, setEditingMember] = useState<TeamMember | null>(null);
+
+  // Formularz nowego / edytowanego członka zespołu
+  const [memberForm, setMemberForm] = useState<{
+    name: string;
+    email: string;
+    phone: string;
+    role: string;
+    specialization: TeamMember["specialization"];
+    assignedServicesText: string;
+  }>({
+    name: "",
+    email: "",
+    phone: "",
+    role: "",
+    specialization: "frontend",
+    assignedServicesText: "Serwis WWW, Formularze",
+  });
+
+  // Zmiana pojedynczego pola w profilu
   const handleChange = <K extends keyof ClientProfile>(
     field: K,
     value: ClientProfile[K]
@@ -106,8 +178,8 @@ export function UserProfileView({
     setHasChanges(true);
   };
 
-  // Obsługa wgrania pliku graficznego z dysku komputera
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Obsługa wgrania pliku logo z dysku komputera
+  const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -145,8 +217,8 @@ export function UserProfileView({
         setHasChanges(true);
         if (showToast) {
           showToast(
-            "Logo wczytane",
-            "Plik graficzny został wczytany z dysku. Zapisz profil, aby zastosować.",
+            "Logo wczytane z dysku",
+            "Plik graficzny został wczytany. Zapisz profil, aby zastosować.",
             "info"
           );
         }
@@ -155,29 +227,55 @@ export function UserProfileView({
     reader.readAsDataURL(file);
   };
 
-  // Wybór presetu
-  const applyPreset = (preset: (typeof PRESET_LOGOS)[0]) => {
-    setFormData((prev) => ({
-      ...prev,
-      orgName: preset.name,
-      orgShortName: preset.shortName,
-      orgLogo: preset.logo,
-      orgAltText: preset.alt,
-      sector: preset.sector,
-      taxId: preset.taxId,
-      domain: preset.domain,
-    }));
-    setHasChanges(true);
-    if (showToast) {
-      showToast(
-        "Zastosowano szablon",
-        `Wczytano logo i dane dla: ${preset.name}`,
-        "info"
-      );
+  // Obsługa wgrania zdjęcia awatara z dysku komputera
+  const handleAvatarUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      if (showToast) {
+        showToast(
+          "Nieprawidłowy format",
+          "Wybierz plik graficzny (PNG, JPG lub WebP).",
+          "danger"
+        );
+      }
+      return;
     }
+
+    if (file.size > 3 * 1024 * 1024) {
+      if (showToast) {
+        showToast(
+          "Plik jest za duży",
+          "Maksymalny rozmiar zdjęcia to 3 MB.",
+          "warning"
+        );
+      }
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const dataUrl = event.target?.result as string;
+      if (dataUrl) {
+        setFormData((prev) => ({
+          ...prev,
+          userAvatar: dataUrl,
+        }));
+        setHasChanges(true);
+        if (showToast) {
+          showToast(
+            "Zdjęcie awatara wczytane",
+            "Twoje zdjęcie profilowe zostało wczytane z dysku.",
+            "success"
+          );
+        }
+      }
+    };
+    reader.readAsDataURL(file);
   };
 
-  // Zapis zmian
+  // Zapis zmian w profilu
   const handleSave = (andNavigateHome: boolean = false) => {
     setClientProfile(formData);
     try {
@@ -193,7 +291,7 @@ export function UserProfileView({
     if (showToast) {
       showToast(
         "Zapisano zmiany w profilu",
-        `Logo i konfiguracja organizacji "${formData.orgName}" zostały zaktualizowane.`,
+        `Logo, dane zespołu (${formData.teamMembers?.length || 0} osób) oraz konfiguracja zostały zaktualizowane.`,
         "success"
       );
     }
@@ -208,9 +306,148 @@ export function UserProfileView({
     setFormData({ ...clientProfile });
     setHasChanges(false);
     if (showToast) {
-      showToast("Cofnięto", "Przywrócono zapisane wartości.", "info");
+      showToast("Cofnięto", "Przywrócono poprzednio zapisane wartości.", "info");
     }
   };
+
+  // Otwarcie modalu dodawania nowego członka
+  const openAddMemberModal = () => {
+    setEditingMember(null);
+    setMemberForm({
+      name: "",
+      email: "",
+      phone: "",
+      role: "Frontend Developer (React)",
+      specialization: "frontend",
+      assignedServicesText: "Serwis transakcyjny, Portal WWW",
+    });
+    setIsMemberModalOpen(true);
+  };
+
+  // Otwarcie modalu edycji istniejącego członka
+  const openEditMemberModal = (member: TeamMember) => {
+    setEditingMember(member);
+    setMemberForm({
+      name: member.name,
+      email: member.email,
+      phone: member.phone || "",
+      role: member.role,
+      specialization: member.specialization,
+      assignedServicesText: member.assignedServices.join(", "),
+    });
+    setIsMemberModalOpen(true);
+  };
+
+  // Zapis członka zespołu (dodanie lub aktualizacja)
+  const handleSaveMember = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!memberForm.name.trim() || !memberForm.email.trim()) {
+      if (showToast) {
+        showToast("Błąd", "Podaj imię, nazwisko oraz adres e-mail.", "danger");
+      }
+      return;
+    }
+
+    const assignedServices = memberForm.assignedServicesText
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
+
+    const specLabels: Record<TeamMember["specialization"], string> = {
+      frontend: "Frontend WWW",
+      mobile: "Aplikacje mobilne",
+      backend: "Backend & API",
+      qa: "Dostępność QA",
+      design: "Design System & UX",
+      other: "Inne",
+    };
+
+    if (editingMember) {
+      // Aktualizacja
+      const updatedList = (formData.teamMembers || []).map((m) =>
+        m.id === editingMember.id
+          ? {
+              ...m,
+              name: memberForm.name,
+              email: memberForm.email,
+              phone: memberForm.phone,
+              role: memberForm.role,
+              specialization: memberForm.specialization,
+              specializationLabel: specLabels[memberForm.specialization],
+              assignedServices: assignedServices.length > 0 ? assignedServices : ["Wszystkie serwisy"],
+            }
+          : m
+      );
+      setFormData((prev) => ({ ...prev, teamMembers: updatedList }));
+      setHasChanges(true);
+      if (showToast) {
+        showToast("Zaktualizowano", `Zaktualizowano dane dla: ${memberForm.name}`, "info");
+      }
+    } else {
+      // Nowy członek
+      const newMember: TeamMember = {
+        id: `tm-${Date.now()}`,
+        name: memberForm.name,
+        email: memberForm.email,
+        phone: memberForm.phone,
+        role: memberForm.role,
+        specialization: memberForm.specialization,
+        specializationLabel: specLabels[memberForm.specialization],
+        assignedServices: assignedServices.length > 0 ? assignedServices : ["Serwis transakcyjny"],
+        status: "active",
+        openErrorsCount: 0,
+        resolvedErrorsCount: 0,
+        avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(
+          memberForm.name
+        )}&backgroundColor=b6e3f4`,
+      };
+
+      setFormData((prev) => ({
+        ...prev,
+        teamMembers: [newMember, ...(prev.teamMembers || [])],
+      }));
+      setHasChanges(true);
+      if (showToast) {
+        showToast("Dodano do zespołu", `Dodano nowego członka: ${memberForm.name}`, "success");
+      }
+    }
+
+    setIsMemberModalOpen(false);
+  };
+
+  // Usunięcie członka zespołu
+  const handleDeleteMember = (memberId: string, memberName: string) => {
+    if (confirm(`Czy na pewno chcesz usunąć użytkownika ${memberName} z zespołu dostępności?`)) {
+      const updatedList = (formData.teamMembers || []).filter((m) => m.id !== memberId);
+      setFormData((prev) => ({ ...prev, teamMembers: updatedList }));
+      setHasChanges(true);
+      if (showToast) {
+        showToast("Usunięto z zespołu", `Użytkownik ${memberName} został usunięty.`, "info");
+      }
+    }
+  };
+
+  // Filtrowanie listy zespołu
+  const filteredTeam = (formData.teamMembers || []).filter((member) => {
+    const matchesSearch =
+      member.name.toLowerCase().includes(teamSearch.toLowerCase()) ||
+      member.email.toLowerCase().includes(teamSearch.toLowerCase()) ||
+      member.role.toLowerCase().includes(teamSearch.toLowerCase());
+
+    const matchesSpecialization =
+      teamFilter === "all" || member.specialization === teamFilter;
+
+    return matchesSearch && matchesSpecialization;
+  });
+
+  const totalOpenErrorsInTeam = (formData.teamMembers || []).reduce(
+    (acc, m) => acc + (m.openErrorsCount || 0),
+    0
+  );
+  const totalResolvedErrorsInTeam = (formData.teamMembers || []).reduce(
+    (acc, m) => acc + (m.resolvedErrorsCount || 0),
+    0
+  );
 
   return (
     <div
@@ -247,7 +484,6 @@ export function UserProfileView({
 
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center gap-4 min-w-0">
-              {/* Awatar usera / logo */}
               <div className="w-12 h-12 rounded-2xl bg-blue-50 text-[#0038F8] border border-blue-200/70 flex items-center justify-center shrink-0 shadow-2xs">
                 <Building2 size={24} />
               </div>
@@ -262,8 +498,7 @@ export function UserProfileView({
                   </span>
                 </div>
                 <p className="text-slate-500 text-sm mt-0.5 leading-relaxed">
-                  Zarządzaj logo klienta wyświetlanym na pulpicie, danymi
-                  instytucji, celami WCAG oraz kontem koordynatora.
+                  Zarządzaj logo klienta, tożsamością instytucji, zespołem deweloperów usuwających błędy WCAG oraz kontem koordynatora.
                 </p>
               </div>
             </div>
@@ -309,6 +544,23 @@ export function UserProfileView({
               <span>Logo & Branding Organizacji</span>
             </button>
 
+            {/* NOWA ZAKŁADKA DLA KOORDYNATORA: ZESPÓŁ I DEWELOPERZY */}
+            <button
+              type="button"
+              onClick={() => setActiveTab("team")}
+              className={`flex items-center gap-2 px-4 py-3 border-b-2 font-bold text-sm transition-all whitespace-nowrap cursor-pointer ${
+                activeTab === "team"
+                  ? "border-[#0038F8] text-[#0038F8]"
+                  : "border-transparent text-slate-600 hover:text-slate-900 hover:border-slate-300"
+              }`}
+            >
+              <Users size={16} />
+              <span>Mój Zespół & Deweloperzy</span>
+              <span className="ml-1 px-2 py-0.2 rounded-full text-[11px] font-extrabold bg-blue-100 text-[#0038F8]">
+                {formData.teamMembers?.length || 0}
+              </span>
+            </button>
+
             <button
               type="button"
               onClick={() => setActiveTab("wcag")}
@@ -351,7 +603,7 @@ export function UserProfileView({
         </div>
       </div>
 
-      {/* ZAWARTOŚĆ GŁÓWNA - SCROLLABLE */}
+      {/* ZAWARTOŚĆ GŁÓWNA */}
       <div className="flex-1 md:overflow-y-auto w-full">
         <div className="max-w-[1600px] mx-auto w-full p-4 sm:p-8 lg:p-12 flex flex-col gap-6">
           {/* BANER NIEZAPISANYCH ZMIAN */}
@@ -364,8 +616,7 @@ export function UserProfileView({
                     Masz niezapisane zmiany w profilu organizacji
                   </p>
                   <p className="text-[11px] text-amber-700">
-                    Zapisz zmiany, aby nowe logo i parametry pojawiły się na
-                    pulpicie i w nagłówkach raportów.
+                    Zapisz zmiany, aby nowe logo, dane zespołu i parametry pojawiły się na pulpicie.
                   </p>
                 </div>
               </div>
@@ -402,14 +653,13 @@ export function UserProfileView({
                     <div className="flex items-center gap-2 mb-2">
                       <Sparkles size={16} className="text-yellow-400" />
                       <span className="text-xs font-extrabold uppercase tracking-wider text-blue-200">
-                        Podgląd na żywo • Tak Twoja organizacja widnieje na
-                        Pulpicie
+                        Podgląd na żywo • Tak Twoja organizacja widnieje na Pulpicie
                       </span>
                     </div>
 
                     <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-5 mt-4">
-                      {/* Kontener logo klienta */}
-                      <div className="w-16 h-16 sm:w-20 sm:h-20 bg-white rounded-2xl p-2.5 flex items-center justify-center shadow-lg shrink-0 border border-white/20">
+                      {/* Kontener logo klienta - BEZ ZAOKRĄGLEŃ NA SAMYM OBRAZIE */}
+                      <div className="h-16 sm:h-20 px-3 bg-white rounded-xl flex items-center justify-center shadow-lg shrink-0 border border-white/20">
                         {formData.orgLogo ? (
                           <img
                             src={formData.orgLogo}
@@ -417,9 +667,9 @@ export function UserProfileView({
                               formData.orgAltText ||
                               `Logo ${formData.orgName}`
                             }
-                            className="max-h-full max-w-full object-contain rounded-lg"
+                            className="max-h-full w-auto max-w-[160px] object-contain block"
+                            style={{ borderRadius: 0 }}
                             onError={(e) => {
-                              // Fallback jeśli URL z zewnątrz zawiedzie
                               if (e.currentTarget.src !== "./logos/erste.png") {
                                 e.currentTarget.src = "./logos/erste.png";
                               }
@@ -481,7 +731,7 @@ export function UserProfileView({
 
               {/* GŁÓWNA SEKCJA ZARZĄDZANIA LOGO */}
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                {/* LEWA KOLUMNA: EDYCJA I WGข้อ LOGO (7 kolumn) */}
+                {/* LEWA KOLUMNA: EDYCJA I WGRANIE LOGO (7 kolumn) */}
                 <div className="lg:col-span-7 space-y-6">
                   <div className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs">
                     <div className="flex items-center justify-between pb-4 border-b border-slate-100 mb-5">
@@ -491,8 +741,7 @@ export function UserProfileView({
                           Ustawienie Logo Klienta
                         </h3>
                         <p className="text-xs text-slate-500 font-medium mt-0.5">
-                          Logo będzie widoczne na pulpicie, w nagłówku raportów
-                          audytowych oraz w deklaracji dostępności.
+                          Logo jest wyświetlane w naturalnych proporcjach, bez zaokrąglania narożników ani przycinania.
                         </p>
                       </div>
 
@@ -512,11 +761,39 @@ export function UserProfileView({
                       )}
                     </div>
 
-                    {/* SPOSÓB 1: Wklejenie adresu URL */}
                     <div className="space-y-4">
+                      {/* SPOSÓB 1: Wgranie pliku z dysku */}
+                      <div>
+                        <span className="block text-xs font-bold text-slate-700 mb-1.5">
+                          Wgraj plik logo z dysku komputera (Zalecane)
+                        </span>
+                        <input
+                          type="file"
+                          ref={logoFileInputRef}
+                          onChange={handleLogoUpload}
+                          accept="image/png,image/svg+xml,image/jpeg,image/webp"
+                          className="hidden"
+                        />
+                        <div
+                          onClick={() => logoFileInputRef.current?.click()}
+                          className="border-2 border-dashed border-slate-200 hover:border-[#0038F8] bg-slate-50 hover:bg-blue-50/50 rounded-2xl p-6 text-center cursor-pointer transition-all group"
+                        >
+                          <div className="w-12 h-12 mx-auto rounded-xl bg-white group-hover:bg-[#0038F8] text-slate-500 group-hover:text-white flex items-center justify-center transition-colors shadow-2xs mb-2.5">
+                            <Upload size={22} />
+                          </div>
+                          <span className="text-sm font-bold text-slate-900 group-hover:text-[#0038F8] block">
+                            Kliknij, aby wybrać plik logo z dysku
+                          </span>
+                          <span className="text-xs text-slate-500 mt-1 block">
+                            PNG, SVG, JPG lub WebP (maksymalnie 2 MB)
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* SPOSÓB 2: Wklejenie adresu URL */}
                       <div>
                         <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                          Adres URL logo (np. link do pliku PNG / SVG / JPG)
+                          LUB podaj bezpośredni adres URL logo
                         </label>
                         <div className="flex gap-2">
                           <input
@@ -541,75 +818,6 @@ export function UserProfileView({
                           >
                             Logo Erste
                           </button>
-                        </div>
-                        <p className="text-[11px] text-slate-400 mt-1">
-                          Możesz wkleić bezpośredni link do logo ze strony
-                          Twojej organizacji.
-                        </p>
-                      </div>
-
-                      {/* SPOSÓB 2: Wgranie pliku z dysku */}
-                      <div>
-                        <span className="block text-xs font-bold text-slate-700 mb-1.5">
-                          LUB wgraj plik logo z dysku komputera
-                        </span>
-                        <input
-                          type="file"
-                          ref={fileInputRef}
-                          onChange={handleFileUpload}
-                          accept="image/png,image/svg+xml,image/jpeg,image/webp"
-                          className="hidden"
-                        />
-                        <div
-                          onClick={() => fileInputRef.current?.click()}
-                          className="border-2 border-dashed border-slate-200 hover:border-[#0038F8] bg-slate-50 hover:bg-blue-50/50 rounded-2xl p-5 text-center cursor-pointer transition-all group"
-                        >
-                          <div className="w-10 h-10 mx-auto rounded-xl bg-white group-hover:bg-[#0038F8] text-slate-500 group-hover:text-white flex items-center justify-center transition-colors shadow-2xs mb-2">
-                            <Upload size={18} />
-                          </div>
-                          <span className="text-xs font-bold text-slate-800 group-hover:text-[#0038F8] block">
-                            Kliknij, aby wybrać plik logo z dysku
-                          </span>
-                          <span className="text-[11px] text-slate-400 mt-0.5 block">
-                            PNG, SVG, JPG lub WebP (maksymalnie 2 MB)
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* SPOSÓB 3: Gotowe presety demonstracyjne */}
-                      <div className="pt-3 border-t border-slate-100">
-                        <span className="block text-xs font-bold text-slate-700 mb-2">
-                          Szybki wybór gotowego szablonu klienta (Presety demo):
-                        </span>
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                          {PRESET_LOGOS.map((p) => {
-                            const isSelected =
-                              formData.orgLogo === p.logo ||
-                              formData.orgShortName === p.shortName;
-                            return (
-                              <button
-                                key={p.id}
-                                type="button"
-                                onClick={() => applyPreset(p)}
-                                className={`p-2 rounded-xl border text-left transition-all cursor-pointer flex flex-col items-center justify-center text-center gap-1.5 ${
-                                  isSelected
-                                    ? "bg-blue-50/80 border-[#0038F8] text-[#0038F8] shadow-2xs"
-                                    : "bg-white border-slate-200 hover:border-slate-300 text-slate-700 hover:bg-slate-50"
-                                }`}
-                              >
-                                <div className="h-7 w-full flex items-center justify-center px-1">
-                                  <img
-                                    src={p.logo}
-                                    alt={p.name}
-                                    className="max-h-full max-w-full object-contain"
-                                  />
-                                </div>
-                                <span className="text-[11px] font-bold truncate max-w-full">
-                                  {p.shortName}
-                                </span>
-                              </button>
-                            );
-                          })}
                         </div>
                       </div>
 
@@ -648,11 +856,11 @@ export function UserProfileView({
 
                 {/* PRAWA KOLUMNA: DANE IDENTYFIKACYJNE FIRMY (5 kolumn) */}
                 <div className="lg:col-span-5 space-y-6">
-                  {/* KARTA PODGLĄDU LOGO I KONTRASTU */}
+                  {/* KARTA PODGLĄDU LOGO I KONTRASTU - BEZ ZAOKRĄGLEŃ NA OBRAZIE */}
                   <div className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs">
                     <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
                       <h4 className="text-xs font-extrabold text-slate-900 uppercase tracking-wider">
-                        Podgląd Logo i Test Kontrastu
+                        Podgląd Logo (Brak zaokrągleń)
                       </h4>
                       <div className="flex items-center gap-1">
                         <button
@@ -691,7 +899,8 @@ export function UserProfileView({
                         <img
                           src={formData.orgLogo}
                           alt={formData.orgAltText || formData.orgName}
-                          className="max-h-24 max-w-[200px] object-contain drop-shadow-xs"
+                          className="max-h-24 w-auto max-w-[220px] object-contain drop-shadow-xs block"
+                          style={{ borderRadius: 0 }}
                           onError={(e) => {
                             if (e.currentTarget.src !== "./logos/erste.png") {
                               e.currentTarget.src = "./logos/erste.png";
@@ -712,10 +921,10 @@ export function UserProfileView({
                     <div className="mt-3 text-[11px] text-slate-500 flex items-center justify-between">
                       <span className="flex items-center gap-1">
                         <CheckCircle2 size={13} className="text-emerald-500" />
-                        Format: Obsługiwany (SVG / PNG / JPG)
+                        Oryginalne proporcje bez przycinania
                       </span>
                       <span className="font-semibold text-slate-700">
-                        Pulpit: Gotowe
+                        Status: Aktywne
                       </span>
                     </div>
                   </div>
@@ -766,7 +975,7 @@ export function UserProfileView({
                           onChange={(e) =>
                             handleChange("taxId", e.target.value)
                           }
-                          placeholder="PL 000-000-00-00"
+                          placeholder="PL 000-00-00-000"
                           className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs sm:text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/30 focus:border-[#0038F8]"
                         />
                       </div>
@@ -827,11 +1036,268 @@ export function UserProfileView({
           )}
 
           {/* ======================================================== */}
-          {/* ZAKŁADKA 2: STANDARDY WCAG & KOORDYNACJA                 */}
+          {/* ZAKŁADKA 2: MÓJ ZESPÓŁ & DEWELOPERZY (NOWA SEKCJA)       */}
+          {/* ======================================================== */}
+          {activeTab === "team" && (
+            <div className="space-y-6">
+              {/* BANER STATYSTYK ZESPOŁU */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-xs flex items-center justify-between">
+                  <div>
+                    <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">
+                      Członkowie zespołu
+                    </span>
+                    <span className="text-2xl font-black text-slate-900 mt-0.5 block">
+                      {formData.teamMembers?.length || 0} osób
+                    </span>
+                    <span className="text-[11px] text-emerald-600 font-bold">
+                      Aktywni wykonawcy
+                    </span>
+                  </div>
+                  <div className="w-12 h-12 rounded-xl bg-blue-50 text-[#0038F8] flex items-center justify-center shrink-0">
+                    <Users size={22} />
+                  </div>
+                </div>
+
+                <div className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-xs flex items-center justify-between">
+                  <div>
+                    <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">
+                      Otwarte błędy zespołu
+                    </span>
+                    <span className="text-2xl font-black text-red-600 mt-0.5 block">
+                      {totalOpenErrorsInTeam}
+                    </span>
+                    <span className="text-[11px] text-slate-500 font-semibold">
+                      W trakcie poprawy
+                    </span>
+                  </div>
+                  <div className="w-12 h-12 rounded-xl bg-red-50 text-red-600 flex items-center justify-center shrink-0">
+                    <AlertCircle size={22} />
+                  </div>
+                </div>
+
+                <div className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-xs flex items-center justify-between">
+                  <div>
+                    <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">
+                      Rozwiązane zadania
+                    </span>
+                    <span className="text-2xl font-black text-emerald-600 mt-0.5 block">
+                      {totalResolvedErrorsInTeam}
+                    </span>
+                    <span className="text-[11px] text-emerald-700 font-semibold">
+                      Zatwierdzone fixy
+                    </span>
+                  </div>
+                  <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                    <CheckCircle2 size={22} />
+                  </div>
+                </div>
+
+                <div className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-xs flex items-center justify-between">
+                  <div>
+                    <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">
+                      Pokrycie kanałów
+                    </span>
+                    <span className="text-2xl font-black text-slate-900 mt-0.5 block">
+                      WWW + Mobile
+                    </span>
+                    <span className="text-[11px] text-slate-500 font-semibold">
+                      iOS, Android, React
+                    </span>
+                  </div>
+                  <div className="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center shrink-0">
+                    <Layers size={22} />
+                  </div>
+                </div>
+              </div>
+
+              {/* PASEK ZARZĄDZANIA: WYSZUKIWARKA, FILTRY I PRZYCISK DODAWANIA */}
+              <div className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-3 flex-1">
+                  {/* Wyszukiwarka */}
+                  <div className="relative flex-1 max-w-md">
+                    <Search
+                      size={16}
+                      className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"
+                    />
+                    <input
+                      type="text"
+                      value={teamSearch}
+                      onChange={(e) => setTeamSearch(e.target.value)}
+                      placeholder="Szukaj dewelopera po imieniu, e-mailu lub roli..."
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-2 text-xs sm:text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/30 focus:bg-white"
+                    />
+                  </div>
+
+                  {/* Filtry ról */}
+                  <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-hide py-1">
+                    {[
+                      { id: "all", label: "Wszyscy" },
+                      { id: "frontend", label: "Frontend" },
+                      { id: "mobile", label: "Mobile" },
+                      { id: "qa", label: "QA / Testy" },
+                      { id: "design", label: "Design" },
+                    ].map((f) => (
+                      <button
+                        key={f.id}
+                        type="button"
+                        onClick={() => setTeamFilter(f.id)}
+                        className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
+                          teamFilter === f.id
+                            ? "bg-[#0038F8] text-white shadow-2xs"
+                            : "bg-slate-100 hover:bg-slate-200 text-slate-700"
+                        }`}
+                      >
+                        {f.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Przycisk dodania nowego członka */}
+                <button
+                  type="button"
+                  onClick={openAddMemberModal}
+                  className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#0038F8] hover:bg-[#002ECC] text-white rounded-xl text-xs font-bold shadow-xs transition-all cursor-pointer shrink-0"
+                >
+                  <UserPlus size={16} />
+                  <span>Dodaj członka zespołu</span>
+                </button>
+              </div>
+
+              {/* LISTA KART CZŁONKÓW ZESPOŁU */}
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+                {filteredTeam.map((member) => (
+                  <div
+                    key={member.id}
+                    className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-xs hover:border-[#0038F8]/40 hover:shadow-md transition-all flex flex-col justify-between group"
+                  >
+                    <div>
+                      {/* Nagłówek karty usera */}
+                      <div className="flex items-start justify-between gap-3 mb-3">
+                        <div className="flex items-center gap-3 min-w-0">
+                          <img
+                            src={member.avatar || "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix"}
+                            alt={member.name}
+                            className="w-12 h-12 rounded-full border-2 border-slate-200 object-cover shrink-0"
+                          />
+                          <div className="min-w-0">
+                            <h4 className="text-sm font-extrabold text-slate-900 group-hover:text-[#0038F8] transition-colors truncate">
+                              {member.name}
+                            </h4>
+                            <p className="text-xs text-slate-500 font-medium truncate">
+                              {member.role}
+                            </p>
+                          </div>
+                        </div>
+
+                        <span
+                          className={`text-[10px] font-extrabold px-2 py-0.5 rounded-full shrink-0 ${
+                            member.specialization === "frontend"
+                              ? "bg-blue-50 text-[#0038F8] border border-blue-200"
+                              : member.specialization === "mobile"
+                              ? "bg-purple-50 text-purple-700 border border-purple-200"
+                              : member.specialization === "qa"
+                              ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                              : "bg-amber-50 text-amber-800 border border-amber-200"
+                          }`}
+                        >
+                          {member.specializationLabel}
+                        </span>
+                      </div>
+
+                      {/* Kontakt */}
+                      <div className="space-y-1 text-xs text-slate-600 mb-4 pt-2 border-t border-slate-100">
+                        <div className="flex items-center gap-2">
+                          <Mail size={13} className="text-slate-400 shrink-0" />
+                          <a
+                            href={`mailto:${member.email}`}
+                            className="hover:text-[#0038F8] truncate"
+                          >
+                            {member.email}
+                          </a>
+                        </div>
+                        {member.phone && (
+                          <div className="flex items-center gap-2">
+                            <Phone size={13} className="text-slate-400 shrink-0" />
+                            <span>{member.phone}</span>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Przypisane serwisy */}
+                      <div className="mb-4">
+                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">
+                          Przypisane serwisy:
+                        </span>
+                        <div className="flex flex-wrap gap-1.5">
+                          {member.assignedServices.map((srv, idx) => (
+                            <span
+                              key={idx}
+                              className="text-[11px] font-semibold bg-slate-100 text-slate-700 px-2 py-0.5 rounded-lg border border-slate-200/80"
+                            >
+                              {srv}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Statystyki błędów i akcje */}
+                    <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
+                      <div className="flex items-center gap-3 text-xs">
+                        <span className="text-red-600 font-extrabold flex items-center gap-1">
+                          <span className="w-2 h-2 rounded-full bg-red-500 inline-block" />
+                          {member.openErrorsCount} otwartych
+                        </span>
+                        <span className="text-emerald-700 font-bold flex items-center gap-1">
+                          <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" />
+                          {member.resolvedErrorsCount} fixów
+                        </span>
+                      </div>
+
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        <button
+                          type="button"
+                          onClick={() => openEditMemberModal(member)}
+                          className="p-1.5 hover:bg-slate-100 text-slate-500 hover:text-[#0038F8] rounded-lg transition-colors cursor-pointer"
+                          title="Edytuj dane dewelopera"
+                        >
+                          <Edit3 size={15} />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteMember(member.id, member.name)}
+                          className="p-1.5 hover:bg-red-50 text-slate-400 hover:text-red-600 rounded-lg transition-colors cursor-pointer"
+                          title="Usuń z zespołu"
+                        >
+                          <Trash2 size={15} />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {filteredTeam.length === 0 && (
+                <div className="bg-white border border-slate-200 rounded-2xl p-12 text-center">
+                  <Users size={36} className="text-slate-300 mx-auto mb-2" />
+                  <h4 className="text-sm font-bold text-slate-700">
+                    Nie znaleziono deweloperów spełniających kryteria
+                  </h4>
+                  <p className="text-xs text-slate-400 mt-1">
+                    Zmień filtry lub dodaj nowego członka zespołu.
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* ======================================================== */}
+          {/* ZAKŁADKA 3: STANDARDY WCAG & KOORDYNACJA                 */}
           {/* ======================================================== */}
           {activeTab === "wcag" && (
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-              {/* LEWA STRONA: STANDARDY AUDYTOWE (7 kolumn) */}
               <div className="lg:col-span-7 space-y-6">
                 <div className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs space-y-5">
                   <div>
@@ -840,13 +1306,10 @@ export function UserProfileView({
                       Referencyjne Standardy Dostępności Cyfrowej
                     </h3>
                     <p className="text-xs text-slate-500 font-medium mt-0.5">
-                      Wybierz standard, według którego audytorzy W-ally weryfikują
-                      serwisy Twojej organizacji i obliczają wskaźniki na
-                      pulpicie.
+                      Wybierz standard, według którego audytorzy W-ally weryfikują serwisy Twojej organizacji.
                     </p>
                   </div>
 
-                  {/* KAFELKI WYBORU STANDARDU */}
                   <div className="space-y-3">
                     {[
                       {
@@ -952,17 +1415,14 @@ export function UserProfileView({
                 </div>
               </div>
 
-              {/* PRAWA STRONA: KOORDYNATOR & DEKLARACJA (5 kolumn) */}
               <div className="lg:col-span-5 space-y-6">
-                {/* KOORDYNATOR DOSTĘPNOŚCI */}
                 <div className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs space-y-4">
                   <div className="pb-3 border-b border-slate-100">
                     <h4 className="text-xs font-extrabold text-slate-900 uppercase tracking-wider">
                       Koordynator ds. Dostępności w Organizacji
                     </h4>
                     <p className="text-[11px] text-slate-500 mt-0.5">
-                      Osoba odpowiedzialna ustawowo za kontakt w sprawach
-                      dostępności oraz zgłoszenia skargowe.
+                      Osoba odpowiedzialna ustawowo za kontakt w sprawach dostępności.
                     </p>
                   </div>
 
@@ -977,7 +1437,7 @@ export function UserProfileView({
                         handleChange("auditCoordinatorName", e.target.value)
                       }
                       placeholder="np. Kinga Wróblewska"
-                      className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs sm:text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/30 focus:border-[#0038F8]"
+                      className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs sm:text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/30"
                     />
                   </div>
 
@@ -992,7 +1452,7 @@ export function UserProfileView({
                         handleChange("auditCoordinatorEmail", e.target.value)
                       }
                       placeholder="dostepnosc@twojadomena.pl"
-                      className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs sm:text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/30 focus:border-[#0038F8]"
+                      className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs sm:text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/30"
                     />
                   </div>
 
@@ -1007,27 +1467,11 @@ export function UserProfileView({
                         handleChange("auditCoordinatorPhone", e.target.value)
                       }
                       placeholder="+48 22 000 00 00"
-                      className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs sm:text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/30 focus:border-[#0038F8]"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">
-                      Departament / Jednostka
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.department}
-                      onChange={(e) =>
-                        handleChange("department", e.target.value)
-                      }
-                      placeholder="np. Departament Standardów Cyfrowych & UX"
-                      className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs sm:text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/30 focus:border-[#0038F8]"
+                      className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs sm:text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/30"
                     />
                   </div>
                 </div>
 
-                {/* DEKLARACJA DOSTĘPNOŚCI */}
                 <div className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs space-y-4">
                   <div className="pb-3 border-b border-slate-100 flex items-center justify-between">
                     <h4 className="text-xs font-extrabold text-slate-900 uppercase tracking-wider">
@@ -1049,7 +1493,7 @@ export function UserProfileView({
                         handleChange("declarationUrl", e.target.value)
                       }
                       placeholder="https://twojadomena.pl/deklaracja-dostepnosci"
-                      className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs sm:text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/30 focus:border-[#0038F8]"
+                      className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs sm:text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/30"
                     />
                   </div>
 
@@ -1063,11 +1507,8 @@ export function UserProfileView({
                       onChange={(e) =>
                         handleChange("declarationDate", e.target.value)
                       }
-                      className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs sm:text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/30 focus:border-[#0038F8]"
+                      className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs sm:text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/30"
                     />
-                    <p className="text-[10px] text-slate-400 mt-1">
-                      Wymóg corocznej aktualizacji deklaracji do 31 marca.
-                    </p>
                   </div>
                 </div>
               </div>
@@ -1075,7 +1516,7 @@ export function UserProfileView({
           )}
 
           {/* ======================================================== */}
-          {/* ZAKŁADKA 3: MOJE KONTO OSOBISTE & BEZPIECZEŃSTWO         */}
+          {/* ZAKŁADKA 4: MOJE KONTO OSOBISTE & AWATAR Z DYSKU         */}
           {/* ======================================================== */}
           {activeTab === "account" && (
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -1084,27 +1525,52 @@ export function UserProfileView({
                   <div className="pb-3 border-b border-slate-100">
                     <h3 className="text-base font-extrabold text-slate-900 flex items-center gap-2">
                       <User size={18} className="text-[#0038F8]" />
-                      Dane Konta Użytkownika
+                      Dane Konta Użytkownika & Zdjęcie Awatara
                     </h3>
                     <p className="text-xs text-slate-500 font-medium mt-0.5">
-                      Twoje dane wyświetlane w prawym górnym rogu platformy
-                      oraz w ticketach konsultacyjnych z audytorami.
+                      Możesz wgrać swoje prawdziwe zdjęcie z dysku lub wygenerować awatar.
                     </p>
                   </div>
 
-                  <div className="flex items-center gap-4">
-                    <img
-                      src={formData.userAvatar}
-                      alt={formData.userName}
-                      className="w-16 h-16 rounded-full bg-slate-100 border-2 border-slate-200 object-cover shrink-0"
-                    />
-                    <div className="min-w-0">
-                      <h4 className="text-sm font-bold text-slate-900">
-                        {formData.userName}
-                      </h4>
-                      <p className="text-xs text-slate-500 font-medium">
-                        {formData.userRole}
-                      </p>
+                  {/* SEKCJA AWATARA ZE ZDJĘCIEM Z DYSKU */}
+                  <div className="p-4 bg-slate-50/70 border border-slate-200 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="flex items-center gap-4">
+                      <img
+                        src={formData.userAvatar}
+                        alt={formData.userName}
+                        className="w-20 h-20 rounded-full bg-slate-100 border-2 border-slate-300 object-cover shrink-0 shadow-sm"
+                      />
+                      <div className="min-w-0">
+                        <h4 className="text-sm font-extrabold text-slate-900">
+                          {formData.userName}
+                        </h4>
+                        <p className="text-xs text-slate-500 font-medium">
+                          {formData.userRole}
+                        </p>
+                        <span className="text-[11px] text-slate-400 mt-0.5 block">
+                          Format: PNG, JPG lub WebP (max 3 MB)
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* PRZYCISKI WGRANIA Z DYSKU LUB LOSOWANIA */}
+                    <div className="flex sm:flex-col items-center sm:items-end gap-2 shrink-0">
+                      <input
+                        type="file"
+                        ref={avatarFileInputRef}
+                        onChange={handleAvatarUpload}
+                        accept="image/png,image/jpeg,image/webp"
+                        className="hidden"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => avatarFileInputRef.current?.click()}
+                        className="flex items-center gap-1.5 px-3.5 py-2 bg-[#0038F8] hover:bg-[#002ECC] text-white rounded-xl text-xs font-bold shadow-xs transition-colors cursor-pointer"
+                      >
+                        <Upload size={14} />
+                        <span>Wgraj zdjęcie z dysku</span>
+                      </button>
+
                       <button
                         type="button"
                         onClick={() => {
@@ -1114,9 +1580,10 @@ export function UserProfileView({
                             `https://api.dicebear.com/7.x/avataaars/svg?seed=${seed}&backgroundColor=b6e3f4`
                           );
                         }}
-                        className="mt-1.5 text-xs font-bold text-[#0038F8] hover:underline cursor-pointer"
+                        className="flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-xl text-xs font-bold transition-colors cursor-pointer"
                       >
-                        Losuj inny awatar
+                        <Sparkles size={13} className="text-[#0038F8]" />
+                        <span>Losuj awatar</span>
                       </button>
                     </div>
                   </div>
@@ -1132,7 +1599,7 @@ export function UserProfileView({
                         onChange={(e) =>
                           handleChange("userName", e.target.value)
                         }
-                        className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/30 focus:border-[#0038F8]"
+                        className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/30"
                       />
                     </div>
                     <div>
@@ -1145,7 +1612,7 @@ export function UserProfileView({
                         onChange={(e) =>
                           handleChange("userRole", e.target.value)
                         }
-                        className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/30 focus:border-[#0038F8]"
+                        className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/30"
                       />
                     </div>
                   </div>
@@ -1161,7 +1628,7 @@ export function UserProfileView({
                         onChange={(e) =>
                           handleChange("userEmail", e.target.value)
                         }
-                        className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/30 focus:border-[#0038F8]"
+                        className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/30"
                       />
                     </div>
                     <div>
@@ -1174,14 +1641,14 @@ export function UserProfileView({
                         onChange={(e) =>
                           handleChange("userPhone", e.target.value)
                         }
-                        className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/30 focus:border-[#0038F8]"
+                        className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/30"
                       />
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* PRAWA STRONA: BEZPIECZEŃSTWO & HASŁO (5 kolumn) */}
+              {/* PRAWA STRONA: BEZPIECZEŃSTWO */}
               <div className="lg:col-span-5 space-y-6">
                 <div className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs space-y-4">
                   <div className="pb-3 border-b border-slate-100">
@@ -1251,7 +1718,7 @@ export function UserProfileView({
           )}
 
           {/* ======================================================== */}
-          {/* ZAKŁADKA 4: POWIADOMIENIA & RAPORTY                      */}
+          {/* ZAKŁADKA 5: POWIADOMIENIA & RAPORTY                      */}
           {/* ======================================================== */}
           {activeTab === "notifications" && (
             <div className="max-w-3xl space-y-6">
@@ -1262,8 +1729,7 @@ export function UserProfileView({
                     Powiadomienia i Komunikaty E-mail
                   </h3>
                   <p className="text-xs text-slate-500 font-medium mt-0.5">
-                    Skonfiguruj, jakie informacje chcesz otrzymywać na adres{" "}
-                    <strong>{formData.userEmail}</strong>.
+                    Skonfiguruj alerty wysyłane na adres <strong>{formData.userEmail}</strong>.
                   </p>
                 </div>
 
@@ -1272,22 +1738,22 @@ export function UserProfileView({
                     {
                       key: "notifyCriticalErrors" as const,
                       title: "Alerty o nowych błędach krytycznych (Priorytetowych)",
-                      desc: "Wysyłane natychmiast po zatwierdzeniu przez audytora błędu uniemożliwiającego użytkownikom ukończenie procesu cyfrowego.",
+                      desc: "Wysyłane natychmiast po wykryciu przez audytora błędu uniemożliwiającego użytkownikom ukończenie procesu cyfrowego.",
                     },
                     {
                       key: "notifyAuditorReplies" as const,
                       title: "Odpowiedzi audytorów w ticketach konsultacyjnych",
-                      desc: "Powiadomienie, gdy Tomasz Straszak lub inny audytor W-ally udzieli rekomendacji merytorycznej w Twoim wątku.",
+                      desc: "Powiadomienie, gdy Tomasz Straszak lub inny audytor W-ally udzieli rekomendacji technicznej w wątku.",
                     },
                     {
                       key: "weeklyDigest" as const,
                       title: "Tygodniowe podsumowanie stanu dostępności (Digest)",
-                      desc: "Wysyłane w każdy poniedziałek o 08:00 rano z wykresem trendu i postępem w naprawianiu barier.",
+                      desc: "Wysyłane w każdy poniedziałek o 08:00 rano ze statystykami napraw w zespole.",
                     },
                     {
                       key: "declarationReminders" as const,
                       title: "Przypomnienia o rocznym przeglądzie Deklaracji Dostępności",
-                      desc: "Alerty wysyłane na 60, 30 i 14 dni przed terminem 31 marca każdego roku.",
+                      desc: "Alerty wysyłane przed ustawowym terminem 31 marca każdego roku.",
                     },
                   ].map((notif) => (
                     <div
@@ -1328,12 +1794,12 @@ export function UserProfileView({
           {hasChanges ? (
             <span className="text-xs font-bold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-200 flex items-center gap-1.5">
               <AlertCircle size={13} />
-              Niezapisane zmiany
+              Niezapisane zmiany w profilu
             </span>
           ) : (
             <span className="text-xs font-semibold text-slate-500 flex items-center gap-1.5">
               <CheckCircle2 size={14} className="text-emerald-500" />
-              Wszystkie zmiany zapisane w profilu
+              Wszystkie zmiany zapisane
             </span>
           )}
         </div>
@@ -1356,6 +1822,150 @@ export function UserProfileView({
           </button>
         </div>
       </div>
+
+      {/* MODAL DODAWANIA / EDYCJI CZŁONKA ZESPOŁU */}
+      {isMemberModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-fadeIn">
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-lg w-full p-6 animate-scaleIn">
+            <div className="flex items-center justify-between pb-4 border-b border-slate-100 mb-5">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#0038F8] flex items-center justify-center shrink-0">
+                  <UserPlus size={20} />
+                </div>
+                <div>
+                  <h3 className="text-base font-extrabold text-slate-900">
+                    {editingMember ? "Edytuj członka zespołu" : "Dodaj nowego dewelopera / członka"}
+                  </h3>
+                  <p className="text-xs text-slate-500 font-medium">
+                    Osoba ta będzie mogła odbierać i naprawiać błędy WCAG.
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsMemberModalOpen(false)}
+                className="p-1.5 text-slate-400 hover:text-slate-700 rounded-lg transition-colors cursor-pointer"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveMember} className="space-y-4">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">
+                  Imię i nazwisko *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={memberForm.name}
+                  onChange={(e) => setMemberForm({ ...memberForm, name: e.target.value })}
+                  placeholder="np. Tomasz Zieliński"
+                  className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2 text-xs sm:text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/30"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                    Adres e-mail firmowy *
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    value={memberForm.email}
+                    onChange={(e) => setMemberForm({ ...memberForm, email: e.target.value })}
+                    placeholder="t.zielinski@erstegroup.com"
+                    className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2 text-xs sm:text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/30"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                    Telefon (opcjonalnie)
+                  </label>
+                  <input
+                    type="text"
+                    value={memberForm.phone}
+                    onChange={(e) => setMemberForm({ ...memberForm, phone: e.target.value })}
+                    placeholder="+48 500 000 000"
+                    className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2 text-xs sm:text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/30"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                    Rola / Stanowisko *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={memberForm.role}
+                    onChange={(e) => setMemberForm({ ...memberForm, role: e.target.value })}
+                    placeholder="np. Senior Frontend Developer"
+                    className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2 text-xs sm:text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/30"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                    Główna specjalizacja
+                  </label>
+                  <select
+                    value={memberForm.specialization}
+                    onChange={(e) =>
+                      setMemberForm({
+                        ...memberForm,
+                        specialization: e.target.value as TeamMember["specialization"],
+                      })
+                    }
+                    className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2 text-xs sm:text-sm font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/30"
+                  >
+                    <option value="frontend">Frontend WWW</option>
+                    <option value="mobile">Aplikacje mobilne (iOS/Android)</option>
+                    <option value="qa">Dostępność QA / Testy</option>
+                    <option value="design">Design System & UX</option>
+                    <option value="backend">Backend & API</option>
+                    <option value="other">Inne</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">
+                  Przypisane serwisy / procesy (oddzielone przecinkami)
+                </label>
+                <input
+                  type="text"
+                  value={memberForm.assignedServicesText}
+                  onChange={(e) =>
+                    setMemberForm({ ...memberForm, assignedServicesText: e.target.value })
+                  }
+                  placeholder="np. Serwis transakcyjny, Aplikacja mobilna, Formularz BLIK"
+                  className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2 text-xs sm:text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/30"
+                />
+              </div>
+
+              <div className="pt-4 border-t border-slate-100 flex items-center justify-end gap-3">
+                <button
+                  type="button"
+                  onClick={() => setIsMemberModalOpen(false)}
+                  className="px-4 py-2 text-xs font-bold text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors cursor-pointer"
+                >
+                  Anuluj
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 text-xs font-bold text-white bg-[#0038F8] hover:bg-[#002ECC] rounded-xl transition-colors cursor-pointer shadow-xs flex items-center gap-1.5"
+                >
+                  <Check size={14} />
+                  <span>{editingMember ? "Zapisz zmiany" : "Dodaj do zespołu"}</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

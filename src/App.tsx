@@ -1463,6 +1463,80 @@ const INITIAL_CLIENT_PROFILE: ClientProfile = {
   notifyAuditorReplies: true,
   weeklyDigest: true,
   declarationReminders: true,
+
+  // 5. Zespół deweloperski i wykonawczy (Koordynator)
+  teamMembers: [
+    {
+      id: "tm-1",
+      name: "Marek Kowalski",
+      email: "m.kowalski@erstegroup.com",
+      role: "Lead Frontend Developer (React / Next.js)",
+      specialization: "frontend",
+      specializationLabel: "Frontend WWW",
+      assignedServices: ["Serwis transakcyjny", "Portal informacyjny", "Kalkulator kredytowy"],
+      status: "active",
+      openErrorsCount: 12,
+      resolvedErrorsCount: 28,
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Marek&backgroundColor=b6e3f4",
+      phone: "+48 501 112 233",
+    },
+    {
+      id: "tm-2",
+      name: "Aleksandra Nowak",
+      email: "a.nowak@erstegroup.com",
+      role: "Senior iOS Developer (Swift)",
+      specialization: "mobile",
+      specializationLabel: "Aplikacja iOS",
+      assignedServices: ["Aplikacja mobilna iOS", "Moduł BLIK"],
+      status: "active",
+      openErrorsCount: 6,
+      resolvedErrorsCount: 19,
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Ola&backgroundColor=ffdfbf",
+      phone: "+48 502 223 344",
+    },
+    {
+      id: "tm-3",
+      name: "Paweł Wiśniewski",
+      email: "p.wisniewski@erstegroup.com",
+      role: "Senior Android Developer (Kotlin)",
+      specialization: "mobile",
+      specializationLabel: "Aplikacja Android",
+      assignedServices: ["Aplikacja mobilna Android", "Autoryzacja mobilna"],
+      status: "active",
+      openErrorsCount: 8,
+      resolvedErrorsCount: 14,
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Pawel&backgroundColor=d1d4f9",
+      phone: "+48 503 334 455",
+    },
+    {
+      id: "tm-4",
+      name: "Magdalena Ciesielska",
+      email: "m.ciesielska@erstegroup.com",
+      role: "QA Accessibility Specialist / Tester",
+      specialization: "qa",
+      specializationLabel: "Dostępność QA (NVDA/TalkBack)",
+      assignedServices: ["Wszystkie serwisy", "Formularze wnioskowe"],
+      status: "active",
+      openErrorsCount: 3,
+      resolvedErrorsCount: 42,
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Magda&backgroundColor=ffd5dc",
+      phone: "+48 504 445 566",
+    },
+    {
+      id: "tm-5",
+      name: "Kamil Bednarek",
+      email: "k.bednarek@erstegroup.com",
+      role: "Senior UI/UX Designer (Design System)",
+      specialization: "design",
+      specializationLabel: "Design System & Kontrasty",
+      assignedServices: ["Komponenty UI", "Tokeny kolorów", "Formularze"],
+      status: "active",
+      openErrorsCount: 5,
+      resolvedErrorsCount: 21,
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Kamil&backgroundColor=c0aede",
+      phone: "+48 505 556 677",
+    },
+  ],
 };
 
 // ==========================================
@@ -1475,7 +1549,13 @@ export default function App() {
   const [clientProfile, setClientProfile] = useState<ClientProfile>(() => {
     try {
       const saved = localStorage.getItem("wcag_auditor_client_profile");
-      if (saved) return JSON.parse(saved);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (!parsed.teamMembers || parsed.teamMembers.length === 0) {
+          parsed.teamMembers = INITIAL_CLIENT_PROFILE.teamMembers;
+        }
+        return parsed;
+      }
     } catch {
       // ignore
     }
@@ -4817,22 +4897,28 @@ function TopNavbar({
               </span>
             </button>
 
-            {/* LOGO KLIENTA (NP. ERSTE) W NAGŁÓWKU */}
+            {/* LOGO KLIENTA (NP. ERSTE) W NAGŁÓWKU - BEZ ZAOKRĄGLEŃ I BEZ PRZYCINANIA */}
             {clientProfile && (
-              <div className="hidden lg:flex items-center gap-2.5 pl-4 border-l border-slate-200">
+              <div className="hidden lg:flex items-center gap-3 pl-4 border-l border-slate-200">
                 {clientProfile.orgLogo && (
-                  <div className="w-7 h-7 rounded-lg bg-white border border-slate-200/90 p-0.5 flex items-center justify-center shrink-0 shadow-2xs">
+                  <button
+                    type="button"
+                    onClick={() => setCurrentView("profil")}
+                    className="h-8 flex items-center justify-center shrink-0 cursor-pointer focus:outline-none"
+                    title="Przejdź do profilu organizacji"
+                  >
                     <img
                       src={clientProfile.orgLogo}
                       alt={clientProfile.orgAltText || clientProfile.orgName}
-                      className="max-h-full max-w-full object-contain rounded"
+                      className="h-7 w-auto max-h-7 max-w-[130px] object-contain block"
+                      style={{ borderRadius: 0 }}
                       onError={(e) => {
                         if (e.currentTarget.src !== "./logos/erste.png") {
                           e.currentTarget.src = "./logos/erste.png";
                         }
                       }}
                     />
-                  </div>
+                  </button>
                 )}
                 <button
                   type="button"
@@ -5052,11 +5138,12 @@ function TopNavbar({
                         <span>Logo i profil organizacji</span>
                       </div>
                       {clientProfile?.orgLogo && (
-                        <div className="w-5 h-5 rounded bg-white border border-slate-200 p-0.5 flex items-center justify-center shrink-0">
+                        <div className="h-5 flex items-center justify-center shrink-0">
                           <img
                             src={clientProfile.orgLogo}
                             alt=""
-                            className="max-h-full max-w-full object-contain"
+                            className="max-h-5 w-auto max-w-[45px] object-contain block"
+                            style={{ borderRadius: 0 }}
                             onError={(e) => {
                               if (e.currentTarget.src !== "./logos/erste.png") {
                                 e.currentTarget.src = "./logos/erste.png";
@@ -5421,9 +5508,9 @@ function DashboardView({
           className="bg-white border border-slate-200/90 rounded-2xl p-4 sm:p-5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4 relative overflow-hidden"
         >
           <div className="flex items-center gap-4 sm:gap-5 min-w-0">
-            {/* LOGO KLIENTA (NP. ERSTE) */}
+            {/* LOGO KLIENTA (NP. ERSTE) - BEZ ZAOKRĄGLEŃ NA OBRAZIE */}
             <div
-              className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-slate-50 border border-slate-200/80 p-2 flex items-center justify-center shrink-0 shadow-2xs group cursor-pointer"
+              className="h-16 px-3 bg-white border border-slate-200/80 rounded-xl flex items-center justify-center shrink-0 shadow-2xs group cursor-pointer"
               onClick={() => setView("profil")}
               title="Kliknij, aby zmienić logo lub dane w profilu"
             >
@@ -5431,7 +5518,8 @@ function DashboardView({
                 <img
                   src={clientProfile.orgLogo}
                   alt={clientProfile.orgAltText || `Logo ${clientProfile.orgName}`}
-                  className="max-h-full max-w-full object-contain rounded-lg transition-transform group-hover:scale-105"
+                  className="max-h-12 w-auto max-w-[160px] object-contain transition-transform group-hover:scale-105 block"
+                  style={{ borderRadius: 0 }}
                   onError={(e) => {
                     if (e.currentTarget.src !== "./logos/erste.png") {
                       e.currentTarget.src = "./logos/erste.png";

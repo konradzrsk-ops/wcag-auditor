@@ -207,6 +207,21 @@ export interface FlatError {
 // Client Profile & Organization Types
 // ==========================================
 
+export interface TeamMember {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  specialization: "frontend" | "mobile" | "backend" | "qa" | "design" | "other";
+  specializationLabel: string;
+  assignedServices: string[];
+  status: "active" | "invited";
+  openErrorsCount: number;
+  resolvedErrorsCount: number;
+  avatar?: string;
+  phone?: string;
+}
+
 export interface ClientProfile {
   // Profil organizacji & Branding
   orgName: string;
@@ -241,5 +256,8 @@ export interface ClientProfile {
   notifyAuditorReplies: boolean;
   weeklyDigest: boolean;
   declarationReminders: boolean;
+
+  // Zespół deweloperski i wykonawczy (Koordynator)
+  teamMembers?: TeamMember[];
 }
 
