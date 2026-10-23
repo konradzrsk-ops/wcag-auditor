@@ -16596,18 +16596,6 @@ function ComplaintDetailsView({
             >
               <FileCode size={14} className="text-blue-600" /> <span>Pobierz (.doc)</span>
             </button>
-            <ReauditButton
-              onClick={() => {
-                if (onOpenReaudit) {
-                  onOpenReaudit(
-                    `Skarga #${complaint.id}: ${complaint.title}`,
-                    "Weryfikacja skargi WCAG",
-                    complaint.auditor || "Piotr Smułkowski"
-                  );
-                }
-              }}
-              variant="primary"
-            />
           </div>
         }
       />
@@ -17262,20 +17250,6 @@ function ComplaintDetailsView({
                   <XCircle size={14} className="text-red-600" />
                   <span>Odrzuć reklamację</span>
                 </button>
-                <ReauditButton
-                  onClick={() => {
-                    if (onOpenReaudit) {
-                      onOpenReaudit(
-                        `Skarga #${complaint.id}: ${complaint.title}`,
-                        "Weryfikacja skargi WCAG",
-                        complaint.auditor || "Piotr Smułkowski"
-                      );
-                    }
-                  }}
-                  variant="secondary"
-                  fullWidth
-                  title="Zleć formalną weryfikację dla tej reklamacji"
-                />
               </div>
 
               <div className="p-3 bg-slate-50 rounded-lg border border-slate-100 text-xs space-y-2">
