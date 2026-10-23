@@ -2169,26 +2169,30 @@ function LoginView({ onLogin }) {
 function NotificationsDropdown({
   announcements = [],
   setAnnouncements,
-  tickets = [],
-  setTickets,
   onClose,
   onViewAllAnnouncements,
-  onViewAllTickets,
-  onOpenTicket,
   showToast,
+}: {
+  announcements?: any[];
+  setAnnouncements?: any;
+  tickets?: any[];
+  setTickets?: any;
+  onClose: () => void;
+  onViewAllAnnouncements?: () => void;
+  onViewAllTickets?: () => void;
+  onOpenTicket?: (ticketId: string) => void;
+  showToast?: (title: string, message: string) => void;
 }) {
-  const dropdownRef = useRef(null);
-  const unreadTicketsCount = tickets.filter((t) => t.unreadByClient).length;
-  const unreadAnnouncementsCount = announcements.filter((a) => a.unread).length;
-  const [activeTab, setActiveTab] = useState(unreadTicketsCount > 0 ? "tickets" : "announcements");
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const unreadAnnouncementsCount = (announcements || []).filter((a) => a.unread).length;
 
   useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
         onClose();
       }
     };
-    const handleKeyDown = (e) => {
+    const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -2199,21 +2203,24 @@ function NotificationsDropdown({
     };
   }, [onClose]);
 
-  const recentAnnouncements = announcements.slice(0, 2);
-  const recentTickets = tickets.slice(0, 3);
+  const recentAnnouncements = (announcements || []).slice(0, 5);
 
-  const markAllAnnouncementsRead = (e) => {
+  const markAllAnnouncementsRead = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setAnnouncements((prev) => prev.map((a) => ({ ...a, unread: false })));
+    if (setAnnouncements) {
+      setAnnouncements((prev: any[]) => prev.map((a) => ({ ...a, unread: false })));
+    }
     if (showToast) {
       showToast("Komunikaty", "Oznaczono wszystkie komunikaty jako przeczytane.");
     }
   };
 
-  const handleAnnouncementClick = (item) => {
-    setAnnouncements((prev) =>
-      prev.map((a) => (a.id === item.id ? { ...a, unread: false } : a))
-    );
+  const handleAnnouncementClick = (item: any) => {
+    if (setAnnouncements) {
+      setAnnouncements((prev: any[]) =>
+        prev.map((a: any) => (a.id === item.id ? { ...a, unread: false } : a))
+      );
+    }
     if (showToast && item.actionMessage) {
       showToast(item.categoryLabel, item.actionMessage);
     }
@@ -2224,221 +2231,116 @@ function NotificationsDropdown({
       ref={dropdownRef}
       className="absolute right-0 top-full mt-2 w-[340px] sm:w-[420px] bg-white rounded-2xl shadow-xl border border-slate-200 z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-150 text-left"
       role="dialog"
-      aria-label="Centrum powiadomień i wiadomości"
+      aria-label="Centrum powiadomień i komunikatów"
     >
-      {/* Zakładki na górze menu */}
-      <div className="flex items-center border-b border-slate-200 bg-slate-50/80 p-1.5 gap-1">
-        <button
-          type="button"
-          onClick={() => setActiveTab("tickets")}
-          className={`flex-1 py-1.5 px-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
-            activeTab === "tickets"
-              ? "bg-white text-[#0038F8] shadow-xs"
-              : "text-slate-600 hover:text-slate-900"
-          }`}
-        >
-          <MessageSquareText size={13} />
-          <span>Konsultacje</span>
-          {unreadTicketsCount > 0 && (
-            <span className="px-1.5 py-0.2 rounded-full text-[10px] font-extrabold bg-emerald-600 text-white animate-pulse">
-              {unreadTicketsCount}
-            </span>
-          )}
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setActiveTab("announcements")}
-          className={`flex-1 py-1.5 px-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
-            activeTab === "announcements"
-              ? "bg-white text-[#0038F8] shadow-xs"
-              : "text-slate-600 hover:text-slate-900"
-          }`}
-        >
-          <Sparkles size={13} />
-          <span>Komunikaty ({announcements.length})</span>
-          {unreadAnnouncementsCount > 0 && (
-            <span className="px-1.5 py-0.2 rounded-full text-[10px] font-extrabold bg-[#0038F8] text-white">
-              {unreadAnnouncementsCount}
-            </span>
-          )}
-        </button>
-      </div>
-
-      {/* ZAWARTOŚĆ ZAKŁADKI 1: TICKETY / ODPOWIEDZI AUDYTORÓW */}
-      {activeTab === "tickets" && (
-        <div>
-          <div className="p-3 bg-slate-50/50 border-b border-slate-100 flex items-center justify-between text-xs">
-            <span className="font-bold text-slate-700">Wątki konsultacyjne z audytorami</span>
-            {unreadTicketsCount > 0 && (
-              <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
-                Wymaga Twojej reakcji
+      {/* Nagłówek centrum powiadomień */}
+      <div className="p-3.5 bg-slate-50/90 border-b border-slate-200 flex items-center justify-between">
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-xl bg-blue-50 text-[#0038F8] flex items-center justify-center border border-blue-100/80 shadow-2xs">
+            <Bell size={16} />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs sm:text-sm font-extrabold text-slate-900">
+                Powiadomienia i komunikaty
               </span>
-            )}
-          </div>
-
-          <div className="divide-y divide-slate-100 max-h-[380px] overflow-y-auto">
-            {recentTickets.map((t) => {
-              const lastMsg = t.messages[t.messages.length - 1];
-              return (
-                <div
-                  key={t.id}
-                  onClick={() => {
-                    onClose();
-                    if (onOpenTicket) onOpenTicket(t.id);
-                  }}
-                  className={`p-3.5 hover:bg-slate-50/90 transition-colors cursor-pointer group relative ${
-                    t.unreadByClient ? "bg-emerald-50/30 border-l-3 border-emerald-500" : ""
-                  }`}
-                >
-                  <div className="flex items-center justify-between gap-2 mb-1.5">
-                    <div className="flex items-center gap-2">
-                      <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold border ${t.categoryColor}`}>
-                        {t.categoryLabel}
-                      </span>
-                      <span className="text-[11px] font-extrabold text-slate-800">
-                        #{t.id}
-                      </span>
-                    </div>
-                    <span className="text-[11px] font-medium text-slate-400">
-                      {t.updatedAt}
-                    </span>
-                  </div>
-
-                  <h4 className="text-xs font-bold text-slate-900 group-hover:text-[#0038F8] transition-colors leading-snug line-clamp-1">
-                    {t.title}
-                  </h4>
-
-                  {/* Snippet ostatniej wypowiedzi */}
-                  <div className="mt-1.5 flex items-start gap-2 bg-slate-50 p-2 rounded-lg border border-slate-100">
-                    <img
-                      src={lastMsg.authorAvatar}
-                      alt={lastMsg.authorName}
-                      className="w-5 h-5 rounded-full object-cover shrink-0 mt-0.5"
-                    />
-                    <div className="min-w-0 flex-1">
-                      <div className="text-[10px] font-bold text-slate-700 flex items-center justify-between">
-                        <span>{lastMsg.authorName}</span>
-                        {t.unreadByClient && (
-                          <span className="text-[9px] font-extrabold text-emerald-700 bg-emerald-100/80 px-1.5 rounded">
-                            Nowa odpowiedź
-                          </span>
-                        )}
-                      </div>
-                      <p className="text-[11px] text-slate-600 line-clamp-2 mt-0.5 leading-relaxed">
-                        {lastMsg.content}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="mt-2.5 flex items-center justify-between text-[11px]">
-                    <span className="inline-flex items-center gap-1 font-bold text-[#0038F8] group-hover:underline">
-                      <span>Otwórz rozmowę w tickecie</span>
-                      <ArrowRight size={11} strokeWidth={2.5} />
-                    </span>
-                    <span className="text-[10px] font-semibold text-slate-400">
-                      Dotyczy: {t.contextId || "Ogólne"}
-                    </span>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          <div className="p-2.5 bg-slate-50/80 border-t border-slate-200/80">
-            <button
-              type="button"
-              onClick={() => {
-                onClose();
-                if (onViewAllTickets) onViewAllTickets();
-              }}
-              className="w-full py-2 px-3 bg-white hover:bg-blue-50 border border-slate-200 hover:border-[#0038F8]/40 text-[#0038F8] rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-2xs transition-all cursor-pointer"
-            >
-              <span>Wszystkie konsultacje ({tickets.length})</span>
-              <ArrowRight size={13} strokeWidth={2.5} />
-            </button>
+              {unreadAnnouncementsCount > 0 && (
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-[#0038F8] text-white">
+                  {unreadAnnouncementsCount} nowe
+                </span>
+              )}
+            </div>
+            <p className="text-[11px] text-slate-500 font-medium">
+              Aktualizacje prawne, webinary i oferty
+            </p>
           </div>
         </div>
-      )}
 
-      {/* ZAWARTOŚĆ ZAKŁADKI 2: KOMUNIKATY I OFERTY */}
-      {activeTab === "announcements" && (
-        <div>
-          <div className="p-3 bg-slate-50/50 border-b border-slate-100 flex items-center justify-between text-xs">
-            <span className="font-bold text-slate-700">Nowości systemowe i webinary</span>
-            {unreadAnnouncementsCount > 0 && (
-              <button
-                type="button"
-                onClick={markAllAnnouncementsRead}
-                className="text-[11px] font-bold text-slate-500 hover:text-[#0038F8] cursor-pointer"
+        {unreadAnnouncementsCount > 0 && (
+          <button
+            type="button"
+            onClick={markAllAnnouncementsRead}
+            className="text-[11px] font-bold text-slate-500 hover:text-[#0038F8] transition-colors cursor-pointer"
+          >
+            Oznacz przeczytane
+          </button>
+        )}
+      </div>
+
+      {/* Lista komunikatów */}
+      {recentAnnouncements.length === 0 ? (
+        <div className="p-8 text-center text-slate-500">
+          <Bell size={28} className="mx-auto text-slate-300 mb-2" />
+          <p className="text-xs font-semibold">Brak nowych powiadomień</p>
+        </div>
+      ) : (
+        <div className="divide-y divide-slate-100 max-h-[380px] overflow-y-auto">
+          {recentAnnouncements.map((item) => {
+            const ItemIcon = item.icon || Sparkles;
+            return (
+              <div
+                key={item.id}
+                onClick={() => handleAnnouncementClick(item)}
+                className={`p-3.5 hover:bg-slate-50/90 transition-colors cursor-pointer group relative ${
+                  item.unread ? "bg-blue-50/20" : ""
+                }`}
               >
-                Oznacz przeczytane
-              </button>
-            )}
-          </div>
-
-          <div className="divide-y divide-slate-100 max-h-[380px] overflow-y-auto">
-            {recentAnnouncements.map((item) => {
-              const ItemIcon = item.icon || Sparkles;
-              return (
-                <div
-                  key={item.id}
-                  onClick={() => handleAnnouncementClick(item)}
-                  className={`p-3.5 hover:bg-slate-50/90 transition-colors cursor-pointer group relative ${
-                    item.unread ? "bg-blue-50/20" : ""
-                  }`}
-                >
-                  <div className="flex items-center justify-between gap-2 mb-1.5">
+                <div className="flex items-center justify-between gap-2 mb-1.5">
+                  <div className="flex items-center gap-1.5">
+                    {item.unread && (
+                      <span className="w-2 h-2 rounded-full bg-[#0038F8] inline-block shrink-0" />
+                    )}
                     <span
                       className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold border ${item.categoryColor}`}
                     >
                       <ItemIcon size={11} />
                       <span>{item.categoryLabel}</span>
                     </span>
-                    <span className="text-[11px] font-medium text-slate-400">
-                      {item.date}
-                    </span>
                   </div>
-
-                  <h4 className="text-xs font-bold text-slate-900 group-hover:text-[#0038F8] transition-colors leading-snug line-clamp-1">
-                    {item.title}
-                  </h4>
-
-                  <p className="text-[11px] text-slate-600 line-clamp-2 mt-1 leading-relaxed">
-                    {item.description}
-                  </p>
-
-                  <div className="mt-2.5 flex items-center justify-between">
-                    <span className="inline-flex items-center gap-1 text-[11px] font-bold text-[#0038F8] group-hover:underline">
-                      <span>{item.ctaText}</span>
-                      <ArrowRight size={11} strokeWidth={2.5} />
-                    </span>
-                    {item.unread && (
-                      <span className="text-[10px] font-semibold text-slate-400">
-                        Kliknij, by odczytać
-                      </span>
-                    )}
-                  </div>
+                  <span className="text-[11px] font-medium text-slate-400">
+                    {item.date}
+                  </span>
                 </div>
-              );
-            })}
-          </div>
 
-          <div className="p-2.5 bg-slate-50/80 border-t border-slate-200/80">
-            <button
-              type="button"
-              onClick={() => {
-                onClose();
-                if (onViewAllAnnouncements) onViewAllAnnouncements();
-              }}
-              className="w-full py-2 px-3 bg-white hover:bg-blue-50 border border-slate-200 hover:border-[#0038F8]/40 text-[#0038F8] rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-2xs transition-all cursor-pointer"
-            >
-              <span>Zobacz wszystkie komunikaty ({announcements.length})</span>
-              <ArrowRight size={13} strokeWidth={2.5} />
-            </button>
-          </div>
+                <h4 className="text-xs font-bold text-slate-900 group-hover:text-[#0038F8] transition-colors leading-snug line-clamp-1">
+                  {item.title}
+                </h4>
+
+                <p className="text-[11px] text-slate-600 line-clamp-2 mt-1 leading-relaxed">
+                  {item.description}
+                </p>
+
+                <div className="mt-2.5 flex items-center justify-between">
+                  <span className="inline-flex items-center gap-1 text-[11px] font-bold text-[#0038F8] group-hover:underline">
+                    <span>{item.ctaText}</span>
+                    <ArrowRight size={11} strokeWidth={2.5} />
+                  </span>
+                  {item.unread && (
+                    <span className="text-[10px] font-semibold text-slate-400">
+                      Kliknij, by odczytać
+                    </span>
+                  )}
+                </div>
+              </div>
+            );
+          })}
         </div>
       )}
+
+      {/* Stopka z przyciskiem do pełnej listy */}
+      <div className="p-2.5 bg-slate-50/80 border-t border-slate-200/80">
+        <button
+          type="button"
+          onClick={() => {
+            onClose();
+            if (onViewAllAnnouncements) onViewAllAnnouncements();
+          }}
+          className="w-full py-2 px-3 bg-white hover:bg-blue-50 border border-slate-200 hover:border-[#0038F8]/40 text-[#0038F8] rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-2xs transition-all cursor-pointer"
+        >
+          <span>Wszystkie komunikaty ({announcements.length})</span>
+          <ArrowRight size={13} strokeWidth={2.5} />
+        </button>
+      </div>
     </div>
   );
 }
@@ -5071,7 +4973,6 @@ function TopNavbar({
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
 
   const unreadAnnouncementsCount = (announcements || []).filter((a) => a.unread).length;
-  const totalUnreadNotifications = unreadAnnouncementsCount + unreadTicketsCount;
 
   const menuItems = [
     { id: "przeglad", label: "Pulpit", icon: LayoutGrid },
@@ -5172,13 +5073,13 @@ function TopNavbar({
               </div>
             </button>
 
-            {/* Przycisk Komunikatów i Ofert ("Dla Ciebie") z Dropdownem powiadomień */}
+            {/* Przycisk Powiadomień i Komunikatów z Dropdownem powiadomień */}
             <div className="relative">
               <button
                 type="button"
                 onClick={() => setIsAnnouncementsOpen(!isAnnouncementsOpen)}
-                title="Powiadomienia: Odpowiedzi audytorów oraz Komunikaty"
-                aria-label="Otwórz menu powiadomień i komunikatów"
+                title="Powiadomienia i komunikaty"
+                aria-label="Otwórz menu powiadomień"
                 className={`w-10 h-10 flex items-center justify-center rounded-xl transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#0038F8]/30 ${
                   isAnnouncementsOpen
                     ? "bg-blue-50 text-[#0038F8]"
@@ -5187,36 +5088,23 @@ function TopNavbar({
               >
                 <div className="relative flex items-center justify-center">
                   <Bell size={19} />
-                  {totalUnreadNotifications > 0 && (
-                    <span className={`absolute -top-1.5 -right-2 flex items-center justify-center min-w-[17px] h-[17px] px-1 text-[10px] font-extrabold text-white rounded-full ring-2 ring-white shadow-xs pointer-events-none ${
-                      unreadTicketsCount > 0 ? "bg-emerald-600" : "bg-[#0038F8]"
-                    }`}>
-                      {totalUnreadNotifications}
+                  {unreadAnnouncementsCount > 0 && (
+                    <span className="absolute -top-1.5 -right-2 flex items-center justify-center min-w-[17px] h-[17px] px-1 text-[10px] font-extrabold text-white bg-[#0038F8] rounded-full ring-2 ring-white shadow-xs pointer-events-none">
+                      {unreadAnnouncementsCount}
                     </span>
                   )}
                 </div>
               </button>
 
-              {/* Kompaktowe rozwinięcie - Zakładki: Odpowiedzi audytorów + Komunikaty */}
+              {/* Kompaktowe rozwinięcie - Powiadomienia i komunikaty */}
               {isAnnouncementsOpen && (
                 <AnnouncementsDropdown
                   announcements={announcements}
                   setAnnouncements={setAnnouncements}
-                  tickets={tickets}
-                  setTickets={setTickets}
                   onClose={() => setIsAnnouncementsOpen(false)}
                   onViewAllAnnouncements={() => {
                     setIsAnnouncementsOpen(false);
                     setCurrentView("komunikaty");
-                  }}
-                  onViewAllTickets={() => {
-                    setIsAnnouncementsOpen(false);
-                    setCurrentView("tickety");
-                  }}
-                  onOpenTicket={(ticketId) => {
-                    setIsAnnouncementsOpen(false);
-                    if (onOpenTicket) onOpenTicket(ticketId);
-                    else setCurrentView("tickety");
                   }}
                   showToast={showToast}
                 />
@@ -5375,13 +5263,31 @@ function TopNavbar({
             <button
               onClick={() => {
                 setIsMobileMenuOpen(false);
+                setCurrentView("tickety");
+              }}
+              className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-bold text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 transition-all cursor-pointer"
+            >
+              <div className="flex items-center gap-3">
+                <MessageSquareText size={18} className="text-emerald-600" />
+                <span>Konsultacje z audytorami</span>
+              </div>
+              {unreadTicketsCount > 0 && (
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-600 text-white animate-pulse">
+                  {unreadTicketsCount} nowa odp.
+                </span>
+              )}
+            </button>
+
+            <button
+              onClick={() => {
+                setIsMobileMenuOpen(false);
                 setCurrentView("komunikaty");
               }}
               className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-bold text-slate-700 hover:bg-blue-50 hover:text-[#0038F8] transition-all cursor-pointer"
             >
               <div className="flex items-center gap-3">
                 <Bell size={18} className="text-[#0038F8]" />
-                <span>Komunikaty i Oferty</span>
+                <span>Powiadomienia i Komunikaty</span>
               </div>
               {unreadAnnouncementsCount > 0 && (
                 <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-[#0038F8] text-white">
