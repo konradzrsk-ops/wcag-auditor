@@ -1733,7 +1733,7 @@ export function UserProfileView({
                     {
                       key: "notifyAuditorReplies" as const,
                       title: "Odpowiedzi audytorów w ticketach konsultacyjnych",
-                      desc: "Powiadomienie, gdy Tomasz Straszak lub inny audytor W-ally udzieli rekomendacji technicznej w wątku.",
+                      desc: "Powiadomienie, gdy audytor W-ally lub Opiekun Klienta (Tomasz Straszak) zamieści odpowiedź w wątku konsultacji.",
                     },
                     {
                       key: "weeklyDigest" as const,

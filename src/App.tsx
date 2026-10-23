@@ -661,7 +661,7 @@ const INITIAL_AUDITOR_TICKETS = [
         authorRole: "Dedykowany Opiekun Klienta",
         authorAvatar: "https://wally.widzialni.eu//uploads/avatars/avatar_133_1760079096.jpg",
         date: "Dzisiaj, 10:12 (15 min temu)",
-        content: "Cześć Piotrze! Dobra wiadomość: dla komponentów interfejsu użytkownika (formularze, kontrolki, ramki pól wyboru) kryterium sukcesu 1.4.11 Non-text Contrast wymaga kontrastu minimum 3.0:1 względem przyległego tła (współczynnik 4.5:1 dotyczy wyłącznie standardowego tekstu z kryterium 1.4.3). Współczynnik 3.8:1 jest w pełni zgodny z WCAG 2.1 oraz WCAG 2.2 na poziomie AA! Możecie bezpiecznie wdrażać ten komponent do jutrzejszego release'u.",
+        content: "Cześć Piotrze! Skonsultowałem tę kwestię natychmiast z naszym audytorem wiodącym WCAG. Dobra wiadomość: dla komponentów interfejsu użytkownika (formularze, kontrolki, ramki pól wyboru) kryterium sukcesu 1.4.11 Non-text Contrast wymaga kontrastu minimum 3.0:1 względem przyległego tła (współczynnik 4.5:1 dotyczy wyłącznie standardowego tekstu z kryterium 1.4.3). Współczynnik 3.8:1 jest w pełni zgodny z WCAG 2.1 oraz WCAG 2.2 na poziomie AA! Audytor potwierdził, że możecie bezpiecznie wdrażać ten komponent do jutrzejszego release'u.",
         attachments: [
           { name: "wytyczna_wcag_1_4_11_komponenty.pdf", size: "1.2 MB" }
         ],
@@ -3093,15 +3093,15 @@ function CreateTicketModal({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label className="block text-xs font-bold text-slate-700 mb-1">
-                Skieruj do audytora:
+                Adresat zgłoszenia:
               </label>
               <select
                 value={auditorName}
                 onChange={(e) => setAuditorName(e.target.value)}
                 className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0038F8]/30"
               >
-                <option value="Tomasz Straszak">Tomasz Straszak (Dedykowany Opiekun Klienta)</option>
-                <option value="dr Piotr Smułkowski">dr Piotr Smułkowski (Główny Audytor WCAG)</option>
+                <option value="Tomasz Straszak">Tomasz Straszak (Opiekun Klienta – ustalenia, wyceny, dystrybucja do audytorów)</option>
+                <option value="dr Piotr Smułkowski">dr Piotr Smułkowski (Główny Audytor WCAG – analiza techniczna)</option>
               </select>
             </div>
 
@@ -6216,7 +6216,7 @@ function DashboardView({
                         Czy kontrast 3.8:1 dla aktywnego stanu checkboxa spełnia WCAG 2.2?
                       </h4>
                       <p className="text-xs text-slate-700 line-clamp-1 mt-0.5 italic">
-                        Tomasz Straszak: "Współczynnik 3.8:1 jest w pełni zgodny z WCAG 2.1 oraz 2.2 AA (kryterium 1.4.11)..."
+                        Tomasz Straszak (Opiekun): "Skonsultowałem to z audytorem: współczynnik 3.8:1 jest w pełni zgodny z WCAG 2.1 oraz 2.2 AA..."
                       </p>
                     </div>
                   </div>

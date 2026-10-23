@@ -24,6 +24,10 @@ import {
   Layers,
   ArrowRight,
   Plus,
+  Briefcase,
+  FileSpreadsheet,
+  FileText,
+  GitBranch,
 } from "lucide-react";
 import { ClientProfile, TeamMember } from "./UserProfileView";
 
@@ -31,7 +35,7 @@ export interface PersonProfileData {
   id: string;
   name: string;
   role: string;
-  type: "auditor" | "coordinator" | "developer";
+  type: "auditor" | "coordinator" | "developer" | "manager";
   avatar: string;
   email: string;
   phone?: string;
@@ -62,19 +66,19 @@ interface PersonProfileViewProps {
   onViewMemberTickets?: (member: any) => void;
 }
 
-// Domyślny profil Tomasza Straszaka
+// Domyślny profil Tomasza Straszaka (Dedykowany Opiekun Klienta)
 const DEFAULT_TOMASZ_PROFILE: PersonProfileData = {
   id: "tomasz-straszak",
   name: "Tomasz Straszak",
-  role: "Dedykowany Opiekun Klienta & Audytor Wiodący W-ally",
-  type: "auditor",
+  role: "Dedykowany Opiekun Klienta (Account Manager)",
+  type: "manager",
   avatar: "https://wally.widzialni.eu//uploads/avatars/avatar_133_1760079096.jpg",
   email: "tomek@widzialni.eu",
   phone: "+48 795 103 017",
-  organization: "Fundacja Widzialni / W-ally",
+  organization: "W-ally / Fundacja Widzialni",
   location: "Warszawa / Zdalnie",
   status: "Dostępny dzisiaj",
-  bio: "Certyfikowany ekspert dostępności cyfrowej IAAP (WAS, CPACC), audytor wiodący z ponad 12-letnim doświadczeniem w badaniach bankowości cyfrowej, systemów transakcyjnych oraz aplikacji mobilnych. Twój bezpośredni opiekun w procesie wdrażania WCAG 2.1 AA i EAA w organizacji.",
+  bio: "Główny opiekun klienta i pierwsza osoba do kontaktu dla Koordynatora Dostępności. Odpowiada za budowanie ustaleń biznesowych i formalnych, kalkulacje oraz wyceny pakietów audytów, formalności umowne oraz sprawną dystrybucję i zlecanie prac dedykowanym audytorom WCAG w W-ally.",
 };
 
 // Domyślny profil Koordynatora (Kinga Wróblewska)
@@ -137,22 +141,23 @@ export function PersonProfileView({
     return DEFAULT_TOMASZ_PROFILE;
   }, [person, clientProfile]);
 
-  const isAuditor = profileData.type === "auditor" || profileData.name.includes("Tomasz Straszak");
+  const isAccountManager = profileData.type === "manager" || profileData.name.includes("Tomasz Straszak");
   const isCoordinator = profileData.type === "coordinator" || profileData.name.includes("Kinga Wróblewska");
-  const isDeveloper = !isAuditor && !isCoordinator;
+  const isDeveloper = !isAccountManager && !isCoordinator;
 
   // Stan formularza rezerwacji 30-minutowego spotkania z Tomaszem
   const [selectedDate, setSelectedDate] = useState("2026-10-24");
   const [selectedSlot, setSelectedSlot] = useState("11:00");
   const [meetingType, setMeetingType] = useState<"video" | "phone">("video");
-  const [meetingTopic, setMeetingTopic] = useState("Konsultacja błędu krytycznego");
+  const [meetingTopic, setMeetingTopic] = useState("Ustalenie zakresu i wycena nowego audytu");
   const [meetingNotes, setMeetingNotes] = useState("");
   const [isBookingConfirmed, setIsBookingConfirmed] = useState(false);
   const [copiedEmail, setCopiedEmail] = useState(false);
 
-  // Stan formularza szybkiej konsultacji / ticketu
+  // Stan formularza zgłoszenia / zlecenia do Opiekuna
   const [consultationSubject, setConsultationSubject] = useState("");
   const [consultationMessage, setConsultationMessage] = useState("");
+  const [inquiryCategory, setInquiryCategory] = useState("Wycena nowego audytu lub reaudytu");
   const [consultationPriority, setConsultationPriority] = useState<"Krytyczny" | "Ważny" | "Marginalny">("Ważny");
   const [isConsultationSent, setIsConsultationSent] = useState(false);
 
@@ -243,8 +248,8 @@ export function PersonProfileView({
           <div className="flex items-center gap-2">
             <span
               className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border ${
-                isAuditor
-                  ? "bg-emerald-50 text-emerald-800 border-emerald-200"
+                isAccountManager
+                  ? "bg-blue-50 text-[#0038F8] border-blue-200"
                   : isCoordinator
                   ? "bg-blue-50 text-[#0038F8] border-blue-200"
                   : "bg-purple-50 text-purple-800 border-purple-200"
@@ -252,11 +257,11 @@ export function PersonProfileView({
             >
               <span
                 className={`w-2 h-2 rounded-full ${
-                  isAuditor ? "bg-emerald-500" : isCoordinator ? "bg-[#0038F8]" : "bg-purple-600"
+                  isAccountManager ? "bg-[#0038F8]" : isCoordinator ? "bg-[#0038F8]" : "bg-purple-600"
                 } inline-block animate-pulse`}
               />
-              {isAuditor
-                ? "Dedykowany Opiekun W-ally"
+              {isAccountManager
+                ? "Dedykowany Opiekun Klienta W-ally"
                 : isCoordinator
                 ? "Koordynator Klienta"
                 : "Członek Zespołu Dev"}
@@ -294,8 +299,8 @@ export function PersonProfileView({
                   </h1>
                   <span
                     className={`text-xs font-extrabold px-2.5 py-0.5 rounded-full border ${
-                      isAuditor
-                        ? "bg-emerald-50 text-emerald-800 border-emerald-200"
+                      isAccountManager
+                        ? "bg-blue-50 text-[#0038F8] border-blue-200"
                         : isCoordinator
                         ? "bg-blue-50 text-[#0038F8] border-blue-200"
                         : "bg-slate-100 text-slate-700 border-slate-200"
@@ -372,9 +377,9 @@ export function PersonProfileView({
         </div>
 
         {/* ======================================================== */}
-        {/* SEKCJA DEDYKOWANA DLA TOMASZA STRASZAKA (OPIEKUN W-ALLY) */}
+        {/* SEKCJA DEDYKOWANA DLA TOMASZA STRASZAKA (OPIEKUN KLIENTA) */}
         {/* ======================================================== */}
-        {isAuditor && (
+        {isAccountManager && (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
             {/* LEWA KOLUMNA (7 KOLUMN): FORMULARZ UMÓWIENIA SPOTKANIA 30 MIN */}
             <div className="lg:col-span-7 flex flex-col gap-6">
@@ -387,14 +392,14 @@ export function PersonProfileView({
                     <div>
                       <div className="flex items-center gap-2">
                         <h2 className="text-base sm:text-lg font-black text-slate-900 tracking-tight">
-                          Umów spotkanie 30 min z Opiekunem
+                          Umów spotkanie 30 min z Opiekunem Klienta
                         </h2>
-                        <span className="px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-emerald-50 text-emerald-800 border border-emerald-200">
-                          1:1 Bezpłatne
+                        <span className="px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-blue-50 text-[#0038F8] border border-blue-200">
+                          1:1 Ustalenia & Wyceny
                         </span>
                       </div>
                       <p className="text-xs font-medium text-slate-600 mt-0.5">
-                        Wybierz dogodny termin na konsultację architektoniczną lub omówienie reaudytu.
+                        Wybierz dogodny termin na ustalenie zakresu współpracy, wycenę audytów lub omówienie formalności.
                       </p>
                     </div>
                   </div>
@@ -548,19 +553,19 @@ export function PersonProfileView({
 
                       <div>
                         <label className="text-xs font-bold text-slate-800 uppercase tracking-wider block mb-1.5">
-                          4. Główny temat:
+                          4. Główny temat spotkania:
                         </label>
                         <select
                           value={meetingTopic}
                           onChange={(e) => setMeetingTopic(e.target.value)}
                           className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/20 focus:border-[#0038F8]"
                         >
-                          <option value="Konsultacja błędu krytycznego">Konsultacja błędu krytycznego</option>
-                          <option value="Przygotowanie do reaudytu kwartalnego">Przygotowanie do reaudytu kwartalnego</option>
-                          <option value="Architektura dostępności formularzy i modali">Architektura dostępności formularzy i modali</option>
-                          <option value="Weryfikacja poprawek deweloperów">Weryfikacja poprawek deweloperów</option>
-                          <option value="Zgodność z Europejskim Aktem o Dostępności (EAA)">Zgodność z EAA (czerwiec 2025)</option>
-                          <option value="Inny temat konsultacyjny">Inny temat konsultacyjny</option>
+                          <option value="Ustalenie zakresu i wycena nowego audytu">Ustalenie zakresu i wycena nowego audytu</option>
+                          <option value="Zlecenie prac i reaudytów (dystrybucja do audytorów)">Zlecenie prac i reaudytów (dystrybucja do audytorów)</option>
+                          <option value="Harmonogram badań, SLA i formalności umowne">Harmonogram badań, SLA i formalności umowne</option>
+                          <option value="Pakiety wsparcia i konsultacji WCAG dla zespołów">Pakiety wsparcia i konsultacji WCAG dla zespołów</option>
+                          <option value="Omówienie raportu zarządczego i postępów w organizacji">Omówienie raportu zarządczego i postępów w organizacji</option>
+                          <option value="Inna sprawa organizacyjna / formalna">Inna sprawa organizacyjna / formalna</option>
                         </select>
                       </div>
                     </div>
@@ -568,13 +573,13 @@ export function PersonProfileView({
                     {/* KROK 4: Krótka agenda */}
                     <div>
                       <label className="text-xs font-bold text-slate-800 uppercase tracking-wider block mb-1.5">
-                        5. Krótka agenda lub linki do zbadania (opcjonalnie):
+                        5. Zakres ustaleń lub uwagi do spotkania (opcjonalnie):
                       </label>
                       <textarea
                         rows={2}
                         value={meetingNotes}
                         onChange={(e) => setMeetingNotes(e.target.value)}
-                        placeholder="np. Chcemy omówić błąd krytyczny 1.4.3 na kafelkach kalkulatora kredytowego..."
+                        placeholder="np. Chcemy ustalić zakres wyceny dla reaudytu nowego serwisu transakcyjnego oraz harmonogram prac na kolejny kwartał..."
                         className="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/20 focus:border-[#0038F8] resize-none"
                       />
                     </div>
@@ -596,69 +601,80 @@ export function PersonProfileView({
                 )}
               </div>
 
-              {/* KWALIFIKACJE I CERTYFIKATY OPIEKUNA */}
+              {/* ROLA I OBSZARY ODPOWIEDZIALNOŚCI OPIEKUNA KLIENTA */}
               <div className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-xs">
                 <div className="flex items-center gap-2.5 mb-4">
-                  <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
-                    <Award size={18} />
+                  <div className="w-8 h-8 rounded-lg bg-blue-50 text-[#0038F8] flex items-center justify-center shrink-0">
+                    <Briefcase size={18} />
                   </div>
                   <div>
                     <h3 className="text-sm font-bold text-slate-900">
-                      Certyfikaty i akredytacje audytorskie
+                      Rola Opiekuna Klienta & Standardy Współpracy
                     </h3>
                     <p className="text-xs text-slate-500">
-                      Standardy merytoryczne Fundacji Widzialni i IAAP
+                      Ustalenia formalne, wyceny, umowy oraz dystrybucja zadań do zespołu audytorów
                     </p>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200/80 flex items-start gap-2.5">
-                    <ShieldCheck size={16} className="text-[#0038F8] shrink-0 mt-0.5" />
+                  <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200/80 flex items-start gap-2.5">
+                    <UserCheck size={18} className="text-[#0038F8] shrink-0 mt-0.5" />
                     <div>
-                      <div className="font-bold text-slate-900">IAAP Certified WAS</div>
-                      <div className="text-slate-500 text-[11px]">Web Accessibility Specialist (International Association of Accessibility Professionals)</div>
+                      <div className="font-bold text-slate-900">Pierwsza osoba do kontaktu</div>
+                      <div className="text-slate-600 text-[11px] mt-0.5 leading-relaxed">
+                        Główny punkt kontaktu dla Koordynatora Dostępności. Bieżące wsparcie operacyjne, zbieranie potrzeb instytucji i opieka nad relacją.
+                      </div>
                     </div>
                   </div>
-                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200/80 flex items-start gap-2.5">
-                    <ShieldCheck size={16} className="text-[#0038F8] shrink-0 mt-0.5" />
+
+                  <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200/80 flex items-start gap-2.5">
+                    <FileSpreadsheet size={18} className="text-[#0038F8] shrink-0 mt-0.5" />
                     <div>
-                      <div className="font-bold text-slate-900">IAAP CPACC</div>
-                      <div className="text-slate-500 text-[11px]">Certified Professional in Accessibility Core Competencies</div>
+                      <div className="font-bold text-slate-900">Wyceny i pakiety audytów</div>
+                      <div className="text-slate-600 text-[11px] mt-0.5 leading-relaxed">
+                        Przygotowywanie kalkulacji kosztów, ofert na audyty pełne i reaudyty weryfikacyjne oraz ustalanie budżetów godzin doradczych.
+                      </div>
                     </div>
                   </div>
-                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200/80 flex items-start gap-2.5">
-                    <CheckCircle2 size={16} className="text-emerald-600 shrink-0 mt-0.5" />
+
+                  <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200/80 flex items-start gap-2.5">
+                    <FileText size={18} className="text-[#0038F8] shrink-0 mt-0.5" />
                     <div>
-                      <div className="font-bold text-slate-900">Audytor Wiodący W-ally</div>
-                      <div className="text-slate-500 text-[11px]">Zgodność z normą EN 301 549 oraz wytycznymi WCAG 2.1 / 2.2 poziom AA</div>
+                      <div className="font-bold text-slate-900">Formalności i umowy</div>
+                      <div className="text-slate-600 text-[11px] mt-0.5 leading-relaxed">
+                        Koordynacja umów ramowych, aneksów, porozumień powierzenia danych, dokumentacji zamówień i rozliczeń finansowych.
+                      </div>
                     </div>
                   </div>
-                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200/80 flex items-start gap-2.5">
-                    <CheckCircle2 size={16} className="text-emerald-600 shrink-0 mt-0.5" />
+
+                  <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200/80 flex items-start gap-2.5">
+                    <GitBranch size={18} className="text-[#0038F8] shrink-0 mt-0.5" />
                     <div>
-                      <div className="font-bold text-slate-900">Ekspert Bankowości Cyfrowej</div>
-                      <div className="text-slate-500 text-[11px]">Specjalizacja w standardach EAA dla sektora finansowego i płatności</div>
+                      <div className="font-bold text-slate-900">Dystrybucja prac do audytorów</div>
+                      <div className="text-slate-600 text-[11px] mt-0.5 leading-relaxed">
+                        Tomasz nie wykonuje osobiście audytów – po zatwierdzeniu ustaleń rozdziela zlecenia do dedykowanych, certyfikowanych audytorów WCAG.
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* PRAWA KOLUMNA (5 KOLUMN): WIDGET UTWORZENIA KONSULTACJI ASYNCHRONICZNEJ */}
+            {/* PRAWA KOLUMNA (5 KOLUMN): WIDGET ZGŁOSZENIA / ZLECENIA DO OPIEKUNA */}
             <div className="lg:col-span-5 flex flex-col gap-6">
               <div className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-xs flex flex-col justify-between">
                 <div>
                   <div className="flex items-center gap-2.5 mb-4">
-                    <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 border border-emerald-100">
+                    <div className="w-9 h-9 rounded-xl bg-blue-50 text-[#0038F8] flex items-center justify-center shrink-0 border border-blue-100">
                       <MessageSquareText size={18} />
                     </div>
                     <div>
                       <h3 className="text-sm sm:text-base font-bold text-slate-900">
-                        Szybka konsultacja merytoryczna
+                        Wiadomość i zlecenie do Opiekuna
                       </h3>
                       <p className="text-xs text-slate-500">
-                        Wątek asynchroniczny przypisany do Tomasza Straszaka
+                        Ustalenia, wyceny i formalności z Tomaszem Straszakiem
                       </p>
                     </div>
                   </div>
@@ -666,23 +682,23 @@ export function PersonProfileView({
                   {isConsultationSent ? (
                     <div className="p-5 bg-emerald-50 border border-emerald-200 rounded-xl text-center space-y-2">
                       <CheckCircle2 size={24} className="text-emerald-600 mx-auto" />
-                      <div className="text-sm font-bold text-slate-900">Zapytanie zostało przekazane!</div>
+                      <div className="text-sm font-bold text-slate-900">Wiadomość została przekazana!</div>
                       <p className="text-xs text-slate-600">
-                        Tomasz Straszak otrzymał powiadomienie. Odpowiedź z rekomendacją techniczną pojawi się w module Konsultacje.
+                        Tomasz Straszak otrzymał Twoje zapytanie. Skontaktuje się w sprawie wyceny lub formalności, a po ich zatwierdzeniu rozdzieli zadania właściwym audytorom WCAG.
                       </p>
                     </div>
                   ) : (
                     <form onSubmit={handleSendConsultation} className="space-y-3.5">
                       <div>
                         <label className="text-xs font-bold text-slate-700 block mb-1">
-                          Temat konsultacji / błąd:
+                          Temat zlecenia lub zapytania:
                         </label>
                         <input
                           type="text"
                           required
                           value={consultationSubject}
                           onChange={(e) => setConsultationSubject(e.target.value)}
-                          placeholder="np. Wątpliwość co do kryterium 1.4.11 w modalach"
+                          placeholder="np. Wycena reaudytu portalu transakcyjnego po wdrożeniu poprawek"
                           className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/20 focus:border-[#0038F8]"
                         />
                       </div>
@@ -690,48 +706,56 @@ export function PersonProfileView({
                       <div className="grid grid-cols-2 gap-3">
                         <div>
                           <label className="text-xs font-bold text-slate-700 block mb-1">
-                            Priorytet:
+                            Kategoria:
+                          </label>
+                          <select
+                            value={inquiryCategory}
+                            onChange={(e) => setInquiryCategory(e.target.value)}
+                            className="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/20 focus:border-[#0038F8]"
+                          >
+                            <option value="Wycena nowego audytu / reaudytu">Wycena audytu / reaudytu</option>
+                            <option value="Zlecenie prac dla audytorów">Zlecenie prac dla audytorów</option>
+                            <option value="Formalności umowne i rozliczenia">Formalności i umowy</option>
+                            <option value="Harmonogram badań i SLA">Harmonogram badań i SLA</option>
+                            <option value="Inna sprawa organizacyjna">Inna sprawa</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="text-xs font-bold text-slate-700 block mb-1">
+                            Oczekiwany termin:
                           </label>
                           <select
                             value={consultationPriority}
                             onChange={(e) => setConsultationPriority(e.target.value as any)}
                             className="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/20 focus:border-[#0038F8]"
                           >
-                            <option value="Krytyczny">Krytyczny (Pilne)</option>
-                            <option value="Ważny">Ważny (Standard)</option>
-                            <option value="Marginalny">Marginalny (Niski)</option>
+                            <option value="Krytyczny">Pilne (bieżący sprint / release)</option>
+                            <option value="Ważny">Standardowe (do 3 dni roboczych)</option>
+                            <option value="Marginalny">Planowanie budżetowe</option>
                           </select>
-                        </div>
-                        <div>
-                          <label className="text-xs font-bold text-slate-700 block mb-1">
-                            Format odpowiedzi:
-                          </label>
-                          <div className="text-xs text-slate-600 py-2 font-medium">
-                            Pisemna rekomendacja techniczna
-                          </div>
                         </div>
                       </div>
 
                       <div>
                         <label className="text-xs font-bold text-slate-700 block mb-1">
-                          Treść zapytania / kod do weryfikacji:
+                          Treść wiadomości / zakres planowanych prac:
                         </label>
                         <textarea
                           rows={4}
                           required
                           value={consultationMessage}
                           onChange={(e) => setConsultationMessage(e.target.value)}
-                          placeholder="Opisz problem techniczny, wklej fragment kodu lub zadaj pytanie dotyczące interpretacji WCAG..."
+                          placeholder="Opisz zakres systemów do zbadania, oczekiwany termin, środowisko testowe lub kwestie formalne..."
                           className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/20 focus:border-[#0038F8] resize-none"
                         />
                       </div>
 
                       <button
                         type="submit"
-                        className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shadow-2xs transition-colors cursor-pointer flex items-center justify-center gap-1.5"
+                        className="w-full py-2.5 bg-[#0038F8] hover:bg-[#002ECC] text-white rounded-xl text-xs font-bold shadow-2xs transition-colors cursor-pointer flex items-center justify-center gap-1.5"
                       >
                         <Send size={14} />
-                        <span>Wyślij zapytanie do Tomasza</span>
+                        <span>Wyślij zgłoszenie do Tomasza</span>
                       </button>
                     </form>
                   )}
@@ -743,16 +767,16 @@ export function PersonProfileView({
                 </div>
               </div>
 
-              {/* AUDYTY OPIEKOWANE PRZEZ TOMASZA W ERSTE */}
+              {/* AKTYWNE PROCESY I ZLECENIA POD OPIEKĄ TOMASZA */}
               <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs">
                 <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3">
-                  Aktywne procesy pod opieką Tomasza:
+                  Procesy i zlecenia koordynowane przez Tomasza:
                 </h4>
                 <div className="space-y-2">
                   {[
-                    { title: "Serwis transakcyjny - Nowy Dashboard", status: "W trakcie audytu", score: "62.1%" },
-                    { title: "Portal informacyjny - wybrane podstrony", status: "Zakończony certyfikacją", score: "77.5%" },
-                    { title: "Proces reklamacyjny i formularze wnioskowe", status: "W trakcie weryfikacji", score: "Nowy" },
+                    { title: "Serwis transakcyjny - Nowy Dashboard", status: "Zlecenie w toku • Audytor techniczny: Zespół W-ally", score: "W toku" },
+                    { title: "Portal informacyjny - wybrane podstrony", status: "Zlecenie zrealizowane • Raport przekazany", score: "77.5%" },
+                    { title: "Proces reklamacyjny i formularze wnioskowe", status: "Wycena i planowanie harmonogramu", score: "Wycena" },
                   ].map((proc, i) => (
                     <div
                       key={i}
