@@ -10795,24 +10795,6 @@ function ReportErrorsView({
               <FileSpreadsheet size={14} className="text-emerald-600" />
               <span>Eksport (.xlsx)</span>
             </button>
-            <ReauditButton
-              onClick={() =>
-                onOpenReaudit &&
-                onOpenReaudit(
-                  'Podstrona "konta" (Portal informacyjny)',
-                  "Audyt WCAG 2.1 AA",
-                  "Piotr Smułkowski"
-                )
-              }
-              variant="primary"
-            />
-            <div className="flex items-center bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-lg gap-2 text-xs font-bold">
-              <span className="text-slate-400">KANAŁ: <span className="text-slate-700 font-extrabold">WWW</span></span>
-              <span className="text-slate-300">|</span>
-              <span className="text-red-600 font-extrabold">WYNIKI: {displayedErrors.length}</span>
-              <span className="text-slate-300">|</span>
-              <span className="text-emerald-600 font-extrabold">89%</span>
-            </div>
           </div>
         }
       />
