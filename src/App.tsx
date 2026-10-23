@@ -1597,7 +1597,16 @@ export default function App() {
   // Filtry kontekstowe dla Koordynatora (wg deweloperów z zespołu)
   const [developerErrorFilter, setDeveloperErrorFilter] = useState(null);
   const [developerTicketFilter, setDeveloperTicketFilter] = useState(null);
-  const [profileInitialTab, setProfileInitialTab] = useState("account");
+  const [profileInitialTab, setProfileInitialTab] = useState<
+    "branding" | "team" | "wcag" | "account" | "notifications"
+  >("account");
+
+  const handleOpenProfile = (
+    tab: "branding" | "team" | "wcag" | "account" | "notifications" = "account"
+  ) => {
+    setProfileInitialTab(tab);
+    setCurrentView("profil");
+  };
 
   // Dedykowany widok profilu osoby (Opiekun, Koordynator, Deweloper)
   const [selectedPerson, setSelectedPerson] = useState<any>(null);
@@ -1675,6 +1684,7 @@ export default function App() {
           setIsHelpOpen={setIsHelpOpen}
           showToast={showToast}
           clientProfile={clientProfile}
+          onOpenProfile={handleOpenProfile}
         />
 
         {/* GŁÓWNA ZAWARTOŚĆ - TŁO 100VW */}
@@ -1696,6 +1706,7 @@ export default function App() {
               showToast={showToast}
               clientProfile={clientProfile}
               onViewPersonProfile={(person) => handleViewPersonProfile(person, "przeglad")}
+              onOpenProfile={handleOpenProfile}
             />
           )}
           {currentView === "tickety" && (
@@ -1710,6 +1721,7 @@ export default function App() {
               developerFilter={developerTicketFilter}
               setDeveloperFilter={setDeveloperTicketFilter}
               onViewPersonProfile={(person) => handleViewPersonProfile(person, "tickety")}
+              onOpenProfile={handleOpenProfile}
             />
           )}
           {currentView === "komunikaty" && (
@@ -1754,6 +1766,7 @@ export default function App() {
               showToast={showToast}
               developerFilter={developerErrorFilter}
               setDeveloperFilter={setDeveloperErrorFilter}
+              onOpenProfile={handleOpenProfile}
             />
           )}
           {currentView === "raportowanie" && (
@@ -3189,6 +3202,7 @@ function TicketsPageView({
   developerFilter = null,
   setDeveloperFilter = null,
   onViewPersonProfile,
+  onOpenProfile,
 }: {
   setView: (v: string) => void;
   tickets?: any[];
@@ -3200,6 +3214,7 @@ function TicketsPageView({
   developerFilter?: string | null;
   setDeveloperFilter?: any;
   onViewPersonProfile?: (person: any) => void;
+  onOpenProfile?: (tab?: "branding" | "team" | "wcag" | "account" | "notifications") => void;
 }) {
   const [activeFilterStatus, setActiveFilterStatus] = useState("all");
   const [activeFilterContext, setActiveFilterContext] = useState("all");
@@ -3315,10 +3330,26 @@ function TicketsPageView({
       <ViewHeader
         breadcrumbs={[
           { label: "Pulpit", onClick: () => setView("przeglad") },
-          { label: "Konsultacje" },
+          ...(developerFilter
+            ? [
+                {
+                  label: "Mój zespół",
+                  onClick: () => {
+                    setDeveloperFilter && setDeveloperFilter(null);
+                    if (onOpenProfile) onOpenProfile("team");
+                    else setView("profil");
+                  },
+                },
+                { label: `Konsultacje: ${developerFilter}` },
+              ]
+            : [{ label: "Konsultacje" }]),
         ]}
-        title="Konsultacje"
-        subtitle="Zadawaj pytania audytorom, konsultuj interpretację kryteriów WCAG i uzgadniaj wytyczne naprawcze bez czekania na spotkania online."
+        title={developerFilter ? `Konsultacje: ${developerFilter}` : "Konsultacje"}
+        subtitle={
+          developerFilter
+            ? `Wątki konsultacyjne i zapytania do audytorów powiązane z deweloperem ${developerFilter}.`
+            : "Zadawaj pytania audytorom, konsultuj interpretację kryteriów WCAG i uzgadniaj wytyczne naprawcze bez czekania na spotkania online."
+        }
         actions={
           <div className="flex items-center gap-2">
             <button
@@ -3329,14 +3360,29 @@ function TicketsPageView({
               <Plus size={16} />
               <span>Nowa konsultacja</span>
             </button>
-            <button
-              type="button"
-              onClick={() => setView("przeglad")}
-              className="flex items-center gap-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold shadow-xs transition-colors cursor-pointer"
-            >
-              <ArrowLeft size={16} />
-              <span>Pulpit</span>
-            </button>
+            {developerFilter ? (
+              <button
+                type="button"
+                onClick={() => {
+                  setDeveloperFilter && setDeveloperFilter(null);
+                  if (onOpenProfile) onOpenProfile("team");
+                  else setView("profil");
+                }}
+                className="flex items-center gap-1.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold shadow-xs transition-colors cursor-pointer"
+              >
+                <ArrowLeft size={16} />
+                <span>Wróć do Zespołu</span>
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setView("przeglad")}
+                className="flex items-center gap-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold shadow-xs transition-colors cursor-pointer"
+              >
+                <ArrowLeft size={16} />
+                <span>Pulpit</span>
+              </button>
+            )}
           </div>
         }
       />
@@ -4464,7 +4510,7 @@ const VIEW_GUIDES = {
   },
   profil: {
     id: "profil",
-    title: "Mój Profil i Ustawienia Organizacji",
+    title: "Zarządzanie Kontem i Organizacją",
     category: "Konfiguracja i Branding",
     summary: "Panel zarządzania logo klienta na pulpicie, tożsamością instytucji, standardami WCAG oraz kontem koordynatora.",
     purpose:
@@ -4999,6 +5045,27 @@ function TopNavbar({
   setIsHelpOpen,
   showToast,
   clientProfile,
+  onOpenProfile,
+}: {
+  currentView: string;
+  setCurrentView: (view: string) => void;
+  onLogout: () => void;
+  isAnnouncementsOpen: boolean;
+  setIsAnnouncementsOpen: (open: boolean) => void;
+  announcements: any[];
+  setAnnouncements: any;
+  tickets?: any[];
+  setTickets?: any;
+  unreadTicketsCount?: number;
+  onOpenTicket?: (ticketId: string) => void;
+  onOpenNewTicket?: (context?: any) => void;
+  isHelpOpen: boolean;
+  setIsHelpOpen: (open: boolean) => void;
+  showToast?: (title: string, text: string, type?: string) => void;
+  clientProfile?: any;
+  onOpenProfile?: (
+    tab?: "branding" | "team" | "wcag" | "account" | "notifications"
+  ) => void;
 }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
@@ -5205,10 +5272,14 @@ function TopNavbar({
                       </div>
                     </div>
                     <button
+                      type="button"
                       onClick={() => {
                         setIsProfileMenuOpen(false);
-                        setProfileInitialTab("account");
-                        setCurrentView("profil");
+                        if (onOpenProfile) {
+                          onOpenProfile("account");
+                        } else {
+                          setCurrentView("profil");
+                        }
                       }}
                       className={`w-full flex items-center justify-between px-4 py-2.5 text-xs font-bold transition-colors cursor-pointer ${
                         currentView === "profil"
@@ -5232,6 +5303,7 @@ function TopNavbar({
                       </span>
                     </button>
                     <button
+                      type="button"
                       onClick={() => {
                         setIsProfileMenuOpen(false);
                         onLogout();
@@ -5262,9 +5334,14 @@ function TopNavbar({
         {isMobileMenuOpen && (
           <div className="md:hidden py-3 border-t border-slate-200 space-y-1">
             <button
+              type="button"
               onClick={() => {
                 setIsMobileMenuOpen(false);
-                setCurrentView("profil");
+                if (onOpenProfile) {
+                  onOpenProfile("account");
+                } else {
+                  setCurrentView("profil");
+                }
               }}
               className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-bold transition-all cursor-pointer ${
                 currentView === "profil"
@@ -5273,8 +5350,8 @@ function TopNavbar({
               }`}
             >
               <div className="flex items-center gap-3">
-                <Building2 size={18} className="text-[#0038F8]" />
-                <span>Mój profil & Logo organizacji</span>
+                <User size={18} className="text-[#0038F8]" />
+                <span>Zarządzaj kontem</span>
               </div>
               <span className="text-xs text-slate-400 font-semibold">
                 {clientProfile?.orgShortName || "Erste"}
@@ -5530,6 +5607,7 @@ function DashboardView({
   showToast,
   clientProfile,
   onViewPersonProfile,
+  onOpenProfile,
 }: {
   setView: (v: string) => void;
   onOpenAnnouncements?: () => void;
@@ -5543,6 +5621,9 @@ function DashboardView({
   showToast?: (title: string, text: string, type?: string) => void;
   clientProfile?: any;
   onViewPersonProfile?: (person: any) => void;
+  onOpenProfile?: (
+    tab?: "branding" | "team" | "wcag" | "account" | "notifications"
+  ) => void;
 }) {
   return (
     <div data-testid="dashboard-view" className="flex-1 flex flex-col md:h-full w-full md:overflow-hidden">
@@ -5595,8 +5676,11 @@ function DashboardView({
             {/* LOGO KLIENTA (NP. ERSTE) - CAŁKOWICIE BEZ RAMKI, BEZ ZAOKRĄGLEŃ NA OBRAZIE */}
             <div
               className="flex items-center justify-center shrink-0 cursor-pointer group py-0.5"
-              onClick={() => setView("profil")}
-              title="Kliknij, aby przejść do profilu organizacji"
+              onClick={() => {
+                if (onOpenProfile) onOpenProfile("branding");
+                else setView("profil");
+              }}
+              title="Kliknij, aby przejść do zarządzania kontem i logotypem organizacji"
             >
               {clientProfile?.orgLogo ? (
                 <img
@@ -5696,11 +5780,14 @@ function DashboardView({
 
             <button
               type="button"
-              onClick={() => setView("profil")}
+              onClick={() => {
+                if (onOpenProfile) onOpenProfile("branding");
+                else setView("profil");
+              }}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 hover:bg-blue-50 text-slate-700 hover:text-[#0038F8] border border-slate-200 hover:border-[#0038F8]/40 rounded-lg text-xs font-bold transition-all cursor-pointer shadow-2xs group"
             >
               <Pencil size={12} className="text-slate-500 group-hover:text-[#0038F8]" />
-              <span>Zarządzaj profilem</span>
+              <span>Zarządzaj kontem</span>
             </button>
           </div>
         </div>
@@ -10388,6 +10475,17 @@ function ReportErrorsView({
   showToast,
   developerFilter = null,
   setDeveloperFilter = null,
+  onOpenProfile,
+}: {
+  setView: (v: string) => void;
+  onOpenReaudit?: (title?: string, type?: string, auditor?: string) => void;
+  tickets?: any[];
+  onOpenTicket?: (id: string) => void;
+  onOpenNewTicket?: (ctx?: any) => void;
+  showToast?: (t: string, b: string, type?: string) => void;
+  developerFilter?: string | null;
+  setDeveloperFilter?: any;
+  onOpenProfile?: (tab?: "branding" | "team" | "wcag" | "account" | "notifications") => void;
 }) {
   const allErrors = [
     {
@@ -10469,7 +10567,8 @@ function ReportErrorsView({
               onClick={() => {
                 if (developerFilter) {
                   setDeveloperFilter && setDeveloperFilter(null);
-                  setView("profil");
+                  if (onOpenProfile) onOpenProfile("team");
+                  else setView("profil");
                 } else {
                   setView("raport-szczegoly");
                 }

@@ -499,7 +499,7 @@ export function UserProfileView({
               </li>
               <li className="text-slate-300 select-none">/</li>
               <li aria-current="page" className="text-slate-800 font-semibold">
-                Mój profil i organizacja
+                Zarządzanie kontem i organizacją
               </li>
             </ol>
           </nav>
@@ -512,7 +512,7 @@ export function UserProfileView({
               <div>
                 <div className="flex flex-wrap items-center gap-2.5">
                   <h1 className="text-[24px] sm:text-[30px] font-extrabold text-slate-900 tracking-tight leading-tight">
-                    Mój profil i organizacja
+                    Zarządzanie kontem i organizacją
                   </h1>
                   <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-50 text-[#0038F8] border border-blue-200">
                     <Landmark size={12} />
