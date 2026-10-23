@@ -86,6 +86,8 @@ import {
   Send,
   RefreshCw,
   Building2,
+  ListOrdered,
+  Sliders,
 } from "lucide-react";
 import { UserProfileView, DEFAULT_COMPLAINT_PROCESS_STEPS } from "./features/profile/UserProfileView";
 import { PersonProfileView } from "./features/profile/PersonProfileView";
@@ -1730,6 +1732,76 @@ const INITIAL_CLIENT_PROFILE: ClientProfile = {
 };
 
 // ==========================================
+// ERROR BOUNDARY - ZAPOBIEGANIE BIAŁYM EKRANOM
+// ==========================================
+
+interface AppErrorBoundaryProps {
+  children: React.ReactNode;
+  onReset?: () => void;
+}
+
+interface AppErrorBoundaryState {
+  hasError: boolean;
+  error: Error | null;
+}
+
+class AppErrorBoundary extends React.Component<AppErrorBoundaryProps, AppErrorBoundaryState> {
+  constructor(props: AppErrorBoundaryProps) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error: Error): AppErrorBoundaryState {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+    console.error("AppErrorBoundary przechwycił błąd w widoku:", error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="flex-1 flex flex-col items-center justify-center p-8 bg-slate-50 min-h-[400px] text-center">
+          <div className="w-14 h-14 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center mb-4 border border-red-200 shadow-xs">
+            <AlertTriangle size={28} />
+          </div>
+          <h2 className="text-lg font-extrabold text-slate-900 mb-2">
+            Wystąpił problem z wyświetleniem tego widoku
+          </h2>
+          <p className="text-xs text-slate-500 max-w-md mb-5 leading-relaxed">
+            Przepraszamy, wystąpił problem podczas renderowania:{" "}
+            <span className="font-mono text-red-600 bg-red-50 px-1 py-0.5 rounded">
+              {this.state.error?.message || "Nieoczekiwany błąd"}
+            </span>
+          </p>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => {
+                this.setState({ hasError: false, error: null });
+                if (this.props.onReset) this.props.onReset();
+              }}
+              className="bg-[#0038F8] hover:bg-[#002ECC] text-white px-4 py-2 rounded-xl font-bold text-xs shadow-xs transition-colors cursor-pointer"
+            >
+              Wróć do pulpitu
+            </button>
+            <button
+              type="button"
+              onClick={() => window.location.reload()}
+              className="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-4 py-2 rounded-xl font-bold text-xs transition-colors cursor-pointer"
+            >
+              Odśwież stronę
+            </button>
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
+// ==========================================
 // GŁÓWNY LAYOUT (ZARZĄDZANIE STANEM LOGOWANIA)
 // ==========================================
 
@@ -1872,6 +1944,7 @@ export default function App() {
           data-testid="main-content"
           className="flex-1 flex flex-col md:h-full md:overflow-hidden bg-[#f8fafc] relative z-10 w-full"
         >
+          <AppErrorBoundary key={currentView} onReset={() => setCurrentView("przeglad")}>
           {currentView === "przeglad" && (
             <DashboardView
               setView={setCurrentView}
@@ -2029,6 +2102,7 @@ export default function App() {
               }}
             />
           )}
+          </AppErrorBoundary>
         </main>
 
         {/* MODAL NOWEGO TICKETU / KONSULTACJI Z AUDYTORAMI */}
