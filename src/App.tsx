@@ -5571,28 +5571,28 @@ function DashboardView({
       />
 
       <div className="flex-1 md:overflow-y-auto bg-[#f8fafc] w-full">
-        <div className="max-w-[1600px] mx-auto w-full px-4 sm:px-6 lg:px-8 py-3.5 sm:py-4.5 flex flex-col gap-3.5 sm:gap-4">
+        <div className="max-w-[1600px] mx-auto w-full px-4 sm:px-6 lg:px-8 py-5 sm:py-6 flex flex-col gap-5 sm:gap-6">
 
-        {/* BANER TOŻSAMOŚCI ORGANIZACJI KLIENTA Z LOGO (NP. ERSTE) - BEZ RAMKI PRZY LOGO */}
+        {/* BANER TOŻSAMOŚCI ORGANIZACJI KLIENTA Z LOGO (NP. ERSTE) */}
         <div
           data-testid="client-org-banner"
-          className="bg-white border border-slate-200/90 rounded-xl px-4 py-2.5 sm:py-3 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3 relative overflow-hidden"
+          className="bg-white border border-slate-200/90 rounded-2xl p-4 sm:p-5 md:px-6 md:py-5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6 relative overflow-hidden"
         >
-          <div className="flex items-center gap-3.5 sm:gap-4 min-w-0">
+          <div className="flex items-center gap-4 sm:gap-5 min-w-0">
             {/* LOGO KLIENTA (NP. ERSTE) - CAŁKOWICIE BEZ RAMKI, BEZ ZAOKRĄGLEŃ NA OBRAZIE */}
             <div
-              className="flex items-center justify-center shrink-0 cursor-pointer group py-0.5"
+              className="flex items-center justify-center shrink-0 cursor-pointer group py-1"
               onClick={() => {
                 if (onOpenProfile) onOpenProfile("branding");
                 else setView("profil");
               }}
-              title="Kliknij, aby przejść do zarządzania kontem i logotypem organizacji"
+              title="Kliknij, aby przejść do zarządzania profilem i logotypem organizacji"
             >
               {clientProfile?.orgLogo ? (
                 <img
                   src={clientProfile.orgLogo}
                   alt={clientProfile.orgAltText || `Logo ${clientProfile.orgName}`}
-                  className="h-8 sm:h-10 w-auto max-w-[140px] sm:max-w-[170px] object-contain block group-hover:opacity-90 transition-opacity"
+                  className="h-9 sm:h-11 w-auto max-w-[150px] sm:max-w-[180px] object-contain block group-hover:opacity-90 transition-opacity"
                   style={{ borderRadius: 0 }}
                   onError={(e) => {
                     if (e.currentTarget.src !== "./logos/erste.png") {
@@ -5601,32 +5601,32 @@ function DashboardView({
                   }}
                 />
               ) : (
-                <Building2 size={24} className="text-slate-400" />
+                <Building2 size={26} className="text-slate-400" />
               )}
             </div>
 
-            <div className="min-w-0 border-l border-slate-200/80 pl-3.5">
-              <div className="flex flex-wrap items-center gap-1.5 mb-0.5">
-                <span className="text-xs font-extrabold uppercase tracking-wider text-[#0038F8] bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
+            <div className="min-w-0 border-l border-slate-200 pl-4 sm:pl-5">
+              <div className="flex flex-wrap items-center gap-2 mb-1">
+                <span className="text-xs font-extrabold uppercase tracking-wider text-[#0038F8] bg-blue-50 px-2.5 py-0.5 rounded-md border border-blue-200/80">
                   Przestrzeń Klienta
                 </span>
                 <span className="text-xs font-semibold text-slate-600">
                   {clientProfile?.sector || "Bankowość i finanse"}
                 </span>
-                <span className="text-xs font-semibold text-slate-400">•</span>
-                <span className="text-xs font-semibold text-slate-600">
+                <span className="text-xs font-semibold text-slate-300">•</span>
+                <span className="text-xs font-semibold text-slate-500">
                   NIP: {clientProfile?.taxId || "PL 525-000-00-00"}
                 </span>
               </div>
 
-              <h2 className="text-sm sm:text-base font-black text-slate-900 tracking-tight flex items-center gap-2">
+              <h2 className="text-base sm:text-lg font-black text-slate-900 tracking-tight flex items-center gap-2">
                 <span>{clientProfile?.orgName || "Erste Group Bank AG"}</span>
                 <span className="text-xs font-semibold text-slate-500 font-normal">
                   ({clientProfile?.orgShortName || "Erste"})
                 </span>
               </h2>
 
-              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-700 font-medium mt-1">
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-slate-700 font-medium mt-1.5">
                 <span>
                   Koordynator organizacji:{" "}
                   <button
@@ -5642,10 +5642,10 @@ function DashboardView({
                     title="Zobacz profil Koordynatora"
                   >
                     <span>{clientProfile?.auditCoordinatorName || "Kinga Wróblewska"}</span>
-                    <ExternalLink size={11} className="text-slate-400" />
+                    <ExternalLink size={12} className="text-slate-400" />
                   </button>
                 </span>
-                <span className="hidden sm:inline text-slate-300">|</span>
+                <span className="hidden sm:inline text-slate-300">•</span>
                 <span>
                   Opiekun W-ally:{" "}
                   <button
@@ -5661,28 +5661,31 @@ function DashboardView({
                     title="Zobacz profil Opiekuna W-ally i umów spotkanie 30 min"
                   >
                     <span>Tomasz Straszak</span>
-                    <ExternalLink size={11} className="text-[#0038F8]" />
+                    <ExternalLink size={12} className="text-[#0038F8]" />
                   </button>
                 </span>
               </div>
             </div>
           </div>
 
-          {/* PRAWA STRONA BANERU: WSKAŹNIK CELU I PRZYCISK EDYCJI */}
-          <div className="flex items-center gap-3 shrink-0 pt-2 md:pt-0 border-t md:border-t-0 border-slate-100 justify-between md:justify-end">
-            <div className="text-right hidden sm:block">
-              <span className="text-xs font-bold text-slate-600 uppercase tracking-wider block">
+          {/* PRAWA STRONA BANERU: WSKAŹNIK CELU I PRZYCISK ZARZĄDZANIA */}
+          <div className="flex items-center gap-4 sm:gap-5 shrink-0 pt-3 md:pt-0 border-t md:border-t-0 border-slate-100 justify-between md:justify-end">
+            <div className="text-left sm:text-right">
+              <span className="text-xs font-extrabold text-slate-500 uppercase tracking-wider block mb-1">
                 Docelowy próg dojrzałości
               </span>
-              <div className="flex items-center justify-end gap-1.5 mt-0.5">
-                <span className="text-xs sm:text-sm font-extrabold text-[#0038F8]">
+              <div className="flex items-center sm:justify-end gap-2.5">
+                <span className="text-sm sm:text-base font-black text-[#0038F8]">
                   Cel: {clientProfile?.targetScore || 90}%
                 </span>
-                <span className="text-xs font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                <span className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-200 shadow-2xs">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block"></span>
                   Aktualnie: 86.2%
                 </span>
               </div>
             </div>
+
+            <div className="h-8 w-px bg-slate-200 hidden md:block" />
 
             <button
               type="button"
@@ -5690,18 +5693,19 @@ function DashboardView({
                 if (onOpenProfile) onOpenProfile("branding");
                 else setView("profil");
               }}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 hover:bg-blue-50 text-slate-700 hover:text-[#0038F8] border border-slate-200 hover:border-[#0038F8]/40 rounded-lg text-xs font-bold transition-all cursor-pointer shadow-2xs group"
+              className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 sm:py-2.5 bg-slate-50/90 hover:bg-blue-50 text-slate-700 hover:text-[#0038F8] border border-slate-200 hover:border-[#0038F8]/40 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer shadow-2xs group shrink-0"
+              title="Przejdź do zarządzania profilem organizacji"
             >
-              <Pencil size={12} className="text-slate-500 group-hover:text-[#0038F8]" />
-              <span>Zarządzaj kontem</span>
+              <Pencil size={13} className="text-slate-400 group-hover:text-[#0038F8] transition-colors" />
+              <span>Zarządzaj profilem</span>
             </button>
           </div>
         </div>
 
-      {/* RZĄD 1: Główne KPI (skompresowane) */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+      {/* RZĄD 1: Główne KPI */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
         <Card
-          className="p-3.5 sm:p-4 hover:border-[#0038F8]/30 transition-colors cursor-pointer"
+          className="p-4 sm:p-5 hover:border-[#0038F8]/30 transition-colors cursor-pointer"
           onClick={() => setView("raportowanie")}
         >
           <div className="flex justify-between items-start mb-2.5">
@@ -5747,7 +5751,7 @@ function DashboardView({
         </Card>
 
         <Card
-          className="p-3.5 sm:p-4 hover:border-[#0038F8]/30 transition-colors cursor-pointer"
+          className="p-4 sm:p-5 hover:border-[#0038F8]/30 transition-colors cursor-pointer"
           onClick={() => setView("baza-uslug")}
         >
           <div className="flex justify-between items-start mb-2.5">
@@ -5778,12 +5782,12 @@ function DashboardView({
           <span className="text-2xl sm:text-3xl font-extrabold text-slate-900">92.0%</span>
         </Card>
 
-        {/* KARTA BŁĘDÓW: Priorytetowe, Ważne, Marginalne (zwarte) */}
+        {/* KARTA BŁĘDÓW: Priorytetowe, Ważne, Marginalne */}
         <Card
-          className="p-3 sm:p-3.5 hover:border-red-300 transition-all cursor-pointer flex flex-col justify-between"
+          className="p-4 sm:p-5 hover:border-red-300 transition-all cursor-pointer flex flex-col justify-between"
           onClick={() => setView("raportowanie")}
         >
-          <div className="flex justify-between items-start mb-1.5">
+          <div className="flex justify-between items-start mb-2">
             <div className="flex items-center gap-1">
               <span className="text-xs font-bold text-slate-700 uppercase tracking-wider block">
                 Błędy Otwarte (Razem: 239)
@@ -5806,47 +5810,47 @@ function DashboardView({
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-1.5 py-0.5">
+          <div className="grid grid-cols-3 gap-2 py-1">
             {/* Priorytetowe */}
-            <div className="flex flex-col bg-red-50/70 p-1.5 rounded-lg border border-red-100">
+            <div className="flex flex-col bg-red-50/70 p-2 rounded-xl border border-red-100">
               <div className="flex items-center gap-1 text-red-700 mb-0.5">
-                <AlertOctagon size={11} className="shrink-0" />
+                <AlertOctagon size={12} className="shrink-0" />
                 <span className="text-xs font-bold text-red-700 tracking-tight whitespace-nowrap">
                   Priorytet.
                 </span>
               </div>
               <span className="text-lg sm:text-xl font-extrabold text-slate-900 leading-none">47</span>
-              <span className="text-xs font-bold text-red-700 mt-0.5 whitespace-nowrap">Wymaga akcji</span>
+              <span className="text-[11px] font-bold text-red-700 mt-1 whitespace-nowrap">Wymaga akcji</span>
             </div>
 
             {/* Ważne */}
-            <div className="flex flex-col bg-amber-50/70 p-1.5 rounded-lg border border-amber-100">
+            <div className="flex flex-col bg-amber-50/70 p-2 rounded-xl border border-amber-100">
               <div className="flex items-center gap-1 text-amber-800 mb-0.5">
-                <AlertTriangle size={11} className="shrink-0" />
+                <AlertTriangle size={12} className="shrink-0" />
                 <span className="text-xs font-bold text-amber-800 tracking-tight whitespace-nowrap">
                   Ważne
                 </span>
               </div>
               <span className="text-lg sm:text-xl font-extrabold text-slate-900 leading-none">128</span>
-              <span className="text-xs font-bold text-amber-800 mt-0.5 whitespace-nowrap">Do planu</span>
+              <span className="text-[11px] font-bold text-amber-800 mt-1 whitespace-nowrap">Do planu</span>
             </div>
 
             {/* Marginalne */}
-            <div className="flex flex-col bg-blue-50/70 p-1.5 rounded-lg border border-blue-100">
+            <div className="flex flex-col bg-blue-50/70 p-2 rounded-xl border border-blue-100">
               <div className="flex items-center gap-1 text-blue-700 mb-0.5">
-                <Info size={11} className="shrink-0" />
+                <Info size={12} className="shrink-0" />
                 <span className="text-xs font-bold text-blue-700 tracking-tight whitespace-nowrap">
                   Marginalne
                 </span>
               </div>
               <span className="text-lg sm:text-xl font-extrabold text-slate-900 leading-none">64</span>
-              <span className="text-xs font-bold text-blue-700 mt-0.5 whitespace-nowrap">Niski wpływ</span>
+              <span className="text-[11px] font-bold text-blue-700 mt-1 whitespace-nowrap">Niski wpływ</span>
             </div>
           </div>
         </Card>
 
         <Card
-          className="p-3.5 sm:p-4 hover:border-blue-300 transition-colors cursor-pointer"
+          className="p-4 sm:p-5 hover:border-blue-300 transition-colors cursor-pointer"
           onClick={() => setView("raporty")}
         >
           <div className="flex justify-between items-start mb-2.5">
@@ -5890,10 +5894,10 @@ function DashboardView({
         </Card>
       </div>
 
-      {/* RZĄD 2: Trendy i Kanały (zoptymalizowana wysokość do 275px) */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4">
+      {/* RZĄD 2: Trendy i Kanały */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 sm:gap-6">
         {/* Wykres Liniowy: Trend */}
-        <Card className="p-3.5 sm:p-4 flex flex-col h-[260px] sm:h-[280px] lg:col-span-2">
+        <Card className="p-5 sm:p-6 flex flex-col h-[280px] sm:h-[305px] lg:col-span-2">
           <div className="flex items-center justify-between mb-1.5 shrink-0">
             <div>
               <div className="flex items-center gap-1.5">
@@ -5971,8 +5975,8 @@ function DashboardView({
           </div>
         </Card>
 
-        {/* Wykres Paskowy Poziomy: Kanały (skompresowany) */}
-        <Card className="p-3.5 sm:p-4.5 flex flex-col h-[260px] sm:h-[280px]">
+        {/* Wykres Paskowy Poziomy: Kanały */}
+        <Card className="p-5 sm:p-6 flex flex-col h-[280px] sm:h-[305px]">
           <div className="flex items-center justify-between mb-3 shrink-0">
             <div className="flex items-center gap-1.5">
               <h3 className="text-sm sm:text-base font-bold text-slate-900">
@@ -6412,9 +6416,9 @@ function DashboardView({
         </Card>
       </div>
 
-      {/* RZĄD 3: Listy akcji i ostatnie audyty (skompresowane) */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
-        <Card className="p-3.5 sm:p-4.5 flex flex-col">
+      {/* RZĄD 3: Listy akcji i ostatnie audyty */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6">
+        <Card className="p-5 sm:p-6 flex flex-col">
           <div className="flex items-center justify-between mb-3">
             <div>
               <h3 className="text-sm sm:text-base font-bold text-slate-900">
@@ -6561,7 +6565,7 @@ function DashboardView({
           </button>
         </Card>
 
-        <Card className="p-3.5 sm:p-4.5 flex flex-col">
+        <Card className="p-5 sm:p-6 flex flex-col">
           <div className="flex items-center justify-between mb-3">
             <div>
               <h3 className="text-sm sm:text-base font-bold text-slate-900">
