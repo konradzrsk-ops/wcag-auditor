@@ -58,9 +58,10 @@ export function ReportingView() {
       type: "select",
       value: selectedChannel,
       options: [
-        { value: "WWW", label: "WWW" },
-        { value: "Aplikacja", label: "Aplikacja mobilna" },
-        { value: "Dokumenty", label: "Dokumenty (PDF)" },
+        { value: "Desktop", label: "Desktop" },
+        { value: "iOS", label: "iOS" },
+        { value: "Android", label: "Android" },
+        { value: "Dokumenty", label: "Dokumenty" },
       ],
     },
   ];

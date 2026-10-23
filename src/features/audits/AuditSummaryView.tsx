@@ -18,6 +18,7 @@ import {
   Monitor,
   Smartphone,
   FileText,
+  FileSpreadsheet,
 } from "lucide-react";
 import { Card } from "../../components/ui/Card";
 import { Badge } from "../../components/ui/Badge";
@@ -28,7 +29,7 @@ import { mockAuditsList } from "../../mocks/data";
 const mockReaudits = [
   {
     id: "re1",
-    name: "Reaudyt 1: Weryfikacja po poprawkach",
+    name: "Reaudyt z dnia 15.04.2026",
     date: "15.04.2026",
     auditor: "P. Smułkowski",
     score: 85.2,
@@ -38,7 +39,7 @@ const mockReaudits = [
   },
   {
     id: "re2",
-    name: "Reaudyt 2: Błędy krytyczne",
+    name: "Reaudyt z dnia 20.05.2026",
     date: "20.05.2026",
     auditor: "A. Nowak",
     score: 92.4,
@@ -119,7 +120,7 @@ export function AuditSummaryView() {
             {currentAudit.title}
           </h1>
         </div>
-        <div className="flex flex-row items-center gap-3 w-full lg:w-auto shrink-0 mt-2 lg:mt-0">
+        <div className="flex flex-wrap items-center gap-2.5 w-full lg:w-auto shrink-0 mt-2 lg:mt-0">
           <Button
             variant="secondary"
             size="md"
@@ -129,12 +130,28 @@ export function AuditSummaryView() {
             Powrót
           </Button>
           <Button
+            variant="secondary"
+            size="md"
+            leftIcon={<FileText size={16} className="text-blue-600" />}
+            onClick={() => alert("Pobieranie raportu Word (.doc)")}
+          >
+            Pobierz Word (.doc)
+          </Button>
+          <Button
+            variant="secondary"
+            size="md"
+            leftIcon={<FileSpreadsheet size={16} className="text-emerald-600" />}
+            onClick={() => alert("Pobieranie raportu Excel (.xlsx)")}
+          >
+            Pobierz Excel (.xlsx)
+          </Button>
+          <Button
             variant="primary"
             size="md"
-            leftIcon={<Download size={16} />}
+            leftIcon={<FileText size={16} className="text-red-500" />}
             onClick={() => alert("Pobieranie raportu PDF")}
           >
-            Pobierz raport (.pdf)
+            Pobierz PDF
           </Button>
         </div>
       </div>
@@ -158,10 +175,6 @@ export function AuditSummaryView() {
               <ShieldCheck size={14} className="text-brand-500" />
               <span>Standard: <strong className="text-slate-800 font-bold">WCAG 2.1 Poziom {currentAudit.wcagLevel}</strong></span>
             </div>
-            <div className="w-px h-3.5 bg-slate-200 hidden sm:block" />
-            <div className="flex items-center gap-1.5 text-slate-500">
-              <span>Cykl: <strong>Q1 2026</strong></span>
-            </div>
           </div>
 
           <div className="flex items-center gap-2">
@@ -179,7 +192,7 @@ export function AuditSummaryView() {
               <FileText size={15} />
             </div>
             <h2 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
-              Wnioski i podsumowanie wykonawcze audytora
+              Podsumowanie audytu
             </h2>
           </div>
 
@@ -207,9 +220,6 @@ export function AuditSummaryView() {
             <span className="text-2xl font-black text-slate-900 leading-tight">
               {currentAudit.score}%
             </span>
-            <span className="text-[11px] font-bold text-emerald-700 block mt-0.5">
-              Średnia zgodność
-            </span>
           </div>
         </Card>
 
@@ -224,9 +234,6 @@ export function AuditSummaryView() {
             </span>
             <span className="text-2xl font-black text-red-700 leading-tight">
               {currentAudit.criticalErrors}
-            </span>
-            <span className="text-[11px] font-bold text-red-700 block mt-0.5">
-              Wymaga akcji
             </span>
           </div>
         </Card>
@@ -243,9 +250,6 @@ export function AuditSummaryView() {
             <span className="text-2xl font-black text-amber-800 leading-tight">
               {currentAudit.brokenCriteria > 5 ? 5 : 2}
             </span>
-            <span className="text-[11px] font-bold text-amber-800 block mt-0.5">
-              Do planu
-            </span>
           </div>
         </Card>
 
@@ -260,9 +264,6 @@ export function AuditSummaryView() {
             </span>
             <span className="text-2xl font-black text-blue-700 leading-tight">
               3
-            </span>
-            <span className="text-[11px] font-bold text-blue-700 block mt-0.5">
-              Niski wpływ
             </span>
           </div>
         </Card>
@@ -284,9 +285,6 @@ export function AuditSummaryView() {
                 / {currentAudit.totalCriteria}
               </span>
             </div>
-            <span className="text-[11px] font-bold text-indigo-700 block mt-0.5">
-              Kryteria WCAG 2.1
-            </span>
           </div>
         </Card>
       </div>

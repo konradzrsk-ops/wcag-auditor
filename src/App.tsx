@@ -1554,10 +1554,10 @@ function ComplaintEditModal({ isOpen, onClose, complaint, onSave }) {
                 onChange={(e) => setFormData({ ...formData, channel: e.target.value })}
                 className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
               >
-                <option value="Desktop WWW">Desktop WWW</option>
-                <option value="Android">Aplikacja Android</option>
-                <option value="iOS">Aplikacja iOS</option>
-                <option value="Dokumenty">Dokumenty PDF</option>
+                <option value="Desktop">Desktop</option>
+                <option value="iOS">iOS</option>
+                <option value="Android">Android</option>
+                <option value="Dokumenty">Dokumenty</option>
               </select>
             </div>
           </div>
@@ -7620,7 +7620,15 @@ function BazaUslugContainer({ currentView, setView, onOpenReaudit, showToast }) 
           return false;
         }
       }
-      if (channelFilter !== "all" && p.channel !== channelFilter) return false;
+      if (channelFilter !== "all") {
+        const matchesChannel =
+          p.channel === channelFilter ||
+          (channelFilter === "Desktop" && (p.channel === "WWW" || p.channel === "Desktop")) ||
+          (channelFilter === "Android" && (p.channel === "Mobile" || p.channel === "Android")) ||
+          (channelFilter === "iOS" && (p.channel === "Mobile" || p.channel === "iOS")) ||
+          (channelFilter === "Dokumenty" && (p.channel === "Dokumenty" || p.channel === "PDF"));
+        if (!matchesChannel) return false;
+      }
       if (scoreFilter === "high" && p.score < 80) return false;
       if (scoreFilter === "medium" && p.score >= 80) return false;
       if (searchQuery.trim()) {
@@ -8107,8 +8115,10 @@ function BazaUslugContainer({ currentView, setView, onOpenReaudit, showToast }) 
                 className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/30 cursor-pointer"
               >
                 <option value="all">Wszystkie kanały</option>
-                <option value="WWW">Portal WWW Desktop</option>
-                <option value="Mobile">Aplikacja Mobilna</option>
+                <option value="Desktop">Desktop</option>
+                <option value="iOS">iOS</option>
+                <option value="Android">Android</option>
+                <option value="Dokumenty">Dokumenty</option>
               </select>
 
               {/* Filtr zgodności */}
@@ -8918,7 +8928,7 @@ function RaportyView({ setView, onOpenReaudit, showToast }) {
       date: "05.06.2026",
       status: "Nowy",
       title: "Proces reklamacyjny - formularze",
-      devices: "Desktop, Mobile Web",
+      devices: "Desktop",
       priority: "8",
       critical: 8,
       important: 19,
@@ -8938,7 +8948,6 @@ function RaportyView({ setView, onOpenReaudit, showToast }) {
   const [activeTimeRange, setActiveTimeRange] = useState("all");
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
-  const [onlyCritical, setOnlyCritical] = useState(false);
   const [sortBy, setSortBy] = useState("score_desc");
   const [layoutMode, setLayoutMode] = useState("table"); // 'table' (standardowy) | 'grid' (kafelkowy)
 
@@ -8966,7 +8975,6 @@ function RaportyView({ setView, onOpenReaudit, showToast }) {
     setActiveTimeRange("all");
     setDateFrom("");
     setDateTo("");
-    setOnlyCritical(false);
     setActiveDropdown(null);
   };
 
@@ -8977,8 +8985,7 @@ function RaportyView({ setView, onOpenReaudit, showToast }) {
     Object.values(selectedChannels).some(Boolean) ||
     activeTimeRange !== "all" ||
     dateFrom ||
-    dateTo ||
-    onlyCritical
+    dateTo
   );
 
   const activeFilterCount =
@@ -8986,8 +8993,7 @@ function RaportyView({ setView, onOpenReaudit, showToast }) {
     (selectedAuditor ? 1 : 0) +
     Object.values(selectedStatuses).filter(Boolean).length +
     Object.values(selectedChannels).filter(Boolean).length +
-    (activeTimeRange !== "all" || dateFrom || dateTo ? 1 : 0) +
-    (onlyCritical ? 1 : 0);
+    (activeTimeRange !== "all" || dateFrom || dateTo ? 1 : 0);
 
   // Dynamiczne filtrowanie i sortowanie na bieżąco
   const filteredAudits = useMemo(() => {
@@ -9009,13 +9015,13 @@ function RaportyView({ setView, onOpenReaudit, showToast }) {
       list = list.filter((a) => a.auditor === selectedAuditor);
     }
 
-    // 3. Status audytu
+    // 2. Status audytu
     const activeStatuses = Object.keys(selectedStatuses).filter((k) => selectedStatuses[k]);
     if (activeStatuses.length > 0) {
       list = list.filter((a) => activeStatuses.includes(a.status));
     }
 
-    // 4. Kanał
+    // 3. Kanał
     const activeChannels = Object.keys(selectedChannels).filter((k) => selectedChannels[k]);
     if (activeChannels.length > 0) {
       list = list.filter((a) =>
@@ -9023,7 +9029,7 @@ function RaportyView({ setView, onOpenReaudit, showToast }) {
       );
     }
 
-    // 5. Czas
+    // 4. Czas
     if (dateFrom) {
       const fromTime = new Date(dateFrom).getTime();
       list = list.filter((a) => {
@@ -9048,11 +9054,6 @@ function RaportyView({ setView, onOpenReaudit, showToast }) {
         const [, m] = a.date.split(".").map(Number);
         return m >= 4;
       });
-    }
-
-    // 6. Błędy: tylko priorytetowe
-    if (onlyCritical) {
-      list = list.filter((a) => parseInt(a.priority, 10) > 0);
     }
 
     // Sortowanie
@@ -9125,36 +9126,6 @@ function RaportyView({ setView, onOpenReaudit, showToast }) {
               </p>
             </div>
             <div className="flex items-center gap-2 flex-wrap shrink-0">
-              <button
-                type="button"
-                onClick={() =>
-                  showToast &&
-                  showToast(
-                    "Eksport do Excela (.xlsx)",
-                    "Wygenerowano arkusz Excel z 6 audytami i szczegółowymi metrykami WCAG w formacie .xlsx."
-                  )
-                }
-                className="flex items-center gap-1.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 px-3.5 py-2 rounded-lg font-bold text-xs shadow-xs transition-colors cursor-pointer"
-                title="Eksportuj audyty do pliku Excel"
-              >
-                <FileSpreadsheet size={14} className="text-emerald-600" />
-                <span>Eksport (.xlsx)</span>
-              </button>
-              <button
-                type="button"
-                onClick={() =>
-                  showToast &&
-                  showToast(
-                    "Pobieranie Word (.doc)",
-                    "Rozpoczęto generowanie pakietu audytów w formacie Microsoft Word (.docx)..."
-                  )
-                }
-                className="flex items-center gap-1.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 px-3.5 py-2 rounded-lg font-bold text-xs shadow-xs transition-colors cursor-pointer"
-                title="Pobierz w formacie Microsoft Word (.doc)"
-              >
-                <FileCode size={14} className="text-blue-600" />
-                <span>Pobierz (.doc)</span>
-              </button>
               <ReauditButton
                 onClick={() =>
                   onOpenReaudit &&
@@ -9294,7 +9265,7 @@ function RaportyView({ setView, onOpenReaudit, showToast }) {
               </button>
               {activeDropdown === "kanal" && (
                 <div className="absolute top-full left-0 mt-1.5 w-52 bg-white border border-slate-200 rounded-xl shadow-xl z-50 p-2 space-y-1">
-                  {["Desktop", "Mobile Web", "iOS", "Android", "Dokumenty"].map((ch) => {
+                  {["Desktop", "iOS", "Android", "Dokumenty"].map((ch) => {
                     const isChecked = Boolean(selectedChannels[ch]);
                     return (
                       <button
@@ -9397,23 +9368,6 @@ function RaportyView({ setView, onOpenReaudit, showToast }) {
                   </div>
                 </div>
               )}
-            </div>
-
-            {/* 5. Błędy */}
-            <div className="relative">
-              <button
-                type="button"
-                onClick={() => setOnlyCritical(!onlyCritical)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold border transition-colors cursor-pointer ${
-                  onlyCritical
-                    ? "bg-red-500 text-white border-red-600 shadow-sm"
-                    : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
-                }`}
-              >
-                <AlertOctagon size={12} className={onlyCritical ? "text-white" : "text-slate-400"} />
-                <span>5. Tylko priorytetowe</span>
-                {onlyCritical && <CheckCircle2 size={12} className="text-white" />}
-              </button>
             </div>
 
             {/* Przycisk: Wyczyść */}
@@ -9526,22 +9480,6 @@ function RaportyView({ setView, onOpenReaudit, showToast }) {
                     onClick={() => { setDateFrom(""); setDateTo(""); setActiveTimeRange("all"); }}
                     className="hover:bg-[#0038F8]/20 p-0.5 rounded transition-colors cursor-pointer"
                     title="Usuń filtr dat"
-                  >
-                    <X size={12} />
-                  </button>
-                </span>
-              )}
-
-              {/* Chip: Tylko priorytetowe */}
-              {onlyCritical && (
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-red-100 text-red-700 border border-red-200">
-                  <AlertOctagon size={12} className="text-red-500" />
-                  <span>Tylko błędy priorytetowe</span>
-                  <button
-                    type="button"
-                    onClick={() => setOnlyCritical(false)}
-                    className="hover:bg-red-200/50 p-0.5 rounded transition-colors cursor-pointer"
-                    title="Usuń filtr błędów priorytetowych"
                   >
                     <X size={12} />
                   </button>
@@ -9966,7 +9904,7 @@ function ReportSummaryView({ setView, onOpenReaudit, showToast }) {
   const [reauditsList, setReauditsList] = useState([
     {
       id: "re1",
-      name: "Reaudyt 1: Weryfikacja po poprawkach",
+      name: "Reaudyt z dnia 15.04.2026",
       date: "15.04.2026",
       auditor: "P. Smułkowski",
       score: 85.2,
@@ -9976,7 +9914,7 @@ function ReportSummaryView({ setView, onOpenReaudit, showToast }) {
     },
     {
       id: "re2",
-      name: "Reaudyt 2: Błędy priorytetowe",
+      name: "Reaudyt z dnia 20.05.2026",
       date: "20.05.2026",
       auditor: "A. Nowak",
       score: 92.4,
@@ -9990,7 +9928,7 @@ function ReportSummaryView({ setView, onOpenReaudit, showToast }) {
     if (showToast) {
       showToast(
         "Pobieranie raportu PDF",
-        "Generowanie oficjalnego certyfikowanego raportu audytu WCAG 2.1 AA (Portal_Informacyjny_Audyt_Q1.pdf)..."
+        "Generowanie oficjalnego certyfikowanego raportu audytu WCAG 2.1 AA (Portal_Informacyjny_Audyt.pdf)..."
       );
     }
   };
@@ -9998,8 +9936,17 @@ function ReportSummaryView({ setView, onOpenReaudit, showToast }) {
   const handleDownloadDoc = () => {
     if (showToast) {
       showToast(
-        "Pobieranie raportu Word (.docx)",
-        "Generowanie w pełni edytowalnego dokumentu raportu Microsoft Word (.docx) z tabelami błędów i rekomendacjami..."
+        "Pobieranie raportu Word (.doc)",
+        "Generowanie dokumentu raportu Microsoft Word (.docx) z tabelami błędów i rekomendacjami..."
+      );
+    }
+  };
+
+  const handleDownloadExcel = () => {
+    if (showToast) {
+      showToast(
+        "Pobieranie raportu Excel (.xlsx)",
+        "Generowanie arkusza Excel (.xlsx) z pełnym wykazem błędów i wskaźników WCAG..."
       );
     }
   };
@@ -10028,7 +9975,7 @@ function ReportSummaryView({ setView, onOpenReaudit, showToast }) {
           </Badge>
         }
         title="Portal informacyjny - wybrane podstrony"
-        subtitle="Raport z badania dostępności cyfrowej WCAG 2.1 AA • Cykl Q1 2026"
+        subtitle="Raport z badania dostępności cyfrowej WCAG 2.1 AA"
         actions={
           <div className="flex items-center gap-2 flex-wrap">
             <button
@@ -10040,16 +9987,23 @@ function ReportSummaryView({ setView, onOpenReaudit, showToast }) {
             <button
               onClick={handleDownloadDoc}
               className="flex justify-center items-center gap-1.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 px-3.5 py-2 rounded-lg font-bold shadow-xs transition-colors text-xs cursor-pointer"
-              title="Pobierz edytowalny raport w formacie Microsoft Word (.docx)"
+              title="Pobierz edytowalny raport w formacie Microsoft Word (.doc)"
             >
-              <FileCode size={14} className="text-blue-600" /> <span>Pobierz Word (.doc)</span>
+              <FileText size={14} className="text-blue-600" /> <span>Pobierz Word (.doc)</span>
+            </button>
+            <button
+              onClick={handleDownloadExcel}
+              className="flex justify-center items-center gap-1.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 px-3.5 py-2 rounded-lg font-bold shadow-xs transition-colors text-xs cursor-pointer"
+              title="Pobierz arkusz kalkulacyjny w formacie Microsoft Excel (.xlsx)"
+            >
+              <FileSpreadsheet size={14} className="text-emerald-600" /> <span>Pobierz Excel (.xlsx)</span>
             </button>
             <button
               onClick={handleDownloadPdf}
               className="flex justify-center items-center gap-1.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 px-3.5 py-2 rounded-lg font-bold shadow-xs transition-colors text-xs cursor-pointer"
               title="Pobierz oficjalny raport w formacie PDF"
             >
-              <Download size={14} className="text-red-500" /> <span>Pobierz PDF</span>
+              <FileText size={14} className="text-red-500" /> <span>Pobierz PDF</span>
             </button>
             <ReauditButton
               onClick={handleTriggerReaudit}
@@ -10081,10 +10035,6 @@ function ReportSummaryView({ setView, onOpenReaudit, showToast }) {
                   <ShieldCheck size={14} className="text-[#0038F8]" />
                   <span>Standard: <strong className="text-slate-800 font-bold">WCAG 2.1 Poziom AA</strong></span>
                 </div>
-                <div className="w-px h-3.5 bg-slate-200 hidden sm:block" />
-                <div className="flex items-center gap-1.5 text-slate-500">
-                  <span>Cykl: <strong>Q1 2026</strong></span>
-                </div>
               </div>
 
               <div className="flex items-center gap-2">
@@ -10102,7 +10052,7 @@ function ReportSummaryView({ setView, onOpenReaudit, showToast }) {
                   <FileText size={15} />
                 </div>
                 <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
-                  Wnioski i podsumowanie wykonawcze audytora
+                  Podsumowanie audytu
                 </h3>
               </div>
 
@@ -10126,9 +10076,6 @@ function ReportSummaryView({ setView, onOpenReaudit, showToast }) {
                 <span className="text-2xl font-black text-slate-900 leading-tight">
                   77.5%
                 </span>
-                <span className="text-[11px] font-bold text-emerald-700 block mt-0.5">
-                  Średnia zgodność
-                </span>
               </div>
             </Card>
 
@@ -10143,9 +10090,6 @@ function ReportSummaryView({ setView, onOpenReaudit, showToast }) {
                 </span>
                 <span className="text-2xl font-black text-red-700 leading-tight">
                   3
-                </span>
-                <span className="text-[11px] font-bold text-red-700 block mt-0.5">
-                  Wymaga akcji
                 </span>
               </div>
             </Card>
@@ -10162,9 +10106,6 @@ function ReportSummaryView({ setView, onOpenReaudit, showToast }) {
                 <span className="text-2xl font-black text-amber-800 leading-tight">
                   1
                 </span>
-                <span className="text-[11px] font-bold text-amber-800 block mt-0.5">
-                  Do planu
-                </span>
               </div>
             </Card>
 
@@ -10179,9 +10120,6 @@ function ReportSummaryView({ setView, onOpenReaudit, showToast }) {
                 </span>
                 <span className="text-2xl font-black text-blue-700 leading-tight">
                   3
-                </span>
-                <span className="text-[11px] font-bold text-blue-700 block mt-0.5">
-                  Niski wpływ
                 </span>
               </div>
             </Card>
@@ -10203,9 +10141,6 @@ function ReportSummaryView({ setView, onOpenReaudit, showToast }) {
                     / 49
                   </span>
                 </div>
-                <span className="text-[11px] font-bold text-indigo-700 block mt-0.5">
-                  Kryteria WCAG 2.1
-                </span>
               </div>
             </Card>
           </div>
@@ -11514,7 +11449,7 @@ function AuditsFilterSection({
           </button>
           {activeDropdown === "audit_kanal" && (
             <div className="absolute top-full left-0 mt-1.5 w-56 bg-white border border-slate-200 rounded-xl shadow-xl z-50 p-2 space-y-1">
-              {["WWW", "Aplikacja", "Dokument"].map((ch) => {
+              {["Desktop", "iOS", "Android", "Dokumenty"].map((ch) => {
                 const isChecked = Boolean(auditChannels[ch]);
                 return (
                   <button
@@ -11527,7 +11462,7 @@ function AuditsFilterSection({
                   >
                     <div className="flex items-center gap-2">
                       <input type="checkbox" checked={isChecked} readOnly className="w-4 h-4 rounded text-[#0038F8] pointer-events-none accent-[#0038F8]" />
-                      <span>{ch === "Dokument" ? "Dokumenty / PDF" : ch}</span>
+                      <span>{ch}</span>
                     </div>
                     {isChecked && <CheckCircle2 size={14} className="text-[#0038F8]" />}
                   </button>
@@ -12025,9 +11960,10 @@ function ServicesFilterSection({
             <div className="absolute top-full left-0 mt-1.5 w-60 bg-white border border-slate-200 rounded-xl shadow-xl z-50 p-2 space-y-1">
               {[
                 { id: "all", label: "Wszystkie kanały" },
-                { id: "WWW", label: "Serwis WWW (Desktop)" },
-                { id: "Mobile", label: "Aplikacja Mobilna" },
-                { id: "Dokument", label: "Wzorce dokumentów / PDF" },
+                { id: "Desktop", label: "Desktop" },
+                { id: "iOS", label: "iOS" },
+                { id: "Android", label: "Android" },
+                { id: "Dokumenty", label: "Dokumenty" },
               ].map((opt) => (
                 <button
                   key={opt.id}
@@ -13534,9 +13470,10 @@ function FiltersSidebar({ isCollapsed, setIsCollapsed }) {
         </FilterAccordion>
 
         <FilterAccordion title="4. Kanał" count={0}>
-          <FilterCheckbox label="WWW" />
-          <FilterCheckbox label="Aplikacja" />
-          <FilterCheckbox label="Dokument" />
+          <FilterCheckbox label="Desktop" />
+          <FilterCheckbox label="iOS" />
+          <FilterCheckbox label="Android" />
+          <FilterCheckbox label="Dokumenty" />
         </FilterAccordion>
 
         <FilterAccordion title="5. Audyty i Wyniki" count={0}>
@@ -13838,7 +13775,7 @@ function AuditReportView() {
       reaudits: [
         {
           id: "re1",
-          name: "Reaudyt 1: Weryfikacja po poprawkach",
+          name: "Reaudyt z dnia 15.04.2024",
           date: "15.04.2024",
           auditor: "P. Smułkowski",
           score: 85.2,
@@ -13848,7 +13785,7 @@ function AuditReportView() {
         },
         {
           id: "re2",
-          name: "Reaudyt 2: Błędy priorytetowe",
+          name: "Reaudyt z dnia 20.05.2024",
           date: "20.05.2024",
           auditor: "A. Nowak",
           score: 92.4,
@@ -17839,7 +17776,7 @@ function ComplaintCreateView({
     service: mockSharedServicesData[0]?.name || "Usługi płatnicze i powiązane z rachunkiem",
     process: mockSharedServicesData[0]?.processes?.[0]?.name || "Otwarcie ROR (istniejący)",
     view: mockSharedServicesData[0]?.processes?.[0]?.views?.[0]?.name || "Strona główna ing.pl",
-    channel: "Desktop WWW",
+    channel: "Desktop",
     source: COMPLAINT_SOURCES[0],
     responsiblePerson: RESPONSIBLE_USERS_LIST[0],
     devTeam: RESPONSIBLE_USERS_LIST[0],
@@ -18181,10 +18118,10 @@ function ComplaintCreateView({
                         onChange={(e) => setFormData({ ...formData, channel: e.target.value })}
                         className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
                       >
-                        <option value="Desktop WWW">Desktop WWW</option>
-                        <option value="Android">Aplikacja Android</option>
-                        <option value="iOS">Aplikacja iOS</option>
-                        <option value="Dokumenty">Dokumenty PDF</option>
+                        <option value="Desktop">Desktop</option>
+                        <option value="iOS">iOS</option>
+                        <option value="Android">Android</option>
+                        <option value="Dokumenty">Dokumenty</option>
                       </select>
                     </div>
                   </div>

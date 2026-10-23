@@ -63,10 +63,10 @@ export function AuditListView() {
       type: "multiselect",
       value: selectedChannels,
       options: [
-        { value: "WWW", label: "WWW" },
-        { value: "Android", label: "Android" },
+        { value: "Desktop", label: "Desktop" },
         { value: "iOS", label: "iOS" },
-        { value: "PDF", label: "PDF / Dokumenty" },
+        { value: "Android", label: "Android" },
+        { value: "Dokumenty", label: "Dokumenty" },
       ],
     },
     {
@@ -156,8 +156,14 @@ export function AuditListView() {
         return false;
       }
       // Channel
-      if (selectedChannels.length > 0 && !selectedChannels.includes(audit.channel)) {
-        return false;
+      if (selectedChannels.length > 0) {
+        const matches = selectedChannels.some(
+          (ch) =>
+            audit.channel === ch ||
+            (ch === "Desktop" && audit.channel === "WWW") ||
+            (ch === "Dokumenty" && audit.channel === "PDF")
+        );
+        if (!matches) return false;
       }
       // Client
       if (selectedClient && audit.clientName !== selectedClient) {
