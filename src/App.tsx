@@ -26,6 +26,7 @@ import {
   Layout,
   ArrowLeft,
   Download,
+  Copy,
   AlertOctagon,
   AlertTriangle,
   Bell,
@@ -5501,6 +5502,99 @@ function InfoTooltip({ text, position = "top", align = "center", className = "" 
   );
 }
 
+function downloadCsvFile(filename: string, content: string) {
+  const blob = new Blob([content], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.setAttribute("href", url);
+  link.setAttribute("download", filename);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+}
+
+function WidgetOptionsMenu({
+  title,
+  actions = [],
+}: {
+  title?: string;
+  actions: Array<{
+    label: string;
+    icon: any;
+    onClick: () => void;
+  }>;
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsOpen(false);
+    };
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("keydown", handleKeyDown);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen]);
+
+  return (
+    <div className="relative" ref={menuRef}>
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        aria-haspopup="true"
+        aria-expanded={isOpen}
+        aria-label={`Opcje widgetu: ${title || "menu"}`}
+        title="Opcje widgetu"
+        className={`w-7 h-7 flex items-center justify-center rounded-lg transition-colors cursor-pointer ${
+          isOpen
+            ? "bg-slate-100 text-[#0038F8]"
+            : "text-slate-400 hover:text-slate-700 hover:bg-slate-100"
+        }`}
+      >
+        <MoreVertical size={16} />
+      </button>
+
+      {isOpen && (
+        <div
+          role="menu"
+          aria-label={title || "Opcje widgetu"}
+          className="absolute right-0 top-full mt-1.5 w-56 bg-white rounded-xl shadow-lg border border-slate-200 z-30 py-1.5 overflow-hidden animate-in fade-in slide-in-from-top-1 duration-150 text-left"
+        >
+          {actions.map((action, i) => {
+            const ActionIcon = action.icon;
+            return (
+              <button
+                key={i}
+                type="button"
+                role="menuitem"
+                onClick={() => {
+                  setIsOpen(false);
+                  action.onClick();
+                }}
+                className="w-full flex items-center gap-2.5 px-3.5 py-2 text-xs font-semibold text-slate-700 hover:text-[#0038F8] hover:bg-blue-50/70 transition-colors text-left cursor-pointer group"
+              >
+                <ActionIcon size={14} className="text-slate-400 group-hover:text-[#0038F8] shrink-0 transition-colors" />
+                <span>{action.label}</span>
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function DashboardView({
   setView,
   onOpenAnnouncements,
@@ -5914,9 +6008,41 @@ function DashboardView({
                 Ostatnie 12 miesięcy w całej organizacji
               </span>
             </div>
-            <button className="text-slate-400 hover:text-slate-600">
-              <MoreVertical size={16} />
-            </button>
+            <WidgetOptionsMenu
+              title="Trend dostępności"
+              actions={[
+                {
+                  label: "Szczegóły w Raportowaniu",
+                  icon: BarChart2,
+                  onClick: () => {
+                    setView("raportowanie");
+                    if (showToast) showToast("Raportowanie", "Przejście do modułu analityki trendów i błędów.");
+                  },
+                },
+                {
+                  label: "Eksportuj dane (CSV)",
+                  icon: Download,
+                  onClick: () => {
+                    const csv = "Miesiąc,Średnia Dostępność (%),Nowe błędy\n" +
+                      chartTrendData.map((d) => `${d.m},${d.s}%,${d.e}`).join("\n");
+                    downloadCsvFile("trend-dostepnosci-wcag.csv", csv);
+                    if (showToast) showToast("Eksport CSV", "Pobrano plik trend-dostepnosci-wcag.csv");
+                  },
+                },
+                {
+                  label: "Kopiuj zestawienie do schowka",
+                  icon: Copy,
+                  onClick: () => {
+                    const text = "Miesiąc\tDostępność\tNowe błędy\n" +
+                      chartTrendData.map((d) => `${d.m}\t${d.s}%\t${d.e}`).join("\n");
+                    if (navigator.clipboard) {
+                      navigator.clipboard.writeText(text);
+                    }
+                    if (showToast) showToast("Schowek", "Skopiowano dane trendu do schowka.");
+                  },
+                },
+              ]}
+            />
           </div>
 
           <div className="flex flex-1 min-h-0 mt-1">
@@ -5988,9 +6114,36 @@ function DashboardView({
                 align="left"
               />
             </div>
-            <button className="text-slate-400 hover:text-slate-600">
-              <MoreVertical size={16} />
-            </button>
+            <WidgetOptionsMenu
+              title="Zgodność kanałów"
+              actions={[
+                {
+                  label: "Szczegóły w Bazie Usług",
+                  icon: Library,
+                  onClick: () => {
+                    setView("baza-uslug");
+                    if (showToast) showToast("Baza Usług", "Przejście do inwentaryzacji procesów w kanałach.");
+                  },
+                },
+                {
+                  label: "Raport przekrojowy kanałów",
+                  icon: BarChart2,
+                  onClick: () => {
+                    setView("raportowanie");
+                    if (showToast) showToast("Raportowanie", "Otwarto raport analityczny kanałów cyfrowych.");
+                  },
+                },
+                {
+                  label: "Eksportuj kanały (CSV)",
+                  icon: Download,
+                  onClick: () => {
+                    const csv = "Kanał,Poziom zgodności (%)\nWWW,94%\nAplikacja (iOS),82%\nAplikacja (Android),78%\nDokumenty (PDF/DOC),45%\n";
+                    downloadCsvFile("zgodnosc-kanalow-wcag.csv", csv);
+                    if (showToast) showToast("Eksport CSV", "Pobrano plik zgodnosc-kanalow-wcag.csv");
+                  },
+                },
+              ]}
+            />
           </div>
 
           <div className="flex-1 flex flex-col justify-center gap-3">
@@ -14943,9 +15096,31 @@ function ManagementReport() {
                 Ostatnie 12 miesięcy
               </span>
             </div>
-            <button className="text-slate-400 hover:text-slate-600">
-              <MoreVertical size={18} />
-            </button>
+            <WidgetOptionsMenu
+              title="Trend dostępności"
+              actions={[
+                {
+                  label: "Eksportuj dane (CSV)",
+                  icon: Download,
+                  onClick: () => {
+                    const csv = "Miesiąc,Średnia Dostępność (%),Nowe błędy\n" +
+                      chartTrendData.map((d) => `${d.m},${d.s}%,${d.e}`).join("\n");
+                    downloadCsvFile("trend-dostepnosci-wcag.csv", csv);
+                  },
+                },
+                {
+                  label: "Kopiuj zestawienie do schowka",
+                  icon: Copy,
+                  onClick: () => {
+                    const text = "Miesiąc\tDostępność\tNowe błędy\n" +
+                      chartTrendData.map((d) => `${d.m}\t${d.s}%\t${d.e}`).join("\n");
+                    if (navigator.clipboard) {
+                      navigator.clipboard.writeText(text);
+                    }
+                  },
+                },
+              ]}
+            />
           </div>
 
           <div className="flex flex-1 min-h-0 mt-2">
@@ -15007,9 +15182,29 @@ function ManagementReport() {
             <h3 className="text-lg font-bold text-slate-900">
               Zgodność według kanałów
             </h3>
-            <button className="text-slate-400 hover:text-slate-600">
-              <MoreVertical size={18} />
-            </button>
+            <WidgetOptionsMenu
+              title="Zgodność kanałów"
+              actions={[
+                {
+                  label: "Eksportuj kanały (CSV)",
+                  icon: Download,
+                  onClick: () => {
+                    const csv = "Kanał,Poziom zgodności (%)\nWWW,94%\nAplikacja mobilna (iOS),82%\nAplikacja mobilna (Android),78%\nDokumenty (PDF/DOC),45%\n";
+                    downloadCsvFile("zgodnosc-kanalow-wcag.csv", csv);
+                  },
+                },
+                {
+                  label: "Kopiuj zestawienie do schowka",
+                  icon: Copy,
+                  onClick: () => {
+                    const text = "Kanał\tZgodność (%)\nWWW\t94%\nAplikacja mobilna (iOS)\t82%\nAplikacja mobilna (Android)\t78%\nDokumenty (PDF/DOC)\t45%\n";
+                    if (navigator.clipboard) {
+                      navigator.clipboard.writeText(text);
+                    }
+                  },
+                },
+              ]}
+            />
           </div>
           <div className="flex-1 flex flex-col justify-center gap-6">
             <div>
