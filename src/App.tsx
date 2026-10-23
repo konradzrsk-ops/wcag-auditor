@@ -2488,26 +2488,26 @@ function NotificationsDropdown({
       ref={dropdownRef}
       className="absolute right-0 top-full mt-2 w-[340px] sm:w-[420px] bg-white rounded-2xl shadow-xl border border-slate-200 z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-150 text-left"
       role="dialog"
-      aria-label="Centrum powiadomień i komunikatów"
+      aria-label="Komunikaty"
     >
       {/* Nagłówek centrum powiadomień */}
-      <div className="p-3.5 bg-slate-50/90 border-b border-slate-200 flex items-center justify-between">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-blue-50 text-[#0038F8] flex items-center justify-center border border-blue-100/80 shadow-2xs">
+      <div className="p-3.5 bg-slate-50/90 border-b border-slate-200 flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2.5 min-w-0">
+          <div className="w-8 h-8 rounded-xl bg-blue-50 text-[#0038F8] flex items-center justify-center border border-blue-100/80 shadow-2xs shrink-0">
             <Bell size={16} />
           </div>
-          <div>
+          <div className="min-w-0">
             <div className="flex items-center gap-2">
-              <span className="text-xs sm:text-sm font-extrabold text-slate-900">
-                Powiadomienia i komunikaty
+              <span className="text-xs sm:text-sm font-extrabold text-slate-900 truncate">
+                Komunikaty
               </span>
               {unreadAnnouncementsCount > 0 && (
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-[#0038F8] text-white">
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-[#0038F8] text-white shrink-0">
                   {unreadAnnouncementsCount} nowe
                 </span>
               )}
             </div>
-            <p className="text-[11px] text-slate-500 font-medium">
+            <p className="text-[11px] text-slate-500 font-medium truncate">
               Aktualizacje prawne, webinary i oferty
             </p>
           </div>
@@ -2517,7 +2517,7 @@ function NotificationsDropdown({
           <button
             type="button"
             onClick={markAllAnnouncementsRead}
-            className="text-[11px] font-bold text-slate-500 hover:text-[#0038F8] transition-colors cursor-pointer"
+            className="text-[11px] font-bold text-slate-500 hover:text-[#0038F8] transition-colors cursor-pointer shrink-0"
           >
             Oznacz przeczytane
           </button>
@@ -2687,9 +2687,9 @@ function AnnouncementsPageView({
       <ViewHeader
         breadcrumbs={[
           { label: "Pulpit", onClick: () => setView("przeglad") },
-          { label: "Centrum Komunikatów i Ofert" },
+          { label: "Komunikaty" },
         ]}
-        title="Centrum Komunikatów i Ofert"
+        title="Komunikaty"
         subtitle="Bieżące powiadomienia systemowe, nowe funkcjonalności, terminy warsztatów oraz pakiety wsparcia dedykowanego."
         actions={
           <div className="flex items-center gap-2">
@@ -2762,7 +2762,7 @@ function AnnouncementsPageView({
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Szukaj w komunikatach i ofertach..."
+                placeholder="Szukaj w komunikatach..."
                 className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm font-medium text-slate-800 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0038F8]/30 transition-all"
               />
             </div>
@@ -4315,7 +4315,7 @@ const VIEW_GUIDES = {
   },
   komunikaty: {
     id: "komunikaty",
-    title: "Centrum Komunikatów i Nowości",
+    title: "Komunikaty",
     category: "Baza wiedzy i edukacja",
     summary:
       "Oficjalne komunikaty zespołu audytorskiego, oferty szkoleń WCAG, bezpłatne webinary eksperckie oraz aktualizacje prawa EAA.",
@@ -5335,8 +5335,8 @@ function TopNavbar({
               <button
                 type="button"
                 onClick={() => setIsAnnouncementsOpen(!isAnnouncementsOpen)}
-                title="Powiadomienia i komunikaty"
-                aria-label="Otwórz menu powiadomień"
+                title="Komunikaty"
+                aria-label="Komunikaty"
                 className={`w-10 h-10 flex items-center justify-center rounded-xl transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#0038F8]/30 ${
                   isAnnouncementsOpen
                     ? "bg-blue-50 text-[#0038F8]"
@@ -5544,7 +5544,7 @@ function TopNavbar({
             >
               <div className="flex items-center gap-3">
                 <Bell size={18} className="text-[#0038F8]" />
-                <span>Powiadomienia i Komunikaty</span>
+                <span>Komunikaty</span>
               </div>
               {unreadAnnouncementsCount > 0 && (
                 <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-[#0038F8] text-white">
