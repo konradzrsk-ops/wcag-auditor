@@ -50,6 +50,7 @@ interface UserProfileViewProps {
   initialTab?: "branding" | "team" | "wcag" | "account" | "notifications";
   onViewMemberErrors?: (member: TeamMember) => void;
   onViewMemberTickets?: (member: TeamMember) => void;
+  onViewPersonProfile?: (person: any) => void;
 }
 
 // Domyślny zespół deweloperów i testerów organizacji
@@ -139,6 +140,7 @@ export function UserProfileView({
   initialTab,
   onViewMemberErrors,
   onViewMemberTickets,
+  onViewPersonProfile,
 }: UserProfileViewProps) {
   const [activeTab, setActiveTab] = useState<
     "branding" | "team" | "wcag" | "account" | "notifications"
@@ -561,10 +563,10 @@ export function UserProfileView({
               }`}
             >
               <Building2 size={16} />
-              <span>Logo & Branding Organizacji</span>
+              <span>Logo organizacji</span>
             </button>
 
-            {/* NOWA ZAKŁADKA DLA KOORDYNATORA: ZESPÓŁ I DEWELOPERZY */}
+            {/* ZAKŁADKA: MÓJ ZESPÓŁ */}
             <button
               type="button"
               onClick={() => setActiveTab("team")}
@@ -575,7 +577,7 @@ export function UserProfileView({
               }`}
             >
               <Users size={16} />
-              <span>Mój Zespół & Deweloperzy</span>
+              <span>Mój zespół</span>
               <span className="ml-1 px-2 py-0.2 rounded-full text-[11px] font-extrabold bg-blue-100 text-[#0038F8]">
                 {formData.teamMembers?.length || 0}
               </span>
@@ -591,7 +593,7 @@ export function UserProfileView({
               }`}
             >
               <ShieldCheck size={16} />
-              <span>Standardy WCAG & Koordynacja</span>
+              <span>Standard WCAG</span>
             </button>
 
             <button
@@ -604,7 +606,7 @@ export function UserProfileView({
               }`}
             >
               <User size={16} />
-              <span>Konto Osobiste & Bezpieczeństwo</span>
+              <span>Moje konto</span>
             </button>
 
             <button
@@ -617,7 +619,7 @@ export function UserProfileView({
               }`}
             >
               <Bell size={16} />
-              <span>Powiadomienia & Raporty</span>
+              <span>Powiadomienia</span>
             </button>
           </div>
         </div>
@@ -1110,15 +1112,24 @@ export function UserProfileView({
                     <div>
                       {/* Nagłówek karty usera */}
                       <div className="flex items-start justify-between gap-3 mb-3">
-                        <div className="flex items-center gap-3 min-w-0">
+                        <div
+                          className="flex items-center gap-3 min-w-0 cursor-pointer group/title"
+                          onClick={() => {
+                            if (onViewPersonProfile) {
+                              onViewPersonProfile(member);
+                            }
+                          }}
+                          title={`Zobacz profil: ${member.name}`}
+                        >
                           <img
                             src={member.avatar || "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix"}
                             alt={member.name}
-                            className="w-12 h-12 rounded-full border-2 border-slate-200 object-cover shrink-0"
+                            className="w-12 h-12 rounded-full border-2 border-slate-200 object-cover shrink-0 group-hover/title:ring-2 group-hover/title:ring-[#0038F8]"
                           />
                           <div className="min-w-0">
-                            <h4 className="text-sm font-extrabold text-slate-900 group-hover:text-[#0038F8] transition-colors truncate">
-                              {member.name}
+                            <h4 className="text-sm font-extrabold text-slate-900 group-hover/title:text-[#0038F8] transition-colors truncate flex items-center gap-1.5">
+                              <span>{member.name}</span>
+                              <ExternalLink size={12} className="text-slate-400 group-hover/title:text-[#0038F8] shrink-0" />
                             </h4>
                             <p className="text-xs text-slate-500 font-medium truncate">
                               {member.role}
@@ -1127,7 +1138,7 @@ export function UserProfileView({
                         </div>
 
                         <span
-                          className={`text-[10px] font-extrabold px-2 py-0.5 rounded-full shrink-0 ${
+                          className={`text-xs font-extrabold px-2.5 py-0.5 rounded-full shrink-0 ${
                             member.specialization === "frontend"
                               ? "bg-blue-50 text-[#0038F8] border border-blue-200"
                               : member.specialization === "mobile"
@@ -1162,14 +1173,14 @@ export function UserProfileView({
 
                       {/* Przypisane serwisy */}
                       <div className="mb-4">
-                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">
+                        <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1.5">
                           Przypisane serwisy:
                         </span>
                         <div className="flex flex-wrap gap-1.5">
                           {member.assignedServices.map((srv, idx) => (
                             <span
                               key={idx}
-                              className="text-[11px] font-semibold bg-slate-100 text-slate-700 px-2 py-0.5 rounded-lg border border-slate-200/80"
+                              className="text-xs font-semibold bg-slate-100 text-slate-700 px-2 py-0.5 rounded-lg border border-slate-200/80"
                             >
                               {srv}
                             </span>
@@ -1217,13 +1228,25 @@ export function UserProfileView({
                           <ArrowRight size={11} className="text-blue-400 group-hover:text-[#0038F8] group-hover:translate-x-0.5 transition-all" />
                         </button>
 
-                        <span className="text-emerald-700 font-bold flex items-center gap-1 text-[11px] px-1 py-1" title="Liczba naprawionych błędów">
+                        <span className="text-emerald-700 font-bold flex items-center gap-1 text-xs px-1 py-1" title="Liczba naprawionych błędów">
                           <CheckCircle2 size={12} className="text-emerald-600" />
                           {member.resolvedErrorsCount} fixów
                         </span>
                       </div>
 
                       <div className="flex items-center gap-1.5 shrink-0">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (onViewPersonProfile) {
+                              onViewPersonProfile(member);
+                            }
+                          }}
+                          className="p-1.5 hover:bg-blue-50 text-slate-500 hover:text-[#0038F8] rounded-lg transition-colors cursor-pointer"
+                          title="Zobacz pełny profil osoby"
+                        >
+                          <User size={15} />
+                        </button>
                         <button
                           type="button"
                           onClick={() => openEditMemberModal(member)}

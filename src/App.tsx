@@ -87,6 +87,7 @@ import {
   Building2,
 } from "lucide-react";
 import { UserProfileView } from "./features/profile/UserProfileView";
+import { PersonProfileView } from "./features/profile/PersonProfileView";
 import { ClientProfile } from "./types";
 
 // ==========================================
@@ -1598,6 +1599,16 @@ export default function App() {
   const [developerTicketFilter, setDeveloperTicketFilter] = useState(null);
   const [profileInitialTab, setProfileInitialTab] = useState("account");
 
+  // Dedykowany widok profilu osoby (Opiekun, Koordynator, Deweloper)
+  const [selectedPerson, setSelectedPerson] = useState<any>(null);
+  const [personProfileBackView, setPersonProfileBackView] = useState("przeglad");
+
+  const handleViewPersonProfile = (person: any, backView?: string) => {
+    setSelectedPerson(person);
+    setPersonProfileBackView(backView || currentView || "przeglad");
+    setCurrentView("osoba-profil");
+  };
+
   const unreadTicketsCount = tickets.filter((t) => t.unreadByClient).length;
 
   const handleOpenNewTicket = (context = null) => {
@@ -1684,6 +1695,7 @@ export default function App() {
               onOpenNewTicket={handleOpenNewTicket}
               showToast={showToast}
               clientProfile={clientProfile}
+              onViewPersonProfile={(person) => handleViewPersonProfile(person, "przeglad")}
             />
           )}
           {currentView === "tickety" && (
@@ -1697,6 +1709,7 @@ export default function App() {
               showToast={showToast}
               developerFilter={developerTicketFilter}
               setDeveloperFilter={setDeveloperTicketFilter}
+              onViewPersonProfile={(person) => handleViewPersonProfile(person, "tickety")}
             />
           )}
           {currentView === "komunikaty" && (
@@ -1705,6 +1718,7 @@ export default function App() {
               announcements={announcements}
               setAnnouncements={setAnnouncements}
               showToast={showToast}
+              onViewPersonProfile={(person) => handleViewPersonProfile(person, "komunikaty")}
             />
           )}
           {currentView === "raporty" && (
@@ -1790,6 +1804,25 @@ export default function App() {
               setClientProfile={setClientProfile}
               showToast={showToast}
               initialTab={profileInitialTab}
+              onViewMemberErrors={(member) => {
+                setDeveloperErrorFilter(member.name);
+                setCurrentView("raport-bledy");
+              }}
+              onViewMemberTickets={(member) => {
+                setDeveloperTicketFilter(member.name);
+                setCurrentView("tickety");
+              }}
+              onViewPersonProfile={(member) => handleViewPersonProfile(member, "profil")}
+            />
+          )}
+          {currentView === "osoba-profil" && (
+            <PersonProfileView
+              person={selectedPerson}
+              setView={setCurrentView}
+              backView={personProfileBackView}
+              clientProfile={clientProfile}
+              showToast={showToast}
+              onOpenNewTicket={handleOpenNewTicket}
               onViewMemberErrors={(member) => {
                 setDeveloperErrorFilter(member.name);
                 setCurrentView("raport-bledy");
@@ -2404,6 +2437,13 @@ function AnnouncementsPageView({
   announcements,
   setAnnouncements,
   showToast,
+  onViewPersonProfile,
+}: {
+  setView: (v: string) => void;
+  announcements: any[];
+  setAnnouncements: any;
+  showToast?: (t: string, b: string) => void;
+  onViewPersonProfile?: (p: any) => void;
 }) {
   const [activeCategory, setActiveCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
@@ -2673,12 +2713,20 @@ function AnnouncementsPageView({
         {/* SPÓJNA KARTA DEDYKOWANEGO OPIEKUNA KLIENTA */}
         <div className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-2xs">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
+            <div
+              className="flex items-center gap-3 cursor-pointer group/mgr"
+              onClick={() => {
+                if (onViewPersonProfile) {
+                  onViewPersonProfile("Tomasz Straszak");
+                }
+              }}
+              title="Kliknij, aby otworzyć profil Tomasza Straszaka"
+            >
               <div className="relative shrink-0">
                 <img
                   src="https://wally.widzialni.eu//uploads/avatars/avatar_133_1760079096.jpg"
                   alt="Tomasz Straszak"
-                  className="w-12 h-12 rounded-full object-cover border-2 border-white shadow-xs"
+                  className="w-12 h-12 rounded-full object-cover border-2 border-white shadow-xs group-hover/mgr:ring-2 group-hover/mgr:ring-[#0038F8]"
                 />
                 <span
                   className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-emerald-500 ring-2 ring-white"
@@ -2687,10 +2735,11 @@ function AnnouncementsPageView({
               </div>
               <div className="min-w-0">
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-bold text-slate-900 truncate">
-                    Tomasz Straszak
+                  <span className="text-sm font-bold text-slate-900 group-hover/mgr:text-[#0038F8] transition-colors truncate flex items-center gap-1.5">
+                    <span>Tomasz Straszak</span>
+                    <ExternalLink size={12} className="text-slate-400 group-hover/mgr:text-[#0038F8]" />
                   </span>
-                  <span className="text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100 flex items-center gap-1">
+                  <span className="text-xs font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 flex items-center gap-1">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block"></span>
                     Dostępny
                   </span>
@@ -2701,12 +2750,14 @@ function AnnouncementsPageView({
                 <div className="flex items-center gap-3 text-xs text-slate-600 font-semibold mt-1">
                   <a
                     href="tel:+48795103017"
+                    onClick={(e) => e.stopPropagation()}
                     className="flex items-center gap-1.5 hover:text-[#0038F8] transition-colors"
                   >
                     <Phone size={12} className="text-[#0038F8]" /> 795 103 017
                   </a>
                   <a
                     href="mailto:tomek@widzialni.eu"
+                    onClick={(e) => e.stopPropagation()}
                     className="flex items-center gap-1.5 hover:text-[#0038F8] transition-colors"
                   >
                     <Mail size={12} className="text-[#0038F8]" /> tomek@widzialni.eu
@@ -2726,16 +2777,17 @@ function AnnouncementsPageView({
               <button
                 type="button"
                 onClick={() => {
-                  if (showToast) {
-                    showToast(
-                      "Zaproszenie na spotkanie statusowe",
-                      "Zaproszenie na spotkanie zostało przekazane do Tomasza Straszaka."
-                    );
+                  if (onViewPersonProfile) {
+                    onViewPersonProfile("Tomasz Straszak");
+                  } else {
+                    setView("profil");
                   }
                 }}
-                className="px-4 py-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-xl text-xs sm:text-sm font-bold shadow-2xs transition-colors cursor-pointer"
+                className="px-4 py-2 bg-[#0038F8] hover:bg-[#002ECC] text-white rounded-xl text-xs sm:text-sm font-bold shadow-2xs transition-colors cursor-pointer flex items-center gap-1.5"
+                title="Umów spotkanie 30 min z Tomaszem Straszakiem"
               >
-                Umów spotkanie
+                <Calendar size={14} />
+                <span>Umów spotkanie 30 min</span>
               </button>
             </div>
           </div>
@@ -3136,6 +3188,18 @@ function TicketsPageView({
   showToast,
   developerFilter = null,
   setDeveloperFilter = null,
+  onViewPersonProfile,
+}: {
+  setView: (v: string) => void;
+  tickets?: any[];
+  setTickets?: any;
+  selectedTicketId?: string;
+  setSelectedTicketId?: any;
+  onOpenNewTicket?: (ctx?: any) => void;
+  showToast?: (t: string, b: string, type?: string) => void;
+  developerFilter?: string | null;
+  setDeveloperFilter?: any;
+  onViewPersonProfile?: (person: any) => void;
 }) {
   const [activeFilterStatus, setActiveFilterStatus] = useState("all");
   const [activeFilterContext, setActiveFilterContext] = useState("all");
@@ -3623,25 +3687,40 @@ function TicketsPageView({
                     <img
                       src={msg.authorAvatar}
                       alt={msg.authorName}
-                      className="w-9 h-9 rounded-full object-cover border border-slate-200 shrink-0"
+                      onClick={() => {
+                        if (onViewPersonProfile) {
+                          onViewPersonProfile(msg.authorName);
+                        }
+                      }}
+                      className="w-9 h-9 rounded-full object-cover border border-slate-200 shrink-0 cursor-pointer hover:ring-2 hover:ring-[#0038F8]"
+                      title={`Zobacz profil: ${msg.authorName}`}
                     />
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between gap-2 mb-1">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <span className="text-xs font-bold text-slate-900">
-                            {msg.authorName}
+                        <div
+                          className="flex items-center gap-2 flex-wrap cursor-pointer group/author"
+                          onClick={() => {
+                            if (onViewPersonProfile) {
+                              onViewPersonProfile(msg.authorName);
+                            }
+                          }}
+                          title={`Zobacz profil: ${msg.authorName}`}
+                        >
+                          <span className="text-xs font-bold text-slate-900 group-hover/author:text-[#0038F8] transition-colors flex items-center gap-1">
+                            <span>{msg.authorName}</span>
+                            <ExternalLink size={11} className="text-slate-400 group-hover/author:text-[#0038F8]" />
                           </span>
                           <span
-                            className={`text-[10px] font-semibold px-2 py-0.2 rounded ${
+                            className={`text-xs font-bold px-2 py-0.5 rounded ${
                               isAuditor
-                                ? "bg-blue-100/80 text-blue-800 font-bold"
+                                ? "bg-blue-100/80 text-blue-800"
                                 : "bg-slate-100 text-slate-600"
                             }`}
                           >
                             {msg.authorRole}
                           </span>
                         </div>
-                        <span className="text-[11px] font-medium text-slate-400">
+                        <span className="text-xs font-medium text-slate-500">
                           {msg.date}
                         </span>
                       </div>
@@ -5427,7 +5506,7 @@ function InfoTooltip({ text, position = "top", align = "center", className = "" 
       </button>
       <span
         role="tooltip"
-        className={`absolute pointer-events-none opacity-0 invisible group-hover/tooltip:opacity-100 group-hover/tooltip:visible group-focus-within/tooltip:opacity-100 group-focus-within/tooltip:visible transition-all duration-150 z-50 bg-slate-900 text-white text-[11px] font-medium leading-relaxed px-2.5 py-1.5 rounded-lg shadow-xl w-52 sm:w-60 text-left ${posClass} ${alignClass}`}
+        className={`absolute pointer-events-none opacity-0 invisible group-hover/tooltip:opacity-100 group-hover/tooltip:visible group-focus-within/tooltip:opacity-100 group-focus-within/tooltip:visible transition-all duration-150 z-50 bg-slate-900 text-white text-xs font-medium leading-relaxed px-2.5 py-1.5 rounded-lg shadow-xl w-52 sm:w-60 text-left ${posClass} ${alignClass}`}
       >
         {text}
         <span
@@ -5450,6 +5529,20 @@ function DashboardView({
   onOpenNewTicket,
   showToast,
   clientProfile,
+  onViewPersonProfile,
+}: {
+  setView: (v: string) => void;
+  onOpenAnnouncements?: () => void;
+  announcements?: any[];
+  setAnnouncements?: any;
+  tickets?: any[];
+  setTickets?: any;
+  unreadTicketsCount?: number;
+  onOpenTicket?: (id: string) => void;
+  onOpenNewTicket?: (context?: any) => void;
+  showToast?: (title: string, text: string, type?: string) => void;
+  clientProfile?: any;
+  onViewPersonProfile?: (person: any) => void;
 }) {
   return (
     <div data-testid="dashboard-view" className="flex-1 flex flex-col md:h-full w-full md:overflow-hidden">
@@ -5465,7 +5558,7 @@ function DashboardView({
               <Landmark size={13} />
               {clientProfile?.orgName || "Erste Group Bank AG"}
             </span>
-            <span className="text-[11px] font-bold text-slate-500 bg-slate-100 px-2.5 py-1 rounded-xl border border-slate-200/80">
+            <span className="text-xs font-bold text-slate-600 bg-slate-100 px-2.5 py-1 rounded-xl border border-slate-200/80">
               {clientProfile?.wcagStandard || "WCAG 2.1 AA"}
             </span>
           </div>
@@ -5524,14 +5617,14 @@ function DashboardView({
 
             <div className="min-w-0 border-l border-slate-200/80 pl-3.5">
               <div className="flex flex-wrap items-center gap-1.5 mb-0.5">
-                <span className="text-[9px] sm:text-[10px] font-extrabold uppercase tracking-wider text-[#0038F8] bg-blue-50 px-1.5 py-0.5 rounded border border-blue-100">
+                <span className="text-xs font-extrabold uppercase tracking-wider text-[#0038F8] bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
                   Przestrzeń Klienta
                 </span>
-                <span className="text-[11px] font-semibold text-slate-500">
+                <span className="text-xs font-semibold text-slate-600">
                   {clientProfile?.sector || "Bankowość i finanse"}
                 </span>
-                <span className="text-[11px] font-semibold text-slate-300">•</span>
-                <span className="text-[11px] font-semibold text-slate-500">
+                <span className="text-xs font-semibold text-slate-400">•</span>
+                <span className="text-xs font-semibold text-slate-600">
                   NIP: {clientProfile?.taxId || "PL 525-000-00-00"}
                 </span>
               </div>
@@ -5543,19 +5636,43 @@ function DashboardView({
                 </span>
               </h2>
 
-              <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-[11px] text-slate-600 font-medium mt-0.5">
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-700 font-medium mt-1">
                 <span>
                   Koordynator organizacji:{" "}
-                  <strong className="text-slate-900 font-bold">
-                    {clientProfile?.auditCoordinatorName || "Kinga Wróblewska"}
-                  </strong>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (onViewPersonProfile) {
+                        onViewPersonProfile("Kinga Wróblewska");
+                      } else {
+                        setView("profil");
+                      }
+                    }}
+                    className="text-slate-900 hover:text-[#0038F8] font-bold underline decoration-slate-300 hover:decoration-[#0038F8] cursor-pointer inline-flex items-center gap-1"
+                    title="Zobacz profil Koordynatora"
+                  >
+                    <span>{clientProfile?.auditCoordinatorName || "Kinga Wróblewska"}</span>
+                    <ExternalLink size={11} className="text-slate-400" />
+                  </button>
                 </span>
                 <span className="hidden sm:inline text-slate-300">|</span>
                 <span>
                   Opiekun W-ally:{" "}
-                  <strong className="text-slate-900 font-bold">
-                    Tomasz Straszak
-                  </strong>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (onViewPersonProfile) {
+                        onViewPersonProfile("Tomasz Straszak");
+                      } else {
+                        setView("profil");
+                      }
+                    }}
+                    className="text-slate-900 hover:text-[#0038F8] font-bold underline decoration-slate-300 hover:decoration-[#0038F8] cursor-pointer inline-flex items-center gap-1"
+                    title="Zobacz profil Opiekuna W-ally i umów spotkanie 30 min"
+                  >
+                    <span>Tomasz Straszak</span>
+                    <ExternalLink size={11} className="text-[#0038F8]" />
+                  </button>
                 </span>
               </div>
             </div>
@@ -5564,14 +5681,14 @@ function DashboardView({
           {/* PRAWA STRONA BANERU: WSKAŹNIK CELU I PRZYCISK EDYCJI */}
           <div className="flex items-center gap-3 shrink-0 pt-2 md:pt-0 border-t md:border-t-0 border-slate-100 justify-between md:justify-end">
             <div className="text-right hidden sm:block">
-              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
+              <span className="text-xs font-bold text-slate-600 uppercase tracking-wider block">
                 Docelowy próg dojrzałości
               </span>
               <div className="flex items-center justify-end gap-1.5 mt-0.5">
                 <span className="text-xs sm:text-sm font-extrabold text-[#0038F8]">
                   Cel: {clientProfile?.targetScore || 90}%
                 </span>
-                <span className="text-[11px] font-semibold text-emerald-600 bg-emerald-50 px-1.5 py-0.2 rounded border border-emerald-100">
+                <span className="text-xs font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
                   Aktualnie: 86.2%
                 </span>
               </div>
@@ -5610,7 +5727,7 @@ function DashboardView({
             </div>
           </div>
           <div className="flex items-center gap-1 mb-0.5">
-            <span className="text-[10px] sm:text-[11px] font-bold text-slate-600 uppercase tracking-wider block">
+            <span className="text-xs font-bold text-slate-700 uppercase tracking-wider block">
               Średnia Dostępność
             </span>
             <InfoTooltip
@@ -5645,7 +5762,7 @@ function DashboardView({
               <ListChecks size={20} />
             </div>
             <div className="flex items-center gap-1">
-              <span className="text-[10px] font-bold text-slate-600 bg-slate-100 px-1.5 py-0.5 rounded">
+              <span className="text-xs font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded">
                 142 procesy
               </span>
               <InfoTooltip
@@ -5656,7 +5773,7 @@ function DashboardView({
             </div>
           </div>
           <div className="flex items-center gap-1 mb-0.5">
-            <span className="text-[10px] sm:text-[11px] font-bold text-slate-600 uppercase tracking-wider block">
+            <span className="text-xs font-bold text-slate-700 uppercase tracking-wider block">
               Pokrycie Audytowe
             </span>
             <InfoTooltip
@@ -5675,7 +5792,7 @@ function DashboardView({
         >
           <div className="flex justify-between items-start mb-1.5">
             <div className="flex items-center gap-1">
-              <span className="text-[10px] sm:text-[11px] font-bold text-slate-600 uppercase tracking-wider block">
+              <span className="text-xs font-bold text-slate-700 uppercase tracking-wider block">
                 Błędy Otwarte (Razem: 239)
               </span>
               <InfoTooltip
@@ -5685,7 +5802,7 @@ function DashboardView({
               />
             </div>
             <div className="flex items-center gap-1">
-              <Badge variant="danger" className="!px-1.5 !py-0.5 !text-[10px]">
+              <Badge variant="danger" className="!px-2 !py-0.5 !text-xs font-bold">
                 +12 m/m
               </Badge>
               <InfoTooltip
@@ -5701,36 +5818,36 @@ function DashboardView({
             <div className="flex flex-col bg-red-50/70 p-1.5 rounded-lg border border-red-100">
               <div className="flex items-center gap-1 text-red-700 mb-0.5">
                 <AlertOctagon size={11} className="shrink-0" />
-                <span className="text-[10px] font-bold text-red-700 tracking-tight whitespace-nowrap">
+                <span className="text-xs font-bold text-red-700 tracking-tight whitespace-nowrap">
                   Priorytet.
                 </span>
               </div>
               <span className="text-lg sm:text-xl font-extrabold text-slate-900 leading-none">47</span>
-              <span className="text-[9px] font-bold text-red-700 mt-0.5 whitespace-nowrap">Wymaga akcji</span>
+              <span className="text-xs font-bold text-red-700 mt-0.5 whitespace-nowrap">Wymaga akcji</span>
             </div>
 
             {/* Ważne */}
             <div className="flex flex-col bg-amber-50/70 p-1.5 rounded-lg border border-amber-100">
               <div className="flex items-center gap-1 text-amber-800 mb-0.5">
                 <AlertTriangle size={11} className="shrink-0" />
-                <span className="text-[10px] font-bold text-amber-800 tracking-tight whitespace-nowrap">
+                <span className="text-xs font-bold text-amber-800 tracking-tight whitespace-nowrap">
                   Ważne
                 </span>
               </div>
               <span className="text-lg sm:text-xl font-extrabold text-slate-900 leading-none">128</span>
-              <span className="text-[9px] font-bold text-amber-800 mt-0.5 whitespace-nowrap">Do planu</span>
+              <span className="text-xs font-bold text-amber-800 mt-0.5 whitespace-nowrap">Do planu</span>
             </div>
 
             {/* Marginalne */}
             <div className="flex flex-col bg-blue-50/70 p-1.5 rounded-lg border border-blue-100">
               <div className="flex items-center gap-1 text-blue-700 mb-0.5">
                 <Info size={11} className="shrink-0" />
-                <span className="text-[10px] font-bold text-blue-700 tracking-tight whitespace-nowrap">
+                <span className="text-xs font-bold text-blue-700 tracking-tight whitespace-nowrap">
                   Marginalne
                 </span>
               </div>
               <span className="text-lg sm:text-xl font-extrabold text-slate-900 leading-none">64</span>
-              <span className="text-[9px] font-bold text-blue-700 mt-0.5 whitespace-nowrap">Niski wpływ</span>
+              <span className="text-xs font-bold text-blue-700 mt-0.5 whitespace-nowrap">Niski wpływ</span>
             </div>
           </div>
         </Card>
@@ -5744,7 +5861,7 @@ function DashboardView({
               <ClipboardCheck size={20} />
             </div>
             <div className="flex items-center gap-1">
-              <span className="text-[10px] font-bold text-blue-700 bg-blue-100 px-1.5 py-0.5 rounded">
+              <span className="text-xs font-bold text-blue-700 bg-blue-100 px-2 py-0.5 rounded">
                 W tym kwartale
               </span>
               <InfoTooltip
@@ -5755,7 +5872,7 @@ function DashboardView({
             </div>
           </div>
           <div className="flex items-center gap-1 mb-0.5">
-            <span className="text-[10px] sm:text-[11px] font-bold text-slate-600 uppercase tracking-wider block">
+            <span className="text-xs font-bold text-slate-700 uppercase tracking-wider block">
               Przeprowadzone Audyty
             </span>
             <InfoTooltip
@@ -5796,7 +5913,7 @@ function DashboardView({
                   align="left"
                 />
               </div>
-              <span className="text-[11px] text-slate-500 font-medium">
+              <span className="text-xs text-slate-600 font-medium">
                 Ostatnie 12 miesięcy w całej organizacji
               </span>
             </div>
@@ -5806,7 +5923,7 @@ function DashboardView({
           </div>
 
           <div className="flex flex-1 min-h-0 mt-1">
-            <div className="w-7 shrink-0 flex flex-col justify-between items-end pb-6 pt-5 pr-1.5 text-[9px] font-bold text-slate-400 border-r border-slate-200 z-10 bg-white">
+            <div className="w-8 shrink-0 flex flex-col justify-between items-end pb-6 pt-5 pr-2 text-xs font-bold text-slate-600 border-r border-slate-200 z-10 bg-white">
               <span className="leading-none">100</span>
               <span className="leading-none">50</span>
               <span className="leading-none translate-y-0.5">0</span>
@@ -5830,7 +5947,7 @@ function DashboardView({
                       style={{ height: `${val.e}%` }}
                     ></div>
 
-                    <div className="opacity-0 group-hover:opacity-100 absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] font-bold px-2 py-1 rounded z-20 whitespace-nowrap pointer-events-none hidden sm:block shadow-lg">
+                    <div className="opacity-0 group-hover:opacity-100 absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-xs font-bold px-2.5 py-1 rounded z-20 whitespace-nowrap pointer-events-none hidden sm:block shadow-lg">
                       Dostępność: {val.s}% | Błędy: {val.e}
                     </div>
                   </div>
@@ -5840,7 +5957,7 @@ function DashboardView({
                 {chartTrendData.map((val, i) => (
                   <div
                     key={i}
-                    className="flex-1 text-center text-[9px] sm:text-[10px] font-bold text-slate-500"
+                    className="flex-1 text-center text-xs font-bold text-slate-600"
                   >
                     {val.m}
                   </div>
@@ -5850,11 +5967,11 @@ function DashboardView({
           </div>
 
           <div className="flex justify-center gap-5 mt-1 shrink-0">
-            <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-600">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-slate-700">
               <div className="w-2.5 h-2.5 rounded-full bg-[#0038F8]"></div> %
               Dostępności
             </div>
-            <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-600">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-slate-700">
               <div className="w-2.5 h-2.5 rounded bg-red-200"></div> Liczba nowych
               błędów
             </div>
@@ -5945,12 +6062,12 @@ function DashboardView({
                       Konsultacje
                     </h3>
                     {unreadTicketsCount > 0 && (
-                      <span className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded-full text-[9px] font-extrabold bg-emerald-600 text-white animate-pulse">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-extrabold bg-emerald-600 text-white animate-pulse">
                         {unreadTicketsCount} nowa odp.
                       </span>
                     )}
                   </div>
-                  <p className="text-[11px] text-slate-500 font-medium">
+                  <p className="text-xs text-slate-600 font-medium">
                     Bezpośredni kontakt merytoryczny z zespołem audytorów WCAG bez konieczności spotkań online.
                   </p>
                 </div>
@@ -5984,7 +6101,16 @@ function DashboardView({
               >
                 <div className="flex items-start justify-between gap-2.5">
                   <div className="flex items-start gap-2.5">
-                    <div className="relative shrink-0 mt-0.5">
+                    <div
+                      className="relative shrink-0 mt-0.5 cursor-pointer hover:opacity-90"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (onViewPersonProfile) {
+                          onViewPersonProfile("Tomasz Straszak");
+                        }
+                      }}
+                      title="Kliknij, aby otworzyć profil Tomasza Straszaka"
+                    >
                       <img
                         src="https://wally.widzialni.eu//uploads/avatars/avatar_133_1760079096.jpg"
                         alt="Tomasz Straszak"
@@ -5994,20 +6120,20 @@ function DashboardView({
                     </div>
                     <div>
                       <div className="flex items-center gap-1.5 mb-0.5">
-                        <span className="text-[9px] font-extrabold uppercase tracking-wider text-emerald-800 bg-emerald-100/90 px-1.5 py-0.2 rounded">
+                        <span className="text-xs font-extrabold uppercase tracking-wider text-emerald-800 bg-emerald-100/90 px-2 py-0.5 rounded">
                           Nowa odpowiedź • #TCK-104
                         </span>
-                        <span className="text-[10px] font-semibold text-slate-400">15 min temu</span>
+                        <span className="text-xs font-semibold text-slate-500">15 min temu</span>
                       </div>
                       <h4 className="text-xs font-bold text-slate-900 group-hover:text-emerald-800 transition-colors">
                         Czy kontrast 3.8:1 dla aktywnego stanu checkboxa spełnia WCAG 2.2?
                       </h4>
-                      <p className="text-[10px] sm:text-[11px] text-slate-600 line-clamp-1 mt-0.5 italic">
+                      <p className="text-xs text-slate-700 line-clamp-1 mt-0.5 italic">
                         Tomasz Straszak: "Współczynnik 3.8:1 jest w pełni zgodny z WCAG 2.1 oraz 2.2 AA (kryterium 1.4.11)..."
                       </p>
                     </div>
                   </div>
-                  <span className="shrink-0 inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 group-hover:underline self-center">
+                  <span className="shrink-0 inline-flex items-center gap-1 text-xs font-bold text-emerald-800 group-hover:underline self-center">
                     <span>Otwórz</span>
                     <ArrowRight size={12} />
                   </span>
@@ -6041,21 +6167,21 @@ function DashboardView({
                       </div>
                       <div className="min-w-0">
                         <div className="flex items-center gap-1.5 mb-0.5 flex-wrap">
-                          <span className="text-[10px] sm:text-[11px] font-bold text-slate-900">
+                          <span className="text-xs font-bold text-slate-900">
                             #{ticket.id}
                           </span>
                           <span
-                            className={`text-[9px] font-bold px-1.5 py-0.2 rounded border ${ticket.categoryColor}`}
+                            className={`text-xs font-bold px-2 py-0.5 rounded border ${ticket.categoryColor}`}
                           >
                             {ticket.categoryLabel}
                           </span>
                           {ticket.contextId && (
-                            <span className="text-[9px] font-semibold text-slate-500 bg-white px-1.5 py-0.2 rounded border border-slate-200 truncate">
+                            <span className="text-xs font-semibold text-slate-600 bg-white px-2 py-0.5 rounded border border-slate-200 truncate">
                               {ticket.contextId}
                             </span>
                           )}
                           <span
-                            className={`text-[9px] font-bold px-1.5 py-0.2 rounded ${
+                            className={`text-xs font-bold px-2 py-0.5 rounded ${
                               isReply
                                 ? "bg-emerald-50 text-emerald-700"
                                 : isWaiting
@@ -6073,17 +6199,26 @@ function DashboardView({
                     </div>
 
                     <div className="flex items-center gap-2.5 shrink-0">
-                      <div className="hidden sm:flex items-center gap-1.5">
+                      <div
+                        className="hidden sm:flex items-center gap-1.5 cursor-pointer hover:opacity-80"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (onViewPersonProfile) {
+                            onViewPersonProfile(ticket.assignedAuditor?.name || "Tomasz Straszak");
+                          }
+                        }}
+                        title={`Zobacz profil: ${ticket.assignedAuditor?.name || "Audytor"}`}
+                      >
                         <img
                           src={ticket.assignedAuditor?.avatar}
                           alt={ticket.assignedAuditor?.name}
                           className="w-5 h-5 rounded-full object-cover border border-white shrink-0"
                         />
-                        <span className="text-[10px] font-medium text-slate-500 truncate max-w-[100px]">
+                        <span className="text-xs font-semibold text-slate-700 truncate max-w-[120px]">
                           {ticket.assignedAuditor?.name}
                         </span>
                       </div>
-                      <span className="text-[10px] font-medium text-slate-400">
+                      <span className="text-xs font-semibold text-slate-500">
                         {ticket.updatedAt}
                       </span>
                       <ChevronRight size={14} className="text-slate-400 group-hover:text-slate-600 transition-colors" />
@@ -6096,12 +6231,20 @@ function DashboardView({
 
           {/* SPÓJNA STOPKA: DEDYKOWANY OPIEKUN KLIENTA */}
           <div className="pt-2.5 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
-            <div className="flex items-center gap-2.5">
+            <div
+              className="flex items-center gap-2.5 cursor-pointer group/opiekun"
+              onClick={() => {
+                if (onViewPersonProfile) {
+                  onViewPersonProfile("Tomasz Straszak");
+                }
+              }}
+              title="Kliknij, aby otworzyć profil Tomasza Straszaka"
+            >
               <div className="relative shrink-0">
                 <img
                   src="https://wally.widzialni.eu//uploads/avatars/avatar_133_1760079096.jpg"
                   alt="Tomasz Straszak"
-                  className="w-8 h-8 rounded-full object-cover border-2 border-white shadow-2xs"
+                  className="w-8 h-8 rounded-full object-cover border-2 border-white shadow-2xs group-hover/opiekun:ring-2 group-hover/opiekun:ring-[#0038F8]"
                 />
                 <span
                   className="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-emerald-500 ring-1 ring-white"
@@ -6110,16 +6253,17 @@ function DashboardView({
               </div>
               <div className="min-w-0">
                 <div className="flex items-center gap-1.5">
-                  <span className="text-xs font-bold text-slate-900 truncate">
-                    Tomasz Straszak
+                  <span className="text-xs font-extrabold text-slate-900 group-hover/opiekun:text-[#0038F8] transition-colors truncate flex items-center gap-1">
+                    <span>Tomasz Straszak</span>
+                    <ExternalLink size={11} className="text-slate-400 group-hover/opiekun:text-[#0038F8]" />
                   </span>
-                  <span className="text-[9px] font-semibold text-emerald-600 bg-emerald-50 px-1 py-0.2 rounded border border-emerald-100 flex items-center gap-0.5">
-                    <span className="w-1 h-1 rounded-full bg-emerald-500 inline-block"></span>
+                  <span className="text-xs font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block"></span>
                     Dostępny
                   </span>
                 </div>
-                <div className="text-[10px] font-medium text-slate-500 truncate">
-                  Dedykowany Opiekun Klienta • <a href="tel:+48795103017" className="text-[#0038F8] hover:underline font-semibold">795 103 017</a> • <a href="mailto:tomek@widzialni.eu" className="text-[#0038F8] hover:underline font-semibold">tomek@widzialni.eu</a>
+                <div className="text-xs font-medium text-slate-600 truncate">
+                  Dedykowany Opiekun Klienta • <a href="tel:+48795103017" onClick={(e) => e.stopPropagation()} className="text-[#0038F8] hover:underline font-semibold">795 103 017</a> • <a href="mailto:tomek@widzialni.eu" onClick={(e) => e.stopPropagation()} className="text-[#0038F8] hover:underline font-semibold">tomek@widzialni.eu</a>
                 </div>
               </div>
             </div>
@@ -6136,16 +6280,17 @@ function DashboardView({
               <button
                 type="button"
                 onClick={() => {
-                  if (showToast) {
-                    showToast(
-                      "Zaproszenie na spotkanie statusowe",
-                      "Zaproszenie na spotkanie zostało przekazane do Tomasza Straszaka."
-                    );
+                  if (onViewPersonProfile) {
+                    onViewPersonProfile("Tomasz Straszak");
+                  } else {
+                    setView("profil");
                   }
                 }}
-                className="px-2.5 py-1.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-lg text-xs font-bold shadow-2xs transition-colors cursor-pointer"
+                className="px-3 py-1.5 bg-[#0038F8] hover:bg-[#002ECC] text-white rounded-lg text-xs font-bold shadow-2xs transition-colors cursor-pointer flex items-center gap-1"
+                title="Przejdź do profilu i umów spotkanie 30 min z Tomaszem Straszakiem"
               >
-                Umów spotkanie
+                <Calendar size={13} />
+                <span>Umów spotkanie 30 min</span>
               </button>
             </div>
           </div>
@@ -6165,12 +6310,12 @@ function DashboardView({
                       Komunikaty & Nowości
                     </h3>
                     {announcements.filter((a) => a.unread).length > 0 && (
-                      <span className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded-full text-[9px] font-extrabold bg-[#0038F8] text-white">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-extrabold bg-[#0038F8] text-white">
                         {announcements.filter((a) => a.unread).length} nowe
                       </span>
                     )}
                   </div>
-                  <p className="text-[11px] text-slate-500 font-medium">
+                  <p className="text-xs text-slate-600 font-medium">
                     Aktualizacje prawne, webinary i oferty.
                   </p>
                 </div>
@@ -6199,12 +6344,12 @@ function DashboardView({
                     <div>
                       <div className="flex items-center justify-between gap-2 mb-1">
                         <span
-                          className={`inline-flex items-center gap-1 px-1.5 py-0.2 rounded text-[9px] font-bold border ${item.categoryColor}`}
+                          className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-bold border ${item.categoryColor}`}
                         >
-                          <ItemIcon size={10} />
+                          <ItemIcon size={11} />
                           <span>{item.categoryLabel}</span>
                         </span>
-                        <span className="text-[10px] font-semibold text-slate-400">
+                        <span className="text-xs font-semibold text-slate-500">
                           {item.date}
                         </span>
                       </div>
@@ -6213,17 +6358,17 @@ function DashboardView({
                         {item.title}
                       </h4>
 
-                      <p className="text-[10px] sm:text-[11px] text-slate-600 mt-0.5 leading-snug line-clamp-1 sm:line-clamp-2">
+                      <p className="text-xs text-slate-700 mt-0.5 leading-snug line-clamp-1 sm:line-clamp-2">
                         {item.description}
                       </p>
                     </div>
 
                     <div className="mt-2 pt-1.5 border-t border-slate-100 flex items-center justify-between">
-                      <span className="text-[10px] font-bold text-[#0038F8] group-hover:underline inline-flex items-center gap-1">
+                      <span className="text-xs font-bold text-[#0038F8] group-hover:underline inline-flex items-center gap-1">
                         <span>{item.ctaText}</span>
-                        <ArrowRight size={10} strokeWidth={2.5} />
+                        <ArrowRight size={11} strokeWidth={2.5} />
                       </span>
-                      <span className="text-[9px] font-semibold text-slate-400 bg-slate-50 px-1.5 py-0.2 rounded">
+                      <span className="text-xs font-semibold text-slate-600 bg-slate-100 px-2 py-0.5 rounded">
                         Szczegóły
                       </span>
                     </div>
@@ -6233,15 +6378,15 @@ function DashboardView({
             </div>
           </div>
 
-          <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
+          <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600 font-medium">
             <span>Baza wiedzy & wytyczne</span>
             <button
               type="button"
               onClick={onOpenAnnouncements}
-              className="text-[11px] font-bold text-[#0038F8] hover:underline flex items-center gap-1 cursor-pointer"
+              className="text-xs font-bold text-[#0038F8] hover:underline flex items-center gap-1 cursor-pointer"
             >
               <span>Przeglądaj wszystkie</span>
-              <ArrowRight size={11} />
+              <ArrowRight size={12} />
             </button>
           </div>
         </Card>
@@ -6255,7 +6400,7 @@ function DashboardView({
               <h3 className="text-sm sm:text-base font-bold text-slate-900">
                 Ostatnie audyty
               </h3>
-              <span className="text-[11px] text-slate-500 font-medium">
+              <span className="text-xs text-slate-600 font-medium">
                 Szybki podgląd prowadzonych prac
               </span>
             </div>
@@ -6307,11 +6452,11 @@ function DashboardView({
               >
                 <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-1.5 sm:mb-0 min-w-0">
                   <div className="flex items-center gap-1.5 shrink-0">
-                    <Badge variant={audit.statusVariant} className="!px-2 !py-0.5 !text-[11px]">
+                    <Badge variant={audit.statusVariant} className="!px-2.5 !py-0.5 !text-xs font-bold">
                       {audit.status}
                     </Badge>
                   </div>
-                  <span className="text-xs sm:text-[13px] font-bold text-slate-800 group-hover:text-[#0038F8] transition-colors truncate">
+                  <span className="text-xs sm:text-sm font-bold text-slate-800 group-hover:text-[#0038F8] transition-colors truncate">
                     {audit.title}
                   </span>
                 </div>
@@ -6321,15 +6466,15 @@ function DashboardView({
                     {/* Priorytetowe */}
                     <div className="relative group/tip flex items-center">
                       <span
-                        className="inline-flex items-center gap-0.5 px-1.5 py-0.2 rounded text-[10px] font-bold bg-red-50 text-red-700 border border-red-200/60 cursor-help"
+                        className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded text-xs font-bold bg-red-50 text-red-700 border border-red-200 cursor-help"
                         title={`Błędy priorytetowe: ${audit.critical}`}
                       >
-                        <AlertOctagon size={10} className="text-red-500" />
+                        <AlertOctagon size={11} className="text-red-600" />
                         {audit.critical}
                       </span>
                       <div
                         role="tooltip"
-                        className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 pointer-events-none opacity-0 invisible group-hover/tip:opacity-100 group-hover/tip:visible transition-all duration-150 z-50 bg-slate-900 text-white text-[10px] font-semibold px-2 py-0.5 rounded shadow-xl whitespace-nowrap"
+                        className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 pointer-events-none opacity-0 invisible group-hover/tip:opacity-100 group-hover/tip:visible transition-all duration-150 z-50 bg-slate-900 text-white text-xs font-semibold px-2.5 py-1 rounded shadow-xl whitespace-nowrap"
                       >
                         Błędy priorytetowe: {audit.critical}
                       </div>
@@ -6338,15 +6483,15 @@ function DashboardView({
                     {/* Ważne */}
                     <div className="relative group/tip flex items-center">
                       <span
-                        className="inline-flex items-center gap-0.5 px-1.5 py-0.2 rounded text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200 cursor-help"
+                        className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded text-xs font-bold bg-amber-50 text-amber-800 border border-amber-200 cursor-help"
                         title={`Błędy ważne: ${audit.important}`}
                       >
-                        <AlertTriangle size={10} className="text-amber-800" />
+                        <AlertTriangle size={11} className="text-amber-800" />
                         {audit.important}
                       </span>
                       <div
                         role="tooltip"
-                        className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 pointer-events-none opacity-0 invisible group-hover/tip:opacity-100 group-hover/tip:visible transition-all duration-150 z-50 bg-slate-900 text-white text-[10px] font-semibold px-2 py-0.5 rounded shadow-xl whitespace-nowrap"
+                        className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 pointer-events-none opacity-0 invisible group-hover/tip:opacity-100 group-hover/tip:visible transition-all duration-150 z-50 bg-slate-900 text-white text-xs font-semibold px-2.5 py-1 rounded shadow-xl whitespace-nowrap"
                       >
                         Błędy ważne: {audit.important}
                       </div>
@@ -6355,26 +6500,26 @@ function DashboardView({
                     {/* Marginalne */}
                     <div className="relative group/tip flex items-center">
                       <span
-                        className="inline-flex items-center gap-0.5 px-1.5 py-0.2 rounded text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200 cursor-help"
+                        className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200 cursor-help"
                         title={`Błędy marginalne: ${audit.marginal}`}
                       >
-                        <Info size={10} className="text-blue-700" />
+                        <Info size={11} className="text-blue-700" />
                         {audit.marginal}
                       </span>
                       <div
                         role="tooltip"
-                        className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 pointer-events-none opacity-0 invisible group-hover/tip:opacity-100 group-hover/tip:visible transition-all duration-150 z-50 bg-slate-900 text-white text-[10px] font-semibold px-2 py-0.5 rounded shadow-xl whitespace-nowrap"
+                        className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 pointer-events-none opacity-0 invisible group-hover/tip:opacity-100 group-hover/tip:visible transition-all duration-150 z-50 bg-slate-900 text-white text-xs font-semibold px-2.5 py-1 rounded shadow-xl whitespace-nowrap"
                       >
                         Błędy marginalne: {audit.marginal}
                       </div>
                     </div>
                   </div>
 
-                  <span className="text-[10px] sm:text-[11px] font-semibold text-slate-500 flex items-center gap-1">
-                    <Calendar size={11} /> {audit.date}
+                  <span className="text-xs font-semibold text-slate-600 flex items-center gap-1">
+                    <Calendar size={12} /> {audit.date}
                   </span>
                   <span
-                    className={`text-xs sm:text-[13px] font-extrabold ${
+                    className={`text-xs sm:text-sm font-extrabold ${
                       audit.score === "-"
                         ? "text-slate-600 font-bold"
                         : parseFloat(audit.score) >= 80
@@ -6390,7 +6535,7 @@ function DashboardView({
           </div>
           <button
             onClick={() => setView("raporty")}
-            className="w-full mt-2.5 text-xs font-bold text-[#0038F8] hover:bg-[#0038F8]/5 py-2 rounded-lg transition-colors border border-[#0038F8]/10"
+            className="w-full mt-2.5 text-xs font-bold text-[#0038F8] hover:bg-[#0038F8]/5 py-2 rounded-lg transition-colors border border-[#0038F8]/10 cursor-pointer"
           >
             Przejdź do modułu Audytów
           </button>
@@ -6402,7 +6547,7 @@ function DashboardView({
               <h3 className="text-sm sm:text-base font-bold text-slate-900">
                 Wymagające uwagi (Top 5)
               </h3>
-              <span className="text-[11px] text-slate-500 font-medium">
+              <span className="text-xs text-slate-600 font-medium">
                 Usługi o najniższym procencie dostępności
               </span>
             </div>
@@ -6422,14 +6567,14 @@ function DashboardView({
                 onClick={() => setView("baza-uslug")}
               >
                 <div className="flex items-center gap-2.5">
-                  <div className="w-5 h-5 rounded bg-red-50 text-red-600 flex items-center justify-center text-[9px] font-bold shrink-0">
+                  <div className="w-5 h-5 rounded bg-red-50 text-red-700 flex items-center justify-center text-xs font-bold shrink-0">
                     {i + 1}
                   </div>
                   <div>
-                    <div className="text-xs sm:text-[13px] font-bold text-slate-800 line-clamp-1">
+                    <div className="text-xs sm:text-sm font-bold text-slate-800 line-clamp-1">
                       {u.name}
                     </div>
-                    <div className="text-[10px] text-slate-500 font-semibold">
+                    <div className="text-xs text-slate-600 font-semibold">
                       {u.err} aktywnych błędów
                     </div>
                   </div>
@@ -6442,7 +6587,7 @@ function DashboardView({
                       ? "warning"
                       : "success"
                   }
-                  className="w-12 sm:w-14 justify-center !py-0.5 !text-[11px] shrink-0 ml-2"
+                  className="w-14 justify-center !py-0.5 !text-xs font-bold shrink-0 ml-2"
                 >
                   {u.score}%
                 </Badge>
@@ -6451,7 +6596,7 @@ function DashboardView({
           </div>
           <button
             onClick={() => setView("raportowanie")}
-            className="w-full mt-2.5 text-xs font-bold text-[#0038F8] hover:bg-[#0038F8]/5 py-2 rounded-lg transition-colors border border-[#0038F8]/10"
+            className="w-full mt-2.5 text-xs font-bold text-[#0038F8] hover:bg-[#0038F8]/5 py-2 rounded-lg transition-colors border border-[#0038F8]/10 cursor-pointer"
           >
             Zobacz pełny ranking w raportach
           </button>
