@@ -910,10 +910,10 @@ function ReauditRequestModal({
   auditor = "Piotr Smułkowski",
   onSubmit,
 }) {
-  const [scope, setScope] = useState("priority");
   const [speed, setSpeed] = useState("standard");
   const [stagingUrl, setStagingUrl] = useState("https://staging-acc.bank.pl/release-2026-q2");
   const [notes, setNotes] = useState("");
+  const [additionalComment, setAdditionalComment] = useState("");
   const [requestConsultation, setRequestConsultation] = useState(false);
   const [notifyDevTeam, setNotifyDevTeam] = useState(true);
 
@@ -924,10 +924,10 @@ function ReauditRequestModal({
     if (onSubmit) {
       onSubmit({
         targetTitle,
-        scope,
         speed,
         stagingUrl,
         notes,
+        additionalComment,
         requestConsultation,
         notifyDevTeam,
         date: new Date().toLocaleDateString("pl-PL"),
@@ -1009,60 +1009,6 @@ function ReauditRequestModal({
             </div>
           </div>
 
-          {/* Scope Selection */}
-          <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">
-              1. Zakres weryfikacji re-audytowej:
-            </label>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
-              <label
-                className={`p-3 rounded-xl border flex items-start gap-2.5 cursor-pointer transition-all ${
-                  scope === "priority"
-                    ? "bg-blue-50/50 border-[#0038F8] ring-1 ring-[#0038F8]/20"
-                    : "bg-white border-slate-200 hover:border-slate-300"
-                }`}
-              >
-                <input
-                  type="radio"
-                  name="scope"
-                  value="priority"
-                  checked={scope === "priority"}
-                  onChange={() => setScope("priority")}
-                  className="mt-0.5 accent-[#0038F8]"
-                />
-                <div>
-                  <div className="font-bold text-slate-900">Błędy priorytetowe (blokery)</div>
-                  <div className="text-slate-500 font-normal mt-0.5 leading-relaxed">
-                    Weryfikacja tylko krytycznych niezgodności przed wdrożeniem na produkcję.
-                  </div>
-                </div>
-              </label>
-
-              <label
-                className={`p-3 rounded-xl border flex items-start gap-2.5 cursor-pointer transition-all ${
-                  scope === "full"
-                    ? "bg-blue-50/50 border-[#0038F8] ring-1 ring-[#0038F8]/20"
-                    : "bg-white border-slate-200 hover:border-slate-300"
-                }`}
-              >
-                <input
-                  type="radio"
-                  name="scope"
-                  value="full"
-                  checked={scope === "full"}
-                  onChange={() => setScope("full")}
-                  className="mt-0.5 accent-[#0038F8]"
-                />
-                <div>
-                  <div className="font-bold text-slate-900">Pełny re-audyt kryteriów</div>
-                  <div className="text-slate-500 font-normal mt-0.5 leading-relaxed">
-                    Ponowne sprawdzenie wszystkich 49 kryteriów WCAG 2.1 AA i aktualizacja wskaźnika.
-                  </div>
-                </div>
-              </label>
-            </div>
-          </div>
-
           {/* Staging URL & Speed */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
@@ -1103,6 +1049,20 @@ function ReauditRequestModal({
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="Podaj informacje dla audytora: np. zespół frontend wymienił przyciski div na button, poprawiono fokus klawiatury w modalach, podwyższono kontrast kolorów..."
+              className="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-xs font-medium text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50 leading-relaxed"
+            />
+          </div>
+
+          {/* Dodatkowy komentarz */}
+          <div>
+            <label className="block text-xs font-bold text-slate-700 mb-1.5">
+              Dodatkowy komentarz:
+            </label>
+            <textarea
+              rows={2}
+              value={additionalComment}
+              onChange={(e) => setAdditionalComment(e.target.value)}
+              placeholder="Wprowadź dodatkowy komentarz lub uwagi do zlecenia re-audytu..."
               className="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-xs font-medium text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50 leading-relaxed"
             />
           </div>
