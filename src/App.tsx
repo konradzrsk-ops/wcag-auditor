@@ -6077,7 +6077,7 @@ function DashboardView({
                         <img
                           src={ticket.assignedAuditor?.avatar}
                           alt={ticket.assignedAuditor?.name}
-                          className="w-4.5 h-4.5 rounded-full object-cover border border-white"
+                          className="w-5 h-5 rounded-full object-cover border border-white shrink-0"
                         />
                         <span className="text-[10px] font-medium text-slate-500 truncate max-w-[100px]">
                           {ticket.assignedAuditor?.name}
