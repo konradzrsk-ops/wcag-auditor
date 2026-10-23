@@ -1,0 +1,617 @@
+================================================================================
+              W-ALLY: FRAZY PULPITU GŁÓWNEGO (DO REDAKCJI PROSTEGO JĘZYKA)        
+================================================================================
+Data wygenerowania: 23.10.2026, 23:03:43
+Łączna liczba fraz: 47
+
+INSTRUKCJA DLA REDAKTORA PROSTEGO JĘZYKA:
+1. Każda fraza posiada swój unikalny identyfikator [ID], kontekst występowania oraz [TYP].
+2. Pole [ORYGINALNY TEKST] zawiera obecne brzmienie w aplikacji.
+3. Wpisz swoją zredagowaną propozycję w linii [PROSTY JĘZYK: ...].
+4. Nie zmieniaj identyfikatorów [ID], aby plik mógł zostać automatycznie zaimportowany do kodu!
+5. Zasady prostego języka: krótkie zdania, strona czynna, brak żargonu, zrozumiałe skróty.
+================================================================================
+
+
+################################################################################
+### SEKCJA: PULPIT – NAGŁÓWEK I POWITANIE
+################################################################################
+
+--------------------------------------------------------------------------------
+ID: dashboard.breadcrumbs.home
+Lokalizacja: Pierwszy element ścieżki powrotnej (breadcrumbs)
+Typ elementu: Nawigacja
+ORYGINALNY TEKST:
+Pulpit
+
+PROSTY JĘZYK (PO REDAKCJI):
+Pulpit
+
+Wskazówka redakcyjna:
+Wskazuje stronę główną w strukturze serwisu.
+--------------------------------------------------------------------------------
+ID: dashboard.welcome.title
+Lokalizacja: Główny nagłówek H1 na pulpicie
+Typ elementu: Tytuł
+ORYGINALNY TEKST:
+Witaj, Piotr! 👋
+
+PROSTY JĘZYK (PO REDAKCJI):
+Dzień dobry, Piotr! 👋
+
+Wskazówka redakcyjna:
+Przyjazne, bezpośrednie powitanie.
+--------------------------------------------------------------------------------
+ID: dashboard.welcome.subtitle
+Lokalizacja: Podtytuł wprowadzający pod nagłówkiem H1
+Typ elementu: Podtytuł
+ORYGINALNY TEKST:
+Oto aktualny stan dostępności cyfrowej i wskaźniki zgodności WCAG 2.1 AA w Twojej organizacji.
+
+PROSTY JĘZYK (PO REDAKCJI):
+Sprawdź aktualny poziom dostępności cyfrowej i zgodności z normą WCAG w Twojej organizacji.
+
+Wskazówka redakcyjna:
+Zamiana 'Oto...' na aktywne 'Sprawdź...'.
+--------------------------------------------------------------------------------
+ID: dashboard.welcome.badge
+Lokalizacja: Etykieta aktualności danych przy nagłówku
+Typ elementu: Plakietka (Badge)
+ORYGINALNY TEKST:
+Aktualizacja na żywo
+
+PROSTY JĘZYK (PO REDAKCJI):
+Dane aktualizowane na bieżąco
+
+Wskazówka redakcyjna:
+Jasna informacja, że wskaźniki odzwierciedlają najświeższe badania.
+--------------------------------------------------------------------------------
+ID: dashboard.actions.btn_reports
+Lokalizacja: Przycisk nawigacji do raportów w nagłówku
+Typ elementu: Przycisk
+ORYGINALNY TEKST:
+Raportowanie
+
+PROSTY JĘZYK (PO REDAKCJI):
+Zobacz raporty
+
+Wskazówka redakcyjna:
+Zastąpienie rzeczownika odczasownikowego konkretnym czasownikiem.
+--------------------------------------------------------------------------------
+ID: dashboard.actions.btn_audits
+Lokalizacja: Główny niebieski przycisk w nagłówku pulpitu
+Typ elementu: Przycisk
+ORYGINALNY TEKST:
+Przeglądaj audyty
+
+PROSTY JĘZYK (PO REDAKCJI):
+Zobacz listę audytów
+
+Wskazówka redakcyjna:
+Bezpośrednie polecenie wskazujące cel akcji.
+
+################################################################################
+### SEKCJA: PULPIT – KARTY WSKAŹNIKÓW KPI
+################################################################################
+
+--------------------------------------------------------------------------------
+ID: dashboard.kpi.avg_score.title
+Lokalizacja: Tytuł 1. karty KPI (średni wynik zgodności)
+Typ elementu: Etykieta wskaźnika
+ORYGINALNY TEKST:
+Średnia Dostępność
+
+PROSTY JĘZYK (PO REDAKCJI):
+Średnia dostępność
+
+Wskazówka redakcyjna:
+Małą literą drugi człon dla naturalnego brzmienia w języku polskim.
+--------------------------------------------------------------------------------
+ID: dashboard.kpi.avg_score.badge
+Lokalizacja: Plakietka trendu miesiąc do miesiąca
+Typ elementu: Dynamika (Trend)
+ORYGINALNY TEKST:
++2.4% m/m
+
+PROSTY JĘZYK (PO REDAKCJI):
++2,4% w tym miesiącu
+
+Wskazówka redakcyjna:
+Rozwinięcie skrótu biznesowego 'm/m' na zrozumiały zapis 'w tym miesiącu'.
+--------------------------------------------------------------------------------
+ID: dashboard.kpi.avg_score.subtext
+Lokalizacja: Dopisek pomocniczy pod wynikiem procentowym
+Typ elementu: Podpis wskaźnika
+ORYGINALNY TEKST:
+Zgodność z WCAG 2.1 AA
+
+PROSTY JĘZYK (PO REDAKCJI):
+Zgodność z normą WCAG 2.1 AA
+
+Wskazówka redakcyjna:
+Doprecyzowanie, o jaką normę chodzi.
+--------------------------------------------------------------------------------
+ID: dashboard.kpi.avg_score.tooltip
+Lokalizacja: Dymek pomocniczy (tooltip) ikony informacji przy karcie wyniku
+Typ elementu: Dymek (Tooltip)
+ORYGINALNY TEKST:
+Średni wynik spełnienia kryteriów sukcesu WCAG 2.1 AA dla wszystkich aktywnych audytów w organizacji.
+
+PROSTY JĘZYK (PO REDAKCJI):
+Pokazuje średni wynik dostępności ze wszystkich zbadanych serwisów i aplikacji. Wynik powyżej 80% oznacza wysoką zgodność.
+
+Wskazówka redakcyjna:
+Wyjaśnienie w 1 zdaniu co oznacza ten wynik dla koordynatora.
+--------------------------------------------------------------------------------
+ID: dashboard.kpi.coverage.title
+Lokalizacja: Tytuł 2. karty KPI (pokrycie audytowe)
+Typ elementu: Etykieta wskaźnika
+ORYGINALNY TEKST:
+Pokrycie Audytowe
+
+PROSTY JĘZYK (PO REDAKCJI):
+Zbadane usługi
+
+Wskazówka redakcyjna:
+W prostym języku pojęcie 'Pokrycie audytowe' można wyjaśnić jako 'Zbadane usługi i procesy'.
+--------------------------------------------------------------------------------
+ID: dashboard.kpi.coverage.badge
+Lokalizacja: Plakietka przyrostu w karcie pokrycia
+Typ elementu: Dynamika (Trend)
+ORYGINALNY TEKST:
++5 audytów
+
+PROSTY JĘZYK (PO REDAKCJI):
++5 nowych audytów
+
+Wskazówka redakcyjna:
+Jasne wskazanie przyrostu zbadanych usług.
+--------------------------------------------------------------------------------
+ID: dashboard.kpi.coverage.subtext
+Lokalizacja: Dopisek pomocniczy pod liczbą pokrycia
+Typ elementu: Podpis wskaźnika
+ORYGINALNY TEKST:
+50 z 50 procesów w Bazie Usług
+
+PROSTY JĘZYK (PO REDAKCJI):
+Wszystkie 50 procesów posiada aktualne badanie
+
+Wskazówka redakcyjna:
+Potwierdzenie pełnego, 100% monitoringu.
+--------------------------------------------------------------------------------
+ID: dashboard.kpi.coverage.tooltip
+Lokalizacja: Dymek pomocniczy przy karcie pokrycia
+Typ elementu: Dymek (Tooltip)
+ORYGINALNY TEKST:
+Odsetek zinwentaryzowanych procesów w Bazie Usług, które posiadają ważny audyt dostępności.
+
+PROSTY JĘZYK (PO REDAKCJI):
+Wskazuje, ile procesów z bazy banku zostało już przebadanych przez audytorów WCAG.
+
+Wskazówka redakcyjna:
+Zastąpienie trudnego słowa 'zinwentaryzowanych' prostym zwrotem.
+--------------------------------------------------------------------------------
+ID: dashboard.kpi.errors.title
+Lokalizacja: Tytuł 3. karty KPI (otwarte błędy)
+Typ elementu: Etykieta wskaźnika
+ORYGINALNY TEKST:
+Otwarte Błędy
+
+PROSTY JĘZYK (PO REDAKCJI):
+Błędy do naprawy
+
+Wskazówka redakcyjna:
+Zamiast żargonowego 'Otwarte błędy' prosty zwrot 'Błędy do naprawy'.
+--------------------------------------------------------------------------------
+ID: dashboard.kpi.errors.badge
+Lokalizacja: Plakietka dynamiki spadku błędów
+Typ elementu: Dynamika (Trend)
+ORYGINALNY TEKST:
+-12 w tym m-cu
+
+PROSTY JĘZYK (PO REDAKCJI):
+Ubyło 12 w tym miesiącu
+
+Wskazówka redakcyjna:
+Rozwinięcie skrótu 'm-cu'.
+--------------------------------------------------------------------------------
+ID: dashboard.kpi.errors.subtext
+Lokalizacja: Dopisek pomocniczy o triadzie priorytetów
+Typ elementu: Podpis wskaźnika
+ORYGINALNY TEKST:
+Czerwone: blokady krytyczne
+
+PROSTY JĘZYK (PO REDAKCJI):
+W pierwszej kolejności naprawiaj błędy krytyczne (czerwone)
+
+Wskazówka redakcyjna:
+Wskazówka kierująca uwagę na usuwanie blokad uniemożliwiających klientom korzystanie z banku.
+--------------------------------------------------------------------------------
+ID: dashboard.kpi.errors.tooltip
+Lokalizacja: Dymek pomocniczy przy karcie błędów
+Typ elementu: Dymek (Tooltip)
+ORYGINALNY TEKST:
+Łączna liczba wykrytych barier cyfrowych oczekujących na wdrożenie fixów przez zespoły deweloperskie.
+
+PROSTY JĘZYK (PO REDAKCJI):
+Liczba wykrytych problemów, które programiści muszą poprawić w kodzie stron i aplikacji.
+
+Wskazówka redakcyjna:
+Zastąpienie anglicyzmu 'fixy' słowem 'poprawić'.
+--------------------------------------------------------------------------------
+ID: dashboard.kpi.complaints.title
+Lokalizacja: Tytuł 4. karty KPI (zgłoszenia reklamacyjne)
+Typ elementu: Etykieta wskaźnika
+ORYGINALNY TEKST:
+Zgłoszenia Klientów
+
+PROSTY JĘZYK (PO REDAKCJI):
+Zgłoszenia od klientów
+
+Wskazówka redakcyjna:
+Zrozumiałe określenie barier zgłoszonych z zewnątrz.
+--------------------------------------------------------------------------------
+ID: dashboard.kpi.complaints.badge
+Lokalizacja: Plakietka dotrzymania terminów (SLA)
+Typ elementu: Dynamika (Trend)
+ORYGINALNY TEKST:
+SLA: 98%
+
+PROSTY JĘZYK (PO REDAKCJI):
+Terminowość: 98%
+
+Wskazówka redakcyjna:
+Zastąpienie branżowego skrótu 'SLA' pojęciem 'Terminowość odpowiedzi'.
+--------------------------------------------------------------------------------
+ID: dashboard.kpi.complaints.subtext
+Lokalizacja: Dopisek pomocniczy o czasie reakcji
+Typ elementu: Podpis wskaźnika
+ORYGINALNY TEKST:
+Śr. czas reakcji: 4.2h
+
+PROSTY JĘZYK (PO REDAKCJI):
+Średni czas odpowiedzi: 4 godziny
+
+Wskazówka redakcyjna:
+Rozwinięcie skrótu 'h' i 'Śr.'.
+--------------------------------------------------------------------------------
+ID: dashboard.kpi.complaints.tooltip
+Lokalizacja: Dymek pomocniczy przy karcie zgłoszeń
+Typ elementu: Dymek (Tooltip)
+ORYGINALNY TEKST:
+Zgłoszenia barier dostępności przesłane przez klientów i pracowników, wymagające opinii audytora lub naprawy.
+
+PROSTY JĘZYK (PO REDAKCJI):
+Liczba skarg na bariery cyfrowe zgłoszonych przez osoby ze szczególnymi potrzebami.
+
+Wskazówka redakcyjna:
+Zwięzłe, empatyczne objaśnienie.
+
+################################################################################
+### SEKCJA: PULPIT – WYKRESY
+################################################################################
+
+--------------------------------------------------------------------------------
+ID: dashboard.chart.trend.title
+Lokalizacja: Tytuł głównego wykresu trendu 12-miesięcznego
+Typ elementu: Tytuł wykresu
+ORYGINALNY TEKST:
+Dynamika Dostępności i Liczba Błędów (Ostatnie 12 miesięcy)
+
+PROSTY JĘZYK (PO REDAKCJI):
+Postępy dostępności w ostatnich 12 miesiącach
+
+Wskazówka redakcyjna:
+Krótszy, bardziej naturalny tytuł wykresu.
+--------------------------------------------------------------------------------
+ID: dashboard.chart.trend.subtitle
+Lokalizacja: Podtytuł wykresu trendu
+Typ elementu: Podtytuł wykresu
+ORYGINALNY TEKST:
+Miesięczna ewolucja średniego wyniku zgodności WCAG vs. tempo redukcji zidentyfikowanych barier cyfrowych.
+
+PROSTY JĘZYK (PO REDAKCJI):
+Sprawdź, jak rośnie wynik zgodności i jak szybko ubywa wykrytych błędów.
+
+Wskazówka redakcyjna:
+Prostszy język: unikanie 'miesięcznej ewolucji' i 'vs.'.
+--------------------------------------------------------------------------------
+ID: dashboard.chart.trend.legend_score
+Lokalizacja: Legenda - słupek dostępności (%)
+Typ elementu: Legenda
+ORYGINALNY TEKST:
+Średnia dostępność (%)
+
+PROSTY JĘZYK (PO REDAKCJI):
+Średnia dostępność (%)
+
+Wskazówka redakcyjna:
+Jasne oznaczenie niebieskich słupków.
+--------------------------------------------------------------------------------
+ID: dashboard.chart.trend.legend_errors
+Lokalizacja: Legenda - słupek liczby błędów
+Typ elementu: Legenda
+ORYGINALNY TEKST:
+Liczba błędów
+
+PROSTY JĘZYK (PO REDAKCJI):
+Liczba błędów w systemach
+
+Wskazówka redakcyjna:
+Jasne oznaczenie szarych słupków.
+--------------------------------------------------------------------------------
+ID: dashboard.chart.channels.title
+Lokalizacja: Tytuł wykresu poziomego dla kanałów
+Typ elementu: Tytuł wykresu
+ORYGINALNY TEKST:
+Dostępność według Kanałów
+
+PROSTY JĘZYK (PO REDAKCJI):
+Dostępność w poszczególnych kanałach
+
+Wskazówka redakcyjna:
+Wskazuje podział na technologie bankowe.
+--------------------------------------------------------------------------------
+ID: dashboard.chart.channels.subtitle
+Lokalizacja: Podtytuł wykresu kanałów
+Typ elementu: Podtytuł wykresu
+ORYGINALNY TEKST:
+Średnia ocena zgodności ze standardem WCAG 2.1 AA
+
+PROSTY JĘZYK (PO REDAKCJI):
+Średni wynik dla serwisów WWW, aplikacji mobilnych i dokumentów
+
+Wskazówka redakcyjna:
+Wymienienie kanałów ułatwia zrozumienie.
+--------------------------------------------------------------------------------
+ID: dashboard.channel.web
+Lokalizacja: Nazwa kanału WWW
+Typ elementu: Etykieta kanału
+ORYGINALNY TEKST:
+Serwisy WWW
+
+PROSTY JĘZYK (PO REDAKCJI):
+Serwisy WWW (przeglądarka)
+
+Wskazówka redakcyjna:
+Doprecyzowanie, że chodzi o komputery stacjonarne i laptopy.
+--------------------------------------------------------------------------------
+ID: dashboard.channel.android
+Lokalizacja: Nazwa kanału Android
+Typ elementu: Etykieta kanału
+ORYGINALNY TEKST:
+Aplikacja Android
+
+PROSTY JĘZYK (PO REDAKCJI):
+Aplikacja Android (telefon)
+
+Wskazówka redakcyjna:
+Wskazuje aplikację mobilną ze sklepu Google Play.
+--------------------------------------------------------------------------------
+ID: dashboard.channel.ios
+Lokalizacja: Nazwa kanału iOS
+Typ elementu: Etykieta kanału
+ORYGINALNY TEKST:
+Aplikacja iOS
+
+PROSTY JĘZYK (PO REDAKCJI):
+Aplikacja iOS (iPhone)
+
+Wskazówka redakcyjna:
+Wskazuje aplikację mobilną z App Store.
+--------------------------------------------------------------------------------
+ID: dashboard.channel.docs
+Lokalizacja: Nazwa kanału Dokumenty
+Typ elementu: Etykieta kanału
+ORYGINALNY TEKST:
+Dokumenty (PDF)
+
+PROSTY JĘZYK (PO REDAKCJI):
+Dokumenty PDF i regulaminy
+
+Wskazówka redakcyjna:
+Wskazuje cyfrowe pliki do pobrania.
+
+################################################################################
+### SEKCJA: PULPIT – REJESTR BADAŃ
+################################################################################
+
+--------------------------------------------------------------------------------
+ID: dashboard.recent_audits.title
+Lokalizacja: Nagłówek sekcji tabeli ostatnich audytów
+Typ elementu: Tytuł sekcji
+ORYGINALNY TEKST:
+Ostatnie audyty
+
+PROSTY JĘZYK (PO REDAKCJI):
+Najnowsze audyty
+
+Wskazówka redakcyjna:
+Zestawienie ostatnich badań w organizacji.
+--------------------------------------------------------------------------------
+ID: dashboard.recent_audits.subtitle
+Lokalizacja: Podtytuł sekcji tabeli ostatnich audytów
+Typ elementu: Podtytuł sekcji
+ORYGINALNY TEKST:
+Najnowsze badania przeprowadzone przez certyfikowanych audytorów
+
+PROSTY JĘZYK (PO REDAKCJI):
+Ostatnio zakończone i trwające badania serwisów banku
+
+Wskazówka redakcyjna:
+Zwięzłe streszczenie zawartości tabeli.
+--------------------------------------------------------------------------------
+ID: dashboard.recent_audits.btn_view_all
+Lokalizacja: Przycisk przejścia do pełnego katalogu audytów
+Typ elementu: Przycisk
+ORYGINALNY TEKST:
+Zobacz wszystkie audyty
+
+PROSTY JĘZYK (PO REDAKCJI):
+Zobacz wszystkie audyty
+
+Wskazówka redakcyjna:
+Jasne polecenie nawigacyjne.
+
+################################################################################
+### SEKCJA: PULPIT – KONSULTACJE Z AUDYTORAMI
+################################################################################
+
+--------------------------------------------------------------------------------
+ID: dashboard.tickets.widget_title
+Lokalizacja: Tytuł lewego widgetu współpracy na pulpicie
+Typ elementu: Tytuł widgetu
+ORYGINALNY TEKST:
+Konsultacje z Audytorami
+
+PROSTY JĘZYK (PO REDAKCJI):
+Zapytaj audytora (Konsultacje)
+
+Wskazówka redakcyjna:
+Zastąpienie formalnego tytułu zachętą do zadania pytania.
+--------------------------------------------------------------------------------
+ID: dashboard.tickets.widget_badge
+Lokalizacja: Plakietka w nagłówku widgetu konsultacji
+Typ elementu: Plakietka (Badge)
+ORYGINALNY TEKST:
+Bez spotkań
+
+PROSTY JĘZYK (PO REDAKCJI):
+Bez umawiania spotkań
+
+Wskazówka redakcyjna:
+Podkreślenie asynchronicznej formy kontaktu.
+--------------------------------------------------------------------------------
+ID: dashboard.tickets.widget_desc
+Lokalizacja: Opis wyjaśniający działanie konsultacji
+Typ elementu: Opis
+ORYGINALNY TEKST:
+Szybkie zapytania techniczne deweloperów o wytyczne WCAG i rekomendacje fixów.
+
+PROSTY JĘZYK (PO REDAKCJI):
+Masz wątpliwości jak wdrożyć poprawkę? Zadaj pytanie ekspertowi WCAG bez planowania spotkań.
+
+Wskazówka redakcyjna:
+Przyjazny, instruktażowy język bez slangu.
+--------------------------------------------------------------------------------
+ID: dashboard.tickets.btn_new
+Lokalizacja: Niebieski przycisk otwarcia nowej konsultacji
+Typ elementu: Przycisk
+ORYGINALNY TEKST:
++ Nowa konsultacja
+
+PROSTY JĘZYK (PO REDAKCJI):
++ Zadaj pytanie audytorowi
+
+Wskazówka redakcyjna:
+Konkretna akcja zachęcająca do kontaktu.
+--------------------------------------------------------------------------------
+ID: dashboard.tickets.banner_new_reply
+Lokalizacja: Zielony baner informujący o odpowiedzi audytora
+Typ elementu: Powiadomienie / Baner
+ORYGINALNY TEKST:
+Nowa odpowiedź audytora w sprawie:
+
+PROSTY JĘZYK (PO REDAKCJI):
+Audytor odpowiedział w sprawie:
+
+Wskazówka redakcyjna:
+Prosty komunikat o nowej wiadomości.
+
+################################################################################
+### SEKCJA: PULPIT – KOMUNIKATY & NOWOŚCI
+################################################################################
+
+--------------------------------------------------------------------------------
+ID: dashboard.announcements.widget_title
+Lokalizacja: Tytuł prawego widgetu wiedzy i zdarzeń
+Typ elementu: Tytuł widgetu
+ORYGINALNY TEKST:
+Komunikaty i Wydarzenia
+
+PROSTY JĘZYK (PO REDAKCJI):
+Wiadomości i szkolenia
+
+Wskazówka redakcyjna:
+Prostsze, przystępne określenie.
+--------------------------------------------------------------------------------
+ID: dashboard.announcements.webinar_title
+Lokalizacja: Tytuł zaproszenia na webinar ekspercki
+Typ elementu: Nagłówek zdarzenia
+ORYGINALNY TEKST:
+Webinar: Przygotowanie bankowości elektronicznej do wymogów EAA 2026
+
+PROSTY JĘZYK (PO REDAKCJI):
+Szkolenie online: Jak spełnić wymogi Europejskiego Aktu o Dostępności (EAA)
+
+Wskazówka redakcyjna:
+Zastąpienie obcego słowa 'Webinar' określeniem 'Szkolenie online' i rozwinięcie skrótu EAA.
+--------------------------------------------------------------------------------
+ID: dashboard.announcements.btn_register
+Lokalizacja: Przycisk zapisu na szkolenie
+Typ elementu: Przycisk
+ORYGINALNY TEKST:
+Zapisz zespół
+
+PROSTY JĘZYK (PO REDAKCJI):
+Zapisz zespół na bezpłatne szkolenie
+
+Wskazówka redakcyjna:
+Jasna zachęta do bezpłatnego podniesienia kompetencji zespołu.
+
+################################################################################
+### SEKCJA: PULPIT – OPIEKUN KLIENTA
+################################################################################
+
+--------------------------------------------------------------------------------
+ID: dashboard.vip.title
+Lokalizacja: Tytuł karty dedykowanego kontaktu
+Typ elementu: Tytuł karty
+ORYGINALNY TEKST:
+Dedykowany Opiekun Klienta
+
+PROSTY JĘZYK (PO REDAKCJI):
+Twój opiekun w zespole audytorów
+
+Wskazówka redakcyjna:
+Ciepłe, partnerskie określenie.
+--------------------------------------------------------------------------------
+ID: dashboard.vip.name
+Lokalizacja: Imię i nazwisko doradcy
+Typ elementu: Dane osoby
+ORYGINALNY TEKST:
+Tomasz Straszak
+
+PROSTY JĘZYK (PO REDAKCJI):
+Tomasz Straszak
+
+Wskazówka redakcyjna:
+Pozostawić bez zmian.
+--------------------------------------------------------------------------------
+ID: dashboard.vip.status_available
+Lokalizacja: Zielony wskaźnik dostępności telefonicznej
+Typ elementu: Status
+ORYGINALNY TEKST:
+Dostępny teraz
+
+PROSTY JĘZYK (PO REDAKCJI):
+Możesz dzwonić teraz
+
+Wskazówka redakcyjna:
+Potwierdzenie bieżącej gotowości do rozmowy.
+--------------------------------------------------------------------------------
+ID: dashboard.vip.btn_call
+Lokalizacja: Przycisk bezpośredniego połączenia telefonicznego
+Typ elementu: Przycisk
+ORYGINALNY TEKST:
+Zadzwoń teraz: 795 103 017
+
+PROSTY JĘZYK (PO REDAKCJI):
+Zadzwoń: 795 103 017
+
+Wskazówka redakcyjna:
+Proste połączenie z numerem telefonu.
+
+================================================================================
+KONIEC PLIKU - ŁĄCZNIE 47 POZYCJI
+================================================================================

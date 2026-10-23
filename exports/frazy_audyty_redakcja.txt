@@ -1,0 +1,852 @@
+================================================================================
+              W-ALLY: FRAZY MODUŁU AUDYTÓW (DO REDAKCJI PROSTEGO JĘZYKA)        
+================================================================================
+Data wygenerowania: 23.10.2026, 23:03:43
+Łączna liczba fraz: 67
+
+INSTRUKCJA DLA REDAKTORA PROSTEGO JĘZYKA:
+1. Każda fraza posiada swój unikalny identyfikator [ID], kontekst występowania oraz [TYP].
+2. Pole [ORYGINALNY TEKST] zawiera obecne brzmienie w aplikacji.
+3. Wpisz swoją zredagowaną propozycję w linii [PROSTY JĘZYK: ...].
+4. Nie zmieniaj identyfikatorów [ID], aby plik mógł zostać automatycznie zaimportowany do kodu!
+5. Zasady prostego języka: krótkie zdania, strona czynna, brak żargonu, zrozumiałe skróty.
+================================================================================
+
+
+################################################################################
+### SEKCJA: AUDYTY – REJESTR I LISTA
+################################################################################
+
+--------------------------------------------------------------------------------
+ID: audits.list.header.title
+Lokalizacja: Główny nagłówek H1 modułu audytów
+Typ elementu: Tytuł
+ORYGINALNY TEKST:
+Audyty
+
+PROSTY JĘZYK (PO REDAKCJI):
+Audyty dostępności
+
+Wskazówka redakcyjna:
+Warto doprecyzować 'Audyty dostępności', aby kontekst był natychmiast oczywisty.
+--------------------------------------------------------------------------------
+ID: audits.list.header.subtitle
+Lokalizacja: Podtytuł informacyjny pod nagłówkiem
+Typ elementu: Podtytuł
+ORYGINALNY TEKST:
+Wykaz wszystkich badań dostępności cyfrowej przeprowadzonych dla serwisów i procesów organizacji.
+
+PROSTY JĘZYK (PO REDAKCJI):
+Przeglądaj raporty z badań stron, aplikacji i dokumentów banku pod kątem normy WCAG.
+
+Wskazówka redakcyjna:
+Prostszy język: unikanie 'Wykazu wszystkich badań przeprowadzonych...'.
+--------------------------------------------------------------------------------
+ID: audits.list.btn_order_audit
+Lokalizacja: Główny przycisk zlecenia nowego badania w nagłówku
+Typ elementu: Przycisk
+ORYGINALNY TEKST:
+Zleć nowy audyt
+
+PROSTY JĘZYK (PO REDAKCJI):
+Zamów nowy audyt
+
+Wskazówka redakcyjna:
+Synonim prostego języka: 'Zamów nowy audyt' lub 'Zleć badanie'.
+--------------------------------------------------------------------------------
+ID: audits.list.btn_export_all
+Lokalizacja: Przycisk eksportu rejestru badań do formatu Excel
+Typ elementu: Przycisk
+ORYGINALNY TEKST:
+Eksportuj do pliku Excel
+
+PROSTY JĘZYK (PO REDAKCJI):
+Pobierz arkusz Excel (.xlsx)
+
+Wskazówka redakcyjna:
+Jasne wskazanie pliku i formatu do pobrania.
+
+################################################################################
+### SEKCJA: AUDYTY – FILTRY I WYSZUKIWARKA
+################################################################################
+
+--------------------------------------------------------------------------------
+ID: audits.filter.search_placeholder
+Lokalizacja: Tekst podpowiedzi w polu wyszukiwania audytów
+Typ elementu: Pole tekstowe (Placeholder)
+ORYGINALNY TEKST:
+Szukaj audytu po nazwie usługi, procesie lub audytorze...
+
+PROSTY JĘZYK (PO REDAKCJI):
+Wpisz nazwę usługi, procesu lub nazwisko audytora...
+
+Wskazówka redakcyjna:
+Instrukcja w trybie rozkazującym wskazująca, co można wpisać.
+--------------------------------------------------------------------------------
+ID: audits.filter.pinned_only
+Lokalizacja: Przycisk filtra obserwowanych audytów (z ikoną pineski)
+Typ elementu: Przycisk filtra
+ORYGINALNY TEKST:
+Obserwowane
+
+PROSTY JĘZYK (PO REDAKCJI):
+Tylko obserwowane
+
+Wskazówka redakcyjna:
+Jasna informacja, że przycisk zawęża listę do badań oznaczonych pineską.
+--------------------------------------------------------------------------------
+ID: audits.filter.pinned_only_tooltip
+Lokalizacja: Dymek przycisku filtra obserwowanych
+Typ elementu: Dymek (Tooltip)
+ORYGINALNY TEKST:
+Pokaż tylko przypięte / obserwowane audyty
+
+PROSTY JĘZYK (PO REDAKCJI):
+Wyświetl wyłącznie audyty przypięte do obserwowanych
+
+Wskazówka redakcyjna:
+Wyjaśnienie działania filtru.
+--------------------------------------------------------------------------------
+ID: audits.filter.channel_label
+Lokalizacja: Przycisk rozwijanego menu wyboru kanałów
+Typ elementu: Przycisk menu
+ORYGINALNY TEKST:
+Kanał
+
+PROSTY JĘZYK (PO REDAKCJI):
+Kanał dostępu
+
+Wskazówka redakcyjna:
+Można doprecyzować do 'Kanał dostępu' (Desktop, iOS, Android, Dokument).
+--------------------------------------------------------------------------------
+ID: audits.filter.status_label
+Lokalizacja: Przycisk menu statusów audytu
+Typ elementu: Przycisk menu
+ORYGINALNY TEKST:
+Status
+
+PROSTY JĘZYK (PO REDAKCJI):
+Status badania
+
+Wskazówka redakcyjna:
+Wskazuje etap audytu (Zakończony, W trakcie, Nowy).
+--------------------------------------------------------------------------------
+ID: audits.filter.auditor_label
+Lokalizacja: Przycisk menu wyboru audytora prowadzącego
+Typ elementu: Przycisk menu
+ORYGINALNY TEKST:
+Audytor
+
+PROSTY JĘZYK (PO REDAKCJI):
+Audytor prowadzący
+
+Wskazówka redakcyjna:
+Pozwala filtrować badania wykonane przez konkretnego eksperta.
+--------------------------------------------------------------------------------
+ID: audits.filter.time_label
+Lokalizacja: Przycisk menu wyboru przedziału czasowego
+Typ elementu: Przycisk menu
+ORYGINALNY TEKST:
+Czas
+
+PROSTY JĘZYK (PO REDAKCJI):
+Okres badania
+
+Wskazówka redakcyjna:
+Bardziej precyzyjne sformułowanie niż pojedyncze słowo 'Czas'.
+--------------------------------------------------------------------------------
+ID: audits.filter.clear_all
+Lokalizacja: Przycisk wyczyszczenia aktywnych filtrów
+Typ elementu: Przycisk akcji
+ORYGINALNY TEKST:
+Wyczyść wszystkie filtry
+
+PROSTY JĘZYK (PO REDAKCJI):
+Wyczyść filtry
+
+Wskazówka redakcyjna:
+Krótki, standardowy zwrot resetujący widok do pełnej listy.
+
+################################################################################
+### SEKCJA: AUDYTY – LISTA I TABELA
+################################################################################
+
+--------------------------------------------------------------------------------
+ID: audits.view_mode.table
+Lokalizacja: Przycisk przełączenia na widok tabeli
+Typ elementu: Przełącznik widoku
+ORYGINALNY TEKST:
+Tabela
+
+PROSTY JĘZYK (PO REDAKCJI):
+Widok tabeli
+
+Wskazówka redakcyjna:
+Zwięzłe określenie układu danych.
+--------------------------------------------------------------------------------
+ID: audits.view_mode.grid
+Lokalizacja: Przycisk przełączenia na widok kafelkowy
+Typ elementu: Przełącznik widoku
+ORYGINALNY TEKST:
+Kafelki
+
+PROSTY JĘZYK (PO REDAKCJI):
+Widok kafelków
+
+Wskazówka redakcyjna:
+Zwięzłe określenie układu danych.
+--------------------------------------------------------------------------------
+ID: audits.counter.summary
+Lokalizacja: Pasek informujący o liczbie znalezionych badań
+Typ elementu: Licznik
+ORYGINALNY TEKST:
+Wyniki: {count} z {total} audytów
+
+PROSTY JĘZYK (PO REDAKCJI):
+Wyświetlanie: {count} z {total} audytów
+
+Wskazówka redakcyjna:
+Prosty licznik wyników wyszukiwania.
+--------------------------------------------------------------------------------
+ID: audits.table.col_pin_aria
+Lokalizacja: Etykieta przycisku pineski dla czytników ekranu
+Typ elementu: Dostępność (Aria)
+ORYGINALNY TEKST:
+Przypnij audyt do obserwowanych (ulubione)
+
+PROSTY JĘZYK (PO REDAKCJI):
+Dodaj audyt do listy obserwowanych
+
+Wskazówka redakcyjna:
+Jasna informacja o akcji przypięcia.
+--------------------------------------------------------------------------------
+ID: audits.table.col_unpin_aria
+Lokalizacja: Etykieta odpięcia pineski
+Typ elementu: Dostępność (Aria)
+ORYGINALNY TEKST:
+Odepnij audyt z obserwowanych
+
+PROSTY JĘZYK (PO REDAKCJI):
+Usuń audyt z listy obserwowanych
+
+Wskazówka redakcyjna:
+Jasna informacja o wyłączeniu obserwowania.
+--------------------------------------------------------------------------------
+ID: audits.table.col_title
+Lokalizacja: Nagłówek kolumny tytułu audytu
+Typ elementu: Nagłówek kolumny
+ORYGINALNY TEKST:
+Nazwa audytu i zakres
+
+PROSTY JĘZYK (PO REDAKCJI):
+Badana usługa lub proces
+
+Wskazówka redakcyjna:
+Wskazuje, jaki element banku był poddany weryfikacji.
+--------------------------------------------------------------------------------
+ID: audits.table.col_date
+Lokalizacja: Nagłówek kolumny daty
+Typ elementu: Nagłówek kolumny
+ORYGINALNY TEKST:
+Data zakończenia
+
+PROSTY JĘZYK (PO REDAKCJI):
+Data badania
+
+Wskazówka redakcyjna:
+Wskazuje termin ukończenia weryfikacji.
+--------------------------------------------------------------------------------
+ID: audits.table.col_devices
+Lokalizacja: Nagłówek kolumny urządzeń / kanałów
+Typ elementu: Nagłówek kolumny
+ORYGINALNY TEKST:
+Kanały i urządzenia
+
+PROSTY JĘZYK (PO REDAKCJI):
+Kanał dostępu
+
+Wskazówka redakcyjna:
+Wskazuje: Desktop, iOS, Android lub Dokument.
+--------------------------------------------------------------------------------
+ID: audits.table.col_auditor
+Lokalizacja: Nagłówek kolumny audytora
+Typ elementu: Nagłówek kolumny
+ORYGINALNY TEKST:
+Audytor prowadzący
+
+PROSTY JĘZYK (PO REDAKCJI):
+Audytor
+
+Wskazówka redakcyjna:
+Imię i nazwisko certyfikowanego eksperta.
+--------------------------------------------------------------------------------
+ID: audits.table.col_priorities
+Lokalizacja: Nagłówek kolumny triady priorytetów
+Typ elementu: Nagłówek kolumny
+ORYGINALNY TEKST:
+Priorytety błędów
+
+PROSTY JĘZYK (PO REDAKCJI):
+Otwarte błędy (K / W / M)
+
+Wskazówka redakcyjna:
+Podział na błędy Krytyczne, Ważne i Marginalne.
+--------------------------------------------------------------------------------
+ID: audits.table.col_score
+Lokalizacja: Nagłówek kolumny wyniku punktowego
+Typ elementu: Nagłówek kolumny
+ORYGINALNY TEKST:
+Zgodność z WCAG
+
+PROSTY JĘZYK (PO REDAKCJI):
+Wynik zgodności (%)
+
+Wskazówka redakcyjna:
+Ocena procentowa spełnienia badanych kryteriów.
+--------------------------------------------------------------------------------
+ID: audits.table.action_details
+Lokalizacja: Przycisk otwarcia szczegółów w wierszu tabeli
+Typ elementu: Przycisk akcji
+ORYGINALNY TEKST:
+Szczegóły
+
+PROSTY JĘZYK (PO REDAKCJI):
+Otwórz raport
+
+Wskazówka redakcyjna:
+Czasownikowe polecenie 'Otwórz raport' precyzyjniej określa dokąd trafi użytkownik.
+--------------------------------------------------------------------------------
+ID: audits.empty.title
+Lokalizacja: Tytuł pustego stanu (brak wyników wyszukiwania)
+Typ elementu: Pusty stan (Empty State)
+ORYGINALNY TEKST:
+Brak audytów spełniających kryteria
+
+PROSTY JĘZYK (PO REDAKCJI):
+Nie znaleźliśmy audytów o takich kryteriach
+
+Wskazówka redakcyjna:
+Bezpośredni, przyjazny komunikat zamiast technicznego 'Brak audytów'.
+--------------------------------------------------------------------------------
+ID: audits.empty.description
+Lokalizacja: Opis pustego stanu
+Typ elementu: Pusty stan (Empty State)
+ORYGINALNY TEKST:
+Żaden audyt nie pasuje do wpisanej frazy lub wybranych filtrów. Zresetuj filtry, aby wyświetlić pełny wykaz.
+
+PROSTY JĘZYK (PO REDAKCJI):
+Zmień wpisaną frazę w wyszukiwarce lub wyczyść filtry, aby zobaczyć całą listę badań.
+
+Wskazówka redakcyjna:
+Jasna wskazówka co zrobić, by odzyskać listę.
+
+################################################################################
+### SEKCJA: AUDYT – PODSUMOWANIE BADANIA
+################################################################################
+
+--------------------------------------------------------------------------------
+ID: audit_summary.header.back
+Lokalizacja: Przycisk powrotu w lewym górnym rogu
+Typ elementu: Przycisk powrotu
+ORYGINALNY TEKST:
+Wróć do listy audytów
+
+PROSTY JĘZYK (PO REDAKCJI):
+Wróć do listy audytów
+
+Wskazówka redakcyjna:
+Bezpieczna nawigacja powrotna.
+--------------------------------------------------------------------------------
+ID: audit_summary.header.badge_wcag
+Lokalizacja: Plakietka poziomu normy pod tytułem
+Typ elementu: Plakietka (Badge)
+ORYGINALNY TEKST:
+WCAG 2.1 Poziom AA
+
+PROSTY JĘZYK (PO REDAKCJI):
+Standard WCAG 2.1 AA
+
+Wskazówka redakcyjna:
+Oficjalny poziom badanej normy.
+--------------------------------------------------------------------------------
+ID: audit_summary.header.btn_pin
+Lokalizacja: Przycisk przypięcia audytu w nagłówku szczegółów
+Typ elementu: Przycisk akcji
+ORYGINALNY TEKST:
+Przypnij audyt
+
+PROSTY JĘZYK (PO REDAKCJI):
+Dodaj do obserwowanych
+
+Wskazówka redakcyjna:
+Wyjaśnienie, że audyt trafi do obserwowanych.
+--------------------------------------------------------------------------------
+ID: audit_summary.header.btn_pinned_active
+Lokalizacja: Stan aktywny przycisku przypięcia
+Typ elementu: Przycisk akcji
+ORYGINALNY TEKST:
+Obserwowany
+
+PROSTY JĘZYK (PO REDAKCJI):
+Obserwujesz ten audyt
+
+Wskazówka redakcyjna:
+Potwierdzenie, że badanie jest na liście obserwowanych.
+--------------------------------------------------------------------------------
+ID: audit_summary.header.btn_reaudit
+Lokalizacja: Główny niebieski przycisk w nagłówku szczegółów
+Typ elementu: Przycisk akcji
+ORYGINALNY TEKST:
+Zleć re-audyt
+
+PROSTY JĘZYK (PO REDAKCJI):
+Zleć weryfikację poprawek
+
+Wskazówka redakcyjna:
+W prostym języku pojęcie 're-audyt' warto objaśnić jako 'weryfikację wprowadzonych poprawek'.
+--------------------------------------------------------------------------------
+ID: audit_summary.header.btn_pdf
+Lokalizacja: Przycisk pobrania raportu PDF
+Typ elementu: Przycisk akcji
+ORYGINALNY TEKST:
+Pobierz raport (.pdf)
+
+PROSTY JĘZYK (PO REDAKCJI):
+Pobierz raport PDF
+
+Wskazówka redakcyjna:
+Pobranie oficjalnego raportu audytowego.
+--------------------------------------------------------------------------------
+ID: audit_summary.header.btn_xlsx
+Lokalizacja: Przycisk eksportu arkusza Excel
+Typ elementu: Przycisk akcji
+ORYGINALNY TEKST:
+Eksport (.xlsx)
+
+PROSTY JĘZYK (PO REDAKCJI):
+Pobierz arkusz Excel (.xlsx)
+
+Wskazówka redakcyjna:
+Pobranie szczegółowych metryk z kryteriami sukcesu.
+--------------------------------------------------------------------------------
+ID: audit_summary.kpi.overall_score
+Lokalizacja: Tytuł 1. karty metryki (wynik ogólny)
+Typ elementu: Etykieta wskaźnika
+ORYGINALNY TEKST:
+Wynik ogólny
+
+PROSTY JĘZYK (PO REDAKCJI):
+Ogólna dostępność
+
+Wskazówka redakcyjna:
+Średni wskaźnik spełnienia kryteriów w tym audycie.
+--------------------------------------------------------------------------------
+ID: audit_summary.kpi.critical_errors
+Lokalizacja: Tytuł 2. karty metryki (błędy priorytetowe)
+Typ elementu: Etykieta wskaźnika
+ORYGINALNY TEKST:
+Priorytetowe
+
+PROSTY JĘZYK (PO REDAKCJI):
+Błędy krytyczne (blokujące)
+
+Wskazówka redakcyjna:
+Bariery całkowicie uniemożliwiające załatwienie sprawy przez klienta z niepełnosprawnością.
+--------------------------------------------------------------------------------
+ID: audit_summary.kpi.important_errors
+Lokalizacja: Tytuł 3. karty metryki (błędy ważne)
+Typ elementu: Etykieta wskaźnika
+ORYGINALNY TEKST:
+Ważne
+
+PROSTY JĘZYK (PO REDAKCJI):
+Błędy ważne (utrudniające)
+
+Wskazówka redakcyjna:
+Bariery powodujące znaczne trudności, ale możliwe do obejścia.
+--------------------------------------------------------------------------------
+ID: audit_summary.kpi.marginal_errors
+Lokalizacja: Tytuł 4. karty metryki (błędy marginalne)
+Typ elementu: Etykieta wskaźnika
+ORYGINALNY TEKST:
+Marginalne
+
+PROSTY JĘZYK (PO REDAKCJI):
+Drobne niedociągnięcia
+
+Wskazówka redakcyjna:
+Drobne błędy semantyczne lub estetyczne o małym wpływie na użytkownika.
+--------------------------------------------------------------------------------
+ID: audit_summary.views.title
+Lokalizacja: Nagłówek sekcji zbadanych ekranów i podstron
+Typ elementu: Tytuł sekcji
+ORYGINALNY TEKST:
+Zbadane elementy / podstrony
+
+PROSTY JĘZYK (PO REDAKCJI):
+Zbadane ekrany i widoki
+
+Wskazówka redakcyjna:
+Zamiast technicznego 'elementy' naturalny zwrot 'ekrany i widoki'.
+--------------------------------------------------------------------------------
+ID: audit_summary.views.subtitle
+Lokalizacja: Podtytuł sekcji zbadanych widoków
+Typ elementu: Podtytuł sekcji
+ORYGINALNY TEKST:
+Kliknij wybrany element, aby przejść do szczegółowej listy błędów, zrzutów ekranu i zaleceń audytora.
+
+PROSTY JĘZYK (PO REDAKCJI):
+Wybierz podstronę, aby zobaczyć zdiagnozowane usterki, zrzuty ekranu i instrukcje naprawy.
+
+Wskazówka redakcyjna:
+Zachęta do przejścia do konkretnego ekranu.
+--------------------------------------------------------------------------------
+ID: audit_summary.views.btn_view_errors
+Lokalizacja: Przycisk otwarcia błędów na kafelku podstrony
+Typ elementu: Przycisk akcji
+ORYGINALNY TEKST:
+Przejdź do błędów
+
+PROSTY JĘZYK (PO REDAKCJI):
+Zobacz błędy
+
+Wskazówka redakcyjna:
+Krótkie polecenie otwierające edytor usterek.
+
+################################################################################
+### SEKCJA: AUDYT – REJESTR BŁĘDÓW PODSTRONY
+################################################################################
+
+--------------------------------------------------------------------------------
+ID: audit_errors.header.back
+Lokalizacja: Przycisk powrotu do podsumowania audytu
+Typ elementu: Przycisk powrotu
+ORYGINALNY TEKST:
+Wróć do podsumowania
+
+PROSTY JĘZYK (PO REDAKCJI):
+Wróć do podsumowania audytu
+
+Wskazówka redakcyjna:
+Precyzyjny odsyłacz powrotny.
+--------------------------------------------------------------------------------
+ID: audit_errors.header.title
+Lokalizacja: Nagłówek widoku błędów konkretnego ekranu
+Typ elementu: Tytuł
+ORYGINALNY TEKST:
+Błędy na podstronie
+
+PROSTY JĘZYK (PO REDAKCJI):
+Wykaz błędów na tym ekranie
+
+Wskazówka redakcyjna:
+Wskazuje usterki wykryte na badanej podstronie.
+--------------------------------------------------------------------------------
+ID: audit_errors.filter.prio_critical
+Lokalizacja: Przycisk filtra błędów priorytetowych
+Typ elementu: Przycisk filtra
+ORYGINALNY TEKST:
+Priorytetowe
+
+PROSTY JĘZYK (PO REDAKCJI):
+Priorytetowe (blokady)
+
+Wskazówka redakcyjna:
+Wyodrębnia naruszenia krytyczne.
+--------------------------------------------------------------------------------
+ID: audit_errors.filter.prio_important
+Lokalizacja: Przycisk filtra błędów ważnych
+Typ elementu: Przycisk filtra
+ORYGINALNY TEKST:
+Ważne
+
+PROSTY JĘZYK (PO REDAKCJI):
+Ważne
+
+Wskazówka redakcyjna:
+Wyodrębnia naruszenia stopnia drugiego.
+--------------------------------------------------------------------------------
+ID: audit_errors.filter.prio_marginal
+Lokalizacja: Przycisk filtra błędów marginalnych
+Typ elementu: Przycisk filtra
+ORYGINALNY TEKST:
+Marginalne
+
+PROSTY JĘZYK (PO REDAKCJI):
+Marginalne (drobne)
+
+Wskazówka redakcyjna:
+Wyodrębnia drobne usterki.
+--------------------------------------------------------------------------------
+ID: audit_errors.filter.search_placeholder
+Lokalizacja: Pole wyszukiwania błędu lub numeru kryterium
+Typ elementu: Pole tekstowe (Placeholder)
+ORYGINALNY TEKST:
+Szukaj błędu, kryterium (np. 1.1.1) lub słowa kluczowego...
+
+PROSTY JĘZYK (PO REDAKCJI):
+Szukaj błędu, numeru kryterium (np. 1.4.3) lub słowa...
+
+Wskazówka redakcyjna:
+Ułatwia wyszukiwanie konkretnej wytycznej WCAG.
+--------------------------------------------------------------------------------
+ID: audit_errors.item.section_desc
+Lokalizacja: Etykieta sekcji opisu usterki w akordeonie
+Typ elementu: Etykieta sekcji
+ORYGINALNY TEKST:
+Opis problemu:
+
+PROSTY JĘZYK (PO REDAKCJI):
+Na czym polega błąd:
+
+Wskazówka redakcyjna:
+Przystępne wyjaśnienie istoty bariery.
+--------------------------------------------------------------------------------
+ID: audit_errors.item.section_impact
+Lokalizacja: Etykieta wpływu błędu na użytkowników z niepełnosprawnością
+Typ elementu: Etykieta sekcji
+ORYGINALNY TEKST:
+Wpływ na użytkownika:
+
+PROSTY JĘZYK (PO REDAKCJI):
+Jak błąd utrudnia korzystanie klientowi:
+
+Wskazówka redakcyjna:
+Empatyczne wyjaśnienie perspektywy użytkownika czytnika ekranu lub klawiatury.
+--------------------------------------------------------------------------------
+ID: audit_errors.item.section_recommendation
+Lokalizacja: Etykieta zaleceń naprawczych audytora
+Typ elementu: Etykieta sekcji
+ORYGINALNY TEKST:
+Rekomendacja audytora:
+
+PROSTY JĘZYK (PO REDAKCJI):
+Jak naprawić ten błąd:
+
+Wskazówka redakcyjna:
+Konkretna, techniczna instrukcja dla programistów.
+--------------------------------------------------------------------------------
+ID: audit_errors.item.jira_label
+Lokalizacja: Etykieta pola integracji z Jira
+Typ elementu: Etykieta pola
+ORYGINALNY TEKST:
+Zadanie w Jira:
+
+PROSTY JĘZYK (PO REDAKCJI):
+Numer zadania w Jira (np. ACC-104):
+
+Wskazówka redakcyjna:
+Wskazuje pole do powiązania ze sprintem IT.
+--------------------------------------------------------------------------------
+ID: audit_errors.item.btn_consult
+Lokalizacja: Przycisk konsultacji z audytorem na kafelku błędu
+Typ elementu: Przycisk akcji
+ORYGINALNY TEKST:
+Konsultuj z audytorem
+
+PROSTY JĘZYK (PO REDAKCJI):
+Zapytaj audytora o ten błąd
+
+Wskazówka redakcyjna:
+Uruchamia wątek konsultacji automatycznie powiązany z danym błędem.
+--------------------------------------------------------------------------------
+ID: audit_errors.item.screenshot_label
+Lokalizacja: Podpis pod miniaturą zrzutu ekranu
+Typ elementu: Podpis obrazu
+ORYGINALNY TEKST:
+Kliknij, aby powiększyć zrzut ekranu (dowód)
+
+PROSTY JĘZYK (PO REDAKCJI):
+Kliknij miniaturę, aby powiększyć zrzut ekranu
+
+Wskazówka redakcyjna:
+Informuje o podglądzie Lightbox w pełnej rozdzielczości.
+
+################################################################################
+### SEKCJA: AUDYT – ZLECENIE WERYFIKACJI (MODAL RE-AUDYTU)
+################################################################################
+
+--------------------------------------------------------------------------------
+ID: reaudit_modal.title
+Lokalizacja: Tytuł okna modalnego zlecenia re-audytu
+Typ elementu: Tytuł modalu
+ORYGINALNY TEKST:
+Zleć re-audyt powdrożeniowy
+
+PROSTY JĘZYK (PO REDAKCJI):
+Zleć weryfikację wprowadzonych poprawek
+
+Wskazówka redakcyjna:
+W prostym języku warto zastąpić techniczne 're-audyt' jasnym pojęciem 'weryfikacji poprawek'.
+--------------------------------------------------------------------------------
+ID: reaudit_modal.target_label
+Lokalizacja: Pole informujące o weryfikowanej usłudze
+Typ elementu: Etykieta pola
+ORYGINALNY TEKST:
+Badany proces / audyt:
+
+PROSTY JĘZYK (PO REDAKCJI):
+Weryfikowana usługa lub proces:
+
+Wskazówka redakcyjna:
+Wskazuje zakres weryfikacji powdrożeniowej.
+--------------------------------------------------------------------------------
+ID: reaudit_modal.auditor_label
+Lokalizacja: Pole przypisanego eksperta
+Typ elementu: Etykieta pola
+ORYGINALNY TEKST:
+Dedykowany audytor:
+
+PROSTY JĘZYK (PO REDAKCJI):
+Audytor prowadzący badanie:
+
+Wskazówka redakcyjna:
+Nazwisko eksperta odpowiedzialnego za weryfikację.
+--------------------------------------------------------------------------------
+ID: reaudit_modal.speed_label
+Lokalizacja: Wybór oczekiwanego terminu realizacji
+Typ elementu: Etykieta grupy opcji
+ORYGINALNY TEKST:
+Oczekiwany czas realizacji weryfikacji:
+
+PROSTY JĘZYK (PO REDAKCJI):
+Kiedy potrzebujesz wyników weryfikacji:
+
+Wskazówka redakcyjna:
+Proste pytanie do zamawiającego.
+--------------------------------------------------------------------------------
+ID: reaudit_modal.speed_standard
+Lokalizacja: Opcja 1: tryb standardowy
+Typ elementu: Opcja wyboru
+ORYGINALNY TEKST:
+Standard (do 5 dni roboczych) - w ramach pakietu
+
+PROSTY JĘZYK (PO REDAKCJI):
+Standardowy (do 5 dni roboczych) – w cenie pakietu
+
+Wskazówka redakcyjna:
+Standardowy czas audytu weryfikacyjnego.
+--------------------------------------------------------------------------------
+ID: reaudit_modal.speed_express
+Lokalizacja: Opcja 2: tryb ekspresowy
+Typ elementu: Opcja wyboru
+ORYGINALNY TEKST:
+Ekspres (do 48h) - pilne wydanie produkcyjne
+
+PROSTY JĘZYK (PO REDAKCJI):
+Ekspresowy (do 48 godzin) – pilne wdrożenie
+
+Wskazówka redakcyjna:
+Tryb przyspieszony dla zespołów sprintowych.
+--------------------------------------------------------------------------------
+ID: reaudit_modal.staging_url_label
+Lokalizacja: Etykieta pola adresu środowiska testowego
+Typ elementu: Etykieta pola
+ORYGINALNY TEKST:
+Adres środowiska testowego / staging (opcjonalnie):
+
+PROSTY JĘZYK (PO REDAKCJI):
+Adres strony testowej lub wersji staging (opcjonalnie):
+
+Wskazówka redakcyjna:
+Wskazuje programistom, gdzie audytor ma sprawdzić poprawki.
+--------------------------------------------------------------------------------
+ID: reaudit_modal.comment_label
+Lokalizacja: Etykieta pola dodatkowego komentarza
+Typ elementu: Etykieta pola
+ORYGINALNY TEKST:
+Dodatkowy komentarz lub zakres weryfikacji:
+
+PROSTY JĘZYK (PO REDAKCJI):
+Dodatkowe uwagi dla audytora:
+
+Wskazówka redakcyjna:
+Miejsce na uwagi, numery zadań w Jira lub branch GIT.
+--------------------------------------------------------------------------------
+ID: reaudit_modal.comment_placeholder
+Lokalizacja: Tekst podpowiedzi w polu komentarza
+Typ elementu: Tekst podpowiedzi
+ORYGINALNY TEKST:
+Wpisz dodatkowe uwagi, zakres wprowadzonych zmian, branch w repozytorium lub dane logowania testowego...
+
+PROSTY JĘZYK (PO REDAKCJI):
+Opisz krótko wprowadzone poprawki, podaj nazwę gałęzi w GIT lub dane konta testowego...
+
+Wskazówka redakcyjna:
+Praktyczne przykłady tego, co warto przekazać audytorowi.
+--------------------------------------------------------------------------------
+ID: reaudit_modal.notify_team_checkbox
+Lokalizacja: Pole wyboru powiadomienia zespołu deweloperskiego
+Typ elementu: Pole wyboru
+ORYGINALNY TEKST:
+Powiadom zespół deweloperski o zleceniu re-audytu (e-mail + powiadomienie w systemie)
+
+PROSTY JĘZYK (PO REDAKCJI):
+Wyślij powiadomienie do zespołu programistów o zleceniu weryfikacji
+
+Wskazówka redakcyjna:
+Zapewnia transparentność wdrożenia w organizacji.
+--------------------------------------------------------------------------------
+ID: reaudit_modal.consultation_checkbox
+Lokalizacja: Pole wyboru krótkiego omówienia wyników
+Typ elementu: Pole wyboru
+ORYGINALNY TEKST:
+Poproś o krótkie 15-minutowe omówienie wyników z audytorem po weryfikacji
+
+PROSTY JĘZYK (PO REDAKCJI):
+Poproś o 15-minutowe spotkanie online z audytorem po zakończeniu weryfikacji
+
+Wskazówka redakcyjna:
+Opcjonalna odprawa poaudytowa.
+--------------------------------------------------------------------------------
+ID: reaudit_modal.btn_cancel
+Lokalizacja: Przycisk anulowania zlecenia w modalu
+Typ elementu: Przycisk
+ORYGINALNY TEKST:
+Anuluj
+
+PROSTY JĘZYK (PO REDAKCJI):
+Anuluj
+
+Wskazówka redakcyjna:
+Zamknięcie okna bez wysyłania zlecenia.
+--------------------------------------------------------------------------------
+ID: reaudit_modal.btn_submit
+Lokalizacja: Przycisk potwierdzenia zlecenia re-audytu
+Typ elementu: Przycisk
+ORYGINALNY TEKST:
+Wyślij zlecenie re-audytu
+
+PROSTY JĘZYK (PO REDAKCJI):
+Zleć weryfikację poprawek
+
+Wskazówka redakcyjna:
+Jasne potwierdzenie wysłania zlecenia do zespołu audytorów.
+--------------------------------------------------------------------------------
+ID: reaudit_modal.toast_title
+Lokalizacja: Tytuł powiadomienia Toast po wysłaniu zlecenia
+Typ elementu: Powiadomienie (Toast)
+ORYGINALNY TEKST:
+Zlecenie re-audytu wysłane
+
+PROSTY JĘZYK (PO REDAKCJI):
+Zlecenie weryfikacji zostało wysłane
+
+Wskazówka redakcyjna:
+Potwierdzenie przyjęcia zgłoszenia przez system.
+--------------------------------------------------------------------------------
+ID: reaudit_modal.toast_desc
+Lokalizacja: Treść powiadomienia Toast po wysłaniu zlecenia
+Typ elementu: Powiadomienie (Toast)
+ORYGINALNY TEKST:
+Zlecenie re-audytu dla "{title}" zostało przekazane do audytora Piotra Smułkowskiego. Potwierdzenie terminu w ciągu 2h.
+
+PROSTY JĘZYK (PO REDAKCJI):
+Zlecenie weryfikacji dla "{title}" trafiło do audytora Piotra Smułkowskiego. Potwierdzenie terminu otrzymasz w ciągu 2 godzin.
+
+Wskazówka redakcyjna:
+Rozwinięcie skrótu '2h' na '2 godzin'.
+
+================================================================================
+KONIEC PLIKU - ŁĄCZNIE 67 POZYCJI
+================================================================================

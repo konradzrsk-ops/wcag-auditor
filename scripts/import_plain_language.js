@@ -13,38 +13,31 @@ if (!fs.existsSync(localesDir)) {
 }
 
 /**
- * Narzędzie do importu zredagowanych fraz prostego języka.
- * Obsługuje pliki:
- *  1. exports/frazy_menu_pulpit_dane.json (priorytet)
- *  2. exports/frazy_menu_pulpit_tabela.csv
- *  3. exports/frazy_menu_pulpit_redakcja.txt
+ * Parsowanie pojedynczego pliku zredagowanych fraz (TXT, JSON lub CSV)
  */
-export function importPlainLanguage(customFilePath = null) {
-  let entries = [];
+function parseFile(filePath) {
+  const entries = [];
   let sourceFormat = "";
 
-  const jsonDefault = path.join(exportsDir, "frazy_menu_pulpit_dane.json");
-  const csvDefault = path.join(exportsDir, "frazy_menu_pulpit_tabela.csv");
-  const txtDefault = path.join(exportsDir, "frazy_menu_pulpit_redakcja.txt");
-
-  const targetFile = customFilePath || (fs.existsSync(jsonDefault) ? jsonDefault : null);
-
-  if (targetFile && targetFile.endsWith(".json") && fs.existsSync(targetFile)) {
+  if (filePath.endsWith(".json")) {
     sourceFormat = "JSON";
-    const raw = fs.readFileSync(targetFile, "utf-8");
+    const raw = fs.readFileSync(filePath, "utf-8");
     const parsed = JSON.parse(raw);
     const items = parsed.items || (Array.isArray(parsed) ? parsed : []);
-    entries = items.map((item) => ({
-      id: item.id,
-      text: item.plainLanguage || item.text || item.original,
-      original: item.original,
-      context: item.context,
-    }));
-  } else if (targetFile && targetFile.endsWith(".csv") && fs.existsSync(targetFile)) {
+    for (const item of items) {
+      if (item.id) {
+        entries.push({
+          id: item.id,
+          text: item.plainLanguage || item.text || item.original,
+          original: item.original,
+          context: item.context,
+        });
+      }
+    }
+  } else if (filePath.endsWith(".csv")) {
     sourceFormat = "CSV";
-    const raw = fs.readFileSync(targetFile, "utf-8").replace(/^\uFEFF/, "");
+    const raw = fs.readFileSync(filePath, "utf-8").replace(/^\uFEFF/, "");
     const lines = raw.split(/\r?\n/).filter(Boolean);
-    const header = lines[0].split(";");
     const idIdx = 0;
     const plainIdx = 5;
 
@@ -59,11 +52,11 @@ export function importPlainLanguage(customFilePath = null) {
         });
       }
     }
-  } else if (targetFile && targetFile.endsWith(".txt") && fs.existsSync(targetFile)) {
+  } else if (filePath.endsWith(".txt")) {
     sourceFormat = "TXT";
-    const raw = fs.readFileSync(targetFile, "utf-8");
+    const raw = fs.readFileSync(filePath, "utf-8");
     const blocks = raw.split(/--------------------------------------------------------------------------------/);
-    
+
     for (const block of blocks) {
       const idMatch = block.match(/ID:\s*([^\r\n]+)/);
       const plainMatch = block.match(/PROSTY JĘZYK \(PO REDAKCJI\):\r?\n([\s\S]*?)(?=\r?\n\r?\nWskazówka|$)/);
@@ -77,16 +70,58 @@ export function importPlainLanguage(customFilePath = null) {
         });
       }
     }
-  } else {
-    throw new Error(`Nie odnaleziono pliku źródłowego do importu. Oczekiwano .json, .csv lub .txt w katalogu exports/`);
   }
 
-  // Budowanie słownika klucz -> wartość
+  return { entries, sourceFormat };
+}
+
+/**
+ * Narzędzie do importu zredagowanych fraz prostego języka.
+ * Obsługuje:
+ *  - Pojedynczy plik .txt, .json lub .csv (np. exports/frazy_logowanie_redakcja.txt)
+ *  - Domyślnie: import i scalenie wszystkich plików z katalogu exports/
+ */
+export function importPlainLanguage(customFilePath = null) {
   const dictionary = {};
-  for (const entry of entries) {
-    if (entry.id) {
-      dictionary[entry.id] = entry.text;
+  let totalImported = 0;
+  const processedFiles = [];
+
+  if (customFilePath) {
+    const resolvedPath = path.resolve(customFilePath);
+    if (!fs.existsSync(resolvedPath)) {
+      throw new Error(`Plik nie istnieje: ${resolvedPath}`);
     }
+    const { entries, sourceFormat } = parseFile(resolvedPath);
+    for (const entry of entries) {
+      if (entry.id) {
+        dictionary[entry.id] = entry.text;
+      }
+    }
+    totalImported = entries.length;
+    processedFiles.push(`${path.basename(resolvedPath)} (${sourceFormat})`);
+  } else {
+    // Automatyczne scalenie wszystkich plików redakcyjnych z katalogu exports/
+    const targetTxtFiles = [
+      "frazy_pulpit_redakcja.txt",
+      "frazy_logowanie_redakcja.txt",
+      "frazy_audyty_redakcja.txt",
+      "frazy_menu_pulpit_redakcja.txt",
+    ];
+
+    for (const fileName of targetTxtFiles) {
+      const fullPath = path.join(exportsDir, fileName);
+      if (fs.existsSync(fullPath)) {
+        const { entries } = parseFile(fullPath);
+        for (const entry of entries) {
+          if (entry.id) {
+            dictionary[entry.id] = entry.text;
+          }
+        }
+        processedFiles.push(`${fileName} (${entries.length} fraz)`);
+      }
+    }
+
+    totalImported = Object.keys(dictionary).length;
   }
 
   // Zapis do src/locales/plainLanguage.json
@@ -95,25 +130,32 @@ export function importPlainLanguage(customFilePath = null) {
 
   // Zapis do modułu TypeScript src/locales/plainLanguage.ts dla wygody w kodzie
   const outTsPath = path.join(localesDir, "plainLanguage.ts");
-  const tsContent = `// Automatycznie wygenerowany słownik prostego języka
+  const tsContent = `// Automatycznie wygenerowany słownik prostego języka (W-ally)
 // Wygenerowano: ${new Date().toISOString()}
-// Źródło: ${sourceFormat} (${entries.length} fraz)
+// Przetworzone pliki: ${processedFiles.join(", ")}
+// Łączna liczba unikalnych fraz: ${Object.keys(dictionary).length}
 
 export const plainLanguageDictionary: Record<string, string> = ${JSON.stringify(dictionary, null, 2)};
 
+/**
+ * Funkcja pobierająca zredagowaną frazę prostego języka według unikalnego klucza ID.
+ * Jeśli klucz nie został podmieniony, zwraca oryginalny tekst (fallback).
+ */
 export function t(key: string, fallback?: string): string {
   return plainLanguageDictionary[key] || fallback || key;
 }
 `;
   fs.writeFileSync(outTsPath, tsContent, "utf-8");
 
-  console.log(`=======================================================`);
-  console.log(`SUKCES: Zaimportowano ${entries.length} fraz z formatu ${sourceFormat}!`);
-  console.log(`Zapisano słownik JSON: ${outJsonPath}`);
-  console.log(`Zapisano moduł TypeScript: ${outTsPath}`);
-  console.log(`=======================================================`);
+  console.log(`================================================================================`);
+  console.log(`SUKCES: Zaimportowano i zaktualizowano słownik prostego języka!`);
+  console.log(`  - Przetworzone źródła: ${processedFiles.join(", ")}`);
+  console.log(`  - Łączna liczba fraz w słowniku: ${Object.keys(dictionary).length}`);
+  console.log(`  - Zapisano JSON: ${outJsonPath}`);
+  console.log(`  - Zapisano TS:   ${outTsPath}`);
+  console.log(`================================================================================`);
 
-  return { total: entries.length, outJsonPath, outTsPath };
+  return { total: Object.keys(dictionary).length, outJsonPath, outTsPath };
 }
 
 // Obsługa uruchomienia z wiersza poleceń: node scripts/import_plain_language.js [ścieżka_do_pliku]

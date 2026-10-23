@@ -1,0 +1,235 @@
+{
+  "metadata": {
+    "title": "Frazy Strony Logowania",
+    "generatedAt": "2026-10-23T21:03:43.451Z",
+    "totalPhrases": 25,
+    "instructions": "Edytuj pole 'plainLanguage' dla każdej frazy. Nie zmieniaj wartości 'id'."
+  },
+  "items": [
+    {
+      "id": "login.brand.name",
+      "section": "Logowanie – Identyfikacja i Nagłówek",
+      "context": "Logo i nazwa systemu w lewym górnym rogu ekranu logowania",
+      "type": "Etykieta",
+      "original": "W-ally",
+      "plainLanguage": "W-ally",
+      "editorNotes": "Nazwa własna platformy audytowej WCAG. Pozostawić bez zmian."
+    },
+    {
+      "id": "login.header.title",
+      "section": "Logowanie – Identyfikacja i Nagłówek",
+      "context": "Główny nagłówek formularza (H1)",
+      "type": "Tytuł",
+      "original": "Witaj z powrotem",
+      "plainLanguage": "Zaloguj się do konta",
+      "editorNotes": "W prostym języku można użyć bezpośredniego zwrotu do czynności: 'Zaloguj się do konta' lub pozostawić przyjazne 'Witaj z powrotem'."
+    },
+    {
+      "id": "login.header.subtitle",
+      "section": "Logowanie – Identyfikacja i Nagłówek",
+      "context": "Tekst wprowadzający pod nagłówkiem H1",
+      "type": "Podtytuł",
+      "original": "Zaloguj się, aby zarządzać dostępnością cyfrową w swojej organizacji.",
+      "plainLanguage": "Wpisz swoje dane, aby zarządzać dostępnością cyfrową serwisów i aplikacji banku.",
+      "editorNotes": "Krótkie, jasne zdanie w trybie rozkazującym/czynnym wyjaśniające cel logowania."
+    },
+    {
+      "id": "login.form.email_label",
+      "section": "Logowanie – Formularz i Pola",
+      "context": "Etykieta pola e-mail",
+      "type": "Etykieta pola",
+      "original": "Adres e-mail",
+      "plainLanguage": "Adres e-mail",
+      "editorNotes": "Standardowe, powszechnie zrozumiałe określenie."
+    },
+    {
+      "id": "login.form.email_placeholder",
+      "section": "Logowanie – Formularz i Pola",
+      "context": "Tekst zastępczy (placeholder) w polu e-mail",
+      "type": "Tekst podpowiedzi",
+      "original": "jan.kowalski@firma.pl",
+      "plainLanguage": "twoj.email@twojabank.pl",
+      "editorNotes": "Przykładowy służbowy adres poczty elektronicznej."
+    },
+    {
+      "id": "login.form.password_label",
+      "section": "Logowanie – Formularz i Pola",
+      "context": "Etykieta pola hasła",
+      "type": "Etykieta pola",
+      "original": "Hasło",
+      "plainLanguage": "Hasło",
+      "editorNotes": "Jasne, jednoznaczne słowo."
+    },
+    {
+      "id": "login.form.password_placeholder",
+      "section": "Logowanie – Formularz i Pola",
+      "context": "Tekst zastępczy w polu hasła",
+      "type": "Tekst podpowiedzi",
+      "original": "••••••••••••",
+      "plainLanguage": "Wpisz hasło",
+      "editorNotes": "Kropki maskujące lub czytelna podpowiedź."
+    },
+    {
+      "id": "login.form.forgot_password",
+      "section": "Logowanie – Formularz i Pola",
+      "context": "Odnośnik resetu hasła obok etykiety pola",
+      "type": "Odnośnik",
+      "original": "Zapomniałeś hasła?",
+      "plainLanguage": "Nie pamiętasz hasła?",
+      "editorNotes": "Forma bezosobowa lub bezpośrednia 'Nie pamiętasz hasła?' zamiast zwrotu wyłącznie w rodzaju męskim."
+    },
+    {
+      "id": "login.form.show_password_aria",
+      "section": "Logowanie – Formularz i Pola",
+      "context": "Etykieta dostępności przycisku odsłonięcia hasła",
+      "type": "Dostępność (Aria)",
+      "original": "Pokaż hasło",
+      "plainLanguage": "Pokaż wpisane hasło",
+      "editorNotes": "Precyzyjna instrukcja dla czytników ekranu."
+    },
+    {
+      "id": "login.form.hide_password_aria",
+      "section": "Logowanie – Formularz i Pola",
+      "context": "Etykieta dostępności przycisku ukrycia hasła",
+      "type": "Dostępność (Aria)",
+      "original": "Ukryj hasło",
+      "plainLanguage": "Ukryj hasło",
+      "editorNotes": "Precyzyjna instrukcja dla czytników ekranu."
+    },
+    {
+      "id": "login.form.remember_me",
+      "section": "Logowanie – Formularz i Pola",
+      "context": "Etykieta pola wyboru (checkbox) trwałego logowania",
+      "type": "Pole wyboru",
+      "original": "Zapamiętaj mnie na tym urządzeniu",
+      "plainLanguage": "Zapamiętaj mnie na tym komputerze",
+      "editorNotes": "Jasny komunikat, że sesja zostanie zachowana."
+    },
+    {
+      "id": "login.form.submit_button",
+      "section": "Logowanie – Formularz i Pola",
+      "context": "Główny niebieski przycisk logowania",
+      "type": "Przycisk",
+      "original": "Zaloguj się do panelu",
+      "plainLanguage": "Zaloguj się",
+      "editorNotes": "Prostszy i krótszy zwrot 'Zaloguj się' jest bardziej naturalny niż 'Zaloguj się do panelu'."
+    },
+    {
+      "id": "login.security.notice",
+      "section": "Logowanie – Bezpieczeństwo i Noty Prawne",
+      "context": "Komunikat w szarej ramce pod formularzem logowania",
+      "type": "Komunikat informacyjny",
+      "original": "Dostęp do platformy wymaga konta służbowego utworzonego przez Twoją organizację. Wpisując dane potwierdzasz zgodność z Polityką Bezpieczeństwa.",
+      "plainLanguage": "Zalogujesz się tylko kontem służbowym swojej organizacji. Logując się, akceptujesz zasady Polityki Bezpieczeństwa.",
+      "editorNotes": "Eliminacja konstrukcji biernej ('wymaga konta utworzonego') na rzecz krótkich, czytelnych zdań."
+    },
+    {
+      "id": "login.security.policy_link",
+      "section": "Logowanie – Bezpieczeństwo i Noty Prawne",
+      "context": "Odnośnik do Polityki Bezpieczeństwa w notce",
+      "type": "Odnośnik",
+      "original": "Polityką Bezpieczeństwa",
+      "plainLanguage": "Polityka Bezpieczeństwa",
+      "editorNotes": "Tytuł powiązanego dokumentu regulaminowego."
+    },
+    {
+      "id": "login.footer.copyright",
+      "section": "Logowanie – Stopka",
+      "context": "Nota praw autorskich w stopce",
+      "type": "Nota prawna",
+      "original": "© 2026 Widzialni.eu",
+      "plainLanguage": "© 2026 Widzialni.eu",
+      "editorNotes": "Pozostawić bez zmian."
+    },
+    {
+      "id": "login.footer.help",
+      "section": "Logowanie – Stopka",
+      "context": "Odnośnik do pomocy w stopce logowania",
+      "type": "Odnośnik",
+      "original": "Pomoc",
+      "plainLanguage": "Pomoc i kontakt",
+      "editorNotes": "Można doprecyzować do 'Pomoc i kontakt'."
+    },
+    {
+      "id": "login.footer.privacy",
+      "section": "Logowanie – Stopka",
+      "context": "Odnośnik do Polityki Prywatności w stopce",
+      "type": "Odnośnik",
+      "original": "Polityka Prywatności",
+      "plainLanguage": "Polityka prywatności",
+      "editorNotes": "Zgodnie z zasadami polskiej ortografii małą literą drugi człon."
+    },
+    {
+      "id": "login.footer.report_problem",
+      "section": "Logowanie – Stopka",
+      "context": "Odnośnik zgłaszania problemów z logowaniem",
+      "type": "Odnośnik",
+      "original": "Zgłoś problem",
+      "plainLanguage": "Zgłoś problem z logowaniem",
+      "editorNotes": "Doprecyzowanie, czego dotyczy zgłoszenie."
+    },
+    {
+      "id": "login.promo.badge",
+      "section": "Logowanie – Panel Korzyści (Prawa strona)",
+      "context": "Niebieska pigułka z certyfikacją nad nagłówkiem",
+      "type": "Plakietka (Badge)",
+      "original": "Pełne wsparcie WCAG 2.2",
+      "plainLanguage": "Zgodne z normą WCAG 2.2",
+      "editorNotes": "Wskazuje aktualny poziom standardu dostępności."
+    },
+    {
+      "id": "login.promo.headline_line1",
+      "section": "Logowanie – Panel Korzyści (Prawa strona)",
+      "context": "Główny nagłówek panelu promocyjnego - linia 1",
+      "type": "Tytuł",
+      "original": "Nowy wymiar audytów",
+      "plainLanguage": "Nowoczesne zarządzanie audytami",
+      "editorNotes": "Marketingowe hasło; w prostym języku warto wskazać konkretną wartość: 'Nowoczesne audyty'."
+    },
+    {
+      "id": "login.promo.headline_line2",
+      "section": "Logowanie – Panel Korzyści (Prawa strona)",
+      "context": "Główny nagłówek panelu promocyjnego - linia 2 (gradient)",
+      "type": "Tytuł",
+      "original": "dostępności cyfrowej.",
+      "plainLanguage": "dostępności cyfrowej.",
+      "editorNotes": "Dokończenie głównego hasła."
+    },
+    {
+      "id": "login.promo.description",
+      "section": "Logowanie – Panel Korzyści (Prawa strona)",
+      "context": "Akapit opisowy pod nagłówkiem",
+      "type": "Opis",
+      "original": "Zarządzaj błędami WCAG, monitoruj SLA zespołów i generuj deklaracje PAD z jednego, scentralizowanego miejsca.",
+      "plainLanguage": "Sprawdzaj błędy dostępności, kontroluj terminy napraw i twórz deklaracje zgodności w jednym miejscu.",
+      "editorNotes": "Zastąpienie skrótowców 'SLA' i 'PAD' zrozumiałymi pojęciami ('terminy napraw', 'deklaracje zgodności')."
+    },
+    {
+      "id": "login.promo.testimonial_quote",
+      "section": "Logowanie – Panel Korzyści (Prawa strona)",
+      "context": "Cytat rekomendacji w dolnej karcie",
+      "type": "Cytat / Opinia",
+      "original": "\"Wdrożenie platformy W-ally pozwoliło nam skrócić czas naprawy błędów priorytetowych o 40% i uporządkować współpracę z dostawcami.\"",
+      "plainLanguage": "\"Dzięki platformie W-ally naprawiamy błędy krytyczne o 40% szybciej i sprawnie współpracujemy z programistami.\"",
+      "editorNotes": "Uproszczenie stylu, dynamiczne słowa ('naprawiamy błędy krytyczne szybciej')."
+    },
+    {
+      "id": "login.promo.testimonial_author",
+      "section": "Logowanie – Panel Korzyści (Prawa strona)",
+      "context": "Imię i nazwisko autora rekomendacji",
+      "type": "Podpis",
+      "original": "Anna Kowalczyk",
+      "plainLanguage": "Anna Kowalczyk",
+      "editorNotes": "Pozostawić bez zmian."
+    },
+    {
+      "id": "login.promo.testimonial_role",
+      "section": "Logowanie – Panel Korzyści (Prawa strona)",
+      "context": "Stanowisko i organizacja autora rekomendacji",
+      "type": "Podpis",
+      "original": "Accessibility Lead, Duży Bank SA",
+      "plainLanguage": "Liderka ds. dostępności cyfrowej, Bank",
+      "editorNotes": "Spolszczenie anglicyzmu 'Accessibility Lead' na 'Liderka ds. dostępności cyfrowej'."
+    }
+  ]
+}

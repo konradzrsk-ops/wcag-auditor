@@ -1,0 +1,613 @@
+{
+  "metadata": {
+    "title": "Frazy Modułu Audytów",
+    "generatedAt": "2026-10-23T21:03:43.454Z",
+    "totalPhrases": 67,
+    "instructions": "Edytuj pole 'plainLanguage' dla każdej frazy. Nie zmieniaj wartości 'id'."
+  },
+  "items": [
+    {
+      "id": "audits.list.header.title",
+      "section": "Audyty – Rejestr i Lista",
+      "context": "Główny nagłówek H1 modułu audytów",
+      "type": "Tytuł",
+      "original": "Audyty",
+      "plainLanguage": "Audyty dostępności",
+      "editorNotes": "Warto doprecyzować 'Audyty dostępności', aby kontekst był natychmiast oczywisty."
+    },
+    {
+      "id": "audits.list.header.subtitle",
+      "section": "Audyty – Rejestr i Lista",
+      "context": "Podtytuł informacyjny pod nagłówkiem",
+      "type": "Podtytuł",
+      "original": "Wykaz wszystkich badań dostępności cyfrowej przeprowadzonych dla serwisów i procesów organizacji.",
+      "plainLanguage": "Przeglądaj raporty z badań stron, aplikacji i dokumentów banku pod kątem normy WCAG.",
+      "editorNotes": "Prostszy język: unikanie 'Wykazu wszystkich badań przeprowadzonych...'."
+    },
+    {
+      "id": "audits.list.btn_order_audit",
+      "section": "Audyty – Rejestr i Lista",
+      "context": "Główny przycisk zlecenia nowego badania w nagłówku",
+      "type": "Przycisk",
+      "original": "Zleć nowy audyt",
+      "plainLanguage": "Zamów nowy audyt",
+      "editorNotes": "Synonim prostego języka: 'Zamów nowy audyt' lub 'Zleć badanie'."
+    },
+    {
+      "id": "audits.list.btn_export_all",
+      "section": "Audyty – Rejestr i Lista",
+      "context": "Przycisk eksportu rejestru badań do formatu Excel",
+      "type": "Przycisk",
+      "original": "Eksportuj do pliku Excel",
+      "plainLanguage": "Pobierz arkusz Excel (.xlsx)",
+      "editorNotes": "Jasne wskazanie pliku i formatu do pobrania."
+    },
+    {
+      "id": "audits.filter.search_placeholder",
+      "section": "Audyty – Filtry i Wyszukiwarka",
+      "context": "Tekst podpowiedzi w polu wyszukiwania audytów",
+      "type": "Pole tekstowe (Placeholder)",
+      "original": "Szukaj audytu po nazwie usługi, procesie lub audytorze...",
+      "plainLanguage": "Wpisz nazwę usługi, procesu lub nazwisko audytora...",
+      "editorNotes": "Instrukcja w trybie rozkazującym wskazująca, co można wpisać."
+    },
+    {
+      "id": "audits.filter.pinned_only",
+      "section": "Audyty – Filtry i Wyszukiwarka",
+      "context": "Przycisk filtra obserwowanych audytów (z ikoną pineski)",
+      "type": "Przycisk filtra",
+      "original": "Obserwowane",
+      "plainLanguage": "Tylko obserwowane",
+      "editorNotes": "Jasna informacja, że przycisk zawęża listę do badań oznaczonych pineską."
+    },
+    {
+      "id": "audits.filter.pinned_only_tooltip",
+      "section": "Audyty – Filtry i Wyszukiwarka",
+      "context": "Dymek przycisku filtra obserwowanych",
+      "type": "Dymek (Tooltip)",
+      "original": "Pokaż tylko przypięte / obserwowane audyty",
+      "plainLanguage": "Wyświetl wyłącznie audyty przypięte do obserwowanych",
+      "editorNotes": "Wyjaśnienie działania filtru."
+    },
+    {
+      "id": "audits.filter.channel_label",
+      "section": "Audyty – Filtry i Wyszukiwarka",
+      "context": "Przycisk rozwijanego menu wyboru kanałów",
+      "type": "Przycisk menu",
+      "original": "Kanał",
+      "plainLanguage": "Kanał dostępu",
+      "editorNotes": "Można doprecyzować do 'Kanał dostępu' (Desktop, iOS, Android, Dokument)."
+    },
+    {
+      "id": "audits.filter.status_label",
+      "section": "Audyty – Filtry i Wyszukiwarka",
+      "context": "Przycisk menu statusów audytu",
+      "type": "Przycisk menu",
+      "original": "Status",
+      "plainLanguage": "Status badania",
+      "editorNotes": "Wskazuje etap audytu (Zakończony, W trakcie, Nowy)."
+    },
+    {
+      "id": "audits.filter.auditor_label",
+      "section": "Audyty – Filtry i Wyszukiwarka",
+      "context": "Przycisk menu wyboru audytora prowadzącego",
+      "type": "Przycisk menu",
+      "original": "Audytor",
+      "plainLanguage": "Audytor prowadzący",
+      "editorNotes": "Pozwala filtrować badania wykonane przez konkretnego eksperta."
+    },
+    {
+      "id": "audits.filter.time_label",
+      "section": "Audyty – Filtry i Wyszukiwarka",
+      "context": "Przycisk menu wyboru przedziału czasowego",
+      "type": "Przycisk menu",
+      "original": "Czas",
+      "plainLanguage": "Okres badania",
+      "editorNotes": "Bardziej precyzyjne sformułowanie niż pojedyncze słowo 'Czas'."
+    },
+    {
+      "id": "audits.filter.clear_all",
+      "section": "Audyty – Filtry i Wyszukiwarka",
+      "context": "Przycisk wyczyszczenia aktywnych filtrów",
+      "type": "Przycisk akcji",
+      "original": "Wyczyść wszystkie filtry",
+      "plainLanguage": "Wyczyść filtry",
+      "editorNotes": "Krótki, standardowy zwrot resetujący widok do pełnej listy."
+    },
+    {
+      "id": "audits.view_mode.table",
+      "section": "Audyty – Lista i Tabela",
+      "context": "Przycisk przełączenia na widok tabeli",
+      "type": "Przełącznik widoku",
+      "original": "Tabela",
+      "plainLanguage": "Widok tabeli",
+      "editorNotes": "Zwięzłe określenie układu danych."
+    },
+    {
+      "id": "audits.view_mode.grid",
+      "section": "Audyty – Lista i Tabela",
+      "context": "Przycisk przełączenia na widok kafelkowy",
+      "type": "Przełącznik widoku",
+      "original": "Kafelki",
+      "plainLanguage": "Widok kafelków",
+      "editorNotes": "Zwięzłe określenie układu danych."
+    },
+    {
+      "id": "audits.counter.summary",
+      "section": "Audyty – Lista i Tabela",
+      "context": "Pasek informujący o liczbie znalezionych badań",
+      "type": "Licznik",
+      "original": "Wyniki: {count} z {total} audytów",
+      "plainLanguage": "Wyświetlanie: {count} z {total} audytów",
+      "editorNotes": "Prosty licznik wyników wyszukiwania."
+    },
+    {
+      "id": "audits.table.col_pin_aria",
+      "section": "Audyty – Lista i Tabela",
+      "context": "Etykieta przycisku pineski dla czytników ekranu",
+      "type": "Dostępność (Aria)",
+      "original": "Przypnij audyt do obserwowanych (ulubione)",
+      "plainLanguage": "Dodaj audyt do listy obserwowanych",
+      "editorNotes": "Jasna informacja o akcji przypięcia."
+    },
+    {
+      "id": "audits.table.col_unpin_aria",
+      "section": "Audyty – Lista i Tabela",
+      "context": "Etykieta odpięcia pineski",
+      "type": "Dostępność (Aria)",
+      "original": "Odepnij audyt z obserwowanych",
+      "plainLanguage": "Usuń audyt z listy obserwowanych",
+      "editorNotes": "Jasna informacja o wyłączeniu obserwowania."
+    },
+    {
+      "id": "audits.table.col_title",
+      "section": "Audyty – Lista i Tabela",
+      "context": "Nagłówek kolumny tytułu audytu",
+      "type": "Nagłówek kolumny",
+      "original": "Nazwa audytu i zakres",
+      "plainLanguage": "Badana usługa lub proces",
+      "editorNotes": "Wskazuje, jaki element banku był poddany weryfikacji."
+    },
+    {
+      "id": "audits.table.col_date",
+      "section": "Audyty – Lista i Tabela",
+      "context": "Nagłówek kolumny daty",
+      "type": "Nagłówek kolumny",
+      "original": "Data zakończenia",
+      "plainLanguage": "Data badania",
+      "editorNotes": "Wskazuje termin ukończenia weryfikacji."
+    },
+    {
+      "id": "audits.table.col_devices",
+      "section": "Audyty – Lista i Tabela",
+      "context": "Nagłówek kolumny urządzeń / kanałów",
+      "type": "Nagłówek kolumny",
+      "original": "Kanały i urządzenia",
+      "plainLanguage": "Kanał dostępu",
+      "editorNotes": "Wskazuje: Desktop, iOS, Android lub Dokument."
+    },
+    {
+      "id": "audits.table.col_auditor",
+      "section": "Audyty – Lista i Tabela",
+      "context": "Nagłówek kolumny audytora",
+      "type": "Nagłówek kolumny",
+      "original": "Audytor prowadzący",
+      "plainLanguage": "Audytor",
+      "editorNotes": "Imię i nazwisko certyfikowanego eksperta."
+    },
+    {
+      "id": "audits.table.col_priorities",
+      "section": "Audyty – Lista i Tabela",
+      "context": "Nagłówek kolumny triady priorytetów",
+      "type": "Nagłówek kolumny",
+      "original": "Priorytety błędów",
+      "plainLanguage": "Otwarte błędy (K / W / M)",
+      "editorNotes": "Podział na błędy Krytyczne, Ważne i Marginalne."
+    },
+    {
+      "id": "audits.table.col_score",
+      "section": "Audyty – Lista i Tabela",
+      "context": "Nagłówek kolumny wyniku punktowego",
+      "type": "Nagłówek kolumny",
+      "original": "Zgodność z WCAG",
+      "plainLanguage": "Wynik zgodności (%)",
+      "editorNotes": "Ocena procentowa spełnienia badanych kryteriów."
+    },
+    {
+      "id": "audits.table.action_details",
+      "section": "Audyty – Lista i Tabela",
+      "context": "Przycisk otwarcia szczegółów w wierszu tabeli",
+      "type": "Przycisk akcji",
+      "original": "Szczegóły",
+      "plainLanguage": "Otwórz raport",
+      "editorNotes": "Czasownikowe polecenie 'Otwórz raport' precyzyjniej określa dokąd trafi użytkownik."
+    },
+    {
+      "id": "audits.empty.title",
+      "section": "Audyty – Lista i Tabela",
+      "context": "Tytuł pustego stanu (brak wyników wyszukiwania)",
+      "type": "Pusty stan (Empty State)",
+      "original": "Brak audytów spełniających kryteria",
+      "plainLanguage": "Nie znaleźliśmy audytów o takich kryteriach",
+      "editorNotes": "Bezpośredni, przyjazny komunikat zamiast technicznego 'Brak audytów'."
+    },
+    {
+      "id": "audits.empty.description",
+      "section": "Audyty – Lista i Tabela",
+      "context": "Opis pustego stanu",
+      "type": "Pusty stan (Empty State)",
+      "original": "Żaden audyt nie pasuje do wpisanej frazy lub wybranych filtrów. Zresetuj filtry, aby wyświetlić pełny wykaz.",
+      "plainLanguage": "Zmień wpisaną frazę w wyszukiwarce lub wyczyść filtry, aby zobaczyć całą listę badań.",
+      "editorNotes": "Jasna wskazówka co zrobić, by odzyskać listę."
+    },
+    {
+      "id": "audit_summary.header.back",
+      "section": "Audyt – Podsumowanie Badania",
+      "context": "Przycisk powrotu w lewym górnym rogu",
+      "type": "Przycisk powrotu",
+      "original": "Wróć do listy audytów",
+      "plainLanguage": "Wróć do listy audytów",
+      "editorNotes": "Bezpieczna nawigacja powrotna."
+    },
+    {
+      "id": "audit_summary.header.badge_wcag",
+      "section": "Audyt – Podsumowanie Badania",
+      "context": "Plakietka poziomu normy pod tytułem",
+      "type": "Plakietka (Badge)",
+      "original": "WCAG 2.1 Poziom AA",
+      "plainLanguage": "Standard WCAG 2.1 AA",
+      "editorNotes": "Oficjalny poziom badanej normy."
+    },
+    {
+      "id": "audit_summary.header.btn_pin",
+      "section": "Audyt – Podsumowanie Badania",
+      "context": "Przycisk przypięcia audytu w nagłówku szczegółów",
+      "type": "Przycisk akcji",
+      "original": "Przypnij audyt",
+      "plainLanguage": "Dodaj do obserwowanych",
+      "editorNotes": "Wyjaśnienie, że audyt trafi do obserwowanych."
+    },
+    {
+      "id": "audit_summary.header.btn_pinned_active",
+      "section": "Audyt – Podsumowanie Badania",
+      "context": "Stan aktywny przycisku przypięcia",
+      "type": "Przycisk akcji",
+      "original": "Obserwowany",
+      "plainLanguage": "Obserwujesz ten audyt",
+      "editorNotes": "Potwierdzenie, że badanie jest na liście obserwowanych."
+    },
+    {
+      "id": "audit_summary.header.btn_reaudit",
+      "section": "Audyt – Podsumowanie Badania",
+      "context": "Główny niebieski przycisk w nagłówku szczegółów",
+      "type": "Przycisk akcji",
+      "original": "Zleć re-audyt",
+      "plainLanguage": "Zleć weryfikację poprawek",
+      "editorNotes": "W prostym języku pojęcie 're-audyt' warto objaśnić jako 'weryfikację wprowadzonych poprawek'."
+    },
+    {
+      "id": "audit_summary.header.btn_pdf",
+      "section": "Audyt – Podsumowanie Badania",
+      "context": "Przycisk pobrania raportu PDF",
+      "type": "Przycisk akcji",
+      "original": "Pobierz raport (.pdf)",
+      "plainLanguage": "Pobierz raport PDF",
+      "editorNotes": "Pobranie oficjalnego raportu audytowego."
+    },
+    {
+      "id": "audit_summary.header.btn_xlsx",
+      "section": "Audyt – Podsumowanie Badania",
+      "context": "Przycisk eksportu arkusza Excel",
+      "type": "Przycisk akcji",
+      "original": "Eksport (.xlsx)",
+      "plainLanguage": "Pobierz arkusz Excel (.xlsx)",
+      "editorNotes": "Pobranie szczegółowych metryk z kryteriami sukcesu."
+    },
+    {
+      "id": "audit_summary.kpi.overall_score",
+      "section": "Audyt – Podsumowanie Badania",
+      "context": "Tytuł 1. karty metryki (wynik ogólny)",
+      "type": "Etykieta wskaźnika",
+      "original": "Wynik ogólny",
+      "plainLanguage": "Ogólna dostępność",
+      "editorNotes": "Średni wskaźnik spełnienia kryteriów w tym audycie."
+    },
+    {
+      "id": "audit_summary.kpi.critical_errors",
+      "section": "Audyt – Podsumowanie Badania",
+      "context": "Tytuł 2. karty metryki (błędy priorytetowe)",
+      "type": "Etykieta wskaźnika",
+      "original": "Priorytetowe",
+      "plainLanguage": "Błędy krytyczne (blokujące)",
+      "editorNotes": "Bariery całkowicie uniemożliwiające załatwienie sprawy przez klienta z niepełnosprawnością."
+    },
+    {
+      "id": "audit_summary.kpi.important_errors",
+      "section": "Audyt – Podsumowanie Badania",
+      "context": "Tytuł 3. karty metryki (błędy ważne)",
+      "type": "Etykieta wskaźnika",
+      "original": "Ważne",
+      "plainLanguage": "Błędy ważne (utrudniające)",
+      "editorNotes": "Bariery powodujące znaczne trudności, ale możliwe do obejścia."
+    },
+    {
+      "id": "audit_summary.kpi.marginal_errors",
+      "section": "Audyt – Podsumowanie Badania",
+      "context": "Tytuł 4. karty metryki (błędy marginalne)",
+      "type": "Etykieta wskaźnika",
+      "original": "Marginalne",
+      "plainLanguage": "Drobne niedociągnięcia",
+      "editorNotes": "Drobne błędy semantyczne lub estetyczne o małym wpływie na użytkownika."
+    },
+    {
+      "id": "audit_summary.views.title",
+      "section": "Audyt – Podsumowanie Badania",
+      "context": "Nagłówek sekcji zbadanych ekranów i podstron",
+      "type": "Tytuł sekcji",
+      "original": "Zbadane elementy / podstrony",
+      "plainLanguage": "Zbadane ekrany i widoki",
+      "editorNotes": "Zamiast technicznego 'elementy' naturalny zwrot 'ekrany i widoki'."
+    },
+    {
+      "id": "audit_summary.views.subtitle",
+      "section": "Audyt – Podsumowanie Badania",
+      "context": "Podtytuł sekcji zbadanych widoków",
+      "type": "Podtytuł sekcji",
+      "original": "Kliknij wybrany element, aby przejść do szczegółowej listy błędów, zrzutów ekranu i zaleceń audytora.",
+      "plainLanguage": "Wybierz podstronę, aby zobaczyć zdiagnozowane usterki, zrzuty ekranu i instrukcje naprawy.",
+      "editorNotes": "Zachęta do przejścia do konkretnego ekranu."
+    },
+    {
+      "id": "audit_summary.views.btn_view_errors",
+      "section": "Audyt – Podsumowanie Badania",
+      "context": "Przycisk otwarcia błędów na kafelku podstrony",
+      "type": "Przycisk akcji",
+      "original": "Przejdź do błędów",
+      "plainLanguage": "Zobacz błędy",
+      "editorNotes": "Krótkie polecenie otwierające edytor usterek."
+    },
+    {
+      "id": "audit_errors.header.back",
+      "section": "Audyt – Rejestr Błędów Podstrony",
+      "context": "Przycisk powrotu do podsumowania audytu",
+      "type": "Przycisk powrotu",
+      "original": "Wróć do podsumowania",
+      "plainLanguage": "Wróć do podsumowania audytu",
+      "editorNotes": "Precyzyjny odsyłacz powrotny."
+    },
+    {
+      "id": "audit_errors.header.title",
+      "section": "Audyt – Rejestr Błędów Podstrony",
+      "context": "Nagłówek widoku błędów konkretnego ekranu",
+      "type": "Tytuł",
+      "original": "Błędy na podstronie",
+      "plainLanguage": "Wykaz błędów na tym ekranie",
+      "editorNotes": "Wskazuje usterki wykryte na badanej podstronie."
+    },
+    {
+      "id": "audit_errors.filter.prio_critical",
+      "section": "Audyt – Rejestr Błędów Podstrony",
+      "context": "Przycisk filtra błędów priorytetowych",
+      "type": "Przycisk filtra",
+      "original": "Priorytetowe",
+      "plainLanguage": "Priorytetowe (blokady)",
+      "editorNotes": "Wyodrębnia naruszenia krytyczne."
+    },
+    {
+      "id": "audit_errors.filter.prio_important",
+      "section": "Audyt – Rejestr Błędów Podstrony",
+      "context": "Przycisk filtra błędów ważnych",
+      "type": "Przycisk filtra",
+      "original": "Ważne",
+      "plainLanguage": "Ważne",
+      "editorNotes": "Wyodrębnia naruszenia stopnia drugiego."
+    },
+    {
+      "id": "audit_errors.filter.prio_marginal",
+      "section": "Audyt – Rejestr Błędów Podstrony",
+      "context": "Przycisk filtra błędów marginalnych",
+      "type": "Przycisk filtra",
+      "original": "Marginalne",
+      "plainLanguage": "Marginalne (drobne)",
+      "editorNotes": "Wyodrębnia drobne usterki."
+    },
+    {
+      "id": "audit_errors.filter.search_placeholder",
+      "section": "Audyt – Rejestr Błędów Podstrony",
+      "context": "Pole wyszukiwania błędu lub numeru kryterium",
+      "type": "Pole tekstowe (Placeholder)",
+      "original": "Szukaj błędu, kryterium (np. 1.1.1) lub słowa kluczowego...",
+      "plainLanguage": "Szukaj błędu, numeru kryterium (np. 1.4.3) lub słowa...",
+      "editorNotes": "Ułatwia wyszukiwanie konkretnej wytycznej WCAG."
+    },
+    {
+      "id": "audit_errors.item.section_desc",
+      "section": "Audyt – Rejestr Błędów Podstrony",
+      "context": "Etykieta sekcji opisu usterki w akordeonie",
+      "type": "Etykieta sekcji",
+      "original": "Opis problemu:",
+      "plainLanguage": "Na czym polega błąd:",
+      "editorNotes": "Przystępne wyjaśnienie istoty bariery."
+    },
+    {
+      "id": "audit_errors.item.section_impact",
+      "section": "Audyt – Rejestr Błędów Podstrony",
+      "context": "Etykieta wpływu błędu na użytkowników z niepełnosprawnością",
+      "type": "Etykieta sekcji",
+      "original": "Wpływ na użytkownika:",
+      "plainLanguage": "Jak błąd utrudnia korzystanie klientowi:",
+      "editorNotes": "Empatyczne wyjaśnienie perspektywy użytkownika czytnika ekranu lub klawiatury."
+    },
+    {
+      "id": "audit_errors.item.section_recommendation",
+      "section": "Audyt – Rejestr Błędów Podstrony",
+      "context": "Etykieta zaleceń naprawczych audytora",
+      "type": "Etykieta sekcji",
+      "original": "Rekomendacja audytora:",
+      "plainLanguage": "Jak naprawić ten błąd:",
+      "editorNotes": "Konkretna, techniczna instrukcja dla programistów."
+    },
+    {
+      "id": "audit_errors.item.jira_label",
+      "section": "Audyt – Rejestr Błędów Podstrony",
+      "context": "Etykieta pola integracji z Jira",
+      "type": "Etykieta pola",
+      "original": "Zadanie w Jira:",
+      "plainLanguage": "Numer zadania w Jira (np. ACC-104):",
+      "editorNotes": "Wskazuje pole do powiązania ze sprintem IT."
+    },
+    {
+      "id": "audit_errors.item.btn_consult",
+      "section": "Audyt – Rejestr Błędów Podstrony",
+      "context": "Przycisk konsultacji z audytorem na kafelku błędu",
+      "type": "Przycisk akcji",
+      "original": "Konsultuj z audytorem",
+      "plainLanguage": "Zapytaj audytora o ten błąd",
+      "editorNotes": "Uruchamia wątek konsultacji automatycznie powiązany z danym błędem."
+    },
+    {
+      "id": "audit_errors.item.screenshot_label",
+      "section": "Audyt – Rejestr Błędów Podstrony",
+      "context": "Podpis pod miniaturą zrzutu ekranu",
+      "type": "Podpis obrazu",
+      "original": "Kliknij, aby powiększyć zrzut ekranu (dowód)",
+      "plainLanguage": "Kliknij miniaturę, aby powiększyć zrzut ekranu",
+      "editorNotes": "Informuje o podglądzie Lightbox w pełnej rozdzielczości."
+    },
+    {
+      "id": "reaudit_modal.title",
+      "section": "Audyt – Zlecenie Weryfikacji (Modal Re-audytu)",
+      "context": "Tytuł okna modalnego zlecenia re-audytu",
+      "type": "Tytuł modalu",
+      "original": "Zleć re-audyt powdrożeniowy",
+      "plainLanguage": "Zleć weryfikację wprowadzonych poprawek",
+      "editorNotes": "W prostym języku warto zastąpić techniczne 're-audyt' jasnym pojęciem 'weryfikacji poprawek'."
+    },
+    {
+      "id": "reaudit_modal.target_label",
+      "section": "Audyt – Zlecenie Weryfikacji (Modal Re-audytu)",
+      "context": "Pole informujące o weryfikowanej usłudze",
+      "type": "Etykieta pola",
+      "original": "Badany proces / audyt:",
+      "plainLanguage": "Weryfikowana usługa lub proces:",
+      "editorNotes": "Wskazuje zakres weryfikacji powdrożeniowej."
+    },
+    {
+      "id": "reaudit_modal.auditor_label",
+      "section": "Audyt – Zlecenie Weryfikacji (Modal Re-audytu)",
+      "context": "Pole przypisanego eksperta",
+      "type": "Etykieta pola",
+      "original": "Dedykowany audytor:",
+      "plainLanguage": "Audytor prowadzący badanie:",
+      "editorNotes": "Nazwisko eksperta odpowiedzialnego za weryfikację."
+    },
+    {
+      "id": "reaudit_modal.speed_label",
+      "section": "Audyt – Zlecenie Weryfikacji (Modal Re-audytu)",
+      "context": "Wybór oczekiwanego terminu realizacji",
+      "type": "Etykieta grupy opcji",
+      "original": "Oczekiwany czas realizacji weryfikacji:",
+      "plainLanguage": "Kiedy potrzebujesz wyników weryfikacji:",
+      "editorNotes": "Proste pytanie do zamawiającego."
+    },
+    {
+      "id": "reaudit_modal.speed_standard",
+      "section": "Audyt – Zlecenie Weryfikacji (Modal Re-audytu)",
+      "context": "Opcja 1: tryb standardowy",
+      "type": "Opcja wyboru",
+      "original": "Standard (do 5 dni roboczych) - w ramach pakietu",
+      "plainLanguage": "Standardowy (do 5 dni roboczych) – w cenie pakietu",
+      "editorNotes": "Standardowy czas audytu weryfikacyjnego."
+    },
+    {
+      "id": "reaudit_modal.speed_express",
+      "section": "Audyt – Zlecenie Weryfikacji (Modal Re-audytu)",
+      "context": "Opcja 2: tryb ekspresowy",
+      "type": "Opcja wyboru",
+      "original": "Ekspres (do 48h) - pilne wydanie produkcyjne",
+      "plainLanguage": "Ekspresowy (do 48 godzin) – pilne wdrożenie",
+      "editorNotes": "Tryb przyspieszony dla zespołów sprintowych."
+    },
+    {
+      "id": "reaudit_modal.staging_url_label",
+      "section": "Audyt – Zlecenie Weryfikacji (Modal Re-audytu)",
+      "context": "Etykieta pola adresu środowiska testowego",
+      "type": "Etykieta pola",
+      "original": "Adres środowiska testowego / staging (opcjonalnie):",
+      "plainLanguage": "Adres strony testowej lub wersji staging (opcjonalnie):",
+      "editorNotes": "Wskazuje programistom, gdzie audytor ma sprawdzić poprawki."
+    },
+    {
+      "id": "reaudit_modal.comment_label",
+      "section": "Audyt – Zlecenie Weryfikacji (Modal Re-audytu)",
+      "context": "Etykieta pola dodatkowego komentarza",
+      "type": "Etykieta pola",
+      "original": "Dodatkowy komentarz lub zakres weryfikacji:",
+      "plainLanguage": "Dodatkowe uwagi dla audytora:",
+      "editorNotes": "Miejsce na uwagi, numery zadań w Jira lub branch GIT."
+    },
+    {
+      "id": "reaudit_modal.comment_placeholder",
+      "section": "Audyt – Zlecenie Weryfikacji (Modal Re-audytu)",
+      "context": "Tekst podpowiedzi w polu komentarza",
+      "type": "Tekst podpowiedzi",
+      "original": "Wpisz dodatkowe uwagi, zakres wprowadzonych zmian, branch w repozytorium lub dane logowania testowego...",
+      "plainLanguage": "Opisz krótko wprowadzone poprawki, podaj nazwę gałęzi w GIT lub dane konta testowego...",
+      "editorNotes": "Praktyczne przykłady tego, co warto przekazać audytorowi."
+    },
+    {
+      "id": "reaudit_modal.notify_team_checkbox",
+      "section": "Audyt – Zlecenie Weryfikacji (Modal Re-audytu)",
+      "context": "Pole wyboru powiadomienia zespołu deweloperskiego",
+      "type": "Pole wyboru",
+      "original": "Powiadom zespół deweloperski o zleceniu re-audytu (e-mail + powiadomienie w systemie)",
+      "plainLanguage": "Wyślij powiadomienie do zespołu programistów o zleceniu weryfikacji",
+      "editorNotes": "Zapewnia transparentność wdrożenia w organizacji."
+    },
+    {
+      "id": "reaudit_modal.consultation_checkbox",
+      "section": "Audyt – Zlecenie Weryfikacji (Modal Re-audytu)",
+      "context": "Pole wyboru krótkiego omówienia wyników",
+      "type": "Pole wyboru",
+      "original": "Poproś o krótkie 15-minutowe omówienie wyników z audytorem po weryfikacji",
+      "plainLanguage": "Poproś o 15-minutowe spotkanie online z audytorem po zakończeniu weryfikacji",
+      "editorNotes": "Opcjonalna odprawa poaudytowa."
+    },
+    {
+      "id": "reaudit_modal.btn_cancel",
+      "section": "Audyt – Zlecenie Weryfikacji (Modal Re-audytu)",
+      "context": "Przycisk anulowania zlecenia w modalu",
+      "type": "Przycisk",
+      "original": "Anuluj",
+      "plainLanguage": "Anuluj",
+      "editorNotes": "Zamknięcie okna bez wysyłania zlecenia."
+    },
+    {
+      "id": "reaudit_modal.btn_submit",
+      "section": "Audyt – Zlecenie Weryfikacji (Modal Re-audytu)",
+      "context": "Przycisk potwierdzenia zlecenia re-audytu",
+      "type": "Przycisk",
+      "original": "Wyślij zlecenie re-audytu",
+      "plainLanguage": "Zleć weryfikację poprawek",
+      "editorNotes": "Jasne potwierdzenie wysłania zlecenia do zespołu audytorów."
+    },
+    {
+      "id": "reaudit_modal.toast_title",
+      "section": "Audyt – Zlecenie Weryfikacji (Modal Re-audytu)",
+      "context": "Tytuł powiadomienia Toast po wysłaniu zlecenia",
+      "type": "Powiadomienie (Toast)",
+      "original": "Zlecenie re-audytu wysłane",
+      "plainLanguage": "Zlecenie weryfikacji zostało wysłane",
+      "editorNotes": "Potwierdzenie przyjęcia zgłoszenia przez system."
+    },
+    {
+      "id": "reaudit_modal.toast_desc",
+      "section": "Audyt – Zlecenie Weryfikacji (Modal Re-audytu)",
+      "context": "Treść powiadomienia Toast po wysłaniu zlecenia",
+      "type": "Powiadomienie (Toast)",
+      "original": "Zlecenie re-audytu dla \"{title}\" zostało przekazane do audytora Piotra Smułkowskiego. Potwierdzenie terminu w ciągu 2h.",
+      "plainLanguage": "Zlecenie weryfikacji dla \"{title}\" trafiło do audytora Piotra Smułkowskiego. Potwierdzenie terminu otrzymasz w ciągu 2 godzin.",
+      "editorNotes": "Rozwinięcie skrótu '2h' na '2 godzin'."
+    }
+  ]
+}

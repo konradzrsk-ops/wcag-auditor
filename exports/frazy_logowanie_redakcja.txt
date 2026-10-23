@@ -1,0 +1,343 @@
+================================================================================
+              W-ALLY: FRAZY STRONY LOGOWANIA (DO REDAKCJI PROSTEGO JĘZYKA)        
+================================================================================
+Data wygenerowania: 23.10.2026, 23:03:43
+Łączna liczba fraz: 25
+
+INSTRUKCJA DLA REDAKTORA PROSTEGO JĘZYKA:
+1. Każda fraza posiada swój unikalny identyfikator [ID], kontekst występowania oraz [TYP].
+2. Pole [ORYGINALNY TEKST] zawiera obecne brzmienie w aplikacji.
+3. Wpisz swoją zredagowaną propozycję w linii [PROSTY JĘZYK: ...].
+4. Nie zmieniaj identyfikatorów [ID], aby plik mógł zostać automatycznie zaimportowany do kodu!
+5. Zasady prostego języka: krótkie zdania, strona czynna, brak żargonu, zrozumiałe skróty.
+================================================================================
+
+
+################################################################################
+### SEKCJA: LOGOWANIE – IDENTYFIKACJA I NAGŁÓWEK
+################################################################################
+
+--------------------------------------------------------------------------------
+ID: login.brand.name
+Lokalizacja: Logo i nazwa systemu w lewym górnym rogu ekranu logowania
+Typ elementu: Etykieta
+ORYGINALNY TEKST:
+W-ally
+
+PROSTY JĘZYK (PO REDAKCJI):
+W-ally
+
+Wskazówka redakcyjna:
+Nazwa własna platformy audytowej WCAG. Pozostawić bez zmian.
+--------------------------------------------------------------------------------
+ID: login.header.title
+Lokalizacja: Główny nagłówek formularza (H1)
+Typ elementu: Tytuł
+ORYGINALNY TEKST:
+Witaj z powrotem
+
+PROSTY JĘZYK (PO REDAKCJI):
+Zaloguj się do konta
+
+Wskazówka redakcyjna:
+W prostym języku można użyć bezpośredniego zwrotu do czynności: 'Zaloguj się do konta' lub pozostawić przyjazne 'Witaj z powrotem'.
+--------------------------------------------------------------------------------
+ID: login.header.subtitle
+Lokalizacja: Tekst wprowadzający pod nagłówkiem H1
+Typ elementu: Podtytuł
+ORYGINALNY TEKST:
+Zaloguj się, aby zarządzać dostępnością cyfrową w swojej organizacji.
+
+PROSTY JĘZYK (PO REDAKCJI):
+Wpisz swoje dane, aby zarządzać dostępnością cyfrową serwisów i aplikacji banku.
+
+Wskazówka redakcyjna:
+Krótkie, jasne zdanie w trybie rozkazującym/czynnym wyjaśniające cel logowania.
+
+################################################################################
+### SEKCJA: LOGOWANIE – FORMULARZ I POLA
+################################################################################
+
+--------------------------------------------------------------------------------
+ID: login.form.email_label
+Lokalizacja: Etykieta pola e-mail
+Typ elementu: Etykieta pola
+ORYGINALNY TEKST:
+Adres e-mail
+
+PROSTY JĘZYK (PO REDAKCJI):
+Adres e-mail
+
+Wskazówka redakcyjna:
+Standardowe, powszechnie zrozumiałe określenie.
+--------------------------------------------------------------------------------
+ID: login.form.email_placeholder
+Lokalizacja: Tekst zastępczy (placeholder) w polu e-mail
+Typ elementu: Tekst podpowiedzi
+ORYGINALNY TEKST:
+jan.kowalski@firma.pl
+
+PROSTY JĘZYK (PO REDAKCJI):
+twoj.email@twojabank.pl
+
+Wskazówka redakcyjna:
+Przykładowy służbowy adres poczty elektronicznej.
+--------------------------------------------------------------------------------
+ID: login.form.password_label
+Lokalizacja: Etykieta pola hasła
+Typ elementu: Etykieta pola
+ORYGINALNY TEKST:
+Hasło
+
+PROSTY JĘZYK (PO REDAKCJI):
+Hasło
+
+Wskazówka redakcyjna:
+Jasne, jednoznaczne słowo.
+--------------------------------------------------------------------------------
+ID: login.form.password_placeholder
+Lokalizacja: Tekst zastępczy w polu hasła
+Typ elementu: Tekst podpowiedzi
+ORYGINALNY TEKST:
+••••••••••••
+
+PROSTY JĘZYK (PO REDAKCJI):
+Wpisz hasło
+
+Wskazówka redakcyjna:
+Kropki maskujące lub czytelna podpowiedź.
+--------------------------------------------------------------------------------
+ID: login.form.forgot_password
+Lokalizacja: Odnośnik resetu hasła obok etykiety pola
+Typ elementu: Odnośnik
+ORYGINALNY TEKST:
+Zapomniałeś hasła?
+
+PROSTY JĘZYK (PO REDAKCJI):
+Nie pamiętasz hasła?
+
+Wskazówka redakcyjna:
+Forma bezosobowa lub bezpośrednia 'Nie pamiętasz hasła?' zamiast zwrotu wyłącznie w rodzaju męskim.
+--------------------------------------------------------------------------------
+ID: login.form.show_password_aria
+Lokalizacja: Etykieta dostępności przycisku odsłonięcia hasła
+Typ elementu: Dostępność (Aria)
+ORYGINALNY TEKST:
+Pokaż hasło
+
+PROSTY JĘZYK (PO REDAKCJI):
+Pokaż wpisane hasło
+
+Wskazówka redakcyjna:
+Precyzyjna instrukcja dla czytników ekranu.
+--------------------------------------------------------------------------------
+ID: login.form.hide_password_aria
+Lokalizacja: Etykieta dostępności przycisku ukrycia hasła
+Typ elementu: Dostępność (Aria)
+ORYGINALNY TEKST:
+Ukryj hasło
+
+PROSTY JĘZYK (PO REDAKCJI):
+Ukryj hasło
+
+Wskazówka redakcyjna:
+Precyzyjna instrukcja dla czytników ekranu.
+--------------------------------------------------------------------------------
+ID: login.form.remember_me
+Lokalizacja: Etykieta pola wyboru (checkbox) trwałego logowania
+Typ elementu: Pole wyboru
+ORYGINALNY TEKST:
+Zapamiętaj mnie na tym urządzeniu
+
+PROSTY JĘZYK (PO REDAKCJI):
+Zapamiętaj mnie na tym komputerze
+
+Wskazówka redakcyjna:
+Jasny komunikat, że sesja zostanie zachowana.
+--------------------------------------------------------------------------------
+ID: login.form.submit_button
+Lokalizacja: Główny niebieski przycisk logowania
+Typ elementu: Przycisk
+ORYGINALNY TEKST:
+Zaloguj się do panelu
+
+PROSTY JĘZYK (PO REDAKCJI):
+Zaloguj się
+
+Wskazówka redakcyjna:
+Prostszy i krótszy zwrot 'Zaloguj się' jest bardziej naturalny niż 'Zaloguj się do panelu'.
+
+################################################################################
+### SEKCJA: LOGOWANIE – BEZPIECZEŃSTWO I NOTY PRAWNE
+################################################################################
+
+--------------------------------------------------------------------------------
+ID: login.security.notice
+Lokalizacja: Komunikat w szarej ramce pod formularzem logowania
+Typ elementu: Komunikat informacyjny
+ORYGINALNY TEKST:
+Dostęp do platformy wymaga konta służbowego utworzonego przez Twoją organizację. Wpisując dane potwierdzasz zgodność z Polityką Bezpieczeństwa.
+
+PROSTY JĘZYK (PO REDAKCJI):
+Zalogujesz się tylko kontem służbowym swojej organizacji. Logując się, akceptujesz zasady Polityki Bezpieczeństwa.
+
+Wskazówka redakcyjna:
+Eliminacja konstrukcji biernej ('wymaga konta utworzonego') na rzecz krótkich, czytelnych zdań.
+--------------------------------------------------------------------------------
+ID: login.security.policy_link
+Lokalizacja: Odnośnik do Polityki Bezpieczeństwa w notce
+Typ elementu: Odnośnik
+ORYGINALNY TEKST:
+Polityką Bezpieczeństwa
+
+PROSTY JĘZYK (PO REDAKCJI):
+Polityka Bezpieczeństwa
+
+Wskazówka redakcyjna:
+Tytuł powiązanego dokumentu regulaminowego.
+
+################################################################################
+### SEKCJA: LOGOWANIE – STOPKA
+################################################################################
+
+--------------------------------------------------------------------------------
+ID: login.footer.copyright
+Lokalizacja: Nota praw autorskich w stopce
+Typ elementu: Nota prawna
+ORYGINALNY TEKST:
+© 2026 Widzialni.eu
+
+PROSTY JĘZYK (PO REDAKCJI):
+© 2026 Widzialni.eu
+
+Wskazówka redakcyjna:
+Pozostawić bez zmian.
+--------------------------------------------------------------------------------
+ID: login.footer.help
+Lokalizacja: Odnośnik do pomocy w stopce logowania
+Typ elementu: Odnośnik
+ORYGINALNY TEKST:
+Pomoc
+
+PROSTY JĘZYK (PO REDAKCJI):
+Pomoc i kontakt
+
+Wskazówka redakcyjna:
+Można doprecyzować do 'Pomoc i kontakt'.
+--------------------------------------------------------------------------------
+ID: login.footer.privacy
+Lokalizacja: Odnośnik do Polityki Prywatności w stopce
+Typ elementu: Odnośnik
+ORYGINALNY TEKST:
+Polityka Prywatności
+
+PROSTY JĘZYK (PO REDAKCJI):
+Polityka prywatności
+
+Wskazówka redakcyjna:
+Zgodnie z zasadami polskiej ortografii małą literą drugi człon.
+--------------------------------------------------------------------------------
+ID: login.footer.report_problem
+Lokalizacja: Odnośnik zgłaszania problemów z logowaniem
+Typ elementu: Odnośnik
+ORYGINALNY TEKST:
+Zgłoś problem
+
+PROSTY JĘZYK (PO REDAKCJI):
+Zgłoś problem z logowaniem
+
+Wskazówka redakcyjna:
+Doprecyzowanie, czego dotyczy zgłoszenie.
+
+################################################################################
+### SEKCJA: LOGOWANIE – PANEL KORZYŚCI (PRAWA STRONA)
+################################################################################
+
+--------------------------------------------------------------------------------
+ID: login.promo.badge
+Lokalizacja: Niebieska pigułka z certyfikacją nad nagłówkiem
+Typ elementu: Plakietka (Badge)
+ORYGINALNY TEKST:
+Pełne wsparcie WCAG 2.2
+
+PROSTY JĘZYK (PO REDAKCJI):
+Zgodne z normą WCAG 2.2
+
+Wskazówka redakcyjna:
+Wskazuje aktualny poziom standardu dostępności.
+--------------------------------------------------------------------------------
+ID: login.promo.headline_line1
+Lokalizacja: Główny nagłówek panelu promocyjnego - linia 1
+Typ elementu: Tytuł
+ORYGINALNY TEKST:
+Nowy wymiar audytów
+
+PROSTY JĘZYK (PO REDAKCJI):
+Nowoczesne zarządzanie audytami
+
+Wskazówka redakcyjna:
+Marketingowe hasło; w prostym języku warto wskazać konkretną wartość: 'Nowoczesne audyty'.
+--------------------------------------------------------------------------------
+ID: login.promo.headline_line2
+Lokalizacja: Główny nagłówek panelu promocyjnego - linia 2 (gradient)
+Typ elementu: Tytuł
+ORYGINALNY TEKST:
+dostępności cyfrowej.
+
+PROSTY JĘZYK (PO REDAKCJI):
+dostępności cyfrowej.
+
+Wskazówka redakcyjna:
+Dokończenie głównego hasła.
+--------------------------------------------------------------------------------
+ID: login.promo.description
+Lokalizacja: Akapit opisowy pod nagłówkiem
+Typ elementu: Opis
+ORYGINALNY TEKST:
+Zarządzaj błędami WCAG, monitoruj SLA zespołów i generuj deklaracje PAD z jednego, scentralizowanego miejsca.
+
+PROSTY JĘZYK (PO REDAKCJI):
+Sprawdzaj błędy dostępności, kontroluj terminy napraw i twórz deklaracje zgodności w jednym miejscu.
+
+Wskazówka redakcyjna:
+Zastąpienie skrótowców 'SLA' i 'PAD' zrozumiałymi pojęciami ('terminy napraw', 'deklaracje zgodności').
+--------------------------------------------------------------------------------
+ID: login.promo.testimonial_quote
+Lokalizacja: Cytat rekomendacji w dolnej karcie
+Typ elementu: Cytat / Opinia
+ORYGINALNY TEKST:
+"Wdrożenie platformy W-ally pozwoliło nam skrócić czas naprawy błędów priorytetowych o 40% i uporządkować współpracę z dostawcami."
+
+PROSTY JĘZYK (PO REDAKCJI):
+"Dzięki platformie W-ally naprawiamy błędy krytyczne o 40% szybciej i sprawnie współpracujemy z programistami."
+
+Wskazówka redakcyjna:
+Uproszczenie stylu, dynamiczne słowa ('naprawiamy błędy krytyczne szybciej').
+--------------------------------------------------------------------------------
+ID: login.promo.testimonial_author
+Lokalizacja: Imię i nazwisko autora rekomendacji
+Typ elementu: Podpis
+ORYGINALNY TEKST:
+Anna Kowalczyk
+
+PROSTY JĘZYK (PO REDAKCJI):
+Anna Kowalczyk
+
+Wskazówka redakcyjna:
+Pozostawić bez zmian.
+--------------------------------------------------------------------------------
+ID: login.promo.testimonial_role
+Lokalizacja: Stanowisko i organizacja autora rekomendacji
+Typ elementu: Podpis
+ORYGINALNY TEKST:
+Accessibility Lead, Duży Bank SA
+
+PROSTY JĘZYK (PO REDAKCJI):
+Liderka ds. dostępności cyfrowej, Bank
+
+Wskazówka redakcyjna:
+Spolszczenie anglicyzmu 'Accessibility Lead' na 'Liderka ds. dostępności cyfrowej'.
+
+================================================================================
+KONIEC PLIKU - ŁĄCZNIE 25 POZYCJI
+================================================================================

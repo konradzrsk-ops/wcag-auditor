@@ -9,7 +9,9 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist",
+    "export:texts": "node scripts/generate_exports_pulpit_login_audits.js",
+    "import:texts": "node scripts/import_plain_language.js"
   },
   "dependencies": {
     "lucide-react": "0.575.0",

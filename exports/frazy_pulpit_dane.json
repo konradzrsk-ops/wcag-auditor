@@ -1,0 +1,433 @@
+{
+  "metadata": {
+    "title": "Frazy Pulpitu Głównego",
+    "generatedAt": "2026-10-23T21:03:43.447Z",
+    "totalPhrases": 47,
+    "instructions": "Edytuj pole 'plainLanguage' dla każdej frazy. Nie zmieniaj wartości 'id'."
+  },
+  "items": [
+    {
+      "id": "dashboard.breadcrumbs.home",
+      "section": "Pulpit – Nagłówek i Powitanie",
+      "context": "Pierwszy element ścieżki powrotnej (breadcrumbs)",
+      "type": "Nawigacja",
+      "original": "Pulpit",
+      "plainLanguage": "Pulpit",
+      "editorNotes": "Wskazuje stronę główną w strukturze serwisu."
+    },
+    {
+      "id": "dashboard.welcome.title",
+      "section": "Pulpit – Nagłówek i Powitanie",
+      "context": "Główny nagłówek H1 na pulpicie",
+      "type": "Tytuł",
+      "original": "Witaj, Piotr! 👋",
+      "plainLanguage": "Dzień dobry, Piotr! 👋",
+      "editorNotes": "Przyjazne, bezpośrednie powitanie."
+    },
+    {
+      "id": "dashboard.welcome.subtitle",
+      "section": "Pulpit – Nagłówek i Powitanie",
+      "context": "Podtytuł wprowadzający pod nagłówkiem H1",
+      "type": "Podtytuł",
+      "original": "Oto aktualny stan dostępności cyfrowej i wskaźniki zgodności WCAG 2.1 AA w Twojej organizacji.",
+      "plainLanguage": "Sprawdź aktualny poziom dostępności cyfrowej i zgodności z normą WCAG w Twojej organizacji.",
+      "editorNotes": "Zamiana 'Oto...' na aktywne 'Sprawdź...'."
+    },
+    {
+      "id": "dashboard.welcome.badge",
+      "section": "Pulpit – Nagłówek i Powitanie",
+      "context": "Etykieta aktualności danych przy nagłówku",
+      "type": "Plakietka (Badge)",
+      "original": "Aktualizacja na żywo",
+      "plainLanguage": "Dane aktualizowane na bieżąco",
+      "editorNotes": "Jasna informacja, że wskaźniki odzwierciedlają najświeższe badania."
+    },
+    {
+      "id": "dashboard.actions.btn_reports",
+      "section": "Pulpit – Nagłówek i Powitanie",
+      "context": "Przycisk nawigacji do raportów w nagłówku",
+      "type": "Przycisk",
+      "original": "Raportowanie",
+      "plainLanguage": "Zobacz raporty",
+      "editorNotes": "Zastąpienie rzeczownika odczasownikowego konkretnym czasownikiem."
+    },
+    {
+      "id": "dashboard.actions.btn_audits",
+      "section": "Pulpit – Nagłówek i Powitanie",
+      "context": "Główny niebieski przycisk w nagłówku pulpitu",
+      "type": "Przycisk",
+      "original": "Przeglądaj audyty",
+      "plainLanguage": "Zobacz listę audytów",
+      "editorNotes": "Bezpośrednie polecenie wskazujące cel akcji."
+    },
+    {
+      "id": "dashboard.kpi.avg_score.title",
+      "section": "Pulpit – Karty Wskaźników KPI",
+      "context": "Tytuł 1. karty KPI (średni wynik zgodności)",
+      "type": "Etykieta wskaźnika",
+      "original": "Średnia Dostępność",
+      "plainLanguage": "Średnia dostępność",
+      "editorNotes": "Małą literą drugi człon dla naturalnego brzmienia w języku polskim."
+    },
+    {
+      "id": "dashboard.kpi.avg_score.badge",
+      "section": "Pulpit – Karty Wskaźników KPI",
+      "context": "Plakietka trendu miesiąc do miesiąca",
+      "type": "Dynamika (Trend)",
+      "original": "+2.4% m/m",
+      "plainLanguage": "+2,4% w tym miesiącu",
+      "editorNotes": "Rozwinięcie skrótu biznesowego 'm/m' na zrozumiały zapis 'w tym miesiącu'."
+    },
+    {
+      "id": "dashboard.kpi.avg_score.subtext",
+      "section": "Pulpit – Karty Wskaźników KPI",
+      "context": "Dopisek pomocniczy pod wynikiem procentowym",
+      "type": "Podpis wskaźnika",
+      "original": "Zgodność z WCAG 2.1 AA",
+      "plainLanguage": "Zgodność z normą WCAG 2.1 AA",
+      "editorNotes": "Doprecyzowanie, o jaką normę chodzi."
+    },
+    {
+      "id": "dashboard.kpi.avg_score.tooltip",
+      "section": "Pulpit – Karty Wskaźników KPI",
+      "context": "Dymek pomocniczy (tooltip) ikony informacji przy karcie wyniku",
+      "type": "Dymek (Tooltip)",
+      "original": "Średni wynik spełnienia kryteriów sukcesu WCAG 2.1 AA dla wszystkich aktywnych audytów w organizacji.",
+      "plainLanguage": "Pokazuje średni wynik dostępności ze wszystkich zbadanych serwisów i aplikacji. Wynik powyżej 80% oznacza wysoką zgodność.",
+      "editorNotes": "Wyjaśnienie w 1 zdaniu co oznacza ten wynik dla koordynatora."
+    },
+    {
+      "id": "dashboard.kpi.coverage.title",
+      "section": "Pulpit – Karty Wskaźników KPI",
+      "context": "Tytuł 2. karty KPI (pokrycie audytowe)",
+      "type": "Etykieta wskaźnika",
+      "original": "Pokrycie Audytowe",
+      "plainLanguage": "Zbadane usługi",
+      "editorNotes": "W prostym języku pojęcie 'Pokrycie audytowe' można wyjaśnić jako 'Zbadane usługi i procesy'."
+    },
+    {
+      "id": "dashboard.kpi.coverage.badge",
+      "section": "Pulpit – Karty Wskaźników KPI",
+      "context": "Plakietka przyrostu w karcie pokrycia",
+      "type": "Dynamika (Trend)",
+      "original": "+5 audytów",
+      "plainLanguage": "+5 nowych audytów",
+      "editorNotes": "Jasne wskazanie przyrostu zbadanych usług."
+    },
+    {
+      "id": "dashboard.kpi.coverage.subtext",
+      "section": "Pulpit – Karty Wskaźników KPI",
+      "context": "Dopisek pomocniczy pod liczbą pokrycia",
+      "type": "Podpis wskaźnika",
+      "original": "50 z 50 procesów w Bazie Usług",
+      "plainLanguage": "Wszystkie 50 procesów posiada aktualne badanie",
+      "editorNotes": "Potwierdzenie pełnego, 100% monitoringu."
+    },
+    {
+      "id": "dashboard.kpi.coverage.tooltip",
+      "section": "Pulpit – Karty Wskaźników KPI",
+      "context": "Dymek pomocniczy przy karcie pokrycia",
+      "type": "Dymek (Tooltip)",
+      "original": "Odsetek zinwentaryzowanych procesów w Bazie Usług, które posiadają ważny audyt dostępności.",
+      "plainLanguage": "Wskazuje, ile procesów z bazy banku zostało już przebadanych przez audytorów WCAG.",
+      "editorNotes": "Zastąpienie trudnego słowa 'zinwentaryzowanych' prostym zwrotem."
+    },
+    {
+      "id": "dashboard.kpi.errors.title",
+      "section": "Pulpit – Karty Wskaźników KPI",
+      "context": "Tytuł 3. karty KPI (otwarte błędy)",
+      "type": "Etykieta wskaźnika",
+      "original": "Otwarte Błędy",
+      "plainLanguage": "Błędy do naprawy",
+      "editorNotes": "Zamiast żargonowego 'Otwarte błędy' prosty zwrot 'Błędy do naprawy'."
+    },
+    {
+      "id": "dashboard.kpi.errors.badge",
+      "section": "Pulpit – Karty Wskaźników KPI",
+      "context": "Plakietka dynamiki spadku błędów",
+      "type": "Dynamika (Trend)",
+      "original": "-12 w tym m-cu",
+      "plainLanguage": "Ubyło 12 w tym miesiącu",
+      "editorNotes": "Rozwinięcie skrótu 'm-cu'."
+    },
+    {
+      "id": "dashboard.kpi.errors.subtext",
+      "section": "Pulpit – Karty Wskaźników KPI",
+      "context": "Dopisek pomocniczy o triadzie priorytetów",
+      "type": "Podpis wskaźnika",
+      "original": "Czerwone: blokady krytyczne",
+      "plainLanguage": "W pierwszej kolejności naprawiaj błędy krytyczne (czerwone)",
+      "editorNotes": "Wskazówka kierująca uwagę na usuwanie blokad uniemożliwiających klientom korzystanie z banku."
+    },
+    {
+      "id": "dashboard.kpi.errors.tooltip",
+      "section": "Pulpit – Karty Wskaźników KPI",
+      "context": "Dymek pomocniczy przy karcie błędów",
+      "type": "Dymek (Tooltip)",
+      "original": "Łączna liczba wykrytych barier cyfrowych oczekujących na wdrożenie fixów przez zespoły deweloperskie.",
+      "plainLanguage": "Liczba wykrytych problemów, które programiści muszą poprawić w kodzie stron i aplikacji.",
+      "editorNotes": "Zastąpienie anglicyzmu 'fixy' słowem 'poprawić'."
+    },
+    {
+      "id": "dashboard.kpi.complaints.title",
+      "section": "Pulpit – Karty Wskaźników KPI",
+      "context": "Tytuł 4. karty KPI (zgłoszenia reklamacyjne)",
+      "type": "Etykieta wskaźnika",
+      "original": "Zgłoszenia Klientów",
+      "plainLanguage": "Zgłoszenia od klientów",
+      "editorNotes": "Zrozumiałe określenie barier zgłoszonych z zewnątrz."
+    },
+    {
+      "id": "dashboard.kpi.complaints.badge",
+      "section": "Pulpit – Karty Wskaźników KPI",
+      "context": "Plakietka dotrzymania terminów (SLA)",
+      "type": "Dynamika (Trend)",
+      "original": "SLA: 98%",
+      "plainLanguage": "Terminowość: 98%",
+      "editorNotes": "Zastąpienie branżowego skrótu 'SLA' pojęciem 'Terminowość odpowiedzi'."
+    },
+    {
+      "id": "dashboard.kpi.complaints.subtext",
+      "section": "Pulpit – Karty Wskaźników KPI",
+      "context": "Dopisek pomocniczy o czasie reakcji",
+      "type": "Podpis wskaźnika",
+      "original": "Śr. czas reakcji: 4.2h",
+      "plainLanguage": "Średni czas odpowiedzi: 4 godziny",
+      "editorNotes": "Rozwinięcie skrótu 'h' i 'Śr.'."
+    },
+    {
+      "id": "dashboard.kpi.complaints.tooltip",
+      "section": "Pulpit – Karty Wskaźników KPI",
+      "context": "Dymek pomocniczy przy karcie zgłoszeń",
+      "type": "Dymek (Tooltip)",
+      "original": "Zgłoszenia barier dostępności przesłane przez klientów i pracowników, wymagające opinii audytora lub naprawy.",
+      "plainLanguage": "Liczba skarg na bariery cyfrowe zgłoszonych przez osoby ze szczególnymi potrzebami.",
+      "editorNotes": "Zwięzłe, empatyczne objaśnienie."
+    },
+    {
+      "id": "dashboard.chart.trend.title",
+      "section": "Pulpit – Wykresy",
+      "context": "Tytuł głównego wykresu trendu 12-miesięcznego",
+      "type": "Tytuł wykresu",
+      "original": "Dynamika Dostępności i Liczba Błędów (Ostatnie 12 miesięcy)",
+      "plainLanguage": "Postępy dostępności w ostatnich 12 miesiącach",
+      "editorNotes": "Krótszy, bardziej naturalny tytuł wykresu."
+    },
+    {
+      "id": "dashboard.chart.trend.subtitle",
+      "section": "Pulpit – Wykresy",
+      "context": "Podtytuł wykresu trendu",
+      "type": "Podtytuł wykresu",
+      "original": "Miesięczna ewolucja średniego wyniku zgodności WCAG vs. tempo redukcji zidentyfikowanych barier cyfrowych.",
+      "plainLanguage": "Sprawdź, jak rośnie wynik zgodności i jak szybko ubywa wykrytych błędów.",
+      "editorNotes": "Prostszy język: unikanie 'miesięcznej ewolucji' i 'vs.'."
+    },
+    {
+      "id": "dashboard.chart.trend.legend_score",
+      "section": "Pulpit – Wykresy",
+      "context": "Legenda - słupek dostępności (%)",
+      "type": "Legenda",
+      "original": "Średnia dostępność (%)",
+      "plainLanguage": "Średnia dostępność (%)",
+      "editorNotes": "Jasne oznaczenie niebieskich słupków."
+    },
+    {
+      "id": "dashboard.chart.trend.legend_errors",
+      "section": "Pulpit – Wykresy",
+      "context": "Legenda - słupek liczby błędów",
+      "type": "Legenda",
+      "original": "Liczba błędów",
+      "plainLanguage": "Liczba błędów w systemach",
+      "editorNotes": "Jasne oznaczenie szarych słupków."
+    },
+    {
+      "id": "dashboard.chart.channels.title",
+      "section": "Pulpit – Wykresy",
+      "context": "Tytuł wykresu poziomego dla kanałów",
+      "type": "Tytuł wykresu",
+      "original": "Dostępność według Kanałów",
+      "plainLanguage": "Dostępność w poszczególnych kanałach",
+      "editorNotes": "Wskazuje podział na technologie bankowe."
+    },
+    {
+      "id": "dashboard.chart.channels.subtitle",
+      "section": "Pulpit – Wykresy",
+      "context": "Podtytuł wykresu kanałów",
+      "type": "Podtytuł wykresu",
+      "original": "Średnia ocena zgodności ze standardem WCAG 2.1 AA",
+      "plainLanguage": "Średni wynik dla serwisów WWW, aplikacji mobilnych i dokumentów",
+      "editorNotes": "Wymienienie kanałów ułatwia zrozumienie."
+    },
+    {
+      "id": "dashboard.channel.web",
+      "section": "Pulpit – Wykresy",
+      "context": "Nazwa kanału WWW",
+      "type": "Etykieta kanału",
+      "original": "Serwisy WWW",
+      "plainLanguage": "Serwisy WWW (przeglądarka)",
+      "editorNotes": "Doprecyzowanie, że chodzi o komputery stacjonarne i laptopy."
+    },
+    {
+      "id": "dashboard.channel.android",
+      "section": "Pulpit – Wykresy",
+      "context": "Nazwa kanału Android",
+      "type": "Etykieta kanału",
+      "original": "Aplikacja Android",
+      "plainLanguage": "Aplikacja Android (telefon)",
+      "editorNotes": "Wskazuje aplikację mobilną ze sklepu Google Play."
+    },
+    {
+      "id": "dashboard.channel.ios",
+      "section": "Pulpit – Wykresy",
+      "context": "Nazwa kanału iOS",
+      "type": "Etykieta kanału",
+      "original": "Aplikacja iOS",
+      "plainLanguage": "Aplikacja iOS (iPhone)",
+      "editorNotes": "Wskazuje aplikację mobilną z App Store."
+    },
+    {
+      "id": "dashboard.channel.docs",
+      "section": "Pulpit – Wykresy",
+      "context": "Nazwa kanału Dokumenty",
+      "type": "Etykieta kanału",
+      "original": "Dokumenty (PDF)",
+      "plainLanguage": "Dokumenty PDF i regulaminy",
+      "editorNotes": "Wskazuje cyfrowe pliki do pobrania."
+    },
+    {
+      "id": "dashboard.recent_audits.title",
+      "section": "Pulpit – Rejestr Badań",
+      "context": "Nagłówek sekcji tabeli ostatnich audytów",
+      "type": "Tytuł sekcji",
+      "original": "Ostatnie audyty",
+      "plainLanguage": "Najnowsze audyty",
+      "editorNotes": "Zestawienie ostatnich badań w organizacji."
+    },
+    {
+      "id": "dashboard.recent_audits.subtitle",
+      "section": "Pulpit – Rejestr Badań",
+      "context": "Podtytuł sekcji tabeli ostatnich audytów",
+      "type": "Podtytuł sekcji",
+      "original": "Najnowsze badania przeprowadzone przez certyfikowanych audytorów",
+      "plainLanguage": "Ostatnio zakończone i trwające badania serwisów banku",
+      "editorNotes": "Zwięzłe streszczenie zawartości tabeli."
+    },
+    {
+      "id": "dashboard.recent_audits.btn_view_all",
+      "section": "Pulpit – Rejestr Badań",
+      "context": "Przycisk przejścia do pełnego katalogu audytów",
+      "type": "Przycisk",
+      "original": "Zobacz wszystkie audyty",
+      "plainLanguage": "Zobacz wszystkie audyty",
+      "editorNotes": "Jasne polecenie nawigacyjne."
+    },
+    {
+      "id": "dashboard.tickets.widget_title",
+      "section": "Pulpit – Konsultacje z Audytorami",
+      "context": "Tytuł lewego widgetu współpracy na pulpicie",
+      "type": "Tytuł widgetu",
+      "original": "Konsultacje z Audytorami",
+      "plainLanguage": "Zapytaj audytora (Konsultacje)",
+      "editorNotes": "Zastąpienie formalnego tytułu zachętą do zadania pytania."
+    },
+    {
+      "id": "dashboard.tickets.widget_badge",
+      "section": "Pulpit – Konsultacje z Audytorami",
+      "context": "Plakietka w nagłówku widgetu konsultacji",
+      "type": "Plakietka (Badge)",
+      "original": "Bez spotkań",
+      "plainLanguage": "Bez umawiania spotkań",
+      "editorNotes": "Podkreślenie asynchronicznej formy kontaktu."
+    },
+    {
+      "id": "dashboard.tickets.widget_desc",
+      "section": "Pulpit – Konsultacje z Audytorami",
+      "context": "Opis wyjaśniający działanie konsultacji",
+      "type": "Opis",
+      "original": "Szybkie zapytania techniczne deweloperów o wytyczne WCAG i rekomendacje fixów.",
+      "plainLanguage": "Masz wątpliwości jak wdrożyć poprawkę? Zadaj pytanie ekspertowi WCAG bez planowania spotkań.",
+      "editorNotes": "Przyjazny, instruktażowy język bez slangu."
+    },
+    {
+      "id": "dashboard.tickets.btn_new",
+      "section": "Pulpit – Konsultacje z Audytorami",
+      "context": "Niebieski przycisk otwarcia nowej konsultacji",
+      "type": "Przycisk",
+      "original": "+ Nowa konsultacja",
+      "plainLanguage": "+ Zadaj pytanie audytorowi",
+      "editorNotes": "Konkretna akcja zachęcająca do kontaktu."
+    },
+    {
+      "id": "dashboard.tickets.banner_new_reply",
+      "section": "Pulpit – Konsultacje z Audytorami",
+      "context": "Zielony baner informujący o odpowiedzi audytora",
+      "type": "Powiadomienie / Baner",
+      "original": "Nowa odpowiedź audytora w sprawie:",
+      "plainLanguage": "Audytor odpowiedział w sprawie:",
+      "editorNotes": "Prosty komunikat o nowej wiadomości."
+    },
+    {
+      "id": "dashboard.announcements.widget_title",
+      "section": "Pulpit – Komunikaty & Nowości",
+      "context": "Tytuł prawego widgetu wiedzy i zdarzeń",
+      "type": "Tytuł widgetu",
+      "original": "Komunikaty i Wydarzenia",
+      "plainLanguage": "Wiadomości i szkolenia",
+      "editorNotes": "Prostsze, przystępne określenie."
+    },
+    {
+      "id": "dashboard.announcements.webinar_title",
+      "section": "Pulpit – Komunikaty & Nowości",
+      "context": "Tytuł zaproszenia na webinar ekspercki",
+      "type": "Nagłówek zdarzenia",
+      "original": "Webinar: Przygotowanie bankowości elektronicznej do wymogów EAA 2026",
+      "plainLanguage": "Szkolenie online: Jak spełnić wymogi Europejskiego Aktu o Dostępności (EAA)",
+      "editorNotes": "Zastąpienie obcego słowa 'Webinar' określeniem 'Szkolenie online' i rozwinięcie skrótu EAA."
+    },
+    {
+      "id": "dashboard.announcements.btn_register",
+      "section": "Pulpit – Komunikaty & Nowości",
+      "context": "Przycisk zapisu na szkolenie",
+      "type": "Przycisk",
+      "original": "Zapisz zespół",
+      "plainLanguage": "Zapisz zespół na bezpłatne szkolenie",
+      "editorNotes": "Jasna zachęta do bezpłatnego podniesienia kompetencji zespołu."
+    },
+    {
+      "id": "dashboard.vip.title",
+      "section": "Pulpit – Opiekun Klienta",
+      "context": "Tytuł karty dedykowanego kontaktu",
+      "type": "Tytuł karty",
+      "original": "Dedykowany Opiekun Klienta",
+      "plainLanguage": "Twój opiekun w zespole audytorów",
+      "editorNotes": "Ciepłe, partnerskie określenie."
+    },
+    {
+      "id": "dashboard.vip.name",
+      "section": "Pulpit – Opiekun Klienta",
+      "context": "Imię i nazwisko doradcy",
+      "type": "Dane osoby",
+      "original": "Tomasz Straszak",
+      "plainLanguage": "Tomasz Straszak",
+      "editorNotes": "Pozostawić bez zmian."
+    },
+    {
+      "id": "dashboard.vip.status_available",
+      "section": "Pulpit – Opiekun Klienta",
+      "context": "Zielony wskaźnik dostępności telefonicznej",
+      "type": "Status",
+      "original": "Dostępny teraz",
+      "plainLanguage": "Możesz dzwonić teraz",
+      "editorNotes": "Potwierdzenie bieżącej gotowości do rozmowy."
+    },
+    {
+      "id": "dashboard.vip.btn_call",
+      "section": "Pulpit – Opiekun Klienta",
+      "context": "Przycisk bezpośredniego połączenia telefonicznego",
+      "type": "Przycisk",
+      "original": "Zadzwoń teraz: 795 103 017",
+      "plainLanguage": "Zadzwoń: 795 103 017",
+      "editorNotes": "Proste połączenie z numerem telefonu."
+    }
+  ]
+}
