@@ -5500,25 +5500,25 @@ function DashboardView({
       />
 
       <div className="flex-1 md:overflow-y-auto bg-[#f8fafc] w-full">
-        <div className="max-w-[1600px] mx-auto w-full p-4 sm:p-8 lg:p-12 flex flex-col gap-6">
+        <div className="max-w-[1600px] mx-auto w-full px-4 sm:px-6 lg:px-8 py-3.5 sm:py-4.5 flex flex-col gap-3.5 sm:gap-4">
 
-        {/* BANER TOŻSAMOŚCI ORGANIZACJI KLIENTA Z LOGO (NP. ERSTE) */}
+        {/* BANER TOŻSAMOŚCI ORGANIZACJI KLIENTA Z LOGO (NP. ERSTE) - BEZ RAMKI PRZY LOGO */}
         <div
           data-testid="client-org-banner"
-          className="bg-white border border-slate-200/90 rounded-2xl p-4 sm:p-5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4 relative overflow-hidden"
+          className="bg-white border border-slate-200/90 rounded-xl px-4 py-2.5 sm:py-3 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3 relative overflow-hidden"
         >
-          <div className="flex items-center gap-4 sm:gap-5 min-w-0">
-            {/* LOGO KLIENTA (NP. ERSTE) - BEZ ZAOKRĄGLEŃ NA OBRAZIE */}
+          <div className="flex items-center gap-3.5 sm:gap-4 min-w-0">
+            {/* LOGO KLIENTA (NP. ERSTE) - CAŁKOWICIE BEZ RAMKI, BEZ ZAOKRĄGLEŃ NA OBRAZIE */}
             <div
-              className="h-16 px-3 bg-white border border-slate-200/80 rounded-xl flex items-center justify-center shrink-0 shadow-2xs group cursor-pointer"
+              className="flex items-center justify-center shrink-0 cursor-pointer group py-0.5"
               onClick={() => setView("profil")}
-              title="Kliknij, aby zmienić logo lub dane w profilu"
+              title="Kliknij, aby przejść do profilu organizacji"
             >
               {clientProfile?.orgLogo ? (
                 <img
                   src={clientProfile.orgLogo}
                   alt={clientProfile.orgAltText || `Logo ${clientProfile.orgName}`}
-                  className="max-h-12 w-auto max-w-[160px] object-contain transition-transform group-hover:scale-105 block"
+                  className="h-8 sm:h-10 w-auto max-w-[140px] sm:max-w-[170px] object-contain block group-hover:opacity-90 transition-opacity"
                   style={{ borderRadius: 0 }}
                   onError={(e) => {
                     if (e.currentTarget.src !== "./logos/erste.png") {
@@ -5527,32 +5527,32 @@ function DashboardView({
                   }}
                 />
               ) : (
-                <Building2 size={28} className="text-slate-400" />
+                <Building2 size={24} className="text-slate-400" />
               )}
             </div>
 
-            <div className="min-w-0">
-              <div className="flex flex-wrap items-center gap-2 mb-1">
-                <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#0038F8] bg-blue-50 px-2 py-0.5 rounded-md border border-blue-100">
+            <div className="min-w-0 border-l border-slate-200/80 pl-3.5">
+              <div className="flex flex-wrap items-center gap-1.5 mb-0.5">
+                <span className="text-[9px] sm:text-[10px] font-extrabold uppercase tracking-wider text-[#0038F8] bg-blue-50 px-1.5 py-0.5 rounded border border-blue-100">
                   Przestrzeń Klienta
                 </span>
-                <span className="text-xs font-semibold text-slate-500">
+                <span className="text-[11px] font-semibold text-slate-500">
                   {clientProfile?.sector || "Bankowość i finanse"}
                 </span>
-                <span className="text-xs font-semibold text-slate-400">•</span>
-                <span className="text-xs font-semibold text-slate-500">
+                <span className="text-[11px] font-semibold text-slate-300">•</span>
+                <span className="text-[11px] font-semibold text-slate-500">
                   NIP: {clientProfile?.taxId || "PL 525-000-00-00"}
                 </span>
               </div>
 
-              <h2 className="text-base sm:text-lg font-black text-slate-900 tracking-tight flex items-center gap-2">
+              <h2 className="text-sm sm:text-base font-black text-slate-900 tracking-tight flex items-center gap-2">
                 <span>{clientProfile?.orgName || "Erste Group Bank AG"}</span>
-                <span className="text-xs font-bold text-slate-500 font-normal">
+                <span className="text-xs font-semibold text-slate-500 font-normal">
                   ({clientProfile?.orgShortName || "Erste"})
                 </span>
               </h2>
 
-              <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-600 font-medium mt-1">
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-[11px] text-slate-600 font-medium mt-0.5">
                 <span>
                   Koordynator organizacji:{" "}
                   <strong className="text-slate-900 font-bold">
@@ -5571,16 +5571,16 @@ function DashboardView({
           </div>
 
           {/* PRAWA STRONA BANERU: WSKAŹNIK CELU I PRZYCISK EDYCJI */}
-          <div className="flex items-center gap-3 shrink-0 pt-3 md:pt-0 border-t md:border-t-0 border-slate-100 justify-between md:justify-end">
+          <div className="flex items-center gap-3 shrink-0 pt-2 md:pt-0 border-t md:border-t-0 border-slate-100 justify-between md:justify-end">
             <div className="text-right hidden sm:block">
-              <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">
+              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
                 Docelowy próg dojrzałości
               </span>
               <div className="flex items-center justify-end gap-1.5 mt-0.5">
-                <span className="text-sm font-extrabold text-[#0038F8]">
+                <span className="text-xs sm:text-sm font-extrabold text-[#0038F8]">
                   Cel: {clientProfile?.targetScore || 90}%
                 </span>
-                <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100">
+                <span className="text-[11px] font-semibold text-emerald-600 bg-emerald-50 px-1.5 py-0.2 rounded border border-emerald-100">
                   Aktualnie: 86.2%
                 </span>
               </div>
@@ -5589,23 +5589,23 @@ function DashboardView({
             <button
               type="button"
               onClick={() => setView("profil")}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-slate-50 hover:bg-blue-50 text-slate-700 hover:text-[#0038F8] border border-slate-200 hover:border-[#0038F8]/40 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-2xs group"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 hover:bg-blue-50 text-slate-700 hover:text-[#0038F8] border border-slate-200 hover:border-[#0038F8]/40 rounded-lg text-xs font-bold transition-all cursor-pointer shadow-2xs group"
             >
-              <Pencil size={13} className="text-slate-500 group-hover:text-[#0038F8]" />
-              <span>Zmień logo w profilu</span>
+              <Pencil size={12} className="text-slate-500 group-hover:text-[#0038F8]" />
+              <span>Zarządzaj profilem</span>
             </button>
           </div>
         </div>
 
-      {/* RZĄD 1: Główne KPI */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+      {/* RZĄD 1: Główne KPI (skompresowane) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <Card
-          className="p-6 hover:border-[#0038F8]/30 transition-colors cursor-pointer"
+          className="p-3.5 sm:p-4 hover:border-[#0038F8]/30 transition-colors cursor-pointer"
           onClick={() => setView("raportowanie")}
         >
-          <div className="flex justify-between items-start mb-4">
-            <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-500 flex items-center justify-center">
-              <Activity size={24} />
+          <div className="flex justify-between items-start mb-2.5">
+            <div className="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-500 flex items-center justify-center">
+              <Activity size={20} />
             </div>
             <div className="flex items-center gap-1">
               <Badge variant="success">
@@ -5618,8 +5618,8 @@ function DashboardView({
               />
             </div>
           </div>
-          <div className="flex items-center gap-1 mb-1">
-            <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider block">
+          <div className="flex items-center gap-1 mb-0.5">
+            <span className="text-[10px] sm:text-[11px] font-bold text-slate-600 uppercase tracking-wider block">
               Średnia Dostępność
             </span>
             <InfoTooltip
@@ -5629,11 +5629,11 @@ function DashboardView({
             />
           </div>
           <div className="flex items-baseline gap-2">
-            <span className="text-3xl font-extrabold text-slate-900">
+            <span className="text-2xl sm:text-3xl font-extrabold text-slate-900">
               86.2%
             </span>
             <div className="flex items-center gap-1">
-              <span className="text-sm font-semibold text-slate-600">
+              <span className="text-xs font-semibold text-slate-600">
                 Cel: {clientProfile?.targetScore || 90}%
               </span>
               <InfoTooltip
@@ -5646,15 +5646,15 @@ function DashboardView({
         </Card>
 
         <Card
-          className="p-6 hover:border-[#0038F8]/30 transition-colors cursor-pointer"
+          className="p-3.5 sm:p-4 hover:border-[#0038F8]/30 transition-colors cursor-pointer"
           onClick={() => setView("baza-uslug")}
         >
-          <div className="flex justify-between items-start mb-4">
-            <div className="w-12 h-12 rounded-xl bg-[#0038F8]/10 text-[#0038F8] flex items-center justify-center">
-              <ListChecks size={24} />
+          <div className="flex justify-between items-start mb-2.5">
+            <div className="w-9 h-9 rounded-lg bg-[#0038F8]/10 text-[#0038F8] flex items-center justify-center">
+              <ListChecks size={20} />
             </div>
-            <div className="flex items-center gap-1 mt-1">
-              <span className="text-[11px] font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded">
+            <div className="flex items-center gap-1">
+              <span className="text-[10px] font-bold text-slate-600 bg-slate-100 px-1.5 py-0.5 rounded">
                 142 procesy
               </span>
               <InfoTooltip
@@ -5664,8 +5664,8 @@ function DashboardView({
               />
             </div>
           </div>
-          <div className="flex items-center gap-1 mb-1">
-            <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider block">
+          <div className="flex items-center gap-1 mb-0.5">
+            <span className="text-[10px] sm:text-[11px] font-bold text-slate-600 uppercase tracking-wider block">
               Pokrycie Audytowe
             </span>
             <InfoTooltip
@@ -5674,17 +5674,17 @@ function DashboardView({
               align="left"
             />
           </div>
-          <span className="text-3xl font-extrabold text-slate-900">92.0%</span>
+          <span className="text-2xl sm:text-3xl font-extrabold text-slate-900">92.0%</span>
         </Card>
 
-        {/* KARTA BŁĘDÓW: Priorytetowe, Ważne, Marginalne */}
+        {/* KARTA BŁĘDÓW: Priorytetowe, Ważne, Marginalne (zwarte) */}
         <Card
-          className="p-4 sm:p-5 hover:border-red-300 transition-all cursor-pointer flex flex-col justify-between"
+          className="p-3 sm:p-3.5 hover:border-red-300 transition-all cursor-pointer flex flex-col justify-between"
           onClick={() => setView("raportowanie")}
         >
-          <div className="flex justify-between items-start mb-2">
+          <div className="flex justify-between items-start mb-1.5">
             <div className="flex items-center gap-1">
-              <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider block">
+              <span className="text-[10px] sm:text-[11px] font-bold text-slate-600 uppercase tracking-wider block">
                 Błędy Otwarte (Razem: 239)
               </span>
               <InfoTooltip
@@ -5694,7 +5694,7 @@ function DashboardView({
               />
             </div>
             <div className="flex items-center gap-1">
-              <Badge variant="danger">
+              <Badge variant="danger" className="!px-1.5 !py-0.5 !text-[10px]">
                 +12 m/m
               </Badge>
               <InfoTooltip
@@ -5705,55 +5705,55 @@ function DashboardView({
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-1.5 sm:gap-2 py-1">
+          <div className="grid grid-cols-3 gap-1.5 py-0.5">
             {/* Priorytetowe */}
-            <div className="flex flex-col bg-red-50/70 p-2 sm:p-2.5 rounded-xl border border-red-100">
-              <div className="flex items-center gap-1 text-red-700 mb-1">
-                <AlertOctagon size={12} className="shrink-0" />
-                <span className="text-[10px] xl:text-[11px] font-bold text-red-700 tracking-tight whitespace-nowrap">
-                  Priorytetowe
+            <div className="flex flex-col bg-red-50/70 p-1.5 rounded-lg border border-red-100">
+              <div className="flex items-center gap-1 text-red-700 mb-0.5">
+                <AlertOctagon size={11} className="shrink-0" />
+                <span className="text-[10px] font-bold text-red-700 tracking-tight whitespace-nowrap">
+                  Priorytet.
                 </span>
               </div>
-              <span className="text-xl sm:text-2xl font-extrabold text-slate-900 leading-none">47</span>
-              <span className="text-[10px] font-bold text-red-700 mt-1 whitespace-nowrap">Wymaga akcji</span>
+              <span className="text-lg sm:text-xl font-extrabold text-slate-900 leading-none">47</span>
+              <span className="text-[9px] font-bold text-red-700 mt-0.5 whitespace-nowrap">Wymaga akcji</span>
             </div>
 
             {/* Ważne */}
-            <div className="flex flex-col bg-amber-50/70 p-2 sm:p-2.5 rounded-xl border border-amber-100">
-              <div className="flex items-center gap-1 text-amber-800 mb-1">
-                <AlertTriangle size={12} className="shrink-0" />
-                <span className="text-[10px] xl:text-[11px] font-bold text-amber-800 tracking-tight whitespace-nowrap">
+            <div className="flex flex-col bg-amber-50/70 p-1.5 rounded-lg border border-amber-100">
+              <div className="flex items-center gap-1 text-amber-800 mb-0.5">
+                <AlertTriangle size={11} className="shrink-0" />
+                <span className="text-[10px] font-bold text-amber-800 tracking-tight whitespace-nowrap">
                   Ważne
                 </span>
               </div>
-              <span className="text-xl sm:text-2xl font-extrabold text-slate-900 leading-none">128</span>
-              <span className="text-[10px] font-bold text-amber-800 mt-1 whitespace-nowrap">Do planu</span>
+              <span className="text-lg sm:text-xl font-extrabold text-slate-900 leading-none">128</span>
+              <span className="text-[9px] font-bold text-amber-800 mt-0.5 whitespace-nowrap">Do planu</span>
             </div>
 
             {/* Marginalne */}
-            <div className="flex flex-col bg-blue-50/70 p-2 sm:p-2.5 rounded-xl border border-blue-100">
-              <div className="flex items-center gap-1 text-blue-700 mb-1">
-                <Info size={12} className="shrink-0" />
-                <span className="text-[10px] xl:text-[11px] font-bold text-blue-700 tracking-tight whitespace-nowrap">
+            <div className="flex flex-col bg-blue-50/70 p-1.5 rounded-lg border border-blue-100">
+              <div className="flex items-center gap-1 text-blue-700 mb-0.5">
+                <Info size={11} className="shrink-0" />
+                <span className="text-[10px] font-bold text-blue-700 tracking-tight whitespace-nowrap">
                   Marginalne
                 </span>
               </div>
-              <span className="text-xl sm:text-2xl font-extrabold text-slate-900 leading-none">64</span>
-              <span className="text-[10px] font-bold text-blue-700 mt-1 whitespace-nowrap">Niski wpływ</span>
+              <span className="text-lg sm:text-xl font-extrabold text-slate-900 leading-none">64</span>
+              <span className="text-[9px] font-bold text-blue-700 mt-0.5 whitespace-nowrap">Niski wpływ</span>
             </div>
           </div>
         </Card>
 
         <Card
-          className="p-6 hover:border-blue-300 transition-colors cursor-pointer"
+          className="p-3.5 sm:p-4 hover:border-blue-300 transition-colors cursor-pointer"
           onClick={() => setView("raporty")}
         >
-          <div className="flex justify-between items-start mb-4">
-            <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-500 flex items-center justify-center">
-              <ClipboardCheck size={24} />
+          <div className="flex justify-between items-start mb-2.5">
+            <div className="w-9 h-9 rounded-lg bg-blue-50 text-blue-500 flex items-center justify-center">
+              <ClipboardCheck size={20} />
             </div>
-            <div className="flex items-center gap-1 mt-1">
-              <span className="text-[11px] font-bold text-blue-700 bg-blue-100 px-2 py-0.5 rounded">
+            <div className="flex items-center gap-1">
+              <span className="text-[10px] font-bold text-blue-700 bg-blue-100 px-1.5 py-0.5 rounded">
                 W tym kwartale
               </span>
               <InfoTooltip
@@ -5763,8 +5763,8 @@ function DashboardView({
               />
             </div>
           </div>
-          <div className="flex items-center gap-1 mb-1">
-            <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider block">
+          <div className="flex items-center gap-1 mb-0.5">
+            <span className="text-[10px] sm:text-[11px] font-bold text-slate-600 uppercase tracking-wider block">
               Przeprowadzone Audyty
             </span>
             <InfoTooltip
@@ -5774,9 +5774,9 @@ function DashboardView({
             />
           </div>
           <div className="flex items-baseline gap-2">
-            <span className="text-3xl font-extrabold text-slate-900">12</span>
+            <span className="text-2xl sm:text-3xl font-extrabold text-slate-900">12</span>
             <div className="flex items-center gap-1">
-              <span className="text-sm font-semibold text-slate-600">
+              <span className="text-xs font-semibold text-slate-600">
                 4 w trakcie
               </span>
               <InfoTooltip
@@ -5789,14 +5789,14 @@ function DashboardView({
         </Card>
       </div>
 
-      {/* RZĄD 2: Trendy i Kanały */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      {/* RZĄD 2: Trendy i Kanały (zoptymalizowana wysokość do 275px) */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4">
         {/* Wykres Liniowy: Trend */}
-        <Card className="p-4 sm:p-6 flex flex-col h-[340px] sm:h-[380px] lg:col-span-2">
-          <div className="flex items-center justify-between mb-2 shrink-0">
+        <Card className="p-3.5 sm:p-4 flex flex-col h-[260px] sm:h-[280px] lg:col-span-2">
+          <div className="flex items-center justify-between mb-1.5 shrink-0">
             <div>
               <div className="flex items-center gap-1.5">
-                <h3 className="text-lg font-bold text-slate-900">
+                <h3 className="text-sm sm:text-base font-bold text-slate-900">
                   Trend dostępności vs Błędy w czasie
                 </h3>
                 <InfoTooltip
@@ -5805,51 +5805,51 @@ function DashboardView({
                   align="left"
                 />
               </div>
-              <span className="text-xs text-slate-500 font-medium">
+              <span className="text-[11px] text-slate-500 font-medium">
                 Ostatnie 12 miesięcy w całej organizacji
               </span>
             </div>
             <button className="text-slate-400 hover:text-slate-600">
-              <MoreVertical size={18} />
+              <MoreVertical size={16} />
             </button>
           </div>
 
-          <div className="flex flex-1 min-h-0 mt-2">
-            <div className="w-8 shrink-0 flex flex-col justify-between items-end pb-8 pt-12 pr-2 text-[10px] font-bold text-slate-400 border-r border-slate-200 z-10 bg-white">
+          <div className="flex flex-1 min-h-0 mt-1">
+            <div className="w-7 shrink-0 flex flex-col justify-between items-end pb-6 pt-5 pr-1.5 text-[9px] font-bold text-slate-400 border-r border-slate-200 z-10 bg-white">
               <span className="leading-none">100</span>
               <span className="leading-none">50</span>
-              <span className="leading-none translate-y-1">0</span>
+              <span className="leading-none translate-y-0.5">0</span>
             </div>
 
             <div className="flex-1 flex flex-col">
-              <div className="flex-1 flex items-end gap-1 sm:gap-2 border-b border-slate-200 pt-12 px-2 sm:px-4">
+              <div className="flex-1 flex items-end gap-1 sm:gap-2 border-b border-slate-200 pt-5 px-1.5 sm:px-3">
                 {chartTrendData.map((val, i) => (
                   <div
                     key={i}
                     className="flex-1 flex justify-center items-end h-full relative group"
                   >
                     <div
-                      className="w-full max-w-[32px] bg-[#0038F8]/20 group-hover:bg-[#0038F8]/30 transition-colors rounded-t-md relative z-10 flex items-start justify-center"
+                      className="w-full max-w-[28px] bg-[#0038F8]/20 group-hover:bg-[#0038F8]/30 transition-colors rounded-t-md relative z-10 flex items-start justify-center"
                       style={{ height: `${val.s}%` }}
                     >
-                      <div className="absolute -top-1.5 w-2 h-2 rounded-full bg-[#0038F8] border-2 border-white"></div>
+                      <div className="absolute -top-1 w-1.5 h-1.5 rounded-full bg-[#0038F8] border-2 border-white"></div>
                     </div>
                     <div
-                      className="absolute bottom-0 w-1/2 max-w-[16px] bg-red-100 group-hover:bg-red-200 transition-colors rounded-t-sm"
+                      className="absolute bottom-0 w-1/2 max-w-[14px] bg-red-100 group-hover:bg-red-200 transition-colors rounded-t-sm"
                       style={{ height: `${val.e}%` }}
                     ></div>
 
-                    <div className="opacity-0 group-hover:opacity-100 absolute -top-12 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-xs font-bold px-3 py-1.5 rounded z-20 whitespace-nowrap pointer-events-none hidden sm:block shadow-lg">
+                    <div className="opacity-0 group-hover:opacity-100 absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] font-bold px-2 py-1 rounded z-20 whitespace-nowrap pointer-events-none hidden sm:block shadow-lg">
                       Dostępność: {val.s}% | Błędy: {val.e}
                     </div>
                   </div>
                 ))}
               </div>
-              <div className="h-8 flex items-start gap-1 sm:gap-2 w-full shrink-0 pt-2 px-2 sm:px-4">
+              <div className="h-6 flex items-start gap-1 sm:gap-2 w-full shrink-0 pt-1 px-1.5 sm:px-3">
                 {chartTrendData.map((val, i) => (
                   <div
                     key={i}
-                    className="flex-1 text-center text-[10px] sm:text-[11px] font-bold text-slate-500"
+                    className="flex-1 text-center text-[9px] sm:text-[10px] font-bold text-slate-500"
                   >
                     {val.m}
                   </div>
@@ -5858,23 +5858,23 @@ function DashboardView({
             </div>
           </div>
 
-          <div className="flex justify-center gap-6 mt-2 shrink-0">
-            <div className="flex items-center gap-2 text-xs font-bold text-slate-600">
-              <div className="w-3 h-3 rounded-full bg-[#0038F8]"></div> %
+          <div className="flex justify-center gap-5 mt-1 shrink-0">
+            <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-600">
+              <div className="w-2.5 h-2.5 rounded-full bg-[#0038F8]"></div> %
               Dostępności
             </div>
-            <div className="flex items-center gap-2 text-xs font-bold text-slate-600">
-              <div className="w-3 h-3 rounded bg-red-200"></div> Liczba nowych
+            <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-600">
+              <div className="w-2.5 h-2.5 rounded bg-red-200"></div> Liczba nowych
               błędów
             </div>
           </div>
         </Card>
 
-        {/* Wykres Paskowy Poziomy: Kanały */}
-        <Card className="p-6 flex flex-col h-[380px]">
-          <div className="flex items-center justify-between mb-8">
+        {/* Wykres Paskowy Poziomy: Kanały (skompresowany) */}
+        <Card className="p-3.5 sm:p-4.5 flex flex-col h-[260px] sm:h-[280px]">
+          <div className="flex items-center justify-between mb-3 shrink-0">
             <div className="flex items-center gap-1.5">
-              <h3 className="text-lg font-bold text-slate-900">
+              <h3 className="text-sm sm:text-base font-bold text-slate-900">
                 Zgodność kanałów
               </h3>
               <InfoTooltip
@@ -5884,16 +5884,16 @@ function DashboardView({
               />
             </div>
             <button className="text-slate-400 hover:text-slate-600">
-              <MoreVertical size={18} />
+              <MoreVertical size={16} />
             </button>
           </div>
 
-          <div className="flex-1 flex flex-col justify-center gap-6">
+          <div className="flex-1 flex flex-col justify-center gap-3">
             <div>
-              <div className="flex justify-between text-sm font-bold text-slate-800 mb-2">
+              <div className="flex justify-between text-xs font-bold text-slate-800 mb-1">
                 <span>WWW</span> <span>94%</span>
               </div>
-              <div className="w-full bg-slate-100 rounded-full h-3 overflow-hidden">
+              <div className="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
                 <div
                   className="bg-emerald-500 h-full rounded-full"
                   style={{ width: "94%" }}
@@ -5901,10 +5901,10 @@ function DashboardView({
               </div>
             </div>
             <div>
-              <div className="flex justify-between text-sm font-bold text-slate-800 mb-2">
+              <div className="flex justify-between text-xs font-bold text-slate-800 mb-1">
                 <span>Aplikacja (iOS)</span> <span>82%</span>
               </div>
-              <div className="w-full bg-slate-100 rounded-full h-3 overflow-hidden">
+              <div className="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
                 <div
                   className="bg-[#0038F8] h-full rounded-full"
                   style={{ width: "82%" }}
@@ -5912,10 +5912,10 @@ function DashboardView({
               </div>
             </div>
             <div>
-              <div className="flex justify-between text-sm font-bold text-slate-800 mb-2">
+              <div className="flex justify-between text-xs font-bold text-slate-800 mb-1">
                 <span>Aplikacja (Android)</span> <span>78%</span>
               </div>
-              <div className="w-full bg-slate-100 rounded-full h-3 overflow-hidden">
+              <div className="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
                 <div
                   className="bg-[#0038F8] h-full rounded-full"
                   style={{ width: "78%" }}
@@ -5923,10 +5923,10 @@ function DashboardView({
               </div>
             </div>
             <div>
-              <div className="flex justify-between text-sm font-bold text-slate-800 mb-2">
+              <div className="flex justify-between text-xs font-bold text-slate-800 mb-1">
                 <span>Dokumenty (PDF/DOC)</span> <span>45%</span>
               </div>
-              <div className="w-full bg-slate-100 rounded-full h-3 overflow-hidden">
+              <div className="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
                 <div
                   className="bg-red-500 h-full rounded-full"
                   style={{ width: "45%" }}
@@ -5937,29 +5937,29 @@ function DashboardView({
         </Card>
       </div>
 
-      {/* RZĄD 2.5: WSPÓŁPRACA Z AUDYTORAMI & KOMUNIKATY (DUAL-CARD COLLABORATION ROW) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6" data-testid="dashboard-collaboration-row">
+      {/* RZĄD 2.5: WSPÓŁPRACA Z AUDYTORAMI & KOMUNIKATY (skompresowane) */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-4" data-testid="dashboard-collaboration-row">
         {/* LEWY WIDGET (7 KOLUMN): KONSULTACJE & TICKETY Z AUDYTORAMI WCAG */}
-        <Card className="p-5 sm:p-6 lg:col-span-7 bg-white border border-slate-200 shadow-xs flex flex-col justify-between">
+        <Card className="p-3.5 sm:p-4.5 lg:col-span-7 bg-white border border-slate-200 shadow-xs flex flex-col justify-between">
           <div>
             {/* Nagłówek modułu ticketów */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 border border-emerald-100">
-                  <MessageSquareText size={20} />
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 mb-3">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 border border-emerald-100">
+                  <MessageSquareText size={17} />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <h3 className="text-lg font-bold text-slate-900 leading-tight">
+                    <h3 className="text-sm sm:text-base font-bold text-slate-900 leading-tight">
                       Konsultacje
                     </h3>
                     {unreadTicketsCount > 0 && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-600 text-white animate-pulse">
+                      <span className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded-full text-[9px] font-extrabold bg-emerald-600 text-white animate-pulse">
                         {unreadTicketsCount} nowa odp.
                       </span>
                     )}
                   </div>
-                  <p className="text-xs text-slate-500 font-medium mt-0.5">
+                  <p className="text-[11px] text-slate-500 font-medium">
                     Bezpośredni kontakt merytoryczny z zespołem audytorów WCAG bez konieczności spotkań online.
                   </p>
                 </div>
@@ -5969,18 +5969,18 @@ function DashboardView({
                 <button
                   type="button"
                   onClick={() => onOpenNewTicket && onOpenNewTicket()}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#0038F8] hover:bg-[#002ECC] text-white rounded-xl text-xs font-bold shadow-xs transition-all cursor-pointer"
+                  className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-[#0038F8] hover:bg-[#002ECC] text-white rounded-lg text-xs font-bold shadow-xs transition-all cursor-pointer"
                 >
-                  <Plus size={14} />
+                  <Plus size={13} />
                   <span>Nowa konsultacja</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => setView("tickety")}
-                  className="inline-flex items-center gap-1 px-3 py-1.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded-xl text-xs font-bold shadow-2xs transition-all cursor-pointer"
+                  className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded-lg text-xs font-bold shadow-2xs transition-all cursor-pointer"
                 >
                   <span>Wszystkie ({tickets.length})</span>
-                  <ArrowRight size={13} />
+                  <ArrowRight size={12} />
                 </button>
               </div>
             </div>
@@ -5989,43 +5989,43 @@ function DashboardView({
             {unreadTicketsCount > 0 && (
               <div
                 onClick={() => onOpenTicket && onOpenTicket("TCK-104")}
-                className="mb-4 p-3.5 bg-gradient-to-r from-emerald-50 via-emerald-50/80 to-white border border-emerald-200 rounded-xl cursor-pointer hover:border-emerald-300 hover:shadow-xs transition-all group"
+                className="mb-2.5 p-2.5 bg-gradient-to-r from-emerald-50 via-emerald-50/80 to-white border border-emerald-200 rounded-lg cursor-pointer hover:border-emerald-300 hover:shadow-xs transition-all group"
               >
-                <div className="flex items-start justify-between gap-3">
-                  <div className="flex items-start gap-3">
+                <div className="flex items-start justify-between gap-2.5">
+                  <div className="flex items-start gap-2.5">
                     <div className="relative shrink-0 mt-0.5">
                       <img
                         src="https://wally.widzialni.eu//uploads/avatars/avatar_133_1760079096.jpg"
                         alt="Tomasz Straszak"
-                        className="w-8 h-8 rounded-full object-cover ring-2 ring-emerald-300"
+                        className="w-7 h-7 rounded-full object-cover ring-2 ring-emerald-300"
                       />
-                      <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-white" />
+                      <span className="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-emerald-500 ring-1 ring-white" />
                     </div>
                     <div>
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-800 bg-emerald-100/90 px-2 py-0.5 rounded-md">
-                          Nowa odpowiedź audytora • #TCK-104
+                      <div className="flex items-center gap-1.5 mb-0.5">
+                        <span className="text-[9px] font-extrabold uppercase tracking-wider text-emerald-800 bg-emerald-100/90 px-1.5 py-0.2 rounded">
+                          Nowa odpowiedź • #TCK-104
                         </span>
-                        <span className="text-[11px] font-semibold text-slate-400">15 min temu</span>
+                        <span className="text-[10px] font-semibold text-slate-400">15 min temu</span>
                       </div>
                       <h4 className="text-xs font-bold text-slate-900 group-hover:text-emerald-800 transition-colors">
                         Czy kontrast 3.8:1 dla aktywnego stanu checkboxa spełnia WCAG 2.2?
                       </h4>
-                      <p className="text-[11px] text-slate-600 line-clamp-1 mt-0.5 italic">
+                      <p className="text-[10px] sm:text-[11px] text-slate-600 line-clamp-1 mt-0.5 italic">
                         Tomasz Straszak: "Współczynnik 3.8:1 jest w pełni zgodny z WCAG 2.1 oraz 2.2 AA (kryterium 1.4.11)..."
                       </p>
                     </div>
                   </div>
-                  <span className="shrink-0 inline-flex items-center gap-1 text-xs font-bold text-emerald-700 group-hover:underline self-center">
+                  <span className="shrink-0 inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 group-hover:underline self-center">
                     <span>Otwórz</span>
-                    <ArrowRight size={13} />
+                    <ArrowRight size={12} />
                   </span>
                 </div>
               </div>
             )}
 
             {/* LISTA OSTATNICH TICKETÓW */}
-            <div className="space-y-2.5 mb-5">
+            <div className="space-y-1.5 mb-3">
               {tickets.slice(0, 3).map((ticket) => {
                 const isReply = ticket.status === "auditor_reply";
                 const isWaiting = ticket.status === "waiting_auditor";
@@ -6034,12 +6034,12 @@ function DashboardView({
                   <div
                     key={ticket.id}
                     onClick={() => onOpenTicket && onOpenTicket(ticket.id)}
-                    className="p-3 bg-slate-50/70 hover:bg-slate-100/80 border border-slate-200/80 rounded-xl transition-all cursor-pointer flex items-center justify-between gap-3 group"
+                    className="py-1.5 px-2.5 sm:px-3 bg-slate-50/70 hover:bg-slate-100/80 border border-slate-200/80 rounded-lg transition-all cursor-pointer flex items-center justify-between gap-2.5 group"
                   >
-                    <div className="flex items-center gap-3 min-w-0">
+                    <div className="flex items-center gap-2.5 min-w-0">
                       <div className="shrink-0 flex flex-col items-center">
                         <span
-                          className={`w-2.5 h-2.5 rounded-full ${
+                          className={`w-2 h-2 rounded-full ${
                             isReply
                               ? "bg-emerald-500 ring-2 ring-emerald-200"
                               : isWaiting
@@ -6049,22 +6049,22 @@ function DashboardView({
                         />
                       </div>
                       <div className="min-w-0">
-                        <div className="flex items-center gap-2 mb-0.5 flex-wrap">
-                          <span className="text-[11px] font-bold text-slate-900">
+                        <div className="flex items-center gap-1.5 mb-0.5 flex-wrap">
+                          <span className="text-[10px] sm:text-[11px] font-bold text-slate-900">
                             #{ticket.id}
                           </span>
                           <span
-                            className={`text-[10px] font-bold px-1.5 py-0.2 rounded border ${ticket.categoryColor}`}
+                            className={`text-[9px] font-bold px-1.5 py-0.2 rounded border ${ticket.categoryColor}`}
                           >
                             {ticket.categoryLabel}
                           </span>
                           {ticket.contextId && (
-                            <span className="text-[10px] font-semibold text-slate-500 bg-white px-1.5 py-0.2 rounded border border-slate-200 truncate">
+                            <span className="text-[9px] font-semibold text-slate-500 bg-white px-1.5 py-0.2 rounded border border-slate-200 truncate">
                               {ticket.contextId}
                             </span>
                           )}
                           <span
-                            className={`text-[10px] font-bold px-1.5 py-0.2 rounded ${
+                            className={`text-[9px] font-bold px-1.5 py-0.2 rounded ${
                               isReply
                                 ? "bg-emerald-50 text-emerald-700"
                                 : isWaiting
@@ -6081,21 +6081,21 @@ function DashboardView({
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-3 shrink-0">
+                    <div className="flex items-center gap-2.5 shrink-0">
                       <div className="hidden sm:flex items-center gap-1.5">
                         <img
                           src={ticket.assignedAuditor?.avatar}
                           alt={ticket.assignedAuditor?.name}
-                          className="w-5 h-5 rounded-full object-cover border border-white"
+                          className="w-4.5 h-4.5 rounded-full object-cover border border-white"
                         />
-                        <span className="text-[11px] font-medium text-slate-500 truncate max-w-[110px]">
+                        <span className="text-[10px] font-medium text-slate-500 truncate max-w-[100px]">
                           {ticket.assignedAuditor?.name}
                         </span>
                       </div>
-                      <span className="text-[11px] font-medium text-slate-400">
+                      <span className="text-[10px] font-medium text-slate-400">
                         {ticket.updatedAt}
                       </span>
-                      <ChevronRight size={15} className="text-slate-400 group-hover:text-slate-600 transition-colors" />
+                      <ChevronRight size={14} className="text-slate-400 group-hover:text-slate-600 transition-colors" />
                     </div>
                   </div>
                 );
@@ -6104,56 +6104,42 @@ function DashboardView({
           </div>
 
           {/* SPÓJNA STOPKA: DEDYKOWANY OPIEKUN KLIENTA */}
-          <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
+          <div className="pt-2.5 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+            <div className="flex items-center gap-2.5">
               <div className="relative shrink-0">
                 <img
                   src="https://wally.widzialni.eu//uploads/avatars/avatar_133_1760079096.jpg"
                   alt="Tomasz Straszak"
-                  className="w-10 h-10 rounded-full object-cover border-2 border-white shadow-xs"
+                  className="w-8 h-8 rounded-full object-cover border-2 border-white shadow-2xs"
                 />
                 <span
-                  className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-white"
+                  className="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-emerald-500 ring-1 ring-white"
                   title="Dostępny"
                 />
               </div>
               <div className="min-w-0">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1.5">
                   <span className="text-xs font-bold text-slate-900 truncate">
                     Tomasz Straszak
                   </span>
-                  <span className="text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-1.5 py-0.2 rounded border border-emerald-100 flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block"></span>
+                  <span className="text-[9px] font-semibold text-emerald-600 bg-emerald-50 px-1 py-0.2 rounded border border-emerald-100 flex items-center gap-0.5">
+                    <span className="w-1 h-1 rounded-full bg-emerald-500 inline-block"></span>
                     Dostępny
                   </span>
                 </div>
-                <div className="text-[11px] font-medium text-slate-500 truncate">
-                  Dedykowany Opiekun Klienta
-                </div>
-                <div className="flex items-center gap-3 text-[11px] text-slate-600 font-semibold mt-0.5">
-                  <a
-                    href="tel:+48795103017"
-                    className="flex items-center gap-1 hover:text-[#0038F8] transition-colors"
-                  >
-                    <Phone size={11} className="text-[#0038F8]" /> 795 103 017
-                  </a>
-                  <a
-                    href="mailto:tomek@widzialni.eu"
-                    className="flex items-center gap-1 hover:text-[#0038F8] transition-colors"
-                  >
-                    <Mail size={11} className="text-[#0038F8]" /> tomek@widzialni.eu
-                  </a>
+                <div className="text-[10px] font-medium text-slate-500 truncate">
+                  Dedykowany Opiekun Klienta • <a href="tel:+48795103017" className="text-[#0038F8] hover:underline font-semibold">795 103 017</a> • <a href="mailto:tomek@widzialni.eu" className="text-[#0038F8] hover:underline font-semibold">tomek@widzialni.eu</a>
                 </div>
               </div>
             </div>
 
-            <div className="flex items-center gap-2 shrink-0 self-start sm:self-auto">
+            <div className="flex items-center gap-1.5 shrink-0 self-start sm:self-auto">
               <button
                 type="button"
                 onClick={() => onOpenNewTicket && onOpenNewTicket()}
-                className="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-800 rounded-xl text-xs font-bold shadow-2xs transition-colors cursor-pointer flex items-center gap-1.5"
+                className="px-2.5 py-1.5 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-800 rounded-lg text-xs font-bold shadow-2xs transition-colors cursor-pointer flex items-center gap-1"
               >
-                <MessageSquareText size={13} className="text-emerald-700" />
+                <MessageSquareText size={12} className="text-emerald-700" />
                 <span>Nowa konsultacja</span>
               </button>
               <button
@@ -6166,7 +6152,7 @@ function DashboardView({
                     );
                   }
                 }}
-                className="px-3 py-1.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-xl text-xs font-bold shadow-2xs transition-colors cursor-pointer"
+                className="px-2.5 py-1.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-lg text-xs font-bold shadow-2xs transition-colors cursor-pointer"
               >
                 Umów spotkanie
               </button>
@@ -6174,26 +6160,26 @@ function DashboardView({
           </div>
         </Card>
 
-        {/* PRAWY WIDGET (5 KOLUMN): KOMUNIKATY & NOWOŚCI (ZMNIEJSZONY MODUŁ) */}
-        <Card className="p-5 sm:p-6 lg:col-span-5 bg-gradient-to-br from-white via-white to-blue-50/20 border border-slate-200 shadow-xs flex flex-col justify-between" data-testid="announcements-teaser">
+        {/* PRAWY WIDGET (5 KOLUMN): KOMUNIKATY & NOWOŚCI (skompresowane) */}
+        <Card className="p-3.5 sm:p-4.5 lg:col-span-5 bg-gradient-to-br from-white via-white to-blue-50/20 border border-slate-200 shadow-xs flex flex-col justify-between" data-testid="announcements-teaser">
           <div>
-            <div className="flex items-center justify-between gap-3 mb-5">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[#0038F8]/10 text-[#0038F8] flex items-center justify-center shrink-0">
-                  <Sparkles size={20} />
+            <div className="flex items-center justify-between gap-2.5 mb-3">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-[#0038F8]/10 text-[#0038F8] flex items-center justify-center shrink-0">
+                  <Sparkles size={17} />
                 </div>
                 <div>
-                  <div className="flex items-center gap-2">
-                    <h3 className="text-lg font-bold text-slate-900 leading-tight">
+                  <div className="flex items-center gap-1.5">
+                    <h3 className="text-sm sm:text-base font-bold text-slate-900 leading-tight">
                       Komunikaty & Nowości
                     </h3>
                     {announcements.filter((a) => a.unread).length > 0 && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-[#0038F8] text-white">
+                      <span className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded-full text-[9px] font-extrabold bg-[#0038F8] text-white">
                         {announcements.filter((a) => a.unread).length} nowe
                       </span>
                     )}
                   </div>
-                  <p className="text-xs text-slate-500 font-medium mt-0.5">
+                  <p className="text-[11px] text-slate-500 font-medium">
                     Aktualizacje prawne, webinary i oferty.
                   </p>
                 </div>
@@ -6202,32 +6188,32 @@ function DashboardView({
               <button
                 type="button"
                 onClick={onOpenAnnouncements}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-slate-50 text-[#0038F8] border border-[#0038F8]/30 hover:border-[#0038F8] rounded-xl text-xs font-bold shadow-2xs transition-all cursor-pointer shrink-0"
+                className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-white hover:bg-slate-50 text-[#0038F8] border border-[#0038F8]/30 hover:border-[#0038F8] rounded-lg text-xs font-bold shadow-2xs transition-all cursor-pointer shrink-0"
               >
                 <span>Wszystkie ({announcements.length})</span>
-                <ArrowRight size={13} />
+                <ArrowRight size={12} />
               </button>
             </div>
 
             {/* 2 KAFELKI OSTATNICH KOMUNIKATÓW */}
-            <div className="space-y-3.5 mb-4">
+            <div className="space-y-2 mb-2.5">
               {announcements.slice(0, 2).map((item) => {
                 const ItemIcon = item.icon || Sparkles;
                 return (
                   <div
                     key={item.id}
                     onClick={onOpenAnnouncements}
-                    className="bg-white border border-slate-200 rounded-xl p-3.5 hover:shadow-md hover:border-[#0038F8]/40 transition-all cursor-pointer flex flex-col justify-between group relative"
+                    className="bg-white border border-slate-200 rounded-lg p-2.5 sm:p-3 hover:shadow-xs hover:border-[#0038F8]/40 transition-all cursor-pointer flex flex-col justify-between group relative"
                   >
                     <div>
-                      <div className="flex items-center justify-between gap-2 mb-1.5">
+                      <div className="flex items-center justify-between gap-2 mb-1">
                         <span
-                          className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold border ${item.categoryColor}`}
+                          className={`inline-flex items-center gap-1 px-1.5 py-0.2 rounded text-[9px] font-bold border ${item.categoryColor}`}
                         >
-                          <ItemIcon size={11} />
+                          <ItemIcon size={10} />
                           <span>{item.categoryLabel}</span>
                         </span>
-                        <span className="text-[11px] font-semibold text-slate-400">
+                        <span className="text-[10px] font-semibold text-slate-400">
                           {item.date}
                         </span>
                       </div>
@@ -6236,17 +6222,17 @@ function DashboardView({
                         {item.title}
                       </h4>
 
-                      <p className="text-[11px] text-slate-600 mt-1 leading-relaxed line-clamp-2">
+                      <p className="text-[10px] sm:text-[11px] text-slate-600 mt-0.5 leading-snug line-clamp-1 sm:line-clamp-2">
                         {item.description}
                       </p>
                     </div>
 
-                    <div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between">
-                      <span className="text-[11px] font-bold text-[#0038F8] group-hover:underline inline-flex items-center gap-1">
+                    <div className="mt-2 pt-1.5 border-t border-slate-100 flex items-center justify-between">
+                      <span className="text-[10px] font-bold text-[#0038F8] group-hover:underline inline-flex items-center gap-1">
                         <span>{item.ctaText}</span>
-                        <ArrowRight size={11} strokeWidth={2.5} />
+                        <ArrowRight size={10} strokeWidth={2.5} />
                       </span>
-                      <span className="text-[10px] font-semibold text-slate-400 bg-slate-50 px-2 py-0.5 rounded">
+                      <span className="text-[9px] font-semibold text-slate-400 bg-slate-50 px-1.5 py-0.2 rounded">
                         Szczegóły
                       </span>
                     </div>
@@ -6256,38 +6242,38 @@ function DashboardView({
             </div>
           </div>
 
-          <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-            <span>Baza wiedzy & archiwum wytycznych</span>
+          <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
+            <span>Baza wiedzy & wytyczne</span>
             <button
               type="button"
               onClick={onOpenAnnouncements}
-              className="text-xs font-bold text-[#0038F8] hover:underline flex items-center gap-1 cursor-pointer"
+              className="text-[11px] font-bold text-[#0038F8] hover:underline flex items-center gap-1 cursor-pointer"
             >
               <span>Przeglądaj wszystkie</span>
-              <ArrowRight size={12} />
+              <ArrowRight size={11} />
             </button>
           </div>
         </Card>
       </div>
 
-      {/* RZĄD 3: Listy akcji i ostatnie audyty */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="p-4 sm:p-6 flex flex-col">
-          <div className="flex items-center justify-between mb-6">
+      {/* RZĄD 3: Listy akcji i ostatnie audyty (skompresowane) */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
+        <Card className="p-3.5 sm:p-4.5 flex flex-col">
+          <div className="flex items-center justify-between mb-3">
             <div>
-              <h3 className="text-lg font-bold text-slate-900">
+              <h3 className="text-sm sm:text-base font-bold text-slate-900">
                 Ostatnie audyty
               </h3>
-              <span className="text-xs text-slate-500 font-medium">
+              <span className="text-[11px] text-slate-500 font-medium">
                 Szybki podgląd prowadzonych prac
               </span>
             </div>
-            <button className="text-[#0038F8] bg-[#0038F8]/5 hover:bg-[#0038F8]/10 p-2 rounded-xl transition-colors">
-              <Plus size={18} />
+            <button className="text-[#0038F8] bg-[#0038F8]/5 hover:bg-[#0038F8]/10 p-1.5 rounded-lg transition-colors">
+              <Plus size={16} />
             </button>
           </div>
 
-          <div className="flex flex-col gap-3 flex-1">
+          <div className="flex flex-col gap-2 flex-1">
             {[
               {
                 id: 1,
@@ -6325,82 +6311,79 @@ function DashboardView({
             ].map((audit) => (
               <div
                 key={audit.id}
-                className="flex flex-col sm:flex-row sm:items-center justify-between p-3 rounded-xl hover:bg-slate-50 border border-slate-100 transition-colors cursor-pointer group"
+                className="flex flex-col sm:flex-row sm:items-center justify-between py-2 px-2.5 sm:px-3 rounded-lg hover:bg-slate-50 border border-slate-100 transition-colors cursor-pointer group"
                 onClick={() => setView("raport-szczegoly")}
               >
-                <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 mb-2 sm:mb-0 min-w-0">
-                  <div className="flex items-center gap-2 shrink-0">
-                    <Badge variant={audit.statusVariant}>
+                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-1.5 sm:mb-0 min-w-0">
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <Badge variant={audit.statusVariant} className="!px-2 !py-0.5 !text-[11px]">
                       {audit.status}
                     </Badge>
                   </div>
-                  <span className="text-[13px] font-bold text-slate-800 group-hover:text-[#0038F8] transition-colors truncate">
+                  <span className="text-xs sm:text-[13px] font-bold text-slate-800 group-hover:text-[#0038F8] transition-colors truncate">
                     {audit.title}
                   </span>
                 </div>
-                <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-4 w-full sm:w-auto shrink-0">
-                  {/* Rozbicie na 3 wagi błędów (Priorytetowe, Ważne, Marginalne) z tooltipami */}
-                  <div className="flex items-center gap-1.5">
+                <div className="flex items-center justify-between sm:justify-end gap-2.5 sm:gap-3 w-full sm:w-auto shrink-0">
+                  {/* Rozbicie na 3 wagi błędów z tooltipami */}
+                  <div className="flex items-center gap-1">
                     {/* Priorytetowe */}
                     <div className="relative group/tip flex items-center">
                       <span
-                        className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[11px] font-bold bg-red-50 text-red-700 border border-red-200/60 cursor-help"
+                        className="inline-flex items-center gap-0.5 px-1.5 py-0.2 rounded text-[10px] font-bold bg-red-50 text-red-700 border border-red-200/60 cursor-help"
                         title={`Błędy priorytetowe: ${audit.critical}`}
                       >
-                        <AlertOctagon size={11} className="text-red-500" />
+                        <AlertOctagon size={10} className="text-red-500" />
                         {audit.critical}
                       </span>
                       <div
                         role="tooltip"
-                        className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 pointer-events-none opacity-0 invisible group-hover/tip:opacity-100 group-hover/tip:visible transition-all duration-150 z-50 bg-slate-900 text-white text-[11px] font-semibold px-2.5 py-1 rounded-lg shadow-xl whitespace-nowrap"
+                        className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 pointer-events-none opacity-0 invisible group-hover/tip:opacity-100 group-hover/tip:visible transition-all duration-150 z-50 bg-slate-900 text-white text-[10px] font-semibold px-2 py-0.5 rounded shadow-xl whitespace-nowrap"
                       >
                         Błędy priorytetowe: {audit.critical}
-                        <span className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-slate-900" />
                       </div>
                     </div>
 
                     {/* Ważne */}
                     <div className="relative group/tip flex items-center">
                       <span
-                        className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[11px] font-bold bg-amber-50 text-amber-800 border border-amber-200 cursor-help"
+                        className="inline-flex items-center gap-0.5 px-1.5 py-0.2 rounded text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200 cursor-help"
                         title={`Błędy ważne: ${audit.important}`}
                       >
-                        <AlertTriangle size={11} className="text-amber-800" />
+                        <AlertTriangle size={10} className="text-amber-800" />
                         {audit.important}
                       </span>
                       <div
                         role="tooltip"
-                        className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 pointer-events-none opacity-0 invisible group-hover/tip:opacity-100 group-hover/tip:visible transition-all duration-150 z-50 bg-slate-900 text-white text-[11px] font-semibold px-2.5 py-1 rounded-lg shadow-xl whitespace-nowrap"
+                        className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 pointer-events-none opacity-0 invisible group-hover/tip:opacity-100 group-hover/tip:visible transition-all duration-150 z-50 bg-slate-900 text-white text-[10px] font-semibold px-2 py-0.5 rounded shadow-xl whitespace-nowrap"
                       >
                         Błędy ważne: {audit.important}
-                        <span className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-slate-900" />
                       </div>
                     </div>
 
                     {/* Marginalne */}
                     <div className="relative group/tip flex items-center">
                       <span
-                        className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[11px] font-bold bg-blue-50 text-blue-700 border border-blue-200 cursor-help"
+                        className="inline-flex items-center gap-0.5 px-1.5 py-0.2 rounded text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200 cursor-help"
                         title={`Błędy marginalne: ${audit.marginal}`}
                       >
-                        <Info size={11} className="text-blue-700" />
+                        <Info size={10} className="text-blue-700" />
                         {audit.marginal}
                       </span>
                       <div
                         role="tooltip"
-                        className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 pointer-events-none opacity-0 invisible group-hover/tip:opacity-100 group-hover/tip:visible transition-all duration-150 z-50 bg-slate-900 text-white text-[11px] font-semibold px-2.5 py-1 rounded-lg shadow-xl whitespace-nowrap"
+                        className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 pointer-events-none opacity-0 invisible group-hover/tip:opacity-100 group-hover/tip:visible transition-all duration-150 z-50 bg-slate-900 text-white text-[10px] font-semibold px-2 py-0.5 rounded shadow-xl whitespace-nowrap"
                       >
                         Błędy marginalne: {audit.marginal}
-                        <span className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-slate-900" />
                       </div>
                     </div>
                   </div>
 
-                  <span className="text-[11px] font-semibold text-slate-600 flex items-center gap-1.5">
-                    <Calendar size={12} /> {audit.date}
+                  <span className="text-[10px] sm:text-[11px] font-semibold text-slate-500 flex items-center gap-1">
+                    <Calendar size={11} /> {audit.date}
                   </span>
                   <span
-                    className={`text-[13px] font-extrabold ${
+                    className={`text-xs sm:text-[13px] font-extrabold ${
                       audit.score === "-"
                         ? "text-slate-600 font-bold"
                         : parseFloat(audit.score) >= 80
@@ -6416,25 +6399,25 @@ function DashboardView({
           </div>
           <button
             onClick={() => setView("raporty")}
-            className="w-full mt-4 text-[13px] font-bold text-[#0038F8] hover:bg-[#0038F8]/5 py-2.5 rounded-xl transition-colors border border-[#0038F8]/10"
+            className="w-full mt-2.5 text-xs font-bold text-[#0038F8] hover:bg-[#0038F8]/5 py-2 rounded-lg transition-colors border border-[#0038F8]/10"
           >
             Przejdź do modułu Audytów
           </button>
         </Card>
 
-        <Card className="p-4 sm:p-6 flex flex-col">
-          <div className="flex items-center justify-between mb-6">
+        <Card className="p-3.5 sm:p-4.5 flex flex-col">
+          <div className="flex items-center justify-between mb-3">
             <div>
-              <h3 className="text-lg font-bold text-slate-900">
+              <h3 className="text-sm sm:text-base font-bold text-slate-900">
                 Wymagające uwagi (Top 5)
               </h3>
-              <span className="text-xs text-slate-500 font-medium">
+              <span className="text-[11px] text-slate-500 font-medium">
                 Usługi o najniższym procencie dostępności
               </span>
             </div>
           </div>
 
-          <div className="flex flex-col gap-2 flex-1">
+          <div className="flex flex-col gap-1.5 flex-1">
             {[
               { name: "Kredyt hipoteczny (Kalkulator)", score: 42.5, err: 54 },
               { name: "Otwarcie rachunku firmowego", score: 58.2, err: 32 },
@@ -6444,18 +6427,18 @@ function DashboardView({
             ].map((u, i) => (
               <div
                 key={i}
-                className="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 border border-transparent hover:border-slate-100 transition-colors cursor-pointer"
+                className="flex items-center justify-between py-1.5 px-2.5 rounded-lg hover:bg-slate-50 border border-transparent hover:border-slate-100 transition-colors cursor-pointer"
                 onClick={() => setView("baza-uslug")}
               >
-                <div className="flex items-center gap-3">
-                  <div className="w-6 h-6 rounded bg-red-50 text-red-600 flex items-center justify-center text-[10px] font-bold shrink-0">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-5 h-5 rounded bg-red-50 text-red-600 flex items-center justify-center text-[9px] font-bold shrink-0">
                     {i + 1}
                   </div>
                   <div>
-                    <div className="text-[13px] font-bold text-slate-800 line-clamp-1">
+                    <div className="text-xs sm:text-[13px] font-bold text-slate-800 line-clamp-1">
                       {u.name}
                     </div>
-                    <div className="text-[11px] text-slate-500 font-semibold">
+                    <div className="text-[10px] text-slate-500 font-semibold">
                       {u.err} aktywnych błędów
                     </div>
                   </div>
@@ -6468,7 +6451,7 @@ function DashboardView({
                       ? "warning"
                       : "success"
                   }
-                  className="w-14 sm:w-16 justify-center !py-1 shrink-0 ml-2"
+                  className="w-12 sm:w-14 justify-center !py-0.5 !text-[11px] shrink-0 ml-2"
                 >
                   {u.score}%
                 </Badge>
@@ -6477,7 +6460,7 @@ function DashboardView({
           </div>
           <button
             onClick={() => setView("raportowanie")}
-            className="w-full mt-4 text-[13px] font-bold text-[#0038F8] hover:bg-[#0038F8]/5 py-2.5 rounded-xl transition-colors border border-[#0038F8]/10"
+            className="w-full mt-2.5 text-xs font-bold text-[#0038F8] hover:bg-[#0038F8]/5 py-2 rounded-lg transition-colors border border-[#0038F8]/10"
           >
             Zobacz pełny ranking w raportach
           </button>
