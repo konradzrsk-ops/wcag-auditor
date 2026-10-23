@@ -18,6 +18,7 @@ import {
   Folder,
   ChevronRight,
   ChevronLeft,
+  Pin,
   Plus,
   Pencil,
   Trash2,
@@ -4343,13 +4344,20 @@ const VIEW_GUIDES = {
         badge: "Punktacja",
         desc: "Oficjalna ocena procentowa spełnienia badanych kryteriów WCAG (kolor zielony dla >=80%).",
       },
+      {
+        name: "Obserwowane audyty (Pineska / Ulubione)",
+        badge: "Personalizacja",
+        desc: "Ikona pineski przy każdym audycie pozwala przypiąć i obserwować kluczowe badania. Dedykowany przycisk 'Obserwowane (N)' w pasku filtrów umożliwia natychmiastowe zawężenie listy tylko do Twoich przypiętych audytów.",
+      },
     ],
     steps: [
       "Krok 1: Wpisz frazę w wyszukiwarkę lub użyj filtrów (kanały Desktop/iOS/Android/Dokument, audytor, status), aby zawęzić listę do interesującej Cię usługi.",
-      "Krok 2: Użyj sortowania w tabeli, aby znaleźć audyty o najniższym wyniku lub z największą liczbą błędów.",
-      "Krok 3: Kliknij wiersz audytu lub przycisk 'Szczegóły', aby otworzyć pełny raport podsumowujący.",
+      "Krok 2: Kliknij ikonę pineski przy dowolnym audycie, aby dodać go do listy obserwowanych i szybko do niego wracać.",
+      "Krok 3: Użyj sortowania w tabeli, aby znaleźć audyty o najniższym wyniku lub z największą liczbą błędów.",
+      "Krok 4: Kliknij wiersz audytu lub przycisk 'Szczegóły', aby otworzyć pełny raport podsumowujący.",
     ],
     tips: [
+      "Kliknij ikonę pineski obok tytułu audytu, aby dodać go do obserwowanych. Stan jest zapamiętywany lokalnie i dostępny także w widoku raportowania.",
       "Widok tabeli jest zalecany przy analizie dużej liczby badań i eksporcie danych.",
       "Widok kafelkowy ułatwia szybkie przeglądanie urządzeń testowych i statusów.",
     ],
@@ -4511,6 +4519,16 @@ const VIEW_GUIDES = {
         desc: "Usunięcie sekcji historii re-audytów z widoku raportowania pozwala skupić się bezpośrednio na bieżących wskaźnikach zgodności i otwartych barierach.",
       },
       {
+        name: "Katalog audytów i paginacja (Czysty stan początkowy)",
+        badge: "Katalog",
+        desc: "Widok startowy modułu raportowania ładuje pełen katalog 10 audytów z czytelną paginacją (4 audyty na stronę) i przejrzystym nagłówkiem katalogu bez mylących komunikatów wyszukiwania przed użyciem filtrów. Przy zerowych wynikach wyświetla dedykowany pusty stan (Empty State) z przyciskiem resetu.",
+      },
+      {
+        name: "Obserwowane w raportach (Pineska)",
+        badge: "Filtrowanie",
+        desc: "Przełącznik 'Obserwowane (N)' na pasku raportów pozwala szybko filtrować wyłącznie przypięte badania, a ikony pineski umożliwiają zarządzanie obserwowanymi bezpośrednio z kart audytów.",
+      },
+      {
         name: "Rejestr Ryzyka i Rankingi",
         badge: "Zarządcze",
         desc: "Zestawienie usług o najwyższej i najniższej dojrzałości oraz rejestr naruszeń wymagających pilnej interwencji.",
@@ -4518,8 +4536,9 @@ const VIEW_GUIDES = {
     ],
     steps: [
       "Krok 1: Wybierz odpowiednią zakładkę raportową (np. 'Raporty z audytów', 'Dostępność usług' lub 'Zarządcze').",
-      "Krok 2: Skonfiguruj filtry poziome: wybierz Kanał (Desktop, iOS, Android, Dokument), Audytora lub minimalną Zgodność WCAG.",
-      "Krok 3: Analizuj wskaźniki spełnienia kryteriów WCAG oraz otwarte usterki z podziałem na priorytety.",
+      "Krok 2: Domyślnie prezentowany jest pełny katalog audytów z paginacją; w razie potrzeby skonfiguruj filtry poziome: Kanał (Desktop, iOS, Android, Dokument), Audytor, Priorytety lub Zgodność WCAG.",
+      "Krok 3: Użyj przycisku 'Obserwowane' lub kliknij ikonę pineski na dowolnym audycie, aby natychmiast wyodrębnić badania, które bezpośrednio Cię dotyczą.",
+      "Krok 4: Analizuj wskaźniki spełnienia kryteriów WCAG oraz otwarte usterki z podziałem na priorytety.",
     ],
     tips: [
       "Rozdzielone filtry 'Audytor' i 'Zgodność WCAG' pozwalają na precyzyjne filtrowanie audytów konkretnego eksperta oraz odfiltrowanie procesów wymagających wsparcia (<80%).",
@@ -8943,7 +8962,99 @@ function RaportyView({ setView, onOpenReaudit, showToast }) {
       statusVariant: "info",
       auditor: "Anna Nowak",
     },
+    {
+      id: 7,
+      date: "18.05.2026",
+      status: "Zakończony",
+      title: "Bankowość korporacyjna BusinessNet - moduł autoryzacji",
+      devices: "Desktop",
+      priority: "2",
+      critical: 2,
+      important: 6,
+      marginal: 5,
+      score: "88.20%",
+      icon: Monitor,
+      statusVariant: "success",
+      auditor: "Piotr Smułkowski",
+    },
+    {
+      id: 8,
+      date: "26.05.2026",
+      status: "W trakcie",
+      title: "Aplikacja iOS - Przelewy i Kantor Walutowy",
+      devices: "iOS",
+      priority: "1",
+      critical: 1,
+      important: 4,
+      marginal: 2,
+      score: "91.50%",
+      icon: Smartphone,
+      statusVariant: "warning",
+      auditor: "Jan Kowalski",
+    },
+    {
+      id: 9,
+      date: "02.06.2026",
+      status: "W trakcie",
+      title: "Portal Hipoteczny - Kalkulator i Wniosek Kredytowy",
+      devices: "Desktop",
+      priority: "4",
+      critical: 4,
+      important: 11,
+      marginal: 7,
+      score: "73.40%",
+      icon: MonitorSmartphone,
+      statusVariant: "warning",
+      auditor: "Anna Nowak",
+    },
+    {
+      id: 10,
+      date: "14.06.2026",
+      status: "Zakończony",
+      title: "Tabela Opłat i Prowizji PDF - Dokumenty Cyfrowe",
+      devices: "Dokumenty",
+      priority: "0",
+      critical: 0,
+      important: 2,
+      marginal: 3,
+      score: "92.10%",
+      icon: FileText,
+      statusVariant: "success",
+      auditor: "Piotr Smułkowski",
+    },
   ];
+
+  // Pinned / Obserwowane audyty (Ulubione z persistencją w localStorage)
+  const [pinnedAuditIds, setPinnedAuditIds] = useState(() => {
+    try {
+      const saved = localStorage.getItem("wally_pinned_audits");
+      return saved ? JSON.parse(saved) : ["1", "3"];
+    } catch {
+      return ["1", "3"];
+    }
+  });
+  const [onlyPinned, setOnlyPinned] = useState(false);
+
+  const togglePinAudit = (auditId, auditTitle, e) => {
+    if (e) e.stopPropagation();
+    const strId = String(auditId);
+    setPinnedAuditIds((prev) => {
+      const isPinned = prev.some((id) => String(id) === strId);
+      const next = isPinned ? prev.filter((id) => String(id) !== strId) : [...prev, strId];
+      try {
+        localStorage.setItem("wally_pinned_audits", JSON.stringify(next));
+      } catch {}
+      if (showToast) {
+        showToast(
+          isPinned ? "Odpięto z obserwowanych" : "Przypięto do obserwowanych",
+          isPinned
+            ? `Audyt "${auditTitle}" został usunięty z listy Twoich obserwowanych.`
+            : `Audyt "${auditTitle}" został przypięty i dodany do listy Twoich obserwowanych.`
+        );
+      }
+      return next;
+    });
+  };
 
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -8980,6 +9091,7 @@ function RaportyView({ setView, onOpenReaudit, showToast }) {
     setActiveTimeRange("all");
     setDateFrom("");
     setDateTo("");
+    setOnlyPinned(false);
     setActiveDropdown(null);
   };
 
@@ -8990,7 +9102,8 @@ function RaportyView({ setView, onOpenReaudit, showToast }) {
     Object.values(selectedChannels).some(Boolean) ||
     activeTimeRange !== "all" ||
     dateFrom ||
-    dateTo
+    dateTo ||
+    onlyPinned
   );
 
   const activeFilterCount =
@@ -8998,11 +9111,17 @@ function RaportyView({ setView, onOpenReaudit, showToast }) {
     (selectedAuditor ? 1 : 0) +
     Object.values(selectedStatuses).filter(Boolean).length +
     Object.values(selectedChannels).filter(Boolean).length +
-    (activeTimeRange !== "all" || dateFrom || dateTo ? 1 : 0);
+    (activeTimeRange !== "all" || dateFrom || dateTo ? 1 : 0) +
+    (onlyPinned ? 1 : 0);
 
   // Dynamiczne filtrowanie i sortowanie na bieżąco
   const filteredAudits = useMemo(() => {
     let list = [...mockAuditsList];
+
+    // 0. Tylko obserwowane (Ulubione / Przypięte)
+    if (onlyPinned) {
+      list = list.filter((a) => pinnedAuditIds.some((pId) => String(pId) === String(a.id)));
+    }
 
     // Wyszukiwanie po tekście
     if (searchQuery.trim()) {
@@ -9093,6 +9212,8 @@ function RaportyView({ setView, onOpenReaudit, showToast }) {
     activeTimeRange,
     dateFrom,
     dateTo,
+    onlyPinned,
+    pinnedAuditIds,
     sortBy,
   ]);
 
@@ -9374,6 +9495,23 @@ function RaportyView({ setView, onOpenReaudit, showToast }) {
               )}
             </div>
 
+            {/* 5. Obserwowane (Ulubione / Przypięte) */}
+            <button
+              type="button"
+              onClick={() => setOnlyPinned((prev) => !prev)}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold border transition-colors cursor-pointer ${
+                onlyPinned
+                  ? "bg-amber-500 text-white border-amber-600 shadow-sm"
+                  : pinnedAuditIds.length > 0
+                  ? "bg-amber-50 text-amber-800 border-amber-200 hover:bg-amber-100"
+                  : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
+              }`}
+              title={onlyPinned ? "Pokaż wszystkie audyty" : "Filtruj tylko przypięte / obserwowane audyty"}
+            >
+              <Pin size={13} className={onlyPinned || pinnedAuditIds.length > 0 ? "fill-current" : ""} />
+              <span>Obserwowane ({pinnedAuditIds.length})</span>
+            </button>
+
             {/* Przycisk: Wyczyść */}
             <div className="flex items-center gap-2 ml-auto">
               <button
@@ -9484,6 +9622,22 @@ function RaportyView({ setView, onOpenReaudit, showToast }) {
                     onClick={() => { setDateFrom(""); setDateTo(""); setActiveTimeRange("all"); }}
                     className="hover:bg-[#0038F8]/20 p-0.5 rounded transition-colors cursor-pointer"
                     title="Usuń filtr dat"
+                  >
+                    <X size={12} />
+                  </button>
+                </span>
+              )}
+
+              {/* Chip: Obserwowane */}
+              {onlyPinned && (
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-50 text-amber-800 border border-amber-200">
+                  <Pin size={12} className="fill-amber-600 text-amber-600" />
+                  <span>Tylko obserwowane ({pinnedAuditIds.length})</span>
+                  <button
+                    type="button"
+                    onClick={() => setOnlyPinned(false)}
+                    className="hover:bg-amber-200/60 p-0.5 rounded transition-colors cursor-pointer"
+                    title="Usuń filtr obserwowanych"
                   >
                     <X size={12} />
                   </button>
@@ -9610,8 +9764,38 @@ function RaportyView({ setView, onOpenReaudit, showToast }) {
                         }}
                       >
                         <td className="px-5 py-4">
-                          <div className="font-bold text-slate-900 group-hover:text-[#0038F8] transition-colors leading-snug">
-                            {audit.title}
+                          <div className="flex items-center gap-2">
+                            <button
+                              type="button"
+                              onClick={(e) => togglePinAudit(audit.id, audit.title, e)}
+                              className={`p-1.5 rounded-lg transition-colors cursor-pointer shrink-0 ${
+                                pinnedAuditIds.some((pId) => String(pId) === String(audit.id))
+                                  ? "text-[#0038F8] bg-blue-50 hover:bg-blue-100"
+                                  : "text-slate-300 hover:text-slate-600 hover:bg-slate-100"
+                              }`}
+                              title={
+                                pinnedAuditIds.some((pId) => String(pId) === String(audit.id))
+                                  ? "Odepnij audyt z obserwowanych"
+                                  : "Przypnij audyt do obserwowanych (ulubione)"
+                              }
+                              aria-label={
+                                pinnedAuditIds.some((pId) => String(pId) === String(audit.id))
+                                  ? "Odepnij audyt"
+                                  : "Przypnij audyt"
+                              }
+                            >
+                              <Pin
+                                size={14}
+                                className={
+                                  pinnedAuditIds.some((pId) => String(pId) === String(audit.id))
+                                    ? "fill-[#0038F8]"
+                                    : ""
+                                }
+                              />
+                            </button>
+                            <div className="font-bold text-slate-900 group-hover:text-[#0038F8] transition-colors leading-snug">
+                              {audit.title}
+                            </div>
                           </div>
                         </td>
                         <td className="px-5 py-4 whitespace-nowrap">
@@ -9761,6 +9945,8 @@ function RaportyView({ setView, onOpenReaudit, showToast }) {
                 marginal={audit.marginal}
                 score={audit.score}
                 icon={audit.icon}
+                isPinned={pinnedAuditIds.some((pId) => String(pId) === String(audit.id))}
+                onTogglePin={(e) => togglePinAudit(audit.id, audit.title, e)}
                 onClick={() => setView("raport-szczegoly")}
               />
             ))}
@@ -9784,6 +9970,8 @@ function ReportCard({
   marginal = 0,
   score,
   icon: DeviceIcon,
+  isPinned = false,
+  onTogglePin,
   onClick,
 }) {
   return (
@@ -9797,18 +9985,36 @@ function ReportCard({
           <Calendar size={12} className="text-indigo-600 shrink-0" />
           <span>{date}</span>
         </Badge>
-        <Badge variant={statusVariant}>
-          {statusVariant === "success" && (
-            <CheckCircle2 size={13} className="shrink-0" />
-          )}
-          {statusVariant === "warning" && (
-            <Activity size={13} className="shrink-0" />
-          )}
-          {statusVariant === "info" && (
-            <Eye size={13} className="shrink-0" />
-          )}
-          <span>{status}</span>
-        </Badge>
+        <div className="flex items-center gap-1.5">
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onTogglePin && onTogglePin(e);
+            }}
+            className={`p-1.5 rounded-lg transition-colors cursor-pointer shrink-0 ${
+              isPinned
+                ? "text-[#0038F8] bg-blue-50 hover:bg-blue-100"
+                : "text-slate-300 hover:text-slate-600 hover:bg-slate-100"
+            }`}
+            title={isPinned ? "Odepnij audyt z obserwowanych" : "Przypnij audyt do obserwowanych (ulubione)"}
+            aria-label={isPinned ? "Odepnij audyt" : "Przypnij audyt"}
+          >
+            <Pin size={14} className={isPinned ? "fill-[#0038F8]" : ""} />
+          </button>
+          <Badge variant={statusVariant}>
+            {statusVariant === "success" && (
+              <CheckCircle2 size={13} className="shrink-0" />
+            )}
+            {statusVariant === "warning" && (
+              <Activity size={13} className="shrink-0" />
+            )}
+            {statusVariant === "info" && (
+              <Eye size={13} className="shrink-0" />
+            )}
+            <span>{status}</span>
+          </Badge>
+        </div>
       </div>
       <div className="mb-3 sm:mb-4 flex-1">
         <h3 className="text-sm sm:text-base font-bold text-slate-900 leading-snug mb-1.5 sm:mb-2 pr-2">
@@ -9905,6 +10111,40 @@ function ReportCard({
 }
 
 function ReportSummaryView({ setView, onOpenReaudit, showToast }) {
+  const currentAuditId = "1";
+  const [isPinned, setIsPinned] = useState(() => {
+    try {
+      const saved = localStorage.getItem("wally_pinned_audits");
+      const list = saved ? JSON.parse(saved) : ["1"];
+      return list.some((id) => String(id) === currentAuditId);
+    } catch {
+      return true;
+    }
+  });
+
+  const handleTogglePin = () => {
+    setIsPinned((prev) => {
+      const next = !prev;
+      try {
+        const saved = localStorage.getItem("wally_pinned_audits");
+        const list = saved ? JSON.parse(saved) : [];
+        const nextList = next
+          ? [...list.filter((id) => String(id) !== currentAuditId), currentAuditId]
+          : list.filter((id) => String(id) !== currentAuditId);
+        localStorage.setItem("wally_pinned_audits", JSON.stringify(nextList));
+      } catch {}
+      if (showToast) {
+        showToast(
+          next ? "Przypięto do obserwowanych" : "Odpięto z obserwowanych",
+          next
+            ? "Ten audyt został przypięty i dodany do listy Twoich obserwowanych."
+            : "Ten audyt został usunięty z listy Twoich obserwowanych."
+        );
+      }
+      return next;
+    });
+  };
+
   const [reauditsList, setReauditsList] = useState([
     {
       id: "re1",
@@ -9987,6 +10227,18 @@ function ReportSummaryView({ setView, onOpenReaudit, showToast }) {
               className="flex justify-center items-center gap-1.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 px-3.5 py-2 rounded-lg font-bold shadow-xs transition-colors text-xs cursor-pointer"
             >
               <ArrowLeft size={14} /> <span>Wróć</span>
+            </button>
+            <button
+              onClick={handleTogglePin}
+              className={`flex justify-center items-center gap-1.5 border px-3.5 py-2 rounded-lg font-bold shadow-xs transition-colors text-xs cursor-pointer ${
+                isPinned
+                  ? "bg-amber-500 text-white border-amber-600 hover:bg-amber-600 shadow-sm"
+                  : "bg-white hover:bg-slate-50 border-slate-200 text-slate-700"
+              }`}
+              title={isPinned ? "Odepnij ten audyt z obserwowanych" : "Przypnij ten audyt do obserwowanych (ulubione)"}
+            >
+              <Pin size={14} className={isPinned ? "fill-white text-white" : "text-amber-500"} />
+              <span>{isPinned ? "Obserwowany" : "Przypnij audyt"}</span>
             </button>
             <button
               onClick={handleDownloadDoc}
@@ -12705,7 +12957,22 @@ function ReportingModuleView({ setView, showToast }) {
 
               {/* Zawartość wybranego pod-widoku audytów */}
               <div className="flex-1">
-                {activeAudytyTab === "raport" && <AuditReportView />}
+                {activeAudytyTab === "raport" && (
+                  <AuditReportView
+                    filters={{
+                      channels: auditChannels,
+                      auditor: auditAuditor,
+                      scoreRange: auditScoreRange,
+                      priorities: auditPriorities,
+                      timeRange: auditTimeRange,
+                      dateFrom: auditDateFrom,
+                      dateTo: auditDateTo,
+                    }}
+                    hasActiveFilters={auditFiltersCount > 0}
+                    onResetFilters={clearAuditFilters}
+                    showToast={showToast}
+                  />
+                )}
                 {activeAudytyTab === "bledy" && <AuditErrorsReportView />}
               </div>
             </>
@@ -13499,48 +13766,85 @@ function FilterNumberRange({
 // RAPORT AUDYTÓW (Odświeżona Pełna Wersja)
 // ==========================================
 
-function AuditReportView() {
+function AuditReportView({
+  filters = {},
+  hasActiveFilters = false,
+  onResetFilters,
+  showToast,
+}: {
+  filters?: any;
+  hasActiveFilters?: boolean;
+  onResetFilters?: () => void;
+  showToast?: (title: string, message: string) => void;
+} = {}) {
   const [detailLevel, setDetailLevel] = useState(2);
   const [sortBy, setSortBy] = useState("date_desc");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 4;
 
-  const mockAudits = [
+  // Obsługa Ulubionych / Obserwowanych audytów (synchronizacja z localStorage)
+  const [pinnedAuditIds, setPinnedAuditIds] = useState<string[]>(() => {
+    try {
+      const saved = localStorage.getItem("wally_pinned_audits");
+      return saved ? JSON.parse(saved) : ["1", "3"];
+    } catch {
+      return ["1", "3"];
+    }
+  });
+  const [onlyPinned, setOnlyPinned] = useState(false);
+
+  // Synchronizacja pinnedAuditIds ze zdarzeniami storage
+  useEffect(() => {
+    const handleStorage = () => {
+      try {
+        const saved = localStorage.getItem("wally_pinned_audits");
+        if (saved) setPinnedAuditIds(JSON.parse(saved));
+      } catch {}
+    };
+    window.addEventListener("storage", handleStorage);
+    return () => window.removeEventListener("storage", handleStorage);
+  }, []);
+
+  const togglePinAudit = (auditId: string | number, auditTitle: string, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    const strId = String(auditId);
+    setPinnedAuditIds((prev) => {
+      const isPinned = prev.some((id) => String(id) === strId);
+      const next = isPinned
+        ? prev.filter((id) => String(id) !== strId)
+        : [...prev, strId];
+      try {
+        localStorage.setItem("wally_pinned_audits", JSON.stringify(next));
+      } catch {}
+      if (showToast) {
+        showToast(
+          isPinned ? "Odpięto z obserwowanych" : "Przypięto do obserwowanych",
+          isPinned
+            ? `Audyt "${auditTitle}" został usunięty z listy Twoich obserwowanych.`
+            : `Audyt "${auditTitle}" został przypięty i dodany do listy Twoich obserwowanych.`
+        );
+      }
+      return next;
+    });
+  };
+
+  // Pełny katalog 10 audytów bankowych
+  const allAudits = useMemo(() => [
     {
-      id: "a1",
-      name: "Strona ing.pl - wybrane podstrony",
-      startDate: "01.03.2024",
-      endDate: "12.03.2024",
+      id: "1",
+      name: "Portal informacyjny - wybrane podstrony",
+      startDate: "01.03.2026",
+      endDate: "12.03.2026",
       wcagVersion: "WCAG 2.1 Poziom AA",
-      channels: ["WWW", "Aplikacja"],
-      auditor: "P. Smułkowski",
-      score: 77.5,
+      channels: ["Desktop", "Android", "iOS"],
+      auditor: "Piotr Smułkowski",
+      score: 77.55,
       brokenCriteria: 11,
       totalErrors: 45,
       priorities: { c: 3, w: 12, m: 20 },
-      reaudits: [
-        {
-          id: "re1",
-          name: "Reaudyt z dnia 15.04.2024",
-          date: "15.04.2024",
-          auditor: "P. Smułkowski",
-          score: 85.2,
-          brokenCriteria: 5,
-          critical: 1,
-          status: "Zakończony",
-        },
-        {
-          id: "re2",
-          name: "Reaudyt z dnia 20.05.2024",
-          date: "20.05.2024",
-          auditor: "A. Nowak",
-          score: 92.4,
-          brokenCriteria: 2,
-          critical: 0,
-          status: "W trakcie",
-        },
-      ],
       views: [
         {
-          id: "v1",
+          id: "v1-1",
           name: "Strona główna - modal logowania",
           score: 65.0,
           brokenCriteria: 4,
@@ -13563,37 +13867,301 @@ function AuditReportView() {
             },
           ],
         },
-        ...genViews(12, "aud-1-gen"),
+        ...genViews(6, "aud-1-gen"),
       ],
     },
     {
-      id: "a2",
-      name: "Aplikacja MING Android - Kredyty",
-      startDate: "10.02.2024",
-      endDate: "28.02.2024",
+      id: "2",
+      name: "Aplikacja mobilna Android - wybrane procesy",
+      startDate: "10.02.2026",
+      endDate: "04.03.2026",
       wcagVersion: "WCAG 2.1 Poziom AA",
-      channels: ["Aplikacja"],
-      auditor: "J. Kowalski",
-      score: 83.6,
+      channels: ["Android"],
+      auditor: "Piotr Smułkowski",
+      score: 83.67,
       brokenCriteria: 6,
       totalErrors: 18,
-      priorities: { c: 0, w: 8, m: 5 },
-      reaudits: [],
-      views: genViews(8, "aud-2-gen"),
+      priorities: { c: 2, w: 5, m: 3 },
+      views: [
+        {
+          id: "v2-1",
+          name: "Ekran autoryzacji kodem BLIK",
+          score: 80.0,
+          brokenCriteria: 2,
+          totalErrors: 4,
+          priorities: { c: 1, w: 2, m: 1 },
+          errors: [
+            {
+              id: "e2-1",
+              title: "Niewystarczający kontrast pola wpisywania cyfr BLIK",
+              criteria: "1.4.3 Kontrast",
+              priority: "Priorytetowy",
+              status: "Nowy",
+            },
+          ],
+        },
+        ...genViews(5, "aud-2-gen"),
+      ],
     },
-  ];
+    {
+      id: "3",
+      name: "Serwis transakcyjny - Nowy Dashboard",
+      startDate: "15.03.2026",
+      endDate: "15.04.2026",
+      wcagVersion: "WCAG 2.1 Poziom AA",
+      channels: ["Desktop"],
+      auditor: "Anna Nowak",
+      score: 62.10,
+      brokenCriteria: 14,
+      totalErrors: 52,
+      priorities: { c: 5, w: 14, m: 8 },
+      views: [
+        {
+          id: "v3-1",
+          name: "Dashboard główny rachunku bieżącego",
+          score: 58.4,
+          brokenCriteria: 7,
+          totalErrors: 22,
+          priorities: { c: 3, w: 8, m: 5 },
+          errors: [
+            {
+              id: "e3-1",
+              title: "Pułapka klawiaturowa w widgetcie historii transakcji",
+              criteria: "2.1.2 Brak pułapki na klawiaturę",
+              priority: "Priorytetowy",
+              status: "Nowy",
+            },
+          ],
+        },
+        ...genViews(7, "aud-3-gen"),
+      ],
+    },
+    {
+      id: "4",
+      name: "Aplikacja mobilna - moduł inwestycji",
+      startDate: "01.04.2026",
+      endDate: "22.04.2026",
+      wcagVersion: "WCAG 2.1 Poziom AA",
+      channels: ["iOS", "Android"],
+      auditor: "Jan Kowalski",
+      score: 89.40,
+      brokenCriteria: 4,
+      totalErrors: 14,
+      priorities: { c: 1, w: 3, m: 2 },
+      views: genViews(6, "aud-4-gen"),
+    },
+    {
+      id: "5",
+      name: "Dokumenty PDF - Regulaminy kart",
+      startDate: "15.04.2026",
+      endDate: "10.05.2026",
+      wcagVersion: "WCAG 2.1 Poziom AA",
+      channels: ["Dokumenty"],
+      auditor: "Piotr Smułkowski",
+      score: 95.00,
+      brokenCriteria: 2,
+      totalErrors: 5,
+      priorities: { c: 0, w: 1, m: 2 },
+      views: genViews(4, "aud-5-gen"),
+    },
+    {
+      id: "6",
+      name: "Proces reklamacyjny - formularze",
+      startDate: "10.05.2026",
+      endDate: "05.06.2026",
+      wcagVersion: "WCAG 2.1 Poziom AA",
+      channels: ["Desktop"],
+      auditor: "Anna Nowak",
+      score: 45.20,
+      brokenCriteria: 18,
+      totalErrors: 64,
+      priorities: { c: 8, w: 19, m: 11 },
+      views: genViews(8, "aud-6-gen"),
+    },
+    {
+      id: "7",
+      name: "Bankowość korporacyjna BusinessNet - moduł autoryzacji",
+      startDate: "20.04.2026",
+      endDate: "18.05.2026",
+      wcagVersion: "WCAG 2.1 Poziom AA",
+      channels: ["Desktop"],
+      auditor: "Piotr Smułkowski",
+      score: 88.20,
+      brokenCriteria: 5,
+      totalErrors: 16,
+      priorities: { c: 2, w: 6, m: 5 },
+      views: genViews(5, "aud-7-gen"),
+    },
+    {
+      id: "8",
+      name: "Aplikacja iOS - Przelewy i Kantor Walutowy",
+      startDate: "02.05.2026",
+      endDate: "26.05.2026",
+      wcagVersion: "WCAG 2.1 Poziom AA",
+      channels: ["iOS"],
+      auditor: "Jan Kowalski",
+      score: 91.50,
+      brokenCriteria: 3,
+      totalErrors: 11,
+      priorities: { c: 1, w: 4, m: 2 },
+      views: genViews(5, "aud-8-gen"),
+    },
+    {
+      id: "9",
+      name: "Portal Hipoteczny - Kalkulator i Wniosek Kredytowy",
+      startDate: "12.05.2026",
+      endDate: "02.06.2026",
+      wcagVersion: "WCAG 2.1 Poziom AA",
+      channels: ["Desktop"],
+      auditor: "Anna Nowak",
+      score: 73.40,
+      brokenCriteria: 9,
+      totalErrors: 32,
+      priorities: { c: 4, w: 11, m: 7 },
+      views: genViews(6, "aud-9-gen"),
+    },
+    {
+      id: "10",
+      name: "Tabela Opłat i Prowizji PDF - Dokumenty Cyfrowe",
+      startDate: "25.05.2026",
+      endDate: "14.06.2026",
+      wcagVersion: "WCAG 2.1 Poziom AA",
+      channels: ["Dokumenty"],
+      auditor: "Piotr Smułkowski",
+      score: 96.80,
+      brokenCriteria: 1,
+      totalErrors: 4,
+      priorities: { c: 0, w: 2, m: 2 },
+      views: genViews(4, "aud-10-gen"),
+    },
+  ], []);
+
+  // Filtrowanie audytów
+  const filteredAudits = useMemo(() => {
+    return allAudits.filter((audit) => {
+      // Filtr Ulubione / Obserwowane
+      if (onlyPinned) {
+        const isPinned = pinnedAuditIds.some((id) => String(id) === String(audit.id));
+        if (!isPinned) return false;
+      }
+
+      // Filtr kanałów
+      const activeChannels = Object.keys(filters.channels || {}).filter(
+        (ch) => filters.channels[ch]
+      );
+      if (activeChannels.length > 0) {
+        const hasChannel = audit.channels.some((ch) => activeChannels.includes(ch));
+        if (!hasChannel) return false;
+      }
+
+      // Filtr audytora
+      if (filters.auditor && audit.auditor !== filters.auditor) {
+        return false;
+      }
+
+      // Filtr zakresu punktowego
+      if (filters.scoreRange && filters.scoreRange !== "all") {
+        if (filters.scoreRange === "low" && audit.score >= 70) return false;
+        if (
+          filters.scoreRange === "medium" &&
+          (audit.score < 70 || audit.score >= 90)
+        )
+          return false;
+        if (filters.scoreRange === "high" && audit.score < 90) return false;
+      }
+
+      // Filtr priorytetów
+      const activePriorities = Object.keys(filters.priorities || {}).filter(
+        (p) => filters.priorities[p]
+      );
+      if (activePriorities.length > 0) {
+        const matchCrit = activePriorities.includes("Priorytetowy") && audit.priorities.c > 0;
+        const matchImp = activePriorities.includes("Ważny") && audit.priorities.w > 0;
+        const matchMarg = activePriorities.includes("Marginalny") && audit.priorities.m > 0;
+        if (!matchCrit && !matchImp && !matchMarg) return false;
+      }
+
+      return true;
+    });
+  }, [allAudits, filters, onlyPinned, pinnedAuditIds]);
+
+  // Sortowanie audytów
+  const sortedAudits = useMemo(() => {
+    const list = [...filteredAudits];
+    switch (sortBy) {
+      case "score_desc":
+        return list.sort((a, b) => b.score - a.score);
+      case "score_asc":
+        return list.sort((a, b) => a.score - b.score);
+      case "errors_desc":
+        return list.sort((a, b) => b.totalErrors - a.totalErrors);
+      case "name_asc":
+        return list.sort((a, b) => a.name.localeCompare(b.name, "pl"));
+      case "date_desc":
+      default:
+        return list.sort((a, b) => {
+          const [d1, m1, y1] = a.endDate.split(".").map(Number);
+          const [d2, m2, y2] = b.endDate.split(".").map(Number);
+          return new Date(y2, m2 - 1, d2).getTime() - new Date(y1, m1 - 1, d1).getTime();
+        });
+    }
+  }, [filteredAudits, sortBy]);
+
+  // Reset paginacji przy zmianie filtrów lub sortowania
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filters, onlyPinned, sortBy]);
+
+  // Paginacja
+  const totalPages = Math.max(1, Math.ceil(sortedAudits.length / itemsPerPage));
+  const safeCurrentPage = Math.min(currentPage, totalPages);
+  const startIndex = (safeCurrentPage - 1) * itemsPerPage;
+  const endIndex = Math.min(startIndex + itemsPerPage, sortedAudits.length);
+  const currentAudits = sortedAudits.slice(startIndex, endIndex);
+
+  const isFiltered = hasActiveFilters || onlyPinned;
 
   return (
-    <div
-      data-testid="audit-report-view"
-      className="w-full"
-    >
-      {/* Pasek wyników, sortowania i zagnieżdżenia - spójny z Audytami i Skargami */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+    <div data-testid="audit-report-view" className="w-full">
+      {/* Pasek statusu katalogu, filtrów, sortowania i zagnieżdżenia */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 bg-white border border-slate-200/80 rounded-xl px-4 py-3 shadow-2xs">
         <div className="flex items-center gap-2.5 flex-wrap">
-          <span className="text-sm font-bold text-slate-700">
-            Wyniki: <span className="text-[#0038F8] font-black">{mockAudits.length}</span> audytów
-          </span>
+          {!isFiltered ? (
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-bold text-slate-800">
+                Katalog audytów: <span className="text-[#0038F8] font-black">{allAudits.length}</span> raportów
+              </span>
+              <span className="text-xs text-slate-400 font-semibold hidden md:inline">
+                (wyświetlanie {allAudits.length > 0 ? startIndex + 1 : 0}–{endIndex} z {allAudits.length})
+              </span>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-sm font-bold text-slate-800">
+                Wyniki filtrowania: <span className="text-[#0038F8] font-black">{sortedAudits.length}</span> z {allAudits.length} audytów
+              </span>
+              {sortedAudits.length > 0 && (
+                <span className="text-xs text-slate-400 font-semibold hidden md:inline">
+                  (wyświetlanie {startIndex + 1}–{endIndex})
+                </span>
+              )}
+            </div>
+          )}
+
+          {/* Szybki przełącznik Obserwowane (Ulubione) */}
+          <button
+            type="button"
+            onClick={() => setOnlyPinned(!onlyPinned)}
+            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold border transition-all cursor-pointer ${
+              onlyPinned
+                ? "bg-amber-500 text-white border-amber-600 shadow-xs"
+                : "bg-white text-slate-600 border-slate-200 hover:border-amber-400 hover:text-amber-700"
+            }`}
+            title="Pokaż tylko przypięte / obserwowane audyty"
+          >
+            <Pin size={13} className={onlyPinned ? "fill-white" : "text-amber-500"} />
+            <span>Obserwowane ({pinnedAuditIds.length})</span>
+          </button>
         </div>
 
         <div className="flex items-center gap-3 flex-wrap">
@@ -13602,11 +14170,11 @@ function AuditReportView() {
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="bg-white border border-slate-200 py-1.5 px-3 rounded-xl text-xs font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50 cursor-pointer shadow-sm"
+              className="bg-white border border-slate-200 py-1.5 px-3 rounded-xl text-xs font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50 cursor-pointer shadow-2xs"
             >
+              <option value="date_desc">Data zakończenia: od najnowszych</option>
               <option value="score_desc">Wynik: od najwyższego (%)</option>
               <option value="score_asc">Wynik: od najniższego (%)</option>
-              <option value="date_desc">Data zakończenia: od najnowszych</option>
               <option value="name_asc">Nazwa audytu (A-Z)</option>
               <option value="errors_desc">Liczba błędów: od największej</option>
             </select>
@@ -13617,7 +14185,7 @@ function AuditReportView() {
             <select
               value={detailLevel}
               onChange={(e) => setDetailLevel(Number(e.target.value))}
-              className="bg-white border border-slate-200 py-1.5 px-3 rounded-xl text-xs font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50 cursor-pointer shadow-sm"
+              className="bg-white border border-slate-200 py-1.5 px-3 rounded-xl text-xs font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50 cursor-pointer shadow-2xs"
             >
               <option value={1}>1. Tylko Raporty</option>
               <option value={2}>2. Raporty + Widoki w audycie</option>
@@ -13627,18 +14195,121 @@ function AuditReportView() {
         </div>
       </div>
 
-      <div className="flex flex-col gap-6">
-        {mockAudits.map((audit) => (
-          <AuditNode key={audit.id} audit={audit} detailLevel={detailLevel} />
-        ))}
-      </div>
+      {/* Lista audytów lub Empty State */}
+      {currentAudits.length === 0 ? (
+        <div className="bg-white border border-slate-200 rounded-2xl p-12 text-center flex flex-col items-center justify-center my-6 shadow-xs">
+          <div className="w-14 h-14 bg-slate-100 rounded-full flex items-center justify-center text-slate-400 mb-4">
+            <Search size={24} />
+          </div>
+          <h3 className="text-base font-bold text-slate-800 mb-1">
+            Brak audytów spełniających kryteria
+          </h3>
+          <p className="text-sm text-slate-500 max-w-md mb-5 leading-relaxed">
+            {onlyPinned
+              ? "Nie masz jeszcze przypiętych audytów w tej selekcji. Kliknij ikonę pineski przy dowolnym audycie w katalogu, aby dodać go do listy obserwowanych."
+              : "Żaden z 10 audytów w katalogu nie spełnia obecnie wybranych kryteriów filtrowania. Zresetuj filtry, aby wyświetlić pełną listę."}
+          </p>
+          <div className="flex items-center gap-2">
+            {onlyPinned && (
+              <button
+                type="button"
+                onClick={() => setOnlyPinned(false)}
+                className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition-colors cursor-pointer"
+              >
+                Wyłącz filtr obserwowanych
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={() => {
+                setOnlyPinned(false);
+                if (onResetFilters) onResetFilters();
+              }}
+              className="px-4 py-2 bg-[#0038F8] hover:bg-[#002ECC] text-white text-xs font-bold rounded-xl shadow-xs transition-colors cursor-pointer"
+            >
+              Wyczyść wszystkie filtry
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div className="flex flex-col gap-6">
+          {currentAudits.map((audit) => {
+            const isPinned = pinnedAuditIds.some(
+              (id) => String(id) === String(audit.id)
+            );
+            return (
+              <AuditNode
+                key={audit.id}
+                audit={audit}
+                detailLevel={detailLevel}
+                isPinned={isPinned}
+                onTogglePin={togglePinAudit}
+              />
+            );
+          })}
+        </div>
+      )}
+
+      {/* Paginacja */}
+      {totalPages > 1 && currentAudits.length > 0 && (
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6 pt-4 border-t border-slate-200">
+          <div className="text-xs font-medium text-slate-500">
+            Strona <span className="font-bold text-slate-800">{safeCurrentPage}</span> z{" "}
+            <span className="font-bold text-slate-800">{totalPages}</span> (łącznie{" "}
+            <span className="font-bold text-slate-800">{sortedAudits.length}</span>{" "}
+            {sortedAudits.length === 1 ? "audyt" : "audytów"})
+          </div>
+          <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              disabled={safeCurrentPage === 1}
+              className="px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-bold text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
+            >
+              Poprzednia
+            </button>
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <button
+                key={page}
+                type="button"
+                onClick={() => setCurrentPage(page)}
+                className={`w-8 h-8 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
+                  safeCurrentPage === page
+                    ? "bg-[#0038F8] text-white shadow-xs"
+                    : "border border-slate-200 text-slate-600 hover:bg-slate-50"
+                }`}
+              >
+                {page}
+              </button>
+            ))}
+            <button
+              type="button"
+              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+              disabled={safeCurrentPage === totalPages}
+              className="px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-bold text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
+            >
+              Następna
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
 
-function AuditNode({ audit, detailLevel }) {
+function AuditNode({
+  audit,
+  detailLevel,
+  isPinned,
+  onTogglePin,
+}: {
+  audit: any;
+  detailLevel: number;
+  isPinned?: boolean;
+  onTogglePin?: (id: string | number, name: string, e: React.MouseEvent) => void;
+}) {
   const [expanded, setExpanded] = useState(false);
-  const visibleViews = expanded ? audit.views : audit.views.slice(0, 3);
+  const visibleViews = expanded ? audit.views : (audit.views || []).slice(0, 3);
 
   return (
     <Card
@@ -13655,6 +14326,24 @@ function AuditNode({ audit, detailLevel }) {
             <h2 className="text-lg font-extrabold text-slate-900 leading-snug">
               {audit.name}
             </h2>
+            <button
+              type="button"
+              onClick={(e) => onTogglePin && onTogglePin(audit.id, audit.name, e)}
+              title={isPinned ? "Usuń z obserwowanych audytów" : "Przypnij audyt do obserwowanych"}
+              aria-label={isPinned ? `Odepnij audyt ${audit.name}` : `Przypnij audyt ${audit.name}`}
+              className={`p-1.5 rounded-lg transition-all cursor-pointer flex-shrink-0 ml-1 ${
+                isPinned
+                  ? "bg-amber-100 text-amber-700 hover:bg-amber-200"
+                  : "text-slate-300 hover:text-amber-600 hover:bg-slate-100"
+              }`}
+            >
+              <Pin size={16} className={isPinned ? "fill-amber-600 rotate-45" : ""} />
+            </button>
+            {isPinned && (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
+                Obserwowany
+              </span>
+            )}
           </div>
           <div className="flex items-center gap-3 text-xs font-semibold text-slate-500 mb-2">
             <span className="flex items-center gap-1">
@@ -13669,7 +14358,7 @@ function AuditNode({ audit, detailLevel }) {
             <Badge variant="neutral" className="!py-0.5 !px-2 !text-[10px]">
               {audit.wcagVersion}
             </Badge>
-            {audit.channels.map((ch) => (
+            {audit.channels.map((ch: string) => (
               <Badge
                 key={ch}
                 variant="lightBlue"
@@ -13692,7 +14381,7 @@ function AuditNode({ audit, detailLevel }) {
           </div>
           <div className="flex flex-col pr-4 sm:pr-6 w-32 sm:w-40 hidden sm:flex shrink-0">
             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">
-              Liczna błędów
+              Liczba błędów
             </span>
             <div className="flex items-center gap-3">
               <span className="text-xl font-extrabold text-slate-700">
@@ -13716,12 +14405,12 @@ function AuditNode({ audit, detailLevel }) {
         </div>
       </div>
 
-      {detailLevel >= 2 && audit.views.length > 0 && (
+      {detailLevel >= 2 && audit.views && audit.views.length > 0 && (
         <div className="bg-slate-50/50 flex flex-col p-4 gap-3">
           <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest pl-2 mb-1">
             Widoki w audycie
           </h4>
-          {visibleViews.map((view) => (
+          {visibleViews.map((view: any) => (
             <AuditViewNode
               key={view.id}
               view={view}
