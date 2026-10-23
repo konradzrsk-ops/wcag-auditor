@@ -1539,9 +1539,9 @@ function ComplaintEditModal({ isOpen, onClose, complaint, onSave }) {
                 onChange={(e) => setFormData({ ...formData, priority: e.target.value })}
                 className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
               >
-                <option value="Priorytetowy">🚨 Priorytetowy (Bloker)</option>
-                <option value="Ważny">🟠 Ważny</option>
-                <option value="Marginalny">🔵 Marginalny</option>
+                <option value="Priorytetowy">Priorytetowy</option>
+                <option value="Ważny">Ważny</option>
+                <option value="Marginalny">Marginalny</option>
               </select>
             </div>
 
@@ -10870,9 +10870,9 @@ function ReportErrorsView({
             </label>
             <select className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 text-sm font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50 transition-shadow appearance-none">
               <option value="">Wszystkie priorytety</option>
-              <option value="priorytetowy">🚨 Priorytetowe (Blokery)</option>
-              <option value="wazny">🟠 Ważne</option>
-              <option value="marginalny">🔵 Marginalne</option>
+              <option value="priorytetowy">Priorytetowe</option>
+              <option value="wazny">Ważne</option>
+              <option value="marginalny">Marginalne</option>
             </select>
           </div>
           <div className="w-full lg:w-[280px] shrink-0">
@@ -18069,9 +18069,9 @@ function ComplaintCreateView({
                         onChange={(e) => handlePriorityChange(e.target.value)}
                         className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
                       >
-                        <option value="Priorytetowy">🚨 Priorytetowy (Bloker)</option>
-                        <option value="Ważny">🟠 Ważny</option>
-                        <option value="Marginalny">🔵 Marginalny</option>
+                        <option value="Priorytetowy">Priorytetowy</option>
+                        <option value="Ważny">Ważny</option>
+                        <option value="Marginalny">Marginalny</option>
                       </select>
                     </div>
 

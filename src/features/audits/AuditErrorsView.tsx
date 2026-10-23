@@ -103,9 +103,9 @@ export function AuditErrorsView() {
       type: "multiselect",
       value: selectedPriorities,
       options: [
-        { value: "Krytyczny", label: "🔴 Krytyczny (Bloker)" },
-        { value: "Ważny", label: "🟠 Ważny" },
-        { value: "Marginalny", label: "🔵 Marginalny" },
+        { value: "Krytyczny", label: "Priorytetowe" },
+        { value: "Ważny", label: "Ważne" },
+        { value: "Marginalny", label: "Marginalne" },
       ],
     },
     {
@@ -126,7 +126,8 @@ export function AuditErrorsView() {
   const activeFilters: ActiveFilter[] = useMemo(() => {
     const active: ActiveFilter[] = [];
     selectedPriorities.forEach((p) => {
-      active.push({ id: `p-${p}`, label: `Priorytet: ${p}`, value: p });
+      const pLabel = p === "Krytyczny" ? "Priorytetowe" : p === "Ważny" ? "Ważne" : "Marginalne";
+      active.push({ id: `p-${p}`, label: `Priorytet: ${pLabel}`, value: p });
     });
     if (selectedCriteria) {
       active.push({ id: "criteria", label: `Kryterium: ${selectedCriteria}`, value: selectedCriteria });

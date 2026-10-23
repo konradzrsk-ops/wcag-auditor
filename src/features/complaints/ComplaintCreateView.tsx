@@ -106,9 +106,9 @@ export function ComplaintCreateView() {
             <Select
               label="Priorytet zgłoszenia *"
               options={[
-                { value: "Krytyczny", label: "🔴 Krytyczny (Bloker dla czytnika/klawiatury)" },
-                { value: "Ważny", label: "🟠 Ważny (Utrudnienie w realizacji procesu)" },
-                { value: "Marginalny", label: "🔵 Marginalny (Drobny błąd wizualny/kontrast)" },
+                { value: "Krytyczny", label: "Priorytetowy" },
+                { value: "Ważny", label: "Ważny" },
+                { value: "Marginalny", label: "Marginalny" },
               ]}
               value={priority}
               onChange={(e) => setPriority(e.target.value as ComplaintPriority)}

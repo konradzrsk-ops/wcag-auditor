@@ -49,9 +49,9 @@ export function ComplaintListView() {
       type: "multiselect",
       value: selectedPriorities,
       options: [
-        { value: "Krytyczny", label: "🔴 Krytyczny" },
-        { value: "Ważny", label: "🟠 Ważny" },
-        { value: "Marginalny", label: "🔵 Marginalny" },
+        { value: "Krytyczny", label: "Priorytetowe" },
+        { value: "Ważny", label: "Ważne" },
+        { value: "Marginalny", label: "Marginalne" },
       ],
     },
     {
