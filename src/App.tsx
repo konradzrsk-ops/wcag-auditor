@@ -4120,8 +4120,16 @@ const GLOSSARY_ITEMS = [
     category: "Wskaźniki",
     badge: "Proces",
     definition:
-      "Ponowne badanie audytorskie przeprowadzane po wdrożeniu zaleceń przez zespół deweloperski w celu formalnego potwierdzenia usunięcia zidentyfikowanej wady.",
+      "Ponowne badanie audytorskie przeprowadzane po wdrożeniu zaleceń przez zespół deweloperski w celu formalnego potwierdzenia usunięcia zidentyfikowanej wady. W formularzu zlecenia re-audytu koordynator wprowadza opcjonalny 'Dodatkowy komentarz' z uwagami dla zespołu audytorskiego.",
     practicalTip: "Po udanym re-audycie status błędu zmienia się na 'Zakończony', co podnosi wynik procentowy usługi.",
+  },
+  {
+    term: "Ujednolicone kanały cyfrowe (Desktop, iOS, Android, Dokument)",
+    category: "Standardy",
+    badge: "Segmentacja",
+    definition:
+      "Cztery standardowe kanały dystrybucji usług cyfrowych monitorowane w platformie W-ally: Desktop (serwisy i portale WWW), iOS (aplikacje natywne Apple), Android (aplikacje natywne Google) oraz Dokument (pliki PDF, deklaracje i regulaminy bankowe).",
+    practicalTip: "Wszystkie filtry w modułach Audyty, Baza Usług i Raportowanie stosują ten spójny 4-elementowy podział.",
   },
   {
     term: "SLA Naprawy (Service Level Agreement)",
@@ -4323,7 +4331,7 @@ const VIEW_GUIDES = {
       {
         name: "Wyszukiwarka i filtry poziome",
         badge: "Filtrowanie",
-        desc: "Błyskawiczne zawężanie audytów po tytule, nazwisku audytora, statusie (Zakończony, W trakcie, Nowy) i kanale.",
+        desc: "Błyskawiczne zawężanie audytów po tytule, audytorze, statusie oraz 4 ujednoliconych kanałach: Desktop, iOS, Android, Dokument.",
       },
       {
         name: "Kolumna Priorytety",
@@ -4337,7 +4345,7 @@ const VIEW_GUIDES = {
       },
     ],
     steps: [
-      "Krok 1: Wpisz frazę w wyszukiwarkę lub użyj filtrów, aby zawęzić listę do interesującej Cię usługi lub kanału.",
+      "Krok 1: Wpisz frazę w wyszukiwarkę lub użyj filtrów (kanały Desktop/iOS/Android/Dokument, audytor, status), aby zawęzić listę do interesującej Cię usługi.",
       "Krok 2: Użyj sortowania w tabeli, aby znaleźć audyty o najniższym wyniku lub z największą liczbą błędów.",
       "Krok 3: Kliknij wiersz audytu lub przycisk 'Szczegóły', aby otworzyć pełny raport podsumowujący.",
     ],
@@ -4398,6 +4406,11 @@ const VIEW_GUIDES = {
         desc: "Rozwijane panele dla każdego błędu z unikalnym ID, kryterium sukcesu i poziomem (A / AA).",
       },
       {
+        name: "Czyste filtry priorytetów",
+        badge: "Filtrowanie",
+        desc: "Przejrzyste przełączniki priorytetów (Priorytetowe, Ważne, Marginalne) bez zbędnych ikonek i dopisków, umożliwiające szybką selekcję barier.",
+      },
+      {
         name: "Zrzuty ekranu z dowodami",
         badge: "Lightbox",
         desc: "Klikalne miniatury zrzutów ekranu obrazujące barierę u użytkownika asystującego.",
@@ -4419,20 +4432,22 @@ const VIEW_GUIDES = {
       },
     ],
     steps: [
-      "Krok 1: Rozwiń wybrany błąd klikając w jego nagłówek.",
-      "Krok 2: Przeczytaj 'Opis problemu' oraz zapoznaj się ze zrzutem ekranu powiększając go kliknięciem.",
-      "Krok 3: Przekaż wytyczne z sekcji 'Rekomendacja' do zespołu deweloperskiego odpowiedzialnego za ten moduł.",
-      "Krok 4: Jeśli deweloperzy mają wątpliwości lub proponują alternatywny fix, kliknij 'Konsultuj z audytorem', aby zadać pytanie bez zwoływania spotkania.",
+      "Krok 1: Wybierz priorytet za pomocą górnych przycisków (np. Priorytetowe), aby wyodrębnić blokady krytyczne.",
+      "Krok 2: Rozwiń wybrany błąd klikając w jego nagłówek.",
+      "Krok 3: Przeczytaj 'Opis problemu' oraz zapoznaj się ze zrzutem ekranu powiększając go kliknięciem.",
+      "Krok 4: Przekaż wytyczne z sekcji 'Rekomendacja' do zespołu deweloperskiego odpowiedzialnego za ten moduł.",
+      "Krok 5: W razie wątpliwości kliknij 'Konsultuj z audytorem', aby zadać pytanie bez zwoływania spotkania.",
     ],
     tips: [
       "Kliknięcie miniatury zrzutu ekranu otwiera pełnoekranowy podgląd Lightbox.",
+      "Zlecanie re-audytu weryfikacyjnego odbywa się na poziomie karty audytu lub procesu w Bazie Usług; widok błędów podstrony skupia się wyłącznie na analizie technicznej.",
     ],
   },
   "baza-uslug": {
     id: "baza-uslug",
     title: "Baza Usług i Procesów",
     category: "Architektura usług",
-    summary: "Centralny wykaz procesów cyfrowych banku z horyzontalnym podziałem na kategorie, filtrami i metrykami WCAG.",
+    summary: "Centralny wykaz 50 procesów cyfrowych banku z podziałem na 6 domen, filtrami kanałowymi i metrykami WCAG.",
     purpose:
       "Umożliwia monitorowanie zgodności WCAG wszystkich ścieżek transakcyjnych banku, weryfikację 100% pokrycia audytowego oraz bezpośrednie zlecanie re-audytów powdrożeniowych.",
     keyElements: [
@@ -4442,9 +4457,9 @@ const VIEW_GUIDES = {
         desc: "Zagregowane wskaźniki: liczba procesów (50), pokrycie audytowe (100%), średnia dostępność WCAG (93.4%) i aktywne skargi.",
       },
       {
-        name: "Horyzontalny selektor kategorii",
+        name: "Hub 6 domen bankowych",
         badge: "Nawigacja",
-        desc: "Pille/zakładki do przełączania obszarów bankowych (Płatności, Kredyty, Maklerskie) na pełnej szerokości siatki 1600 px.",
+        desc: "Struktura kluczowych domen (Konta, Płatności, Kredyty, Oszczędności, Karty, Ubezpieczenia) oraz dostęp do wszystkich 50 procesów cyfrowych.",
       },
       {
         name: "Przełącznik Tabela / Kafelki",
@@ -4454,11 +4469,11 @@ const VIEW_GUIDES = {
       {
         name: "Wyszukiwarka i filtry kanałów",
         badge: "Filtrowanie",
-        desc: "Błyskawiczne zawężanie procesów po nazwie, zespole, kanale (WWW/Mobile) oraz przedziale zgodności WCAG.",
+        desc: "Błyskawiczne zawężanie procesów po nazwie, zespole, 4 kanałach (Desktop, iOS, Android, Dokument) oraz przedziale zgodności WCAG.",
       },
     ],
     steps: [
-      "Krok 1: Wybierz kategorię usług z poziomego paska lub skorzystaj z wyszukiwarki do przeszukania wszystkich 50 procesów.",
+      "Krok 1: Wybierz domenę lub kategorię usług albo skorzystaj z wyszukiwarki do przeszukania procesów.",
       "Krok 2: Użyj przełącznika widoku (Kafelki lub Tabela) w zależności od preferowanego poziomu szczegółowości.",
       "Krok 3: Kliknij kartę lub wiersz procesu, aby otworzyć wykaz kroków i zbadanych ekranów.",
       "Krok 4: W razie potrzeby użyj przycisku 'Zleć re-audyt' bezpośrednio z kafelka lub w nagłówku strony.",
@@ -4481,22 +4496,33 @@ const VIEW_GUIDES = {
         desc: "Raporty z audytów, Dostępność usług, Raport zarządczy oraz Zgodność regulacyjna PAD.",
       },
       {
-        name: "Rejestr Ryzyka (Błędy po SLA)",
-        badge: "Eskalacja",
-        desc: "Tabela naruszeń priorytetowych, które przekroczyły deklarowany czas naprawy wraz z przyciskiem eskalacji.",
+        name: "Zoptymalizowane filtry w Raportach z audytów",
+        badge: "Filtrowanie",
+        desc: "Szybkie filtry poziome: Kanał (Desktop, iOS, Android, Dokument), Priorytet błędu, rozdzielone filtry Audytor oraz Zgodność WCAG, a także horyzont Czasu. Usunięto zbędne filtry i niepotrzebne ramki podsumowań.",
       },
       {
-        name: "Ranking dojrzałości usług",
-        badge: "Analiza",
-        desc: "Zestawienie usług o najwyższej i najniższej zgodności ze standardem WCAG.",
+        name: "Dedykowane filtry Dostępności Usług",
+        badge: "Procesy",
+        desc: "Filtry skupione na architekturze: Usługa, Proces oraz Kanał (Desktop, iOS, Android, Dokument) bez archiwalnych parametrów SLA i cyklu.",
+      },
+      {
+        name: "Czystość i przejrzystość raportu",
+        badge: "Ekspertyza",
+        desc: "Usunięcie sekcji historii re-audytów z widoku raportowania pozwala skupić się bezpośrednio na bieżących wskaźnikach zgodności i otwartych barierach.",
+      },
+      {
+        name: "Rejestr Ryzyka i Rankingi",
+        badge: "Zarządcze",
+        desc: "Zestawienie usług o najwyższej i najniższej dojrzałości oraz rejestr naruszeń wymagających pilnej interwencji.",
       },
     ],
     steps: [
-      "Krok 1: Wybierz odpowiednią zakładkę raportową (np. 'Zarządcze' na spotkanie komitetu).",
-      "Krok 2: Skonfiguruj filtry kontekstu (jednostka biznesowa, kanał, horyzont czasowy).",
-      "Krok 3: Zweryfikuj Rejestr Ryzyka i podejmij decyzję o ewentualnej eskalacji do właścicieli biznesowych.",
+      "Krok 1: Wybierz odpowiednią zakładkę raportową (np. 'Raporty z audytów', 'Dostępność usług' lub 'Zarządcze').",
+      "Krok 2: Skonfiguruj filtry poziome: wybierz Kanał (Desktop, iOS, Android, Dokument), Audytora lub minimalną Zgodność WCAG.",
+      "Krok 3: Analizuj wskaźniki spełnienia kryteriów WCAG oraz otwarte usterki z podziałem na priorytety.",
     ],
     tips: [
+      "Rozdzielone filtry 'Audytor' i 'Zgodność WCAG' pozwalają na precyzyjne filtrowanie audytów konkretnego eksperta oraz odfiltrowanie procesów wymagających wsparcia (<80%).",
       "Raport regulacyjny PAD odpowiada oficjalnemu wzorowi wymaganemu podczas kontroli organów nadzorczych.",
     ],
   },
@@ -4558,14 +4584,14 @@ const VIEW_GUIDES = {
         desc: "Diagnoza przyczyny, rekomendowane rozwiązanie semantyczne oraz lista wymaganych atrybutów.",
       },
       {
-        name: "Rekomendowane atrybuty",
-        badge: "Wytyczne",
-        desc: "Zwięzła lista znaczników i atrybutów (np. <button>, role='button', tabindex='0', aria-label).",
+        name: "Edycja skargi i pobieranie Word (.doc)",
+        badge: "Akcje",
+        desc: "Przyciski w nagłówku do edycji parametrów zgłoszenia oraz wygenerowania pliku Word (.docx) ze skargą i wytyczną audytora.",
       },
       {
         name: "Zarządzanie statusem (Prawy panel)",
         badge: "Workflow",
-        desc: "Dropdown wyboru statusu (Nowe, Oczekuje, Gotowa rekomendacja, W trakcie wdrożenia, Zamknięte).",
+        desc: "Przyciski akcji: Przekaż do analizy zespołu, Zweryfikowane pozytywnie, Zamknij reklamację oraz Odrzuć reklamację.",
       },
       {
         name: "Powiązana Konsultacja WCAG",
@@ -4582,9 +4608,12 @@ const VIEW_GUIDES = {
       "Krok 1: Przeczytaj opis zgłoszenia od klienta i sprawdź środowisko asystujące.",
       "Krok 2: Zapoznaj się z 'Rekomendacją eksperta WCAG' oraz listą sugerowanych atrybutów.",
       "Krok 3: W razie wątpliwości skorzystaj z karty 'Konsultacja z audytorem' i zadaj pytanie w wątku.",
-      "Krok 4: Wprowadź klucz zadania Jira, zmień status na 'W trakcie wdrożenia u klienta' i przekaż wytyczne do deweloperów.",
+      "Krok 4: Wprowadź klucz zadania Jira, przekaż wytyczne do deweloperów.",
+      "Krok 5: Po wdrożeniu zmian oznacz zgłoszenie jako 'Zweryfikowane pozytywnie' lub 'Zamknięte'.",
     ],
     tips: [
+      "Przycisk zlecenia re-audytu został wycofany ze szczegółów skargi – weryfikacja poprawek odbywa się bezpośrednio statusem 'Zweryfikowane pozytywnie' lub w całościowym re-audycie procesu.",
+      "Możesz wyeksportować kartę skargi do formatu Word (.doc) klikając przycisk 'Pobierz (.doc)' w prawym górnym rogu.",
       "Rekomendacja nie zawiera gotowego kodu źródłowego – implementacja należy do deweloperów klienta.",
     ],
   },
@@ -4683,6 +4712,26 @@ const FAQ_ITEMS = [
     a: "Platforma W-ally powiadomi Cię wielokanałowo: 1) na ikonie Konsultacji w prawym górnym rogu paska nawigacji pojawi się zielony pulsujący wskaźnik z liczbą nowych odpowiedzi, 2) na Pulpicie w module Konsultacji wyświetli się dedykowany zielony baner z podglądem ostatniej wypowiedzi audytora, 3) w centrum powiadomień pod ikoną dzwonka pojawi się powiadomienie w zakładce 'Konsultacje'. Kliknięcie w dowolny z tych elementów natychmiast otwiera właściwy wątek.",
   },
   {
+    q: "Jak zlecić formalny Re-audyt i jakie informacje podaje się w formularzu zlecenia?",
+    a: "Zlecenie formalnego re-audytu jest dostępne na poziomie karty audytu (w widoku 'Audyty' oraz 'Szczegóły audytu') oraz przy poszczególnych procesach w 'Bazie Usług'. W formularzu zlecenia procedura została uproszczona: usunięto sztywny podział na warianty (blokery vs pełny), a zamiast tego dodano pole 'Dodatkowy komentarz:', w którym koordynator może przekazać audytorom wytyczne, zakres wprowadzonych zmian na środowisku testowym oraz pożądany harmonogram weryfikacji.",
+  },
+  {
+    q: "Dlaczego w widoku szczegółów skargi oraz na ekranie błędów podstrony nie ma przycisku 'Zleć re-audyt'?",
+    a: "Zmiana ta porządkuje procesy i zapobiega dublowaniu zleceń. W widoku skargi zespół weryfikuje wykonanie rekomendacji bezpośrednio poprzez zmianę statusu zgłoszenia na 'Zweryfikowane pozytywnie' w prawym panelu. Z kolei na poziomie pojedynczych błędów deweloperzy korzystają z wątków 'Konsultuj z audytorem', a formalny re-audyt zamawia się całościowo dla badanego audytu lub procesu biznesowego.",
+  },
+  {
+    q: "Jakie kanały cyfrowe są obsługiwane w systemie filtrów w całej platformie?",
+    a: "Wszystkie widoki aplikacji (Audyty, Baza Usług, Raportowanie, Skargi) stosują 4 ujednolicone kanały: 1) Desktop (serwisy i portale WWW), 2) iOS (aplikacje natywne Apple), 3) Android (aplikacje natywne Google) oraz 4) Dokument (pliki PDF, deklaracje dostępności i regulaminy bankowe).",
+  },
+  {
+    q: "Jakie usprawnienia wprowadzono w filtrach modułu Raportowania?",
+    a: "Filtry w Raportowaniu zostały zoptymalizowane pod kątem przejrzystości: 1) w zakładce Raportów z audytów i Błędów rozdzielono połączony filtr na dwa niezależne: 'Audytor' oraz 'Zgodność WCAG', zachowano filtry Priorytetu i Czasu oraz wyeliminowano zbędne opcje (status błędu, źródło, usługa/proces) i usunięto ramkę zakresu; 2) w zakładce Dostępności Usług pozostawiono czyste filtry: Usługa, Proces oraz Kanał, usuwając archiwalne parametry SLA i cyklu; 3) z raportu usunięto sekcję historii re-audytów, aby skupić uwagę na bieżącym poziomie dostępności.",
+  },
+  {
+    q: "Jak działają filtry priorytetu w szczegółach błędów audytu?",
+    a: "Filtry priorytetów zostały oczyszczone z ikonografii oraz technicznych dopisków w nawiasach. Trzy czyste opcje ('Priorytetowe', 'Ważne', 'Marginalne') pozwalają błyskawicznie zawęzić listę naruszeń do usterek o najwyższym ryzyku prawnym i operacyjnym.",
+  },
+  {
     q: "Czym różni się zapytanie w Konsultacjach od zlecenia formalnego Re-audytu?",
     a: "Konsultacja to bieżący kontakt doradczo-techniczny – służy do wyjaśniania niejasności, interpretacji kryteriów WCAG lub oceny koncepcji poprawki przed jej zaimplementowaniem. Re-audyt (weryfikacja powdrożeniowa) to formalne badanie audytorskie zlecane po wdrożeniu zmian na środowisku, które oficjalnie potwierdza usunięcie usterki, zamyka pozycję w Rejestrze Ryzyka i podnosi wskaźnik zgodności usługi.",
   },
@@ -4705,10 +4754,6 @@ const FAQ_ITEMS = [
   {
     q: "Czym różni się błąd Priorytetowy od Ważnego i Marginalnego?",
     a: "Błąd Priorytetowy (czerwony) całkowicie blokuje użytkownika asystującego w wykonaniu kluczowej czynności (np. brak obsługi klawiatury w przelewie). Błąd Ważny (bursztynowy) znacząco utrudnia korzystanie z serwisu (np. zbyt słaby kontrast), ale istnieje alternatywna ścieżka. Błąd Marginalny (niebieski) to drobna usterka formalna nieutrudniająca realizacji zadań.",
-  },
-  {
-    q: "Co oznacza re-audyt i kiedy należy go zlecić?",
-    a: "Re-audyt to ponowna weryfikacja dostępności przeprowadzana po wdrożeniu poprawek przez zespół programistyczny. Potwierdza trwałe usunięcie błędu, aktualizuje wskaźnik zgodności (%) usługi w Bazie Usług oraz zamyka pozycję w Rejestrze Ryzyka.",
   },
   {
     q: "Jakie wymogi nakłada Europejski Akt o Dostępności (EAA)?",
