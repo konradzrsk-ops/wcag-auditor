@@ -1,7 +1,7 @@
 // Automatycznie wygenerowany słownik prostego języka (W-ally)
-// Wygenerowano: 2026-10-23T21:03:53.703Z
-// Przetworzone pliki: frazy_pulpit_redakcja.txt (47 fraz), frazy_logowanie_redakcja.txt (25 fraz), frazy_audyty_redakcja.txt (67 fraz), frazy_menu_pulpit_redakcja.txt (104 fraz)
-// Łączna liczba unikalnych fraz: 237
+// Wygenerowano: 2026-10-28T12:39:38.400Z
+// Przetworzone pliki: frazy_pulpit_redakcja.txt (50 fraz), frazy_logowanie_redakcja.txt (25 fraz), frazy_audyty_redakcja.txt (67 fraz), frazy_menu_pulpit_redakcja.txt (104 fraz)
+// Łączna liczba unikalnych fraz: 240
 
 export const plainLanguageDictionary: Record<string, string> = {
   "dashboard.breadcrumbs.home": "Pulpit",
@@ -22,6 +22,9 @@ export const plainLanguageDictionary: Record<string, string> = {
   "dashboard.kpi.errors.badge": "Ubyło 12 w tym miesiącu",
   "dashboard.kpi.errors.subtext": "W pierwszej kolejności naprawiaj błędy krytyczne (czerwone)",
   "dashboard.kpi.errors.tooltip": "Liczba wykrytych problemów, które programiści muszą poprawić w kodzie stron i aplikacji.",
+  "dashboard.kpi.errors.dominance": "Najwięcej jest błędów ważnych (54%)",
+  "dashboard.kpi.errors.structure_label": "Procentowy podział błędów:",
+  "dashboard.kpi.errors.dominance_note": "Błędy ważne to ponad połowa wszystkich usterek (54%)",
   "dashboard.kpi.complaints.title": "Zgłoszenia od klientów",
   "dashboard.kpi.complaints.badge": "Terminowość: 98%",
   "dashboard.kpi.complaints.subtext": "Średni czas odpowiedzi: 4 godziny",

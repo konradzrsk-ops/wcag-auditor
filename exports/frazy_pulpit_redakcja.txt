@@ -1,8 +1,8 @@
 ================================================================================
               W-ALLY: FRAZY PULPITU GŁÓWNEGO (DO REDAKCJI PROSTEGO JĘZYKA)        
 ================================================================================
-Data wygenerowania: 23.10.2026, 23:03:43
-Łączna liczba fraz: 47
+Data wygenerowania: 28.10.2026, 13:39:37
+Łączna liczba fraz: 50
 
 INSTRUKCJA DLA REDAKTORA PROSTEGO JĘZYKA:
 1. Każda fraza posiada swój unikalny identyfikator [ID], kontekst występowania oraz [TYP].
@@ -238,6 +238,42 @@ Liczba wykrytych problemów, które programiści muszą poprawić w kodzie stron
 
 Wskazówka redakcyjna:
 Zastąpienie anglicyzmu 'fixy' słowem 'poprawić'.
+--------------------------------------------------------------------------------
+ID: dashboard.kpi.errors.dominance
+Lokalizacja: Wskaźnik dominacji barier na karcie błędów
+Typ elementu: Wskaźnik dominacji
+ORYGINALNY TEKST:
+Dominują: Ważne (54%)
+
+PROSTY JĘZYK (PO REDAKCJI):
+Najwięcej jest błędów ważnych (54%)
+
+Wskazówka redakcyjna:
+Wskazuje na pierwszy rzut oka, która kategoria barier dominuje w audytach.
+--------------------------------------------------------------------------------
+ID: dashboard.kpi.errors.structure_label
+Lokalizacja: Etykieta nad poziomym paskiem składowym barier
+Typ elementu: Podpis wykresu
+ORYGINALNY TEKST:
+Udział procentowy w całości:
+
+PROSTY JĘZYK (PO REDAKCJI):
+Procentowy podział błędów:
+
+Wskazówka redakcyjna:
+Wprowadzenie do poziomego paska udziału.
+--------------------------------------------------------------------------------
+ID: dashboard.kpi.errors.dominance_note
+Lokalizacja: Dopisek informacyjny przy poziomym pasku składowym
+Typ elementu: Podpis wykresu
+ORYGINALNY TEKST:
+Ważne stanowią ponad połowę (54%)
+
+PROSTY JĘZYK (PO REDAKCJI):
+Błędy ważne to ponad połowa wszystkich usterek (54%)
+
+Wskazówka redakcyjna:
+Wyraźne podkreślenie skali występowania barier stopnia drugiego.
 --------------------------------------------------------------------------------
 ID: dashboard.kpi.complaints.title
 Lokalizacja: Tytuł 4. karty KPI (zgłoszenia reklamacyjne)
@@ -613,5 +649,5 @@ Wskazówka redakcyjna:
 Proste połączenie z numerem telefonu.
 
 ================================================================================
-KONIEC PLIKU - ŁĄCZNIE 47 POZYCJI
+KONIEC PLIKU - ŁĄCZNIE 50 POZYCJI
 ================================================================================

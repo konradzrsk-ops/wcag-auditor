@@ -422,6 +422,33 @@ export const dashboardPhrases = [
     plainLanguageSuggestion: "Liczba wykrytych problemów, które programiści muszą poprawić w kodzie stron i aplikacji.",
     editorNotes: "Zastąpienie anglicyzmu 'fixy' słowem 'poprawić'.",
   },
+  {
+    id: "dashboard.kpi.errors.dominance",
+    section: "Pulpit – Karty Wskaźników KPI",
+    context: "Wskaźnik dominacji barier na karcie błędów",
+    type: "Wskaźnik dominacji",
+    original: "Dominują: Ważne (54%)",
+    plainLanguageSuggestion: "Najwięcej jest błędów ważnych (54%)",
+    editorNotes: "Wskazuje na pierwszy rzut oka, która kategoria barier dominuje w audytach.",
+  },
+  {
+    id: "dashboard.kpi.errors.structure_label",
+    section: "Pulpit – Karty Wskaźników KPI",
+    context: "Etykieta nad poziomym paskiem składowym barier",
+    type: "Podpis wykresu",
+    original: "Udział procentowy w całości:",
+    plainLanguageSuggestion: "Procentowy podział błędów:",
+    editorNotes: "Wprowadzenie do poziomego paska udziału.",
+  },
+  {
+    id: "dashboard.kpi.errors.dominance_note",
+    section: "Pulpit – Karty Wskaźników KPI",
+    context: "Dopisek informacyjny przy poziomym pasku składowym",
+    type: "Podpis wykresu",
+    original: "Ważne stanowią ponad połowę (54%)",
+    plainLanguageSuggestion: "Błędy ważne to ponad połowa wszystkich usterek (54%)",
+    editorNotes: "Wyraźne podkreślenie skali występowania barier stopnia drugiego.",
+  },
 
   {
     id: "dashboard.kpi.complaints.title",

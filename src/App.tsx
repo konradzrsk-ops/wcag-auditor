@@ -4186,9 +4186,9 @@ const VIEW_GUIDES = {
         desc: "Odsetek zidentyfikowanych procesów w Bazie Usług, które posiadają aktualny audyt w bieżącym cyklu.",
       },
       {
-        name: "Otwarte Błędy (Triada Priorytetów)",
-        badge: "Naruszenia",
-        desc: "Karta podsumowująca błędy: Priorytetowe (czerwone, blokujące klienta), Ważne (bursztynowe) oraz Marginalne (błękitne).",
+        name: "Otwarte Błędy i Struktura Barier (%)",
+        badge: "Wykres & KPI",
+        desc: "Karta ze zintegrowanym wykresem kołowym (Donut) i poziomym paskiem składowym. Prezentuje liczbę i procentowy udział barier (Priorytetowe 20%, Ważne 54%, Marginalne 26%) z natychmiastowym wyróżnieniem kategorii dominującej.",
       },
       {
         name: "Trend 12-miesięczny",
@@ -5875,6 +5875,349 @@ function WidgetOptionsMenu({
   );
 }
 
+// ==========================================
+// KARTA KPI: STRUKTURA I ROZKŁAD BŁĘDÓW (PULPIT)
+// ==========================================
+function DashboardErrorsKpiCard({
+  setView,
+  showToast,
+}: {
+  setView: (v: string) => void;
+  showToast?: (title: string, text: string, type?: string) => void;
+}) {
+  const [hoveredSegment, setHoveredSegment] = useState<"critical" | "important" | "marginal" | null>(null);
+
+  // Dane statystyczne barier na pulpicie
+  const total = 239;
+  const critical = 47;
+  const important = 128; // Kategoria dominująca (53.6%)
+  const marginal = 64;
+
+  const criticalPct = Number(((critical / total) * 100).toFixed(1)); // 19.7%
+  const importantPct = Number(((important / total) * 100).toFixed(1)); // 53.6%
+  const marginalPct = Number(((marginal / total) * 100).toFixed(1)); // 26.8%
+
+  // Matematyka dla SVG Donut (r=26, obwód = 2 * PI * 26 ≈ 163.363)
+  const circumference = 163.363;
+  const criticalLength = Number(((criticalPct / 100) * circumference).toFixed(2)); // ~32.12
+  const importantLength = Number(((importantPct / 100) * circumference).toFixed(2)); // ~87.49
+  const marginalLength = Number(((marginalPct / 100) * circumference).toFixed(2)); // ~43.75
+
+  // Treści dynamiczne w środku donuta przy najechaniu
+  const centerValue =
+    hoveredSegment === "critical"
+      ? `${criticalPct}%`
+      : hoveredSegment === "important"
+      ? `${importantPct}%`
+      : hoveredSegment === "marginal"
+      ? `${marginalPct}%`
+      : total;
+
+  const centerSubtext =
+    hoveredSegment === "critical"
+      ? "Krytyczne"
+      : hoveredSegment === "important"
+      ? "Ważne (Top)"
+      : hoveredSegment === "marginal"
+      ? "Marginalne"
+      : "łącznie";
+
+  const handleCardClick = (priorityName?: string) => {
+    setView("raportowanie");
+    if (showToast) {
+      if (priorityName) {
+        showToast(
+          "Filtr barier",
+          `Przejście do modułu raportowania z podglądem błędów kategorii: ${priorityName}.`
+        );
+      } else {
+        showToast(
+          "Wszystkie usterki",
+          "Przejście do pełnego rejestru i analityki barier dostępności."
+        );
+      }
+    }
+  };
+
+  return (
+    <Card
+      data-testid="dashboard-errors-kpi-card"
+      className="p-4 sm:p-5 hover:border-amber-400 transition-all cursor-pointer flex flex-col justify-between group/card shadow-xs bg-white relative overflow-hidden"
+      onClick={() => handleCardClick()}
+    >
+      {/* 1. GÓRNA BELKA KARTY: IKONA, TYTUŁ, BADGE DOMINACJI I ŁĄCZNA LICZBA */}
+      <div className="flex justify-between items-start mb-2">
+        <div className="flex items-center gap-2.5">
+          <div className="w-9 h-9 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center shrink-0 border border-amber-200/60 group-hover/card:bg-amber-100/70 transition-colors">
+            <PieChart size={19} />
+          </div>
+          <div>
+            <div className="flex items-center gap-1">
+              <span className="text-xs font-bold text-slate-700 uppercase tracking-wider block">
+                Otwarte Błędy
+              </span>
+              <InfoTooltip
+                text="Łącznie 239 zarejestrowanych barier dostępności. Wykres kołowy i pasek składowy natychmiast uwidaczniają strukturę: błędy Ważne stanowią ponad 53% wszystkich usterek."
+                position="top"
+                align="left"
+              />
+            </div>
+            {/* Wskaźnik dominacji widoczny na 1. rzut oka */}
+            <div className="flex items-center gap-1.5 mt-0.5">
+              <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-black bg-amber-100/90 text-amber-900 border border-amber-300 shadow-2xs">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+                Dominują: Ważne ({importantPct}%)
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-1 shrink-0">
+          <span
+            className="text-xs font-black text-slate-900 bg-slate-100 px-2 py-0.5 rounded border border-slate-200/80"
+            title="Suma wszystkich nierozwiązanych barier we wszystkich audytach"
+          >
+            {total} sumarycznie
+          </span>
+        </div>
+      </div>
+
+      {/* 2. CENTRUM: MINI WYKRES KOŁOWY (DONUT) + 3 BLOKI KATEGORII Z LICZBĄ I % */}
+      <div className="flex items-center gap-3 my-1">
+        {/* Interaktywny wykres kołowy (SVG Donut) */}
+        <div
+          className="relative w-16 h-16 shrink-0 flex items-center justify-center select-none"
+          title={`Rozkład barier: Ważne ${importantPct}% (dominujące), Marginalne ${marginalPct}%, Priorytetowe ${criticalPct}%`}
+        >
+          <svg className="w-16 h-16 -rotate-90 transform" viewBox="0 0 72 72">
+            {/* Tło pierścienia */}
+            <circle
+              cx="36"
+              cy="36"
+              r="26"
+              className="text-slate-100"
+              strokeWidth="7"
+              stroke="currentColor"
+              fill="transparent"
+            />
+            {/* Segment: Priorytetowe (Czerwony - 19.7%) */}
+            <circle
+              cx="36"
+              cy="36"
+              r="26"
+              stroke="#EF4444"
+              strokeWidth={hoveredSegment === "critical" ? "9" : "7"}
+              strokeDasharray={`${criticalLength} ${circumference}`}
+              strokeDashoffset="0"
+              fill="transparent"
+              className="transition-all duration-200 cursor-pointer"
+              onMouseEnter={() => setHoveredSegment("critical")}
+              onMouseLeave={() => setHoveredSegment(null)}
+            />
+            {/* Segment: Ważne (Bursztynowy - 53.6% - DOMINUJĄCY!) */}
+            <circle
+              cx="36"
+              cy="36"
+              r="26"
+              stroke="#F59E0B"
+              strokeWidth={hoveredSegment === "important" ? "9.5" : "7"}
+              strokeDasharray={`${importantLength} ${circumference}`}
+              strokeDashoffset={`-${criticalLength}`}
+              fill="transparent"
+              className="transition-all duration-200 cursor-pointer"
+              onMouseEnter={() => setHoveredSegment("important")}
+              onMouseLeave={() => setHoveredSegment(null)}
+            />
+            {/* Segment: Marginalne (Błękitny - 26.8%) */}
+            <circle
+              cx="36"
+              cy="36"
+              r="26"
+              stroke="#3B82F6"
+              strokeWidth={hoveredSegment === "marginal" ? "9" : "7"}
+              strokeDasharray={`${marginalLength} ${circumference}`}
+              strokeDashoffset={`-${criticalLength + importantLength}`}
+              fill="transparent"
+              className="transition-all duration-200 cursor-pointer"
+              onMouseEnter={() => setHoveredSegment("marginal")}
+              onMouseLeave={() => setHoveredSegment(null)}
+            />
+          </svg>
+
+          {/* Dynamiczna wartość w środku donuta */}
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-center leading-none pointer-events-none">
+            <span
+              className={`font-black tracking-tight transition-colors ${
+                hoveredSegment === "critical"
+                  ? "text-sm text-red-700"
+                  : hoveredSegment === "important"
+                  ? "text-sm text-amber-800"
+                  : hoveredSegment === "marginal"
+                  ? "text-sm text-blue-700"
+                  : "text-sm text-slate-900"
+              }`}
+            >
+              {centerValue}
+            </span>
+            <span className="text-[7.5px] font-extrabold text-slate-400 uppercase tracking-tighter mt-0.5">
+              {centerSubtext}
+            </span>
+          </div>
+        </div>
+
+        {/* 3 mini kafelki wiersza: Priorytetowe, Ważne (Wyróżnione), Marginalne */}
+        <div className="grid grid-cols-3 gap-1.5 flex-1 min-w-0">
+          {/* Priorytetowe */}
+          <div
+            className={`flex flex-col p-1.5 rounded-xl border transition-all ${
+              hoveredSegment === "critical"
+                ? "bg-red-100/90 border-red-300 ring-2 ring-red-400/30 scale-[1.02]"
+                : "bg-red-50/70 border-red-100 hover:bg-red-100/60"
+            }`}
+            onMouseEnter={() => setHoveredSegment("critical")}
+            onMouseLeave={() => setHoveredSegment(null)}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleCardClick("Priorytetowe");
+            }}
+            title="Błędy priorytetowe (blokady krytyczne): 47 (19.7%)"
+          >
+            <div className="flex items-center gap-1 text-red-700 mb-0.5">
+              <AlertOctagon size={11} className="shrink-0" />
+              <span className="text-[10px] font-black text-red-700 uppercase tracking-tight truncate">
+                Prio.
+              </span>
+            </div>
+            <div className="flex items-baseline justify-between gap-1">
+              <span className="text-sm sm:text-base font-extrabold text-slate-900 leading-none">
+                {critical}
+              </span>
+              <span className="text-[10px] font-bold text-red-700">
+                {criticalPct}%
+              </span>
+            </div>
+          </div>
+
+          {/* Ważne - WYRÓŻNIONE / DOMINUJĄCE */}
+          <div
+            className={`flex flex-col p-1.5 rounded-xl border-2 transition-all relative ${
+              hoveredSegment === "important"
+                ? "bg-amber-100 border-amber-500 ring-2 ring-amber-400/40 shadow-xs scale-[1.02]"
+                : "bg-amber-50/90 border-amber-300 hover:bg-amber-100/70 shadow-2xs"
+            }`}
+            onMouseEnter={() => setHoveredSegment("important")}
+            onMouseLeave={() => setHoveredSegment(null)}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleCardClick("Ważne");
+            }}
+            title="Błędy ważne (dominujące w systemach bankowych): 128 (53.6%)"
+          >
+            <div className="flex items-center justify-between text-amber-800 mb-0.5">
+              <div className="flex items-center gap-1">
+                <AlertTriangle size={11} className="shrink-0 text-amber-600" />
+                <span className="text-[10px] font-black text-amber-800 uppercase tracking-tight truncate">
+                  Ważne
+                </span>
+              </div>
+              <span className="text-[7.5px] font-black uppercase bg-amber-200 text-amber-900 px-1 rounded-sm leading-none py-0.5">
+                Top
+              </span>
+            </div>
+            <div className="flex items-baseline justify-between gap-1">
+              <span className="text-sm sm:text-base font-black text-slate-900 leading-none">
+                {important}
+              </span>
+              <span className="text-[10px] font-black text-amber-800">
+                {importantPct}%
+              </span>
+            </div>
+          </div>
+
+          {/* Marginalne */}
+          <div
+            className={`flex flex-col p-1.5 rounded-xl border transition-all ${
+              hoveredSegment === "marginal"
+                ? "bg-blue-100/90 border-blue-300 ring-2 ring-blue-400/30 scale-[1.02]"
+                : "bg-blue-50/70 border-blue-100 hover:bg-blue-100/60"
+            }`}
+            onMouseEnter={() => setHoveredSegment("marginal")}
+            onMouseLeave={() => setHoveredSegment(null)}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleCardClick("Marginalne");
+            }}
+            title="Błędy marginalne (drobne usterki): 64 (26.8%)"
+          >
+            <div className="flex items-center gap-1 text-blue-700 mb-0.5">
+              <Info size={11} className="shrink-0" />
+              <span className="text-[10px] font-black text-blue-700 uppercase tracking-tight truncate">
+                Marg.
+              </span>
+            </div>
+            <div className="flex items-baseline justify-between gap-1">
+              <span className="text-sm sm:text-base font-extrabold text-slate-900 leading-none">
+                {marginal}
+              </span>
+              <span className="text-[10px] font-bold text-blue-700">
+                {marginalPct}%
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 3. DOLNY DIAGRAM: POZIOMY PASEK SKŁADOWY (PROPORCJE WIDOCZNE NA 1 RZUT OKA) */}
+      <div className="mt-2 pt-2 border-t border-slate-100">
+        <div className="flex items-center justify-between text-[10px] font-bold text-slate-500 mb-1">
+          <span className="text-slate-600">
+            {hoveredSegment
+              ? `Podgląd: ${centerSubtext} (${centerValue})`
+              : "Udział procentowy w całości:"}
+          </span>
+          <span className="text-amber-800 font-extrabold">
+            Ważne stanowią ponad połowę ({importantPct}%)
+          </span>
+        </div>
+
+        {/* Poziomy pasek składowy */}
+        <div
+          className="w-full h-2 rounded-full bg-slate-100 flex overflow-hidden gap-0.5 p-0.5 shadow-inner"
+          title="Rozkład barier: Czerwony (19.7%), Bursztynowy (53.6%), Błękitny (26.8%)"
+        >
+          {/* Segment Priorytetowy: ~19.7% */}
+          <div
+            className={`h-full bg-red-500 rounded-l-full transition-all duration-300 ${
+              hoveredSegment === "critical" ? "brightness-110 ring-1 ring-red-400" : ""
+            }`}
+            style={{ width: `${criticalPct}%` }}
+            onMouseEnter={() => setHoveredSegment("critical")}
+            onMouseLeave={() => setHoveredSegment(null)}
+          />
+          {/* Segment Ważne: ~53.6% (DOMINUJĄCY) */}
+          <div
+            className={`h-full bg-amber-500 transition-all duration-300 ${
+              hoveredSegment === "important" ? "brightness-110 ring-1 ring-amber-400" : ""
+            }`}
+            style={{ width: `${importantPct}%` }}
+            onMouseEnter={() => setHoveredSegment("important")}
+            onMouseLeave={() => setHoveredSegment(null)}
+          />
+          {/* Segment Marginalny: ~26.7% */}
+          <div
+            className={`h-full bg-blue-500 rounded-r-full transition-all duration-300 ${
+              hoveredSegment === "marginal" ? "brightness-110 ring-1 ring-blue-400" : ""
+            }`}
+            style={{ width: `${marginalPct}%` }}
+            onMouseEnter={() => setHoveredSegment("marginal")}
+            onMouseLeave={() => setHoveredSegment(null)}
+          />
+        </div>
+      </div>
+    </Card>
+  );
+}
+
 function DashboardView({
   setView,
   onOpenAnnouncements,
@@ -6102,59 +6445,8 @@ function DashboardView({
           <span className="text-2xl sm:text-3xl font-extrabold text-slate-900">92.0%</span>
         </Card>
 
-        {/* KARTA BŁĘDÓW: Priorytetowe, Ważne, Marginalne */}
-        <Card
-          className="p-4 sm:p-5 hover:border-red-300 transition-all cursor-pointer flex flex-col justify-between"
-          onClick={() => setView("raportowanie")}
-        >
-          <div className="flex justify-between items-start mb-2">
-            <div className="flex items-center gap-1">
-              <span className="text-xs font-bold text-slate-700 uppercase tracking-wider block">
-                Błędy
-              </span>
-              <InfoTooltip
-                text="Łączna liczba zarejestrowanych, nierozwiązanych dotąd barier dostępności wykrytych we wszystkich audytowanych systemach."
-                position="top"
-                align="left"
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-3 gap-2 py-1">
-            {/* Priorytetowe */}
-            <div className="flex flex-col bg-red-50/70 p-2 rounded-xl border border-red-100">
-              <div className="flex items-center gap-1 text-red-700 mb-0.5">
-                <AlertOctagon size={12} className="shrink-0" />
-                <span className="text-xs font-bold text-red-700 tracking-tight whitespace-nowrap">
-                  Priorytet.
-                </span>
-              </div>
-              <span className="text-lg sm:text-xl font-extrabold text-slate-900 leading-none">47</span>
-            </div>
-
-            {/* Ważne */}
-            <div className="flex flex-col bg-amber-50/70 p-2 rounded-xl border border-amber-100">
-              <div className="flex items-center gap-1 text-amber-800 mb-0.5">
-                <AlertTriangle size={12} className="shrink-0" />
-                <span className="text-xs font-bold text-amber-800 tracking-tight whitespace-nowrap">
-                  Ważne
-                </span>
-              </div>
-              <span className="text-lg sm:text-xl font-extrabold text-slate-900 leading-none">128</span>
-            </div>
-
-            {/* Marginalne */}
-            <div className="flex flex-col bg-blue-50/70 p-2 rounded-xl border border-blue-100">
-              <div className="flex items-center gap-1 text-blue-700 mb-0.5">
-                <Info size={12} className="shrink-0" />
-                <span className="text-xs font-bold text-blue-700 tracking-tight whitespace-nowrap">
-                  Marginalne
-                </span>
-              </div>
-              <span className="text-lg sm:text-xl font-extrabold text-slate-900 leading-none">64</span>
-            </div>
-          </div>
-        </Card>
+        {/* KARTA BŁĘDÓW: Priorytetowe, Ważne, Marginalne (NOWOCZESNY WIDGET Z WYKRESEM I % DOMINACJI) */}
+        <DashboardErrorsKpiCard setView={setView} showToast={showToast} />
 
         <Card
           className="p-4 sm:p-5 hover:border-blue-300 transition-colors cursor-pointer"
