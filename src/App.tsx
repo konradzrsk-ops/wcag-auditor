@@ -1782,10 +1782,16 @@ export default function App() {
       const saved = localStorage.getItem("wcag_auditor_client_profile");
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (!parsed.teamMembers || parsed.teamMembers.length === 0) {
-          parsed.teamMembers = INITIAL_CLIENT_PROFILE.teamMembers;
+        if (parsed && typeof parsed === "object") {
+          return {
+            ...INITIAL_CLIENT_PROFILE,
+            ...parsed,
+            teamMembers:
+              Array.isArray(parsed.teamMembers) && parsed.teamMembers.length > 0
+                ? parsed.teamMembers
+                : INITIAL_CLIENT_PROFILE.teamMembers,
+          };
         }
-        return parsed;
       }
     } catch {
       // ignore
@@ -9086,13 +9092,15 @@ function RaportyView({ setView, onOpenReaudit, showToast }) {
   ];
 
   // Pinned / Obserwowane audyty (Ulubione z persistencją w localStorage)
-  const [pinnedAuditIds, setPinnedAuditIds] = useState(() => {
+  const [pinnedAuditIds, setPinnedAuditIds] = useState<string[]>(() => {
     try {
       const saved = localStorage.getItem("wally_pinned_audits");
-      return saved ? JSON.parse(saved) : ["1", "3"];
-    } catch {
-      return ["1", "3"];
-    }
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) return parsed.map(String);
+      }
+    } catch {}
+    return ["1", "3"];
   });
   const [onlyPinned, setOnlyPinned] = useState(false);
 
@@ -9100,8 +9108,9 @@ function RaportyView({ setView, onOpenReaudit, showToast }) {
     if (e) e.stopPropagation();
     const strId = String(auditId);
     setPinnedAuditIds((prev) => {
-      const isPinned = prev.some((id) => String(id) === strId);
-      const next = isPinned ? prev.filter((id) => String(id) !== strId) : [...prev, strId];
+      const safePrev = Array.isArray(prev) ? prev : [];
+      const isPinned = safePrev.some((id) => String(id) === strId);
+      const next = isPinned ? safePrev.filter((id) => String(id) !== strId) : [...safePrev, strId];
       try {
         localStorage.setItem("wally_pinned_audits", JSON.stringify(next));
       } catch {}
@@ -10208,7 +10217,7 @@ function ReportSummaryView({ setView, onOpenReaudit, showToast }) {
     try {
       const saved = localStorage.getItem("wally_pinned_audits");
       const list = saved ? JSON.parse(saved) : ["1"];
-      return list.some((id) => String(id) === currentAuditId);
+      return Array.isArray(list) ? list.some((id) => String(id) === currentAuditId) : true;
     } catch {
       return true;
     }
@@ -10220,9 +10229,10 @@ function ReportSummaryView({ setView, onOpenReaudit, showToast }) {
       try {
         const saved = localStorage.getItem("wally_pinned_audits");
         const list = saved ? JSON.parse(saved) : [];
+        const safeList = Array.isArray(list) ? list : [];
         const nextList = next
-          ? [...list.filter((id) => String(id) !== currentAuditId), currentAuditId]
-          : list.filter((id) => String(id) !== currentAuditId);
+          ? [...safeList.filter((id) => String(id) !== currentAuditId), currentAuditId]
+          : safeList.filter((id) => String(id) !== currentAuditId);
         localStorage.setItem("wally_pinned_audits", JSON.stringify(nextList));
       } catch {}
       if (showToast) {
@@ -10240,7 +10250,10 @@ function ReportSummaryView({ setView, onOpenReaudit, showToast }) {
   const [reauditsList, setReauditsList] = useState<ReauditRecord[]>(() => {
     try {
       const saved = localStorage.getItem("wally_reaudits_list_v2");
-      if (saved) return JSON.parse(saved);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
     } catch {}
     return INITIAL_REAUDITS_HISTORY;
   });
@@ -10956,24 +10969,28 @@ function ReportSummaryView({ setView, onOpenReaudit, showToast }) {
       </div>
 
       {/* MODAL DODAWANIA REAUDYTU */}
-      <AddReauditModal
-        isOpen={isAddReauditOpen}
-        onClose={() => setIsAddReauditOpen(false)}
-        auditTitle="Portal informacyjny - wybrane podstrony"
-        baseScore={77.5}
-        baseElements={DEFAULT_BASE_ELEMENTS}
-        previousErrors={DEFAULT_PREVIOUS_ERRORS}
-        onSaveReaudit={handleSaveReaudit}
-      />
+      {isAddReauditOpen && (
+        <AddReauditModal
+          isOpen={isAddReauditOpen}
+          onClose={() => setIsAddReauditOpen(false)}
+          auditTitle="Portal informacyjny - wybrane podstrony"
+          baseScore={77.5}
+          baseElements={DEFAULT_BASE_ELEMENTS}
+          previousErrors={DEFAULT_PREVIOUS_ERRORS}
+          onSaveReaudit={handleSaveReaudit}
+        />
+      )}
 
       {/* MODAL SZCZEGÓŁÓW WYBRANEGO REAUDYTU */}
-      <ReauditDetailModal
-        isOpen={Boolean(selectedReauditForDetails)}
-        onClose={() => setSelectedReauditForDetails(null)}
-        reaudit={selectedReauditForDetails}
-        auditTitle="Portal informacyjny - wybrane podstrony"
-        onShowToast={showToast}
-      />
+      {selectedReauditForDetails && (
+        <ReauditDetailModal
+          isOpen={Boolean(selectedReauditForDetails)}
+          onClose={() => setSelectedReauditForDetails(null)}
+          reaudit={selectedReauditForDetails}
+          auditTitle="Portal informacyjny - wybrane podstrony"
+          onShowToast={showToast}
+        />
+      )}
     </div>
   );
 }
@@ -13962,10 +13979,12 @@ function AuditReportView({
   const [pinnedAuditIds, setPinnedAuditIds] = useState<string[]>(() => {
     try {
       const saved = localStorage.getItem("wally_pinned_audits");
-      return saved ? JSON.parse(saved) : ["1", "3"];
-    } catch {
-      return ["1", "3"];
-    }
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) return parsed.map(String);
+      }
+    } catch {}
+    return ["1", "3"];
   });
   const [onlyPinned, setOnlyPinned] = useState(false);
 
@@ -13974,7 +13993,10 @@ function AuditReportView({
     const handleStorage = () => {
       try {
         const saved = localStorage.getItem("wally_pinned_audits");
-        if (saved) setPinnedAuditIds(JSON.parse(saved));
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed)) setPinnedAuditIds(parsed.map(String));
+        }
       } catch {}
     };
     window.addEventListener("storage", handleStorage);
@@ -13985,10 +14007,11 @@ function AuditReportView({
     if (e) e.stopPropagation();
     const strId = String(auditId);
     setPinnedAuditIds((prev) => {
-      const isPinned = prev.some((id) => String(id) === strId);
+      const safePrev = Array.isArray(prev) ? prev : [];
+      const isPinned = safePrev.some((id) => String(id) === strId);
       const next = isPinned
-        ? prev.filter((id) => String(id) !== strId)
-        : [...prev, strId];
+        ? safePrev.filter((id) => String(id) !== strId)
+        : [...safePrev, strId];
       try {
         localStorage.setItem("wally_pinned_audits", JSON.stringify(next));
       } catch {}

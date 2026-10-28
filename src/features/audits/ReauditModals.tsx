@@ -284,8 +284,6 @@ export function AddReauditModal({
     recommendation: "",
   });
 
-  if (!isOpen) return null;
-
   // Statystyki na żywo
   const totalVerified = previousErrors.length;
   const fixedCount = previousErrors.filter(
@@ -408,6 +406,8 @@ export function AddReauditModal({
 
     onSaveReaudit(newReauditRecord);
   };
+
+  if (!isOpen) return null;
 
   return (
     <div
