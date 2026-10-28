@@ -95,13 +95,15 @@ import { PersonProfileView } from "./features/profile/PersonProfileView";
 import { WcagCriteriaCombobox, ALL_WCAG_CRITERIA, normalizeCriterion } from "./components/ui/WcagCriteriaCombobox";
 import { ClientProfile } from "./types";
 import {
-  AddReauditModal,
-  ReauditDetailModal,
   ReauditRecord,
   INITIAL_REAUDITS_HISTORY,
   DEFAULT_BASE_ELEMENTS,
-  DEFAULT_PREVIOUS_ERRORS,
 } from "./features/audits/ReauditModals";
+import {
+  NewReauditPageView,
+  ReauditDetailsPageView,
+  ENRICHED_DEFAULT_PREVIOUS_ERRORS,
+} from "./features/audits/ReauditPages";
 
 // ==========================================
 // GENERATORY DANYCH TESTOWYCH
@@ -1867,13 +1869,46 @@ export default function App() {
     return () => clearTimeout(timer);
   }, [toast]);
 
-  const handleOpenReaudit = (title, type = "Audyt WCAG 2.1 AA", auditor = "Piotr Smułkowski") => {
-    setReauditContext({
-      targetTitle: title || "Portal informacyjny - wybrane podstrony",
-      targetType: type,
-      auditor: auditor,
+  // Stan listy Reaudytów z trwałością w localStorage
+  const [reauditsList, setReauditsList] = useState<ReauditRecord[]>(() => {
+    try {
+      const saved = localStorage.getItem("wally_reaudits_list_v2");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch {}
+    return INITIAL_REAUDITS_HISTORY;
+  });
+
+  const [selectedReauditForDetails, setSelectedReauditForDetails] = useState<ReauditRecord | null>(null);
+
+  const handleSaveReaudit = (newReaudit: ReauditRecord) => {
+    setReauditsList((prev) => {
+      const next = [newReaudit, ...prev];
+      try {
+        localStorage.setItem("wally_reaudits_list_v2", JSON.stringify(next));
+      } catch {}
+      return next;
     });
-    setIsReauditModalOpen(true);
+    setCurrentView("raport-szczegoly");
+    const fixedNum = (newReaudit.verifiedPreviousErrors || []).filter(
+      (e) => e.status === "fixed"
+    ).length;
+    showToast(
+      "Zapisano nowy Reaudyt",
+      `Zarejestrowano "${newReaudit.name}". Wynik zgodności po reaudycie: ${newReaudit.score}% (poprawiono ${fixedNum} z ${newReaudit.verifiedPreviousErrors?.length || 0} wykazanych barier).`,
+      "success"
+    );
+  };
+
+  const handleOpenReaudit = (title?: string, type = "Audyt WCAG 2.1 AA", auditor = "Piotr Smułkowski") => {
+    setCurrentView("reaudyt-nowy");
+  };
+
+  const handleOpenReauditDetails = (reaudit: ReauditRecord) => {
+    setSelectedReauditForDetails(reaudit);
+    setCurrentView("reaudyt-szczegoly");
   };
 
   if (!isAuthenticated) {
@@ -1981,6 +2016,27 @@ export default function App() {
             <ReportSummaryView
               setView={setCurrentView}
               onOpenReaudit={handleOpenReaudit}
+              onOpenReauditDetails={handleOpenReauditDetails}
+              reauditsList={reauditsList}
+              showToast={showToast}
+            />
+          )}
+          {currentView === "reaudyt-nowy" && (
+            <NewReauditPageView
+              setView={setCurrentView}
+              auditTitle="Portal informacyjny - wybrane podstrony"
+              baseScore={77.5}
+              baseElements={DEFAULT_BASE_ELEMENTS}
+              previousErrors={ENRICHED_DEFAULT_PREVIOUS_ERRORS}
+              onSaveReaudit={handleSaveReaudit}
+              showToast={showToast}
+            />
+          )}
+          {currentView === "reaudyt-szczegoly" && (
+            <ReauditDetailsPageView
+              setView={setCurrentView}
+              reaudit={selectedReauditForDetails || reauditsList[0] || null}
+              auditTitle="Portal informacyjny - wybrane podstrony"
               showToast={showToast}
             />
           )}
@@ -4415,6 +4471,73 @@ const VIEW_GUIDES = {
       "Raport PDF można pobrać w prawym górnym rogu nagłówka i przekazać do dokumentacji wdrożeniowej.",
     ],
   },
+  "reaudyt-nowy": {
+    id: "reaudyt-nowy",
+    title: "Kreator Reaudytu Powdrożeniowego",
+    category: "Weryfikacja",
+    summary: "Dedykowana strona do przeprowadzenia ponownego badania dostępności cyfrowej z podziałem na badane ekrany.",
+    purpose:
+      "Umożliwia audytorowi weryfikację dotychczasowych błędów wykazanych w audycie bazowym oraz rejestrację nowych usterek dla każdego z badanych ekranów.",
+    keyElements: [
+      {
+        name: "Podział na ekrany",
+        badge: "Struktura",
+        desc: "Każdy badany ekran posiada osobną sekcję: najpierw stare błędy z audytu bazowego, a poniżej nowo wykryte usterki.",
+      },
+      {
+        name: "Dwustanowa weryfikacja barier",
+        badge: "Status",
+        desc: "Przełączniki Poprawiony / Występuje dalej z możliwością dodania dedykowanej notatki audytora dla zespołu deweloperskiego.",
+      },
+      {
+        name: "Dynamiczny bilans zgodności (%)",
+        badge: "Kalkulator",
+        desc: "Wynik zgodności przeliczany w czasie rzeczywistym z uwzględnieniem usuniętych barier i nowych usterek.",
+      },
+    ],
+    steps: [
+      "Krok 1: Wybierz badany ekran za pomocą paska zakładek lub przewiń widok do interesującego Cię ekranu.",
+      "Krok 2: W sekcji '1. Dotychczasowe błędy' oznacz stan każdej bariery (Poprawiony / Występuje dalej) i dopisz notatkę.",
+      "Krok 3: W sekcji '2. Nowe błędy' dopisz ewentualne nowe usterki za pomocą przycisku '+ Dodaj nowy błąd dla tego ekranu'.",
+      "Krok 4: Wprowadź wnioski końcowe i zatwierdź badanie przyciskiem 'Zapisz i zakończ Reaudyt'.",
+    ],
+    tips: [
+      "Reaudyt nie jest modalem - pracuje na pełnej stronie, dzięki czemu wygodnie przełączasz się między ekranami.",
+    ],
+  },
+  "reaudyt-szczegoly": {
+    id: "reaudyt-szczegoly",
+    title: "Karta Wyników Reaudytu",
+    category: "Weryfikacja",
+    summary: "Pełny podgląd wyników przeprowadzonego reaudytu powdrożeniowego z podziałem na ekrany i usterki.",
+    purpose:
+      "Prezentuje syntetyczne podsumowanie ponownego badania, wykaz naprawionych barier oraz nowo wykryte regresje dla compliance.",
+    keyElements: [
+      {
+        name: "Wskaźnik zgodności po badaniu",
+        badge: "KPI",
+        desc: "Wynik WCAG osiągnięty w reaudycie wraz z bilansem poprawionych i pozostałych błędów.",
+      },
+      {
+        name: "Podział na badane ekrany",
+        badge: "Szczegóły",
+        desc: "Przegląd usterek przypisanych do każdego ekranu w kolejności: najpierw dotychczasowe, poniżej nowe.",
+      },
+      {
+        name: "Eksport PDF i Excel",
+        badge: "Dokumentacja",
+        desc: "Generowanie raportu PDF oraz arkusza kalkulacyjnego z weryfikacją.",
+      },
+    ],
+    steps: [
+      "Krok 1: Przeanalizuj wskaźniki KPI w nagłówku badania.",
+      "Krok 2: Sprawdź stan weryfikacji usterek na poszczególnych ekranach.",
+      "Krok 3: Pobierz raport PDF lub arkusz Excel dla zespołu wdrożeniowego.",
+    ],
+    tips: [
+      "Możesz filtrować wyniki wg konkretnego ekranu lub przeglądać zestawienie zbiorcze.",
+    ],
+  },
   "raport-bledy": {
     id: "raport-bledy",
     title: "Edytor i Rejestr Błędów Podstrony",
@@ -5306,7 +5429,7 @@ function TopNavbar({
               const isActive =
                 currentView === item.id ||
                 (item.id === "baza-uslug" && currentView === "proces-szczegoly") ||
-                (item.id === "raporty" && (currentView === "raport-szczegoly" || currentView === "raport-bledy")) ||
+                (item.id === "raporty" && (currentView === "raport-szczegoly" || currentView === "raport-bledy" || currentView === "reaudyt-nowy" || currentView === "reaudyt-szczegoly")) ||
                 (item.id === "reklamacje" && (currentView === "reklamacja-szczegoly" || currentView === "reklamacja-nowa"));
               const Icon = item.icon;
 
@@ -5596,7 +5719,7 @@ function TopNavbar({
               const isActive =
                 currentView === item.id ||
                 (item.id === "baza-uslug" && currentView === "proces-szczegoly") ||
-                (item.id === "raporty" && (currentView === "raport-szczegoly" || currentView === "raport-bledy")) ||
+                (item.id === "raporty" && (currentView === "raport-szczegoly" || currentView === "raport-bledy" || currentView === "reaudyt-nowy" || currentView === "reaudyt-szczegoly")) ||
                 (item.id === "reklamacje" && (currentView === "reklamacja-szczegoly" || currentView === "reklamacja-nowa"));
               const Icon = item.icon;
 
@@ -9323,12 +9446,7 @@ function RaportyView({ setView, onOpenReaudit, showToast }) {
             <div className="flex items-center gap-2 flex-wrap shrink-0">
               <button
                 type="button"
-                onClick={() => {
-                  try {
-                    sessionStorage.setItem("wally_open_add_reaudit", "true");
-                  } catch {}
-                  setView("raport-szczegoly");
-                }}
+                onClick={() => setView("reaudyt-nowy")}
                 className="inline-flex items-center justify-center gap-1.5 bg-[#0038F8] hover:bg-[#002ECC] text-white px-3.5 py-2 text-xs font-bold rounded-lg shadow-xs transition-all cursor-pointer active:translate-y-px"
                 title="Wprowadź i zarejestruj wyniki ponownego audytu"
               >
@@ -9336,14 +9454,7 @@ function RaportyView({ setView, onOpenReaudit, showToast }) {
                 <span>Dodaj Reaudyt</span>
               </button>
               <ReauditButton
-                onClick={() =>
-                  onOpenReaudit &&
-                  onOpenReaudit(
-                    "Zbiorcze audyty organizacji",
-                    "Audyt WCAG 2.1 AA",
-                    "Piotr Smułkowski"
-                  )
-                }
+                onClick={() => setView("reaudyt-nowy")}
                 variant="secondary"
               />
             </div>
@@ -9998,10 +10109,7 @@ function RaportyView({ setView, onOpenReaudit, showToast }) {
                               type="button"
                               onClick={(e) => {
                                 e.stopPropagation();
-                                try {
-                                  sessionStorage.setItem("wally_open_add_reaudit", "true");
-                                } catch {}
-                                setView("raport-szczegoly");
+                                setView("reaudyt-nowy");
                               }}
                               className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 hover:text-slate-900 transition-colors cursor-pointer"
                               title={`Dodaj reaudyt dla ${audit.title}`}
@@ -10211,7 +10319,19 @@ function ReportCard({
   );
 }
 
-function ReportSummaryView({ setView, onOpenReaudit, showToast }) {
+function ReportSummaryView({
+  setView,
+  onOpenReaudit,
+  onOpenReauditDetails,
+  reauditsList = INITIAL_REAUDITS_HISTORY,
+  showToast,
+}: {
+  setView: (view: string) => void;
+  onOpenReaudit?: (title?: string, type?: string, auditor?: string) => void;
+  onOpenReauditDetails?: (reaudit: ReauditRecord) => void;
+  reauditsList?: ReauditRecord[];
+  showToast?: (title: string, message: string) => void;
+}) {
   const currentAuditId = "1";
   const [isPinned, setIsPinned] = useState(() => {
     try {
@@ -10245,49 +10365,6 @@ function ReportSummaryView({ setView, onOpenReaudit, showToast }) {
       }
       return next;
     });
-  };
-
-  const [reauditsList, setReauditsList] = useState<ReauditRecord[]>(() => {
-    try {
-      const saved = localStorage.getItem("wally_reaudits_list_v2");
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-      }
-    } catch {}
-    return INITIAL_REAUDITS_HISTORY;
-  });
-
-  const [isAddReauditOpen, setIsAddReauditOpen] = useState(() => {
-    try {
-      if (sessionStorage.getItem("wally_open_add_reaudit") === "true") {
-        sessionStorage.removeItem("wally_open_add_reaudit");
-        return true;
-      }
-    } catch {}
-    return false;
-  });
-  const [selectedReauditForDetails, setSelectedReauditForDetails] = useState<ReauditRecord | null>(null);
-
-  const handleSaveReaudit = (newReaudit: ReauditRecord) => {
-    setReauditsList((prev) => {
-      const next = [newReaudit, ...prev];
-      try {
-        localStorage.setItem("wally_reaudits_list_v2", JSON.stringify(next));
-      } catch {}
-      return next;
-    });
-    setIsAddReauditOpen(false);
-    if (showToast) {
-      const fixedNum = (newReaudit.verifiedPreviousErrors || []).filter(
-        (e) => e.status === "fixed"
-      ).length;
-      showToast(
-        "Zapisano nowy Reaudyt",
-        `Dodano "${newReaudit.name}". Wynik po reaudycie: ${newReaudit.score}% (poprawiono ${fixedNum} z ${newReaudit.verifiedPreviousErrors?.length || 0} barier).`,
-        "success"
-      );
-    }
   };
 
   const handleDownloadPdf = () => {
@@ -10385,7 +10462,10 @@ function ReportSummaryView({ setView, onOpenReaudit, showToast }) {
             </button>
             <button
               type="button"
-              onClick={() => setIsAddReauditOpen(true)}
+              onClick={() => {
+                if (onOpenReaudit) onOpenReaudit();
+                else setView("reaudyt-nowy");
+              }}
               className="flex justify-center items-center gap-1.5 bg-[#0038F8] hover:bg-[#002ECC] text-white px-3.5 py-2 rounded-lg font-bold shadow-xs transition-colors text-xs cursor-pointer active:translate-y-px"
               title="Wprowadź i zarejestruj wyniki ponownego audytu"
             >
@@ -10543,7 +10623,10 @@ function ReportSummaryView({ setView, onOpenReaudit, showToast }) {
               <div className="flex items-center gap-2">
                 <button
                   type="button"
-                  onClick={() => setIsAddReauditOpen(true)}
+                  onClick={() => {
+                    if (onOpenReaudit) onOpenReaudit();
+                    else setView("reaudyt-nowy");
+                  }}
                   className="inline-flex items-center gap-1.5 bg-[#0038F8] hover:bg-[#002ECC] text-white px-3 py-1.5 rounded-lg text-xs font-bold shadow-xs transition-colors cursor-pointer active:translate-y-px"
                   title="Wprowadź i zarejestruj wyniki ponownego audytu"
                 >
@@ -10569,14 +10652,24 @@ function ReportSummaryView({ setView, onOpenReaudit, showToast }) {
               <div
                 key={reaudit.id}
                 className="flex flex-col sm:flex-row sm:items-center justify-between bg-slate-50/70 hover:bg-slate-100/80 border border-slate-200/80 hover:border-[#0038F8]/30 rounded-xl p-3 sm:p-3.5 transition-all cursor-pointer gap-4 group"
-                onClick={() => setSelectedReauditForDetails(reaudit)}
+                onClick={() => {
+                  if (onOpenReauditDetails) {
+                    onOpenReauditDetails(reaudit);
+                  } else {
+                    setView("reaudyt-szczegoly");
+                  }
+                }}
                 title="Kliknij, aby otworzyć szczegółowy raport weryfikacji tego reaudytu"
                 role="button"
                 tabIndex={0}
                 onKeyDown={(e) => {
                   if (e.key === "Enter" || e.key === " ") {
                     e.preventDefault();
-                    setSelectedReauditForDetails(reaudit);
+                    if (onOpenReauditDetails) {
+                      onOpenReauditDetails(reaudit);
+                    } else {
+                      setView("reaudyt-szczegoly");
+                    }
                   }
                 }}
               >
@@ -10968,29 +11061,6 @@ function ReportSummaryView({ setView, onOpenReaudit, showToast }) {
         </div>
       </div>
 
-      {/* MODAL DODAWANIA REAUDYTU */}
-      {isAddReauditOpen && (
-        <AddReauditModal
-          isOpen={isAddReauditOpen}
-          onClose={() => setIsAddReauditOpen(false)}
-          auditTitle="Portal informacyjny - wybrane podstrony"
-          baseScore={77.5}
-          baseElements={DEFAULT_BASE_ELEMENTS}
-          previousErrors={DEFAULT_PREVIOUS_ERRORS}
-          onSaveReaudit={handleSaveReaudit}
-        />
-      )}
-
-      {/* MODAL SZCZEGÓŁÓW WYBRANEGO REAUDYTU */}
-      {selectedReauditForDetails && (
-        <ReauditDetailModal
-          isOpen={Boolean(selectedReauditForDetails)}
-          onClose={() => setSelectedReauditForDetails(null)}
-          reaudit={selectedReauditForDetails}
-          auditTitle="Portal informacyjny - wybrane podstrony"
-          onShowToast={showToast}
-        />
-      )}
     </div>
   );
 }
