@@ -110,6 +110,8 @@ export const plainLanguageDictionary: Record<string, string> = {
   "audit_summary.header.btn_pin": "Dodaj do obserwowanych",
   "audit_summary.header.btn_pinned_active": "Obserwujesz ten audyt",
   "audit_summary.header.btn_reaudit": "Zleć weryfikację poprawek",
+  "audit_summary.header.btn_add_reaudit": "Dodaj Reaudyt",
+  "audits.list.btn_add_reaudit": "Dodaj Reaudyt",
   "audit_summary.header.btn_pdf": "Pobierz raport PDF",
   "audit_summary.header.btn_xlsx": "Pobierz arkusz Excel (.xlsx)",
   "audit_summary.kpi.overall_score": "Ogólna dostępność",

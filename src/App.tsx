@@ -94,6 +94,14 @@ import { UserProfileView, DEFAULT_COMPLAINT_PROCESS_STEPS } from "./features/pro
 import { PersonProfileView } from "./features/profile/PersonProfileView";
 import { WcagCriteriaCombobox, ALL_WCAG_CRITERIA, normalizeCriterion } from "./components/ui/WcagCriteriaCombobox";
 import { ClientProfile } from "./types";
+import {
+  AddReauditModal,
+  ReauditDetailModal,
+  ReauditRecord,
+  INITIAL_REAUDITS_HISTORY,
+  DEFAULT_BASE_ELEMENTS,
+  DEFAULT_PREVIOUS_ERRORS,
+} from "./features/audits/ReauditModals";
 
 // ==========================================
 // GENERATORY DANYCH TESTOWYCH
@@ -4376,9 +4384,9 @@ const VIEW_GUIDES = {
         desc: "Podsumowanie liczby błędów Priorytetowych, Ważnych i Marginalnych na całym badanym serwisie.",
       },
       {
-        name: "Śledzenie re-audytów",
+        name: "Dodawanie i śledzenie Reaudytów",
         badge: "Weryfikacja",
-        desc: "Lista ponownych weryfikacji powdrożeniowych z datami i informacją o liczbie naprawionych kryteriów.",
+        desc: "Przycisk 'Dodaj Reaudyt' umożliwia zarejestrowanie ponownego badania tych samych ekranów: weryfikację czy wcześniejsze błędy zostały poprawione, czy występują dalej, oraz dodanie nowych usterek.",
       },
       {
         name: "Lista zbadanych elementów / podstron",
@@ -4392,9 +4400,10 @@ const VIEW_GUIDES = {
       },
     ],
     steps: [
-      "Krok 1: Przeanalizuj ogólną punktację i sprawdź, czy audyt posiada re-audyty powdrożeniowe.",
-      "Krok 2: Sprawdź listę zbadanych elementów i zidentyfikuj podstrony o najniższej dostępności.",
-      "Krok 3: Kliknij wybrany element, aby otworzyć listę konkretnych błędów z opisami i wytycznymi.",
+      "Krok 1: Przeanalizuj ogólną punktację i sprawdź historię re-audytów lub dodaj nowy reaudyt powdrożeniowy przyciskiem 'Dodaj Reaudyt'.",
+      "Krok 2: W formularzu reaudytu zweryfikuj stan każdego dotychczasowego błędu (Poprawiony / Występuje dalej) i dopisz ewentualne nowe usterki na tych samych badanych ekranach.",
+      "Krok 3: Sprawdź listę zbadanych elementów i zidentyfikuj podstrony o najniższej dostępności.",
+      "Krok 4: Kliknij wybrany element, aby otworzyć listę konkretnych błędów z opisami i wytycznymi.",
     ],
     tips: [
       "Raport PDF można pobrać w prawym górnym rogu nagłówka i przekazać do dokumentacji wdrożeniowej.",
@@ -9303,6 +9312,20 @@ function RaportyView({ setView, onOpenReaudit, showToast }) {
               </p>
             </div>
             <div className="flex items-center gap-2 flex-wrap shrink-0">
+              <button
+                type="button"
+                onClick={() => {
+                  try {
+                    sessionStorage.setItem("wally_open_add_reaudit", "true");
+                  } catch {}
+                  setView("raport-szczegoly");
+                }}
+                className="inline-flex items-center justify-center gap-1.5 bg-[#0038F8] hover:bg-[#002ECC] text-white px-3.5 py-2 text-xs font-bold rounded-lg shadow-xs transition-all cursor-pointer active:translate-y-px"
+                title="Wprowadź i zarejestruj wyniki ponownego audytu"
+              >
+                <Plus size={14} />
+                <span>Dodaj Reaudyt</span>
+              </button>
               <ReauditButton
                 onClick={() =>
                   onOpenReaudit &&
@@ -9312,7 +9335,7 @@ function RaportyView({ setView, onOpenReaudit, showToast }) {
                     "Piotr Smułkowski"
                   )
                 }
-                variant="primary"
+                variant="secondary"
               />
             </div>
           </div>
@@ -9961,18 +9984,35 @@ function RaportyView({ setView, onOpenReaudit, showToast }) {
                           </Badge>
                         </td>
                         <td className="px-5 py-4 text-right whitespace-nowrap">
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setView("raport-szczegoly");
-                            }}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-[#0038F8]/10 text-[#0038F8] hover:bg-[#0038F8] hover:text-white transition-colors cursor-pointer"
-                            title="Otwórz szczegóły audytu"
-                          >
-                            <span>Szczegóły</span>
-                            <ArrowRight size={13} strokeWidth={2.5} />
-                          </button>
+                          <div className="inline-flex items-center gap-1.5 justify-end">
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                try {
+                                  sessionStorage.setItem("wally_open_add_reaudit", "true");
+                                } catch {}
+                                setView("raport-szczegoly");
+                              }}
+                              className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 hover:text-slate-900 transition-colors cursor-pointer"
+                              title={`Dodaj reaudyt dla ${audit.title}`}
+                            >
+                              <Plus size={12} className="text-[#0038F8]" />
+                              <span>Reaudyt</span>
+                            </button>
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setView("raport-szczegoly");
+                              }}
+                              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-[#0038F8]/10 text-[#0038F8] hover:bg-[#0038F8] hover:text-white transition-colors cursor-pointer"
+                              title="Otwórz szczegóły audytu"
+                            >
+                              <span>Szczegóły</span>
+                              <ArrowRight size={13} strokeWidth={2.5} />
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     );
@@ -10197,28 +10237,45 @@ function ReportSummaryView({ setView, onOpenReaudit, showToast }) {
     });
   };
 
-  const [reauditsList, setReauditsList] = useState([
-    {
-      id: "re1",
-      name: "Reaudyt z dnia 15.04.2026",
-      date: "15.04.2026",
-      auditor: "P. Smułkowski",
-      score: 85.2,
-      brokenCriteria: 5,
-      criticalErrors: 1,
-      status: "Zakończony",
-    },
-    {
-      id: "re2",
-      name: "Reaudyt z dnia 20.05.2026",
-      date: "20.05.2026",
-      auditor: "A. Nowak",
-      score: 92.4,
-      brokenCriteria: 2,
-      criticalErrors: 0,
-      status: "W trakcie",
-    },
-  ]);
+  const [reauditsList, setReauditsList] = useState<ReauditRecord[]>(() => {
+    try {
+      const saved = localStorage.getItem("wally_reaudits_list_v2");
+      if (saved) return JSON.parse(saved);
+    } catch {}
+    return INITIAL_REAUDITS_HISTORY;
+  });
+
+  const [isAddReauditOpen, setIsAddReauditOpen] = useState(() => {
+    try {
+      if (sessionStorage.getItem("wally_open_add_reaudit") === "true") {
+        sessionStorage.removeItem("wally_open_add_reaudit");
+        return true;
+      }
+    } catch {}
+    return false;
+  });
+  const [selectedReauditForDetails, setSelectedReauditForDetails] = useState<ReauditRecord | null>(null);
+
+  const handleSaveReaudit = (newReaudit: ReauditRecord) => {
+    setReauditsList((prev) => {
+      const next = [newReaudit, ...prev];
+      try {
+        localStorage.setItem("wally_reaudits_list_v2", JSON.stringify(next));
+      } catch {}
+      return next;
+    });
+    setIsAddReauditOpen(false);
+    if (showToast) {
+      const fixedNum = (newReaudit.verifiedPreviousErrors || []).filter(
+        (e) => e.status === "fixed"
+      ).length;
+      showToast(
+        "Zapisano nowy Reaudyt",
+        `Dodano "${newReaudit.name}". Wynik po reaudycie: ${newReaudit.score}% (poprawiono ${fixedNum} z ${newReaudit.verifiedPreviousErrors?.length || 0} barier).`,
+        "success"
+      );
+    }
+  };
 
   const handleDownloadPdf = () => {
     if (showToast) {
@@ -10313,9 +10370,17 @@ function ReportSummaryView({ setView, onOpenReaudit, showToast }) {
             >
               <FileText size={14} className="text-red-500" /> <span>Pobierz PDF</span>
             </button>
+            <button
+              type="button"
+              onClick={() => setIsAddReauditOpen(true)}
+              className="flex justify-center items-center gap-1.5 bg-[#0038F8] hover:bg-[#002ECC] text-white px-3.5 py-2 rounded-lg font-bold shadow-xs transition-colors text-xs cursor-pointer active:translate-y-px"
+              title="Wprowadź i zarejestruj wyniki ponownego audytu"
+            >
+              <Plus size={14} /> <span>Dodaj Reaudyt</span>
+            </button>
             <ReauditButton
               onClick={handleTriggerReaudit}
-              variant="primary"
+              variant="secondary"
             />
           </div>
         }
@@ -10462,101 +10527,140 @@ function ReportSummaryView({ setView, onOpenReaudit, showToast }) {
                   Historia i Reaudyty ({reauditsList.length})
                 </h2>
               </div>
-              <ReauditButton
-                onClick={handleTriggerReaudit}
-                variant="secondary"
-                size="sm"
-                className="hidden sm:inline-flex text-xs py-1.5 px-3"
-              />
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setIsAddReauditOpen(true)}
+                  className="inline-flex items-center gap-1.5 bg-[#0038F8] hover:bg-[#002ECC] text-white px-3 py-1.5 rounded-lg text-xs font-bold shadow-xs transition-colors cursor-pointer active:translate-y-px"
+                  title="Wprowadź i zarejestruj wyniki ponownego audytu"
+                >
+                  <Plus size={13} />
+                  <span>Dodaj Reaudyt</span>
+                </button>
+                <ReauditButton
+                  onClick={handleTriggerReaudit}
+                  variant="secondary"
+                  size="sm"
+                  className="hidden sm:inline-flex text-xs py-1.5 px-3"
+                />
+              </div>
             </div>
 
             <div className="flex flex-col gap-2.5">
-          {reauditsList.map((reaudit) => (
-            <div
-              key={reaudit.id}
-              className="flex flex-col sm:flex-row sm:items-center justify-between bg-slate-50/70 hover:bg-slate-100/80 border border-slate-200/80 hover:border-[#0038F8]/30 rounded-xl p-3 sm:p-3.5 transition-all cursor-pointer gap-4 group"
-              onClick={() => setView("raport-szczegoly")}
-            >
-              <div className="flex items-center gap-3.5 flex-1 min-w-[240px]">
-                <div className="w-9 h-9 rounded-xl bg-blue-50 text-[#0038F8] group-hover:bg-[#0038F8] group-hover:text-white transition-colors flex items-center justify-center flex-shrink-0">
-                  <ClipboardCheck size={17} />
-                </div>
-                <div className="min-w-0 pr-3">
-                  <div className="text-[14px] font-bold text-slate-800 leading-snug group-hover:text-[#0038F8] transition-colors truncate">
-                    {reaudit.name}
-                  </div>
-                  <div className="flex items-center gap-2 text-[11px] text-slate-500 font-medium mt-0.5 truncate">
-                    <span className="flex items-center gap-1 shrink-0">
-                      <Calendar size={11} /> {reaudit.date}
-                    </span>
-                    <span className="text-slate-300">•</span>
-                    <span className="flex items-center gap-1 shrink-0">
-                      <User size={11} /> {reaudit.auditor}
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <div className="flex flex-wrap items-center justify-between sm:justify-end gap-3 sm:gap-5 w-full sm:w-auto mt-2 sm:mt-0 pt-2.5 sm:pt-0 border-t border-slate-200/60 sm:border-none">
-                <div className="flex flex-col hidden sm:flex shrink-0 items-center justify-center">
-                  <span className="text-[10px] font-bold text-slate-600 uppercase tracking-widest mb-0.5">
-                    Złamane Kryt.
-                  </span>
-                  <span className="text-[15px] font-extrabold text-slate-800 text-center">
-                    {reaudit.brokenCriteria}
-                  </span>
-                </div>
+          {reauditsList.map((reaudit) => {
+            const prevErrors = reaudit.verifiedPreviousErrors || [];
+            const fixedNum = prevErrors.filter((e) => e.status === "fixed").length;
+            const hasNew = Boolean(reaudit.newErrors && reaudit.newErrors.length > 0);
 
-                <div className="hidden sm:flex shrink-0 items-center justify-center">
-                  <Badge
-                    variant={
-                      reaudit.status === "Zakończony" ? "success" : "warning"
-                    }
-                    className="!py-0.5 !px-2.5 !text-[11px] w-max font-bold"
-                  >
-                    {reaudit.status}
-                  </Badge>
-                </div>
-
-                <div className="flex shrink-0 items-center justify-end">
-                  <div className="flex items-center gap-2.5 bg-white px-2.5 py-1 rounded-lg border border-slate-200 shadow-2xs">
-                    <div
-                      className="relative group/tip flex items-center gap-1.5 border-r border-slate-200 pr-2.5 cursor-help"
-                      title={`Błędy priorytetowe: ${reaudit.criticalErrors}`}
-                    >
-                      <AlertOctagon size={13} className={reaudit.criticalErrors > 0 ? "text-red-700" : "text-slate-500"} />
-                      <span className={`text-[14px] font-black ${reaudit.criticalErrors > 0 ? "text-red-700" : "text-slate-600"}`}>
-                        {reaudit.criticalErrors}
+            return (
+              <div
+                key={reaudit.id}
+                className="flex flex-col sm:flex-row sm:items-center justify-between bg-slate-50/70 hover:bg-slate-100/80 border border-slate-200/80 hover:border-[#0038F8]/30 rounded-xl p-3 sm:p-3.5 transition-all cursor-pointer gap-4 group"
+                onClick={() => setSelectedReauditForDetails(reaudit)}
+                title="Kliknij, aby otworzyć szczegółowy raport weryfikacji tego reaudytu"
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    setSelectedReauditForDetails(reaudit);
+                  }
+                }}
+              >
+                <div className="flex items-center gap-3.5 flex-1 min-w-[240px]">
+                  <div className="w-9 h-9 rounded-xl bg-blue-50 text-[#0038F8] group-hover:bg-[#0038F8] group-hover:text-white transition-colors flex items-center justify-center flex-shrink-0">
+                    <ClipboardCheck size={17} />
+                  </div>
+                  <div className="min-w-0 pr-3">
+                    <div className="text-[14px] font-bold text-slate-800 leading-snug group-hover:text-[#0038F8] transition-colors truncate">
+                      {reaudit.name}
+                    </div>
+                    <div className="flex items-center gap-2 text-[11px] text-slate-500 font-medium mt-0.5 truncate flex-wrap">
+                      <span className="flex items-center gap-1 shrink-0">
+                        <Calendar size={11} /> {reaudit.date}
                       </span>
+                      <span className="text-slate-300">•</span>
+                      <span className="flex items-center gap-1 shrink-0">
+                        <User size={11} /> {reaudit.auditor}
+                      </span>
+                      {prevErrors.length > 0 && (
+                        <>
+                          <span className="text-slate-300">•</span>
+                          <span className="text-emerald-700 font-bold bg-emerald-50 px-1.5 py-0.2 rounded text-[10px] border border-emerald-200">
+                            Poprawiono: {fixedNum} / {prevErrors.length}
+                          </span>
+                        </>
+                      )}
+                      {hasNew && (
+                        <span className="text-amber-800 font-bold bg-amber-50 px-1.5 py-0.2 rounded text-[10px] border border-amber-200">
+                          +{reaudit.newErrors.length} nowe usterki
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <div className="flex flex-wrap items-center justify-between sm:justify-end gap-3 sm:gap-5 w-full sm:w-auto mt-2 sm:mt-0 pt-2.5 sm:pt-0 border-t border-slate-200/60 sm:border-none">
+                  <div className="flex flex-col hidden sm:flex shrink-0 items-center justify-center">
+                    <span className="text-[10px] font-bold text-slate-600 uppercase tracking-widest mb-0.5">
+                      Złamane Kryt.
+                    </span>
+                    <span className="text-[15px] font-extrabold text-slate-800 text-center">
+                      {reaudit.brokenCriteria}
+                    </span>
+                  </div>
+
+                  <div className="hidden sm:flex shrink-0 items-center justify-center">
+                    <Badge
+                      variant={
+                        reaudit.status === "Zakończony" ? "success" : "warning"
+                      }
+                      className="!py-0.5 !px-2.5 !text-[11px] w-max font-bold"
+                    >
+                      {reaudit.status}
+                    </Badge>
+                  </div>
+
+                  <div className="flex shrink-0 items-center justify-end">
+                    <div className="flex items-center gap-2.5 bg-white px-2.5 py-1 rounded-lg border border-slate-200 shadow-2xs">
                       <div
-                        role="tooltip"
-                        className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 pointer-events-none opacity-0 invisible group-hover/tip:opacity-100 group-hover/tip:visible transition-all duration-150 z-50 bg-slate-900 text-white text-[11px] font-semibold px-2.5 py-1 rounded-lg shadow-xl whitespace-nowrap"
+                        className="relative group/tip flex items-center gap-1.5 border-r border-slate-200 pr-2.5 cursor-help"
+                        title={`Błędy priorytetowe: ${reaudit.criticalErrors}`}
                       >
-                        Błędy priorytetowe: {reaudit.criticalErrors}
-                        <span className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-slate-900" />
+                        <AlertOctagon size={13} className={reaudit.criticalErrors > 0 ? "text-red-700" : "text-slate-500"} />
+                        <span className={`text-[14px] font-black ${reaudit.criticalErrors > 0 ? "text-red-700" : "text-slate-600"}`}>
+                          {reaudit.criticalErrors}
+                        </span>
+                        <div
+                          role="tooltip"
+                          className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 pointer-events-none opacity-0 invisible group-hover/tip:opacity-100 group-hover/tip:visible transition-all duration-150 z-50 bg-slate-900 text-white text-[11px] font-semibold px-2.5 py-1 rounded-lg shadow-xl whitespace-nowrap"
+                        >
+                          Błędy priorytetowe: {reaudit.criticalErrors}
+                          <span className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-slate-900" />
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-[10px] font-bold text-slate-600 uppercase tracking-widest hidden sm:block">
+                          Zgodność:
+                        </span>
+                        <span
+                          className={`text-[14px] font-black ${
+                            reaudit.score >= 80
+                              ? "text-emerald-700"
+                              : "text-amber-800"
+                          }`}
+                        >
+                          {reaudit.score}%
+                        </span>
                       </div>
                     </div>
-                    <div className="flex items-center gap-1.5">
-                      <span className="text-[10px] font-bold text-slate-600 uppercase tracking-widest hidden sm:block">
-                        Zgodność:
-                      </span>
-                      <span
-                        className={`text-[14px] font-black ${
-                          reaudit.score >= 80
-                            ? "text-emerald-700"
-                            : "text-amber-800"
-                        }`}
-                      >
-                        {reaudit.score}%
-                      </span>
-                    </div>
+                  </div>
+                  <div className="w-8 flex justify-end shrink-0 hidden sm:flex">
+                    <ChevronRight size={18} className="text-slate-500 group-hover:text-[#0038F8] transition-colors" />
                   </div>
                 </div>
-                <div className="w-8 flex justify-end shrink-0 hidden sm:flex">
-                  <ChevronRight size={18} className="text-slate-500 group-hover:text-[#0038F8] transition-colors" />
-                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
         <ReauditButton
           onClick={handleTriggerReaudit}
@@ -10850,6 +10954,26 @@ function ReportSummaryView({ setView, onOpenReaudit, showToast }) {
       })()}
         </div>
       </div>
+
+      {/* MODAL DODAWANIA REAUDYTU */}
+      <AddReauditModal
+        isOpen={isAddReauditOpen}
+        onClose={() => setIsAddReauditOpen(false)}
+        auditTitle="Portal informacyjny - wybrane podstrony"
+        baseScore={77.5}
+        baseElements={DEFAULT_BASE_ELEMENTS}
+        previousErrors={DEFAULT_PREVIOUS_ERRORS}
+        onSaveReaudit={handleSaveReaudit}
+      />
+
+      {/* MODAL SZCZEGÓŁÓW WYBRANEGO REAUDYTU */}
+      <ReauditDetailModal
+        isOpen={Boolean(selectedReauditForDetails)}
+        onClose={() => setSelectedReauditForDetails(null)}
+        reaudit={selectedReauditForDetails}
+        auditTitle="Portal informacyjny - wybrane podstrony"
+        onShowToast={showToast}
+      />
     </div>
   );
 }
