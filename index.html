@@ -20,7 +20,7 @@
         var isChunkOrScriptError =
           msg.indexOf('Failed to fetch dynamically imported module') !== -1 ||
           msg.indexOf('Loading chunk') !== -1 ||
-          (target && target.tagName === 'SCRIPT' && target.src);
+          (target && target.tagName === 'SCRIPT' && target.src && target.src.indexOf('assets/index') !== -1);
 
         if (isChunkOrScriptError) {
           console.warn('Wykryto problem z załadowaniem skryptu lub chunka. Sprawdzam potrzebę odświeżenia...', e);
@@ -35,6 +35,21 @@
       window.addEventListener('load', function() {
         sessionStorage.removeItem('wally_auto_reload');
       });
+
+      // Jeśli strona jest serwowana statycznie ze środowiska GitHub Pages (np. bezpośrednio z gałęzi main)
+      if (window.location.hostname.includes('github.io') && !document.querySelector('script[src*="assets/index"]')) {
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.crossOrigin = '';
+        link.href = './assets/index-YMJEd546.css';
+        document.head.appendChild(link);
+
+        var script = document.createElement('script');
+        script.type = 'module';
+        script.crossOrigin = '';
+        script.src = './assets/index-DGjvWG1F.js';
+        document.head.appendChild(script);
+      }
     </script>
     <script type="module" crossorigin src="./assets/index-DGjvWG1F.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-YMJEd546.css">
