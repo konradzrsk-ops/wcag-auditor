@@ -5,14 +5,66 @@
     <link rel="icon" type="image/svg+xml" href="./vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="W-ally — platforma do zarządzania dostępnością cyfrową" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet" />
     <title>W-ally</title>
-    <script type="module" crossorigin src="./assets/index-POv8F5ZM.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-_q53KijT.css">
+    <script>
+      // Zabezpieczenie przed błędem nieaktualnego chunka po wdrożeniu (stary chunk 404 w pamięci przeglądarki)
+      window.addEventListener('error', function(e) {
+        var msg = (e && e.message) || '';
+        var target = e && e.target;
+        var isChunkOrScriptError =
+          msg.indexOf('Failed to fetch dynamically imported module') !== -1 ||
+          msg.indexOf('Loading chunk') !== -1 ||
+          (target && target.tagName === 'SCRIPT' && target.src && target.src.indexOf('assets/index') !== -1);
+
+        if (isChunkOrScriptError) {
+          console.warn('Wykryto problem z załadowaniem skryptu lub chunka. Sprawdzam potrzebę odświeżenia...', e);
+          var hasReloaded = sessionStorage.getItem('wally_auto_reload');
+          if (!hasReloaded) {
+            sessionStorage.setItem('wally_auto_reload', 'true');
+            window.location.reload();
+          }
+        }
+      }, true);
+
+      window.addEventListener('load', function() {
+        sessionStorage.removeItem('wally_auto_reload');
+      });
+
+      // Jeśli strona jest serwowana statycznie ze środowiska GitHub Pages (np. bezpośrednio z gałęzi main)
+      if (window.location.hostname.includes('github.io') && !document.querySelector('script[src*="assets/index"]')) {
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.crossOrigin = '';
+        link.href = './assets/index-BNm_JkOM.css';
+        document.head.appendChild(link);
+
+        var script = document.createElement('script');
+        script.type = 'module';
+        script.crossOrigin = '';
+        script.src = './assets/index-BnUC1kFj.js';
+        document.head.appendChild(script);
+      }
+    </script>
+    <script type="module" crossorigin src="./assets/index-BnUC1kFj.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-BNm_JkOM.css">
   </head>
-  <body class="font-sans antialiased">
-    <div id="root"></div>
+  <body class="font-sans antialiased bg-slate-50">
+    <div id="root">
+      <!-- Fallback w razie opóźnienia sieci lub błędu skryptu - użytkownik nigdy nie widzi czystej białej strony -->
+      <div id="wally-fallback-loader" style="min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: 'Figtree', system-ui, -apple-system, sans-serif; background-color: #f8fafc; color: #0f172a; padding: 24px; text-align: center;">
+        <div style="width: 50px; height: 50px; border-radius: 14px; background: #0038F8; display: flex; align-items: center; justify-content: center; margin-bottom: 18px; color: white; font-weight: 800; font-size: 22px; box-shadow: 0 4px 14px rgba(0,56,248,0.25);">W</div>
+        <h1 style="font-size: 19px; font-weight: 800; margin: 0 0 8px 0; color: #0f172a; letter-spacing: -0.01em;">Ładowanie platformy W-ally...</h1>
+        <p style="font-size: 13px; color: #64748b; max-width: 440px; margin: 0 0 20px 0; line-height: 1.5;">Trwa wczytywanie interfejsu. Jeśli ten ekran wyświetla się dłużej niż kilka sekund po aktualizacji, odśwież stronę.</p>
+        <button onclick="try { localStorage.clear(); sessionStorage.clear(); } catch(e){} window.location.reload(true);" style="background-color: #0038F8; color: white; border: none; padding: 10px 22px; border-radius: 12px; font-weight: 700; font-size: 13px; cursor: pointer; box-shadow: 0 2px 8px rgba(0,56,248,0.25);">
+          Odśwież i wyczyść pamięć podręczną
+        </button>
+      </div>
+    </div>
   </body>
 </html>
