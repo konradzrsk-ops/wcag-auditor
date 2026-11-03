@@ -86,6 +86,7 @@ import {
   Sparkles,
   Send,
   RefreshCw,
+  RotateCcw,
   Building2,
   ListOrdered,
   Sliders,
