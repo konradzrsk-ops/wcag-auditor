@@ -110,6 +110,7 @@ import {
   PlannedHelpModal,
 } from "./components/modals/PlannedFeatureModals";
 import { HiddenTeaserShowcaseView } from "./features/showcase/HiddenTeaserShowcaseView";
+import { t } from "./locales/plainLanguage";
 
 // ==========================================
 // GENERATORY DANYCH TESTOWYCH
@@ -2299,7 +2300,7 @@ function LoginView({ onLogin }) {
                 <Eye size={22} strokeWidth={2.5} />
               </div>
               <span className="text-slate-900 font-extrabold text-2xl leading-none tracking-tight">
-                W-ally
+                {t("login.brand.name", "W-ally")}
               </span>
             </div>
 
@@ -2307,18 +2308,17 @@ function LoginView({ onLogin }) {
             <div className="w-full my-auto py-12">
               <div className="mb-8">
                 <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight mb-3">
-                  Witaj z powrotem
+                  {t("login.header.title", "Zaloguj się do konta")}
                 </h1>
                 <p className="text-slate-500 font-medium">
-                  Zaloguj się, aby zarządzać dostępnością cyfrową w swojej
-                  organizacji.
+                  {t("login.header.subtitle", "Zaloguj się, aby zarządzać dostępnością cyfrową w swojej organizacji")}
                 </p>
               </div>
 
               <form data-testid="login-form" onSubmit={handleLogin} className="space-y-5">
                 <div className="space-y-2">
                   <label className="block text-[13px] font-bold text-slate-700">
-                    Adres e-mail
+                    {t("login.form.email_label", "E-mail")}
                   </label>
                   <div className="relative flex items-center group">
                     <Mail
@@ -2330,7 +2330,7 @@ function LoginView({ onLogin }) {
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="jan.kowalski@firma.pl"
+                      placeholder={t("login.form.email_placeholder", "twoj.email@twojabank.pl")}
                       className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-12 pr-4 py-3.5 text-sm font-semibold text-slate-900 placeholder:text-slate-400 placeholder:font-medium focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50 focus:border-[#0038F8] transition-all bg-white"
                       required
                     />
@@ -2340,13 +2340,13 @@ function LoginView({ onLogin }) {
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
                     <label className="block text-[13px] font-bold text-slate-700">
-                      Hasło
+                      {t("login.form.password_label", "Hasło")}
                     </label>
                     <a
                       href="#"
                       className="text-[13px] font-bold text-[#0038F8] hover:text-[#002ECC] transition-colors"
                     >
-                      Zapomniałeś hasła?
+                      {t("login.form.forgot_password", "Nie pamiętasz hasła?")}
                     </a>
                   </div>
                   <div className="relative flex items-center group">
@@ -2359,7 +2359,7 @@ function LoginView({ onLogin }) {
                       type={showPassword ? "text" : "password"}
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      placeholder="••••••••••••"
+                      placeholder={t("login.form.password_placeholder", "Wpisz hasło")}
                       className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-12 pr-12 py-3.5 text-sm font-semibold text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50 focus:border-[#0038F8] transition-all bg-white"
                       required
                     />
@@ -2367,7 +2367,7 @@ function LoginView({ onLogin }) {
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
                       className="absolute right-4 text-slate-400 hover:text-slate-600 transition-colors focus:outline-none focus:text-[#0038F8]"
-                      aria-label={showPassword ? "Ukryj hasło" : "Pokaż hasło"}
+                      aria-label={showPassword ? t("login.form.hide_password_aria", "Ukryj hasło") : t("login.form.show_password_aria", "Pokaż hasło")}
                     >
                       {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                     </button>
@@ -2386,16 +2386,16 @@ function LoginView({ onLogin }) {
                     </div>
                   </div>
                   <span className="text-sm font-semibold text-slate-600 group-hover:text-slate-900 transition-colors">
-                    Zapamiętaj mnie na tym urządzeniu
+                    {t("login.form.remember_me", "Zapamiętaj mnie na tym urządzeniu")}
                   </span>
                 </label>
 
                 <button
                   data-testid="login-submit-button"
                   type="submit"
-                  className="w-full bg-[#0038F8] hover:bg-[#002ECC] text-white py-4 rounded-xl font-bold shadow-[0_4px_14px_rgba(0,56,248,0.25)] hover:shadow-[0_6px_20px_rgba(0,56,248,0.3)] transition-all flex items-center justify-center gap-2 mt-6 group"
+                  className="w-full bg-[#0038F8] hover:bg-[#002ECC] text-white py-4 rounded-xl font-bold shadow-[0_4px_14px_rgba(0,56,248,0.25)] hover:shadow-[0_6px_20px_rgba(0,56,248,0.3)] transition-all flex items-center justify-center gap-2 mt-6 group cursor-pointer"
                 >
-                  Zaloguj się do panelu
+                  {t("login.form.submit_button", "Zaloguj się")}
                   <ArrowRight
                     size={18}
                     className="group-hover:translate-x-1 transition-transform"
@@ -2409,14 +2409,13 @@ function LoginView({ onLogin }) {
                   className="text-[#0038F8] shrink-0 mt-0.5"
                 />
                 <p className="text-[12px] text-slate-600 font-medium leading-relaxed">
-                  Dostęp do platformy wymaga konta służbowego utworzonego przez Twoją organizację.
-                  Wpisując dane potwierdzasz zgodność z{" "}
+                  Zalogujesz się tylko e-mailem służbowym swojej organizacji. Logując się, akceptujesz zasady{" "}
                   <a
                     href="#"
                     onClick={(e) => e.preventDefault()}
                     className="text-[#0038F8] font-bold hover:underline"
                   >
-                    Polityką Bezpieczeństwa
+                    {t("login.security.policy_link", "Polityki Bezpieczeństwa")}
                   </a>
                   .
                 </p>
@@ -2425,16 +2424,16 @@ function LoginView({ onLogin }) {
 
             {/* Stopka */}
             <div className="flex flex-wrap items-center justify-between text-xs font-semibold text-slate-400 gap-4 shrink-0">
-              <span>© 2026 Widzialni.eu</span>
+              <span>{t("login.footer.copyright", "© 2026 Widzialni.eu")}</span>
               <div className="flex items-center gap-4">
                 <a href="#" className="hover:text-slate-600 transition-colors">
-                  Pomoc
+                  {t("login.footer.help", "Pomoc")}
                 </a>
                 <a href="#" className="hover:text-slate-600 transition-colors">
-                  Polityka Prywatności
+                  {t("login.footer.privacy", "Polityka prywatności")}
                 </a>
                 <a href="#" className="hover:text-slate-600 transition-colors">
-                  Zgłoś problem
+                  {t("login.footer.report_problem", "Zgłoś problem")}
                 </a>
               </div>
             </div>
@@ -2473,17 +2472,19 @@ function LoginView({ onLogin }) {
               </div>
 
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/20 text-xs font-bold text-[#00D4FF] mb-6 uppercase tracking-widest backdrop-blur-sm">
-                <CheckCircle2 size={14} /> Pełne wsparcie WCAG 2.2
+                <CheckCircle2 size={14} /> {t("login.promo.badge", "Pełne wsparcie WCAG 2.2")}
               </div>
               <h2 className="text-4xl lg:text-5xl font-extrabold leading-tight tracking-tight mb-6">
-                Nowy wymiar audytów <br />
+                {t("login.promo.headline_line1", "Dostępność pod kontrolą.")} <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00D4FF] to-white">
-                  dostępności cyfrowej.
+                  {t("login.promo.headline_line2", "Zarządzaj dostępnością w całej organizacji")}
                 </span>
               </h2>
               <p className="text-blue-100 text-lg leading-relaxed font-medium mb-12">
-                Zarządzaj błędami WCAG, monitoruj SLA zespołów i generuj
-                deklaracje PAD z jednego, scentralizowanego miejsca.
+                {t(
+                  "login.promo.description",
+                  "Monitoruj procesy i zarządzaj błędami WCAG. Śledź postępy, kontroluj realizację SLA i generuj deklaracje PAD. Wszystko w jednym miejscu."
+                )}
               </p>
 
               <div className="bg-white/5 border border-white/10 p-6 rounded-xl backdrop-blur-sm">
@@ -2501,18 +2502,21 @@ function LoginView({ onLogin }) {
                   ))}
                 </div>
                 <p className="italic text-white/90 text-sm mb-4">
-                  "Wdrożenie platformy W-ally pozwoliło nam skrócić czas naprawy
-                  błędów priorytetowych o 40% i uporządkować współpracę z
-                  dostawcami."
+                  {t(
+                    "login.promo.testimonial_quote",
+                    '"Wdrożenie platformy W-ally pozwoliło nam skrócić czas naprawy błędów priorytetowych o 40% i uporządkować współpracę z dostawcami."'
+                  )}
                 </p>
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-white/20 border border-white/30 flex items-center justify-center font-bold">
                     AK
                   </div>
                   <div>
-                    <div className="font-bold text-sm">Anna Kowalczyk</div>
+                    <div className="font-bold text-sm">
+                      {t("login.promo.testimonial_author", "Anna Kowalczyk")}
+                    </div>
                     <div className="text-xs text-blue-200">
-                      Accessibility Lead, Duży Bank SA
+                      {t("login.promo.testimonial_role", "Accessibility Lead, Duży Bank SA")}
                     </div>
                   </div>
                 </div>

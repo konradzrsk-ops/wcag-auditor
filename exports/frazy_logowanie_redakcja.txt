@@ -1,7 +1,7 @@
 ================================================================================
               W-ALLY: FRAZY STRONY LOGOWANIA (DO REDAKCJI PROSTEGO JĘZYKA)        
 ================================================================================
-Data wygenerowania: 28.10.2026, 13:39:37
+Data wygenerowania: 23.10.2026, 23:03:43
 Łączna liczba fraz: 25
 
 INSTRUKCJA DLA REDAKTORA PROSTEGO JĘZYKA:
@@ -49,7 +49,7 @@ ORYGINALNY TEKST:
 Zaloguj się, aby zarządzać dostępnością cyfrową w swojej organizacji.
 
 PROSTY JĘZYK (PO REDAKCJI):
-Wpisz swoje dane, aby zarządzać dostępnością cyfrową serwisów i aplikacji banku.
+Zaloguj się, aby zarządzać dostępnością cyfrową w swojej organizacji
 
 Wskazówka redakcyjna:
 Krótkie, jasne zdanie w trybie rozkazującym/czynnym wyjaśniające cel logowania.
@@ -66,7 +66,7 @@ ORYGINALNY TEKST:
 Adres e-mail
 
 PROSTY JĘZYK (PO REDAKCJI):
-Adres e-mail
+E-mail
 
 Wskazówka redakcyjna:
 Standardowe, powszechnie zrozumiałe określenie.
@@ -126,7 +126,7 @@ ORYGINALNY TEKST:
 Pokaż hasło
 
 PROSTY JĘZYK (PO REDAKCJI):
-Pokaż wpisane hasło
+Pokaż hasło
 
 Wskazówka redakcyjna:
 Precyzyjna instrukcja dla czytników ekranu.
@@ -150,7 +150,7 @@ ORYGINALNY TEKST:
 Zapamiętaj mnie na tym urządzeniu
 
 PROSTY JĘZYK (PO REDAKCJI):
-Zapamiętaj mnie na tym komputerze
+Zapamiętaj mnie na tym urządzeniu
 
 Wskazówka redakcyjna:
 Jasny komunikat, że sesja zostanie zachowana.
@@ -179,7 +179,7 @@ ORYGINALNY TEKST:
 Dostęp do platformy wymaga konta służbowego utworzonego przez Twoją organizację. Wpisując dane potwierdzasz zgodność z Polityką Bezpieczeństwa.
 
 PROSTY JĘZYK (PO REDAKCJI):
-Zalogujesz się tylko kontem służbowym swojej organizacji. Logując się, akceptujesz zasady Polityki Bezpieczeństwa.
+Zalogujesz się tylko e-mailem służbowym swojej organizacji. Logując się, akceptujesz zasady Polityki Bezpieczeństwa.
 
 Wskazówka redakcyjna:
 Eliminacja konstrukcji biernej ('wymaga konta utworzonego') na rzecz krótkich, czytelnych zdań.
@@ -220,7 +220,7 @@ ORYGINALNY TEKST:
 Pomoc
 
 PROSTY JĘZYK (PO REDAKCJI):
-Pomoc i kontakt
+Pomoc
 
 Wskazówka redakcyjna:
 Można doprecyzować do 'Pomoc i kontakt'.
@@ -244,7 +244,7 @@ ORYGINALNY TEKST:
 Zgłoś problem
 
 PROSTY JĘZYK (PO REDAKCJI):
-Zgłoś problem z logowaniem
+Zgłoś problem
 
 Wskazówka redakcyjna:
 Doprecyzowanie, czego dotyczy zgłoszenie.
@@ -261,7 +261,7 @@ ORYGINALNY TEKST:
 Pełne wsparcie WCAG 2.2
 
 PROSTY JĘZYK (PO REDAKCJI):
-Zgodne z normą WCAG 2.2
+Pełne wsparcie WCAG 2.2
 
 Wskazówka redakcyjna:
 Wskazuje aktualny poziom standardu dostępności.
@@ -273,7 +273,7 @@ ORYGINALNY TEKST:
 Nowy wymiar audytów
 
 PROSTY JĘZYK (PO REDAKCJI):
-Nowoczesne zarządzanie audytami
+Dostępność pod kontrolą.
 
 Wskazówka redakcyjna:
 Marketingowe hasło; w prostym języku warto wskazać konkretną wartość: 'Nowoczesne audyty'.
@@ -285,7 +285,7 @@ ORYGINALNY TEKST:
 dostępności cyfrowej.
 
 PROSTY JĘZYK (PO REDAKCJI):
-dostępności cyfrowej.
+Zarządzaj dostępnością w całej organizacji
 
 Wskazówka redakcyjna:
 Dokończenie głównego hasła.
@@ -297,7 +297,7 @@ ORYGINALNY TEKST:
 Zarządzaj błędami WCAG, monitoruj SLA zespołów i generuj deklaracje PAD z jednego, scentralizowanego miejsca.
 
 PROSTY JĘZYK (PO REDAKCJI):
-Sprawdzaj błędy dostępności, kontroluj terminy napraw i twórz deklaracje zgodności w jednym miejscu.
+Monitoruj procesy i zarządzaj błędami WCAG. Śledź postępy, kontroluj realizację SLA i generuj deklaracje PAD. Wszystko w jednym miejscu.
 
 Wskazówka redakcyjna:
 Zastąpienie skrótowców 'SLA' i 'PAD' zrozumiałymi pojęciami ('terminy napraw', 'deklaracje zgodności').
@@ -309,7 +309,7 @@ ORYGINALNY TEKST:
 "Wdrożenie platformy W-ally pozwoliło nam skrócić czas naprawy błędów priorytetowych o 40% i uporządkować współpracę z dostawcami."
 
 PROSTY JĘZYK (PO REDAKCJI):
-"Dzięki platformie W-ally naprawiamy błędy krytyczne o 40% szybciej i sprawnie współpracujemy z programistami."
+"Wdrożenie platformy W-ally pozwoliło nam skrócić czas naprawy błędów priorytetowych o 40% i uporządkować współpracę z dostawcami."
 
 Wskazówka redakcyjna:
 Uproszczenie stylu, dynamiczne słowa ('naprawiamy błędy krytyczne szybciej').
@@ -333,7 +333,7 @@ ORYGINALNY TEKST:
 Accessibility Lead, Duży Bank SA
 
 PROSTY JĘZYK (PO REDAKCJI):
-Liderka ds. dostępności cyfrowej, Bank
+Accessibility Lead, Duży Bank SA
 
 Wskazówka redakcyjna:
 Spolszczenie anglicyzmu 'Accessibility Lead' na 'Liderka ds. dostępności cyfrowej'.
