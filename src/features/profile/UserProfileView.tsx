@@ -40,6 +40,7 @@ import {
   ListOrdered,
 } from "lucide-react";
 import { ClientProfile, TeamMember, ComplaintProcessStep } from "../../types";
+import { BlockedAddUserModal } from "../../components/modals/PlannedFeatureModals";
 
 interface UserProfileViewProps {
   setView: (view: string) => void;
@@ -218,6 +219,7 @@ export function UserProfileView({
   const [teamSearch, setTeamSearch] = useState("");
   const [teamFilter, setTeamFilter] = useState<string>("all");
   const [isMemberModalOpen, setIsMemberModalOpen] = useState(false);
+  const [isBlockedAddUserModalOpen, setIsBlockedAddUserModalOpen] = useState(false);
   const [editingMember, setEditingMember] = useState<TeamMember | null>(null);
 
   // Formularz nowego / edytowanego członka zespołu
@@ -453,18 +455,9 @@ export function UserProfileView({
     }
   };
 
-  // Otwarcie modalu dodawania nowego członka
+  // Otwarcie informacji o dodawaniu nowego członka (zablokowane dla klientów)
   const openAddMemberModal = () => {
-    setEditingMember(null);
-    setMemberForm({
-      name: "",
-      email: "",
-      phone: "",
-      role: "Frontend Developer (React)",
-      specialization: "frontend",
-      assignedServicesText: "Serwis transakcyjny, Portal WWW",
-    });
-    setIsMemberModalOpen(true);
+    setIsBlockedAddUserModalOpen(true);
   };
 
   // Otwarcie modalu edycji istniejącego członka
@@ -1114,6 +1107,30 @@ export function UserProfileView({
           {/* ======================================================== */}
           {activeTab === "team" && (
             <div className="space-y-6">
+              {/* BANER INFORMACYJNY DOT. REJESTRACJI UŻYTKOWNIKÓW PRZEZ PANEL ADMINA */}
+              <div className="bg-amber-50/80 border border-amber-200/90 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs shadow-2xs">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-700 flex items-center justify-center shrink-0">
+                    <Lock size={18} />
+                  </div>
+                  <div>
+                    <span className="font-bold text-amber-950 block text-xs sm:text-[13px]">
+                      Rejestracja użytkowników wyłącznie przez Panel Administracyjny
+                    </span>
+                    <span className="text-amber-800 text-[11px] sm:text-xs">
+                      Samodzielne dodawanie nowych profili przez klientów zostało tymczasowo zablokowane. Dodawanie deweloperów odbywa się centralnie przez administratora systemu.
+                    </span>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsBlockedAddUserModalOpen(true)}
+                  className="px-3.5 py-1.5 rounded-xl bg-white border border-amber-300 text-amber-900 font-bold hover:bg-amber-100 transition-colors shrink-0 text-xs cursor-pointer shadow-2xs"
+                >
+                  Jak dodać użytkownika?
+                </button>
+              </div>
+
               {/* BANER STATYSTYK ZESPOŁU */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-xs flex items-center justify-between">
@@ -1228,14 +1245,15 @@ export function UserProfileView({
                   </div>
                 </div>
 
-                {/* Przycisk dodania nowego członka */}
+                {/* Przycisk dodania nowego członka (Zablokowany dla klienta - admin only) */}
                 <button
                   type="button"
-                  onClick={openAddMemberModal}
-                  className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#0038F8] hover:bg-[#002ECC] text-white rounded-xl text-xs font-bold shadow-xs transition-all cursor-pointer shrink-0"
+                  onClick={() => setIsBlockedAddUserModalOpen(true)}
+                  className="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-100 hover:bg-slate-200/90 border border-slate-300 text-slate-700 rounded-xl text-xs font-bold shadow-2xs transition-all cursor-pointer shrink-0"
+                  title="Dodawanie użytkowników zablokowane dla klientów - wyłącznie przez panel administracyjny"
                 >
-                  <UserPlus size={16} />
-                  <span>Dodaj członka zespołu</span>
+                  <Lock size={15} className="text-slate-500" />
+                  <span>Dodaj członka zespołu (Panel Admina)</span>
                 </button>
               </div>
 
@@ -2242,6 +2260,12 @@ export function UserProfileView({
           </div>
         </div>
       )}
+
+      {/* MODAL INFORMACJI O BLOKADZIE SAMODZIELNEGO DODAWANIA UŻYTKOWNIKÓW */}
+      <BlockedAddUserModal
+        isOpen={isBlockedAddUserModalOpen}
+        onClose={() => setIsBlockedAddUserModalOpen(false)}
+      />
     </div>
   );
 }

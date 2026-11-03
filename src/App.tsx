@@ -104,6 +104,10 @@ import {
   ReauditDetailsPageView,
   ENRICHED_DEFAULT_PREVIOUS_ERRORS,
 } from "./features/audits/ReauditPages";
+import {
+  PlannedConsultationsModal,
+  PlannedHelpModal,
+} from "./components/modals/PlannedFeatureModals";
 
 // ==========================================
 // GENERATORY DANYCH TESTOWYCH
@@ -1805,6 +1809,7 @@ export default function App() {
   const [isAnnouncementsOpen, setIsAnnouncementsOpen] = useState(false);
   const [announcements, setAnnouncements] = useState(INITIAL_ANNOUNCEMENTS);
   const [isHelpOpen, setIsHelpOpen] = useState(false);
+  const [isConsultationsModalOpen, setIsConsultationsModalOpen] = useState(false);
 
   // Stan dla Koordynatora Dostępności
   const [isReauditModalOpen, setIsReauditModalOpen] = useState(false);
@@ -1944,6 +1949,8 @@ export default function App() {
           onOpenNewTicket={handleOpenNewTicket}
           isHelpOpen={isHelpOpen}
           setIsHelpOpen={setIsHelpOpen}
+          isConsultationsModalOpen={isConsultationsModalOpen}
+          setIsConsultationsModalOpen={setIsConsultationsModalOpen}
           showToast={showToast}
           clientProfile={clientProfile}
           onOpenProfile={handleOpenProfile}
@@ -1968,24 +1975,44 @@ export default function App() {
               onOpenNewTicket={handleOpenNewTicket}
               showToast={showToast}
               clientProfile={clientProfile}
+              onOpenConsultationsModal={() => setIsConsultationsModalOpen(true)}
               onViewPersonProfile={(person) => handleViewPersonProfile(person, "przeglad")}
               onOpenProfile={handleOpenProfile}
             />
           )}
           {currentView === "tickety" && (
-            <TicketsPageView
-              setView={setCurrentView}
-              tickets={tickets}
-              setTickets={setTickets}
-              selectedTicketId={selectedTicketId}
-              setSelectedTicketId={setSelectedTicketId}
-              onOpenNewTicket={handleOpenNewTicket}
-              showToast={showToast}
-              developerFilter={developerTicketFilter}
-              setDeveloperFilter={setDeveloperTicketFilter}
-              onViewPersonProfile={(person) => handleViewPersonProfile(person, "tickety")}
-              onOpenProfile={handleOpenProfile}
-            />
+            <div className="flex-1 flex flex-col items-center justify-center p-6 text-center">
+              <div className="max-w-lg bg-white border border-slate-200 rounded-2xl p-8 shadow-xs">
+                <div className="w-14 h-14 rounded-2xl bg-blue-50 text-[#0038F8] flex items-center justify-center mx-auto mb-4">
+                  <MessageSquare size={28} />
+                </div>
+                <span className="text-[11px] font-extrabold uppercase tracking-wider text-amber-700 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-md">
+                  Sekcja w przygotowaniu
+                </span>
+                <h2 className="text-xl font-extrabold text-slate-900 mt-3 mb-2">
+                  Konsultacje z Audytorami WCAG
+                </h2>
+                <p className="text-xs sm:text-sm text-slate-600 mb-6 leading-relaxed">
+                  Moduł asynchronicznych konsultacji jest obecnie projektowany i będzie dostępny w kolejnym wydaniu platformy W-ally.
+                </p>
+                <div className="flex items-center justify-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setCurrentView("przeglad")}
+                    className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-colors cursor-pointer"
+                  >
+                    Wróć do pulpitu
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setIsConsultationsModalOpen(true)}
+                    className="px-5 py-2 bg-[#0038F8] hover:bg-[#002ECC] text-white rounded-xl text-xs font-bold shadow-xs transition-colors cursor-pointer"
+                  >
+                    Zobacz opis planowanych funkcji
+                  </button>
+                </div>
+              </div>
+            </div>
           )}
           {currentView === "komunikaty" && (
             <AnnouncementsPageView
@@ -4456,9 +4483,9 @@ const VIEW_GUIDES = {
         desc: "Każdy przebadany ekran (np. podstrona konta, formularz) z liczbą wykrytych usterek i odnośnikiem do edytora błędów.",
       },
       {
-        name: "Pobierz raport (.pdf)",
+        name: "Pobierz raport (.docx)",
         badge: "Eksport",
-        desc: "Generowanie certyfikowanego pliku PDF podsumowującego audyt dla compliance i regulatora.",
+        desc: "Generowanie dostępnego cyfrowo dokumentu Word (.docx) podsumowującego audyt dla compliance i regulatora.",
       },
     ],
     steps: [
@@ -4468,7 +4495,7 @@ const VIEW_GUIDES = {
       "Krok 4: Kliknij wybrany element, aby otworzyć listę konkretnych błędów z opisami i wytycznymi.",
     ],
     tips: [
-      "Raport PDF można pobrać w prawym górnym rogu nagłówka i przekazać do dokumentacji wdrożeniowej.",
+      "Raport Word (.docx) można pobrać w prawym górnym rogu nagłówka i przekazać do dokumentacji wdrożeniowej.",
     ],
   },
   "reaudyt-nowy": {
@@ -4524,15 +4551,15 @@ const VIEW_GUIDES = {
         desc: "Przegląd usterek przypisanych do każdego ekranu w kolejności: najpierw dotychczasowe, poniżej nowe.",
       },
       {
-        name: "Eksport PDF i Excel",
+        name: "Eksport Word i Excel",
         badge: "Dokumentacja",
-        desc: "Generowanie raportu PDF oraz arkusza kalkulacyjnego z weryfikacją.",
+        desc: "Generowanie dostępnego raportu Word (.docx) oraz arkusza kalkulacyjnego z weryfikacją.",
       },
     ],
     steps: [
       "Krok 1: Przeanalizuj wskaźniki KPI w nagłówku badania.",
       "Krok 2: Sprawdź stan weryfikacji usterek na poszczególnych ekranach.",
-      "Krok 3: Pobierz raport PDF lub arkusz Excel dla zespołu wdrożeniowego.",
+      "Krok 3: Pobierz raport Word (.docx) lub arkusz Excel dla zespołu wdrożeniowego.",
     ],
     tips: [
       "Możesz filtrować wyniki wg konkretnego ekranu lub przeglądać zestawienie zbiorcze.",
@@ -5364,6 +5391,8 @@ function TopNavbar({
   onOpenNewTicket,
   isHelpOpen,
   setIsHelpOpen,
+  isConsultationsModalOpen,
+  setIsConsultationsModalOpen,
   showToast,
   clientProfile,
   onOpenProfile,
@@ -5382,6 +5411,8 @@ function TopNavbar({
   onOpenNewTicket?: (context?: any) => void;
   isHelpOpen: boolean;
   setIsHelpOpen: (open: boolean) => void;
+  isConsultationsModalOpen: boolean;
+  setIsConsultationsModalOpen: (open: boolean) => void;
   showToast?: (title: string, text: string, type?: string) => void;
   clientProfile?: any;
   onOpenProfile?: (
@@ -5467,28 +5498,16 @@ function TopNavbar({
               <span className="hidden sm:inline">Pomoc</span>
             </button>
 
-            {/* Przycisk Konsultacji z audytorami */}
+            {/* Przycisk Konsultacji z audytorami (Planowana funkcja) */}
             <button
               type="button"
-              onClick={() => {
-                if (onOpenTicket) onOpenTicket(tickets[0]?.id || "TCK-104");
-                else setCurrentView("tickety");
-              }}
-              title="Konsultacje"
+              onClick={() => setIsConsultationsModalOpen(true)}
+              title="Konsultacje z audytorami (Planowana funkcja)"
               aria-label="Konsultacje z audytorami"
-              className={`w-10 h-10 flex items-center justify-center rounded-xl transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#0038F8]/30 relative ${
-                currentView === "tickety"
-                  ? "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-300"
-                  : "text-slate-600 hover:text-emerald-700 hover:bg-emerald-50/80"
-              }`}
+              className={`w-10 h-10 flex items-center justify-center rounded-xl transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#0038F8]/30 relative text-slate-600 hover:text-[#0038F8] hover:bg-blue-50/80`}
             >
               <div className="relative flex items-center justify-center">
                 <MessageSquareText size={19} />
-                {unreadTicketsCount > 0 && (
-                  <span className="absolute -top-1.5 -right-2 flex items-center justify-center min-w-[17px] h-[17px] px-1 text-[10px] font-extrabold text-white bg-emerald-600 rounded-full ring-2 ring-white shadow-xs pointer-events-none animate-pulse">
-                    {unreadTicketsCount}
-                  </span>
-                )}
               </div>
             </button>
 
@@ -5676,25 +5695,25 @@ function TopNavbar({
                 <HelpCircle size={18} className="text-[#0038F8]" />
                 <span>Pomoc</span>
               </div>
-              <span className="text-xs text-slate-400 font-semibold">Instrukcje & FAQ</span>
+              <span className="text-[10px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+                Planowana
+              </span>
             </button>
 
             <button
               onClick={() => {
                 setIsMobileMenuOpen(false);
-                setCurrentView("tickety");
+                setIsConsultationsModalOpen(true);
               }}
-              className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-bold text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 transition-all cursor-pointer"
+              className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-bold text-slate-700 hover:bg-blue-50 hover:text-[#0038F8] transition-all cursor-pointer"
             >
               <div className="flex items-center gap-3">
-                <MessageSquareText size={18} className="text-emerald-600" />
+                <MessageSquareText size={18} className="text-[#0038F8]" />
                 <span>Konsultacje z audytorami</span>
               </div>
-              {unreadTicketsCount > 0 && (
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-600 text-white animate-pulse">
-                  {unreadTicketsCount} nowa odp.
-                </span>
-              )}
+              <span className="text-[10px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+                Planowane
+              </span>
             </button>
 
             <button
@@ -5757,15 +5776,14 @@ function TopNavbar({
       </div>
 
 
-      {/* MODAL POMOCY */}
-      <HelpGuideModal
+      {/* MAKIETY PLANOWANYCH FUNKCJI: POMOC I KONSULTACJE */}
+      <PlannedHelpModal
         isOpen={isHelpOpen}
         onClose={() => setIsHelpOpen(false)}
-        currentView={currentView}
-        onNavigate={(targetView) => {
-          setCurrentView(targetView);
-          setIsHelpOpen(false);
-        }}
+      />
+      <PlannedConsultationsModal
+        isOpen={isConsultationsModalOpen}
+        onClose={() => setIsConsultationsModalOpen(false)}
       />
     </header>
   );
@@ -6125,6 +6143,7 @@ function DashboardView({
   unreadTicketsCount = 0,
   onOpenTicket,
   onOpenNewTicket,
+  onOpenConsultationsModal,
   showToast,
   clientProfile,
   onViewPersonProfile,
@@ -6139,6 +6158,7 @@ function DashboardView({
   unreadTicketsCount?: number;
   onOpenTicket?: (id: string) => void;
   onOpenNewTicket?: (context?: any) => void;
+  onOpenConsultationsModal?: () => void;
   showToast?: (title: string, text: string, type?: string) => void;
   clientProfile?: any;
   onViewPersonProfile?: (person: any) => void;
@@ -6830,7 +6850,7 @@ function DashboardView({
               <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
                 <button
                   type="button"
-                  onClick={() => onOpenNewTicket && onOpenNewTicket()}
+                  onClick={() => onOpenConsultationsModal ? onOpenConsultationsModal() : (onOpenNewTicket && onOpenNewTicket())}
                   className="inline-flex items-center gap-1.5 px-3 py-2 bg-[#0038F8] hover:bg-[#002ECC] text-white rounded-xl text-xs font-bold shadow-xs transition-all cursor-pointer"
                 >
                   <Plus size={14} />
@@ -6838,7 +6858,7 @@ function DashboardView({
                 </button>
                 <button
                   type="button"
-                  onClick={() => setView("tickety")}
+                  onClick={() => onOpenConsultationsModal ? onOpenConsultationsModal() : setView("tickety")}
                   className="inline-flex items-center gap-1.5 px-3 py-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded-xl text-xs font-bold shadow-2xs transition-all cursor-pointer"
                 >
                   <span>Wszystkie ({tickets.length})</span>
@@ -6850,7 +6870,7 @@ function DashboardView({
             {/* BANER WYRÓŻNIONEJ ODPOWIEDZI (JEŚLI SĄ NIEPRZECZYTANE) */}
             {unreadTicketsCount > 0 && (
               <div
-                onClick={() => onOpenTicket && onOpenTicket("TCK-104")}
+                onClick={() => onOpenConsultationsModal ? onOpenConsultationsModal() : (onOpenTicket && onOpenTicket("TCK-104"))}
                 className="mb-3.5 p-3 sm:p-3.5 bg-gradient-to-r from-emerald-50 via-emerald-50/80 to-white border border-emerald-200 rounded-xl cursor-pointer hover:border-emerald-300 hover:shadow-xs transition-all group"
               >
                 <div className="flex items-start justify-between gap-3">
@@ -7051,7 +7071,7 @@ function DashboardView({
               <div className="flex items-center gap-2 shrink-0 self-start md:self-auto pt-1 md:pt-0">
                 <button
                   type="button"
-                  onClick={() => onOpenNewTicket && onOpenNewTicket()}
+                  onClick={() => onOpenConsultationsModal ? onOpenConsultationsModal() : (onOpenNewTicket && onOpenNewTicket())}
                   className="px-3.5 py-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-xl text-xs font-bold shadow-2xs transition-colors cursor-pointer flex items-center gap-1.5"
                 >
                   <MessageSquareText size={13} className="text-[#0038F8]" />
@@ -7159,14 +7179,13 @@ function DashboardView({
             </div>
           </div>
 
-          <div className="mt-4 pt-3.5 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600 font-medium">
-            <span>Baza wiedzy & wytyczne</span>
+          <div className="mt-4 pt-3.5 border-t border-slate-100 flex items-center justify-end text-xs text-slate-600 font-medium">
             <button
               type="button"
               onClick={onOpenAnnouncements}
               className="text-xs font-bold text-[#0038F8] hover:underline flex items-center gap-1 cursor-pointer"
             >
-              <span>Przeglądaj wszystkie</span>
+              <span>Przeglądaj wszystkie komunikaty</span>
               <ArrowRight size={12} />
             </button>
           </div>
@@ -10367,20 +10386,11 @@ function ReportSummaryView({
     });
   };
 
-  const handleDownloadPdf = () => {
-    if (showToast) {
-      showToast(
-        "Pobieranie raportu PDF",
-        "Generowanie oficjalnego certyfikowanego raportu audytu WCAG 2.1 AA (Portal_Informacyjny_Audyt.pdf)..."
-      );
-    }
-  };
-
   const handleDownloadDoc = () => {
     if (showToast) {
       showToast(
-        "Pobieranie raportu Word (.doc)",
-        "Generowanie dokumentu raportu Microsoft Word (.docx) z tabelami błędów i rekomendacjami..."
+        "Pobieranie raportu Word (.docx)",
+        "Generowanie dostępnego cyfrowo dokumentu raportu Microsoft Word (.docx) z zachowaniem hierarchii nagłówków, tabel i tekstu alternatywnego..."
       );
     }
   };
@@ -10442,9 +10452,9 @@ function ReportSummaryView({
             <button
               onClick={handleDownloadDoc}
               className="flex justify-center items-center gap-1.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 px-3.5 py-2 rounded-lg font-bold shadow-xs transition-colors text-xs cursor-pointer"
-              title="Pobierz edytowalny raport w formacie Microsoft Word (.doc)"
+              title="Pobierz dostępny cyfrowo raport w formacie Microsoft Word (.docx)"
             >
-              <FileText size={14} className="text-blue-600" /> <span>Pobierz Word (.doc)</span>
+              <FileText size={14} className="text-blue-600" /> <span>Pobierz Word (.docx)</span>
             </button>
             <button
               onClick={handleDownloadExcel}
@@ -10452,13 +10462,6 @@ function ReportSummaryView({
               title="Pobierz arkusz kalkulacyjny w formacie Microsoft Excel (.xlsx)"
             >
               <FileSpreadsheet size={14} className="text-emerald-600" /> <span>Pobierz Excel (.xlsx)</span>
-            </button>
-            <button
-              onClick={handleDownloadPdf}
-              className="flex justify-center items-center gap-1.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 px-3.5 py-2 rounded-lg font-bold shadow-xs transition-colors text-xs cursor-pointer"
-              title="Pobierz oficjalny raport w formacie PDF"
-            >
-              <FileText size={14} className="text-red-500" /> <span>Pobierz PDF</span>
             </button>
             <button
               type="button"
@@ -13142,34 +13145,8 @@ function ReportingModuleView({ setView, showToast }) {
                 </div>
 
                 <div className="flex items-center gap-2 flex-wrap">
-                  {lastGeneratedAt && (
-                    <span className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                      <CheckCircle2 size={13} /> Raport aktualny ({lastGeneratedAt})
-                    </span>
-                  )}
                   <button
-                    onClick={handleGenerateReport}
-                    disabled={isGenerating}
-                    className="flex items-center gap-2 bg-[#0038F8] hover:bg-[#002ECC] text-white px-4 py-2 rounded-xl font-bold text-xs shadow-sm shadow-[#0038F8]/20 transition-all cursor-pointer disabled:opacity-70"
-                  >
-                    <Sparkles size={14} className={isGenerating ? "animate-spin" : ""} />
-                    <span>{isGenerating ? "Generowanie..." : "Generuj raport z audytów"}</span>
-                  </button>
-                  <button
-                    onClick={() =>
-                      showToast &&
-                      showToast(
-                        "Generowanie PDF",
-                        "Generowanie skonsolidowanego raportu audytów WCAG w formacie PDF..."
-                      )
-                    }
-                    className="flex items-center gap-1.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 px-3.5 py-2 rounded-lg font-bold text-xs shadow-xs transition-colors cursor-pointer"
-                    title="Pobierz raport w formacie PDF"
-                  >
-                    <FileText size={14} className="text-red-500" />
-                    <span>Pobierz PDF</span>
-                  </button>
-                  <button
+                    type="button"
                     onClick={() =>
                       showToast &&
                       showToast(
@@ -13177,11 +13154,11 @@ function ReportingModuleView({ setView, showToast }) {
                         "Pomyślnie wygenerowano plik Excel: Raport_Audyty_Zestawienie_2026.xlsx (zawiera 49 kryteriów WCAG i metryki)."
                       )
                     }
-                    className="flex items-center gap-1.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 px-3.5 py-2 rounded-lg font-bold text-xs shadow-xs transition-colors cursor-pointer"
-                    title="Eksportuj do pliku Excel"
+                    className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl font-bold text-xs shadow-sm transition-colors cursor-pointer"
+                    title="Eksportuj zestawienie audytów do pliku Excel (.xlsx)"
                   >
-                    <FileSpreadsheet size={14} className="text-emerald-600" />
-                    <span>Eksport (.xlsx)</span>
+                    <FileSpreadsheet size={15} />
+                    <span>Eksport do Excel (.xlsx)</span>
                   </button>
                 </div>
               </div>
@@ -13287,22 +13264,8 @@ function ReportingModuleView({ setView, showToast }) {
                     onClick={() =>
                       showToast &&
                       showToast(
-                        "Generowanie PDF",
-                        "Generowanie raportu dostępności usług w formacie PDF..."
-                      )
-                    }
-                    className="flex items-center gap-1.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 px-3.5 py-2 rounded-lg font-bold text-xs shadow-xs transition-colors cursor-pointer"
-                    title="Pobierz raport w formacie PDF"
-                  >
-                    <FileText size={14} className="text-red-500" />
-                    <span>Pobierz PDF</span>
-                  </button>
-                  <button
-                    onClick={() =>
-                      showToast &&
-                      showToast(
                         "Eksport do Excela (.xlsx)",
-                        "Pomyślnie wygenerowano plik Excel: Dostepnosc_Uslug_Procesy_2026.xlsx z danymi kanałów WWW, Mobile i PDF."
+                        "Pomyślnie wygenerowano plik Excel: Dostepnosc_Uslug_Procesy_2026.xlsx z danymi kanałów WWW, Mobile i Dokumentów."
                       )
                     }
                     className="flex items-center gap-1.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 px-3.5 py-2 rounded-lg font-bold text-xs shadow-xs transition-colors cursor-pointer"
@@ -13373,15 +13336,15 @@ function ReportingModuleView({ setView, showToast }) {
                     onClick={() =>
                       showToast &&
                       showToast(
-                        "Generowanie Raportu Zarządczego (PDF)",
-                        "Generowanie oficjalnego podsumowania executive dla Dyrekcji w formacie PDF..."
+                        "Pobieranie Raportu Zarządczego (Word)",
+                        "Generowanie dostępnego cyfrowo podsumowania executive dla Dyrekcji w formacie Microsoft Word (.docx)..."
                       )
                     }
                     className="flex items-center gap-1.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 px-3.5 py-2 rounded-lg font-bold text-xs shadow-xs transition-colors cursor-pointer"
-                    title="Pobierz oficjalny raport executive PDF"
+                    title="Pobierz oficjalny raport executive Word (.docx)"
                   >
-                    <FileText size={14} className="text-red-500" />
-                    <span>Pobierz Raport Zarządczy (PDF)</span>
+                    <FileText size={14} className="text-blue-600" />
+                    <span>Pobierz Raport Zarządczy (.docx)</span>
                   </button>
                   <button
                     onClick={() =>
@@ -13459,15 +13422,15 @@ function ReportingModuleView({ setView, showToast }) {
                     onClick={() =>
                       showToast &&
                       showToast(
-                        "Generowanie Deklaracji PAD (PDF)",
-                        "Generowanie urzędowej Deklaracji Dostępności zgodnie z wymogami Ustawy PAD i EAA w formacie PDF..."
+                        "Pobieranie Deklaracji PAD (.docx)",
+                        "Generowanie dostępnej cyfrowo Deklaracji Dostępności zgodnie z wymogami Ustawy PAD i EAA w formacie Microsoft Word (.docx)..."
                       )
                     }
                     className="flex items-center gap-1.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 px-3.5 py-2 rounded-lg font-bold text-xs shadow-xs transition-colors cursor-pointer"
-                    title="Pobierz Deklarację Dostępności w formacie PDF"
+                    title="Pobierz Deklarację Dostępności w formacie Word (.docx)"
                   >
-                    <FileText size={14} className="text-red-500" />
-                    <span>Pobierz Deklarację PAD (PDF)</span>
+                    <FileText size={14} className="text-blue-600" />
+                    <span>Pobierz Deklarację PAD (.docx)</span>
                   </button>
                   <button
                     onClick={() =>

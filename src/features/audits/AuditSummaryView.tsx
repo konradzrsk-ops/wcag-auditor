@@ -145,14 +145,6 @@ export function AuditSummaryView() {
           >
             Pobierz Excel (.xlsx)
           </Button>
-          <Button
-            variant="primary"
-            size="md"
-            leftIcon={<FileText size={16} className="text-red-500" />}
-            onClick={() => alert("Pobieranie raportu PDF")}
-          >
-            Pobierz PDF
-          </Button>
         </div>
       </div>
 

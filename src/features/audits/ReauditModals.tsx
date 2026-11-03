@@ -1251,14 +1251,14 @@ export function ReauditDetailModal({
                 if (onShowToast) {
                   onShowToast(
                     "Pobieranie raportu reaudytu",
-                    `Generowanie pliku PDF z raportem weryfikacji dla "${reaudit.name}"...`
+                    `Generowanie dostępnego cyfrowo dokumentu Microsoft Word (.docx) z raportem weryfikacji dla "${reaudit.name}"...`
                   );
                 }
               }}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 hover:bg-slate-100 text-slate-700 rounded-lg text-xs font-bold transition-colors cursor-pointer"
             >
-              <FileText size={13} className="text-red-500" />
-              <span>Raport PDF</span>
+              <FileText size={13} className="text-blue-600" />
+              <span>Raport Word (.docx)</span>
             </button>
             <button
               type="button"

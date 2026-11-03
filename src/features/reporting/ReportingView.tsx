@@ -120,18 +120,18 @@ export function ReportingView() {
             <Button
               variant="secondary"
               size="md"
-              leftIcon={<FileText size={16} className="text-red-500" />}
-              onClick={() => alert("Generowanie raportu PDF")}
+              leftIcon={<FileText size={16} className="text-blue-600" />}
+              onClick={() => alert("Generowanie raportu Word (.docx)...")}
             >
-              PDF
+              Word (.docx)
             </Button>
             <Button
               variant="secondary"
               size="md"
               leftIcon={<FileSpreadsheet size={16} className="text-emerald-600" />}
-              onClick={() => alert("Eksport do Excel")}
+              onClick={() => alert("Eksport do Excel (.xlsx)...")}
             >
-              XLS
+              Excel (.xlsx)
             </Button>
           </div>
         </div>
