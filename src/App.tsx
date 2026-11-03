@@ -108,6 +108,7 @@ import {
   PlannedConsultationsModal,
   PlannedHelpModal,
 } from "./components/modals/PlannedFeatureModals";
+import { HiddenTeaserShowcaseView } from "./features/showcase/HiddenTeaserShowcaseView";
 
 // ==========================================
 // GENERATORY DANYCH TESTOWYCH
@@ -1856,8 +1857,21 @@ export default function App() {
 
   const handleOpenNewTicket = (context = null) => {
     setNewTicketInitialContext(context);
-    setIsNewTicketModalOpen(true);
+    setIsConsultationsModalOpen(true);
   };
+
+  // Obsługa ukrytego adresu URL dla makiet popupów (#makiety-popup)
+  useEffect(() => {
+    const checkHash = () => {
+      const h = window.location.hash;
+      if (h === "#makiety-popup" || h === "#ukryte-makiety-popup") {
+        setCurrentView("ukryte-makiety-popup");
+      }
+    };
+    checkHash();
+    window.addEventListener("hashchange", checkHash);
+    return () => window.removeEventListener("hashchange", checkHash);
+  }, []);
 
   const handleOpenTicketThread = (ticketId) => {
     setSelectedTicketId(ticketId);
@@ -1981,38 +1995,25 @@ export default function App() {
             />
           )}
           {currentView === "tickety" && (
-            <div className="flex-1 flex flex-col items-center justify-center p-6 text-center">
-              <div className="max-w-lg bg-white border border-slate-200 rounded-2xl p-8 shadow-xs">
-                <div className="w-14 h-14 rounded-2xl bg-blue-50 text-[#0038F8] flex items-center justify-center mx-auto mb-4">
-                  <MessageSquare size={28} />
-                </div>
-                <span className="text-[11px] font-extrabold uppercase tracking-wider text-amber-700 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-md">
-                  Sekcja w przygotowaniu
-                </span>
-                <h2 className="text-xl font-extrabold text-slate-900 mt-3 mb-2">
-                  Konsultacje z Audytorami WCAG
-                </h2>
-                <p className="text-xs sm:text-sm text-slate-600 mb-6 leading-relaxed">
-                  Moduł asynchronicznych konsultacji jest obecnie projektowany i będzie dostępny w kolejnym wydaniu platformy W-ally.
-                </p>
-                <div className="flex items-center justify-center gap-3">
-                  <button
-                    type="button"
-                    onClick={() => setCurrentView("przeglad")}
-                    className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-colors cursor-pointer"
-                  >
-                    Wróć do pulpitu
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setIsConsultationsModalOpen(true)}
-                    className="px-5 py-2 bg-[#0038F8] hover:bg-[#002ECC] text-white rounded-xl text-xs font-bold shadow-xs transition-colors cursor-pointer"
-                  >
-                    Zobacz opis planowanych funkcji
-                  </button>
-                </div>
-              </div>
-            </div>
+            <TicketsPageView
+              setView={setCurrentView}
+              tickets={tickets}
+              setTickets={setTickets}
+              selectedTicketId={selectedTicketId}
+              setSelectedTicketId={setSelectedTicketId}
+              onOpenNewTicket={handleOpenNewTicket}
+              showToast={showToast}
+              developerFilter={developerTicketFilter}
+              setDeveloperFilter={setDeveloperTicketFilter}
+              onViewPersonProfile={(person) => handleViewPersonProfile(person, "tickety")}
+              onOpenProfile={handleOpenProfile}
+            />
+          )}
+          {currentView === "ukryte-makiety-popup" && (
+            <HiddenTeaserShowcaseView
+              setView={setCurrentView}
+              showToast={showToast}
+            />
           )}
           {currentView === "komunikaty" && (
             <AnnouncementsPageView
@@ -2162,6 +2163,28 @@ export default function App() {
           )}
           </AppErrorBoundary>
         </main>
+
+        {/* DYSKRETNA STOPKA SYSTEMOWA */}
+        <footer className="w-full border-t border-slate-200/80 bg-white/70 backdrop-blur-xs py-2.5 px-4 sm:px-8 text-xs text-slate-400 flex flex-col sm:flex-row items-center justify-between gap-2 shrink-0">
+          <div className="flex items-center gap-2">
+            <span className="font-semibold text-slate-600">W-ally Enterprise</span>
+            <span>•</span>
+            <span className="text-slate-500">Platforma Zarządzania Dostępnością Cyfrową WCAG</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => setCurrentView("ukryte-makiety-popup")}
+              className="text-[11px] text-slate-500 hover:text-[#0038F8] transition-colors cursor-pointer flex items-center gap-1 font-semibold hover:underline"
+              title="Otwórz ukrytą stronę: Podgląd makiet popupów zapowiadających nowe funkcje"
+            >
+              <span>🔒</span>
+              <span>Makiety popupów (Dev)</span>
+            </button>
+            <span className="text-slate-300">|</span>
+            <span className="text-[11px] text-slate-400">v2.4.2</span>
+          </div>
+        </footer>
 
         {/* MODAL NOWEGO TICKETU / KONSULTACJI Z AUDYTORAMI */}
         <CreateTicketModal
@@ -5498,16 +5521,25 @@ function TopNavbar({
               <span className="hidden sm:inline">Pomoc</span>
             </button>
 
-            {/* Przycisk Konsultacji z audytorami (Planowana funkcja) */}
+            {/* Przycisk Konsultacji z audytorami (Dostępny dla dewelopera) */}
             <button
               type="button"
-              onClick={() => setIsConsultationsModalOpen(true)}
-              title="Konsultacje z audytorami (Planowana funkcja)"
+              onClick={() => setCurrentView("tickety")}
+              title="Konsultacje z audytorami"
               aria-label="Konsultacje z audytorami"
-              className={`w-10 h-10 flex items-center justify-center rounded-xl transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#0038F8]/30 relative text-slate-600 hover:text-[#0038F8] hover:bg-blue-50/80`}
+              className={`w-10 h-10 flex items-center justify-center rounded-xl transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#0038F8]/30 relative ${
+                currentView === "tickety"
+                  ? "bg-blue-50 text-[#0038F8]"
+                  : "text-slate-600 hover:text-[#0038F8] hover:bg-blue-50/80"
+              }`}
             >
               <div className="relative flex items-center justify-center">
                 <MessageSquareText size={19} />
+                {unreadTicketsCount > 0 && (
+                  <span className="absolute -top-1.5 -right-2 flex items-center justify-center min-w-[17px] h-[17px] px-1 text-[10px] font-extrabold text-white bg-[#0038F8] rounded-full ring-2 ring-white shadow-xs pointer-events-none">
+                    {unreadTicketsCount}
+                  </span>
+                )}
               </div>
             </button>
 
@@ -5703,7 +5735,7 @@ function TopNavbar({
             <button
               onClick={() => {
                 setIsMobileMenuOpen(false);
-                setIsConsultationsModalOpen(true);
+                setCurrentView("tickety");
               }}
               className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-bold text-slate-700 hover:bg-blue-50 hover:text-[#0038F8] transition-all cursor-pointer"
             >
@@ -5711,9 +5743,11 @@ function TopNavbar({
                 <MessageSquareText size={18} className="text-[#0038F8]" />
                 <span>Konsultacje z audytorami</span>
               </div>
-              <span className="text-[10px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
-                Planowane
-              </span>
+              {unreadTicketsCount > 0 && (
+                <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-[#0038F8] text-white">
+                  {unreadTicketsCount}
+                </span>
+              )}
             </button>
 
             <button
@@ -6850,7 +6884,7 @@ function DashboardView({
               <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
                 <button
                   type="button"
-                  onClick={() => onOpenConsultationsModal ? onOpenConsultationsModal() : (onOpenNewTicket && onOpenNewTicket())}
+                  onClick={() => onOpenNewTicket && onOpenNewTicket()}
                   className="inline-flex items-center gap-1.5 px-3 py-2 bg-[#0038F8] hover:bg-[#002ECC] text-white rounded-xl text-xs font-bold shadow-xs transition-all cursor-pointer"
                 >
                   <Plus size={14} />
@@ -6858,7 +6892,7 @@ function DashboardView({
                 </button>
                 <button
                   type="button"
-                  onClick={() => onOpenConsultationsModal ? onOpenConsultationsModal() : setView("tickety")}
+                  onClick={() => setView("tickety")}
                   className="inline-flex items-center gap-1.5 px-3 py-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded-xl text-xs font-bold shadow-2xs transition-all cursor-pointer"
                 >
                   <span>Wszystkie ({tickets.length})</span>
@@ -6870,7 +6904,7 @@ function DashboardView({
             {/* BANER WYRÓŻNIONEJ ODPOWIEDZI (JEŚLI SĄ NIEPRZECZYTANE) */}
             {unreadTicketsCount > 0 && (
               <div
-                onClick={() => onOpenConsultationsModal ? onOpenConsultationsModal() : (onOpenTicket && onOpenTicket("TCK-104"))}
+                onClick={() => onOpenTicket && onOpenTicket("TCK-104")}
                 className="mb-3.5 p-3 sm:p-3.5 bg-gradient-to-r from-emerald-50 via-emerald-50/80 to-white border border-emerald-200 rounded-xl cursor-pointer hover:border-emerald-300 hover:shadow-xs transition-all group"
               >
                 <div className="flex items-start justify-between gap-3">
@@ -7071,7 +7105,7 @@ function DashboardView({
               <div className="flex items-center gap-2 shrink-0 self-start md:self-auto pt-1 md:pt-0">
                 <button
                   type="button"
-                  onClick={() => onOpenConsultationsModal ? onOpenConsultationsModal() : (onOpenNewTicket && onOpenNewTicket())}
+                  onClick={() => onOpenNewTicket && onOpenNewTicket()}
                   className="px-3.5 py-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-xl text-xs font-bold shadow-2xs transition-colors cursor-pointer flex items-center gap-1.5"
                 >
                   <MessageSquareText size={13} className="text-[#0038F8]" />
