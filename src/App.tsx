@@ -1813,9 +1813,10 @@ export default function App() {
   const [isConsultationsModalOpen, setIsConsultationsModalOpen] = useState(false);
 
   // Stan dla Koordynatora Dostępności
+  const [selectedAuditId, setSelectedAuditId] = useState<number>(2); // Domyślnie audyt bez zrobionych reaudytów (Android)
   const [isReauditModalOpen, setIsReauditModalOpen] = useState(false);
   const [reauditContext, setReauditContext] = useState({
-    targetTitle: "Portal informacyjny - wybrane podstrony",
+    targetTitle: "Aplikacja mobilna Android - wybrane procesy",
     targetType: "Audyt WCAG 2.1 AA",
     auditor: "Piotr Smułkowski",
   });
@@ -1921,7 +1922,22 @@ export default function App() {
     );
   };
 
+  // Zlecenie formalnego re-audytu (otwiera okno zamawiania ReauditRequestModal)
   const handleOpenReaudit = (title?: string, type = "Audyt WCAG 2.1 AA", auditor = "Piotr Smułkowski") => {
+    setReauditContext({
+      targetTitle:
+        title ||
+        (selectedAuditId === 1
+          ? "Portal informacyjny - wybrane podstrony"
+          : "Aplikacja mobilna Android - wybrane procesy"),
+      targetType: type,
+      auditor: auditor,
+    });
+    setIsReauditModalOpen(true);
+  };
+
+  // Dodanie reaudytu przez formularz badania (otwiera edytor NewReauditPageView)
+  const handleAddNewReaudit = (title?: string) => {
     setCurrentView("reaudyt-nowy");
   };
 
@@ -2028,6 +2044,7 @@ export default function App() {
             <RaportyView
               setView={setCurrentView}
               onOpenReaudit={handleOpenReaudit}
+              onSelectAudit={(id) => setSelectedAuditId(id)}
               showToast={showToast}
             />
           )}
@@ -2044,16 +2061,23 @@ export default function App() {
             <ReportSummaryView
               setView={setCurrentView}
               onOpenReaudit={handleOpenReaudit}
+              onAddNewReaudit={handleAddNewReaudit}
               onOpenReauditDetails={handleOpenReauditDetails}
               reauditsList={reauditsList}
+              selectedAuditId={selectedAuditId}
+              onSelectAuditId={(id) => setSelectedAuditId(id)}
               showToast={showToast}
             />
           )}
           {currentView === "reaudyt-nowy" && (
             <NewReauditPageView
               setView={setCurrentView}
-              auditTitle="Portal informacyjny - wybrane podstrony"
-              baseScore={77.5}
+              auditTitle={
+                selectedAuditId === 1
+                  ? "Portal informacyjny - wybrane podstrony"
+                  : "Aplikacja mobilna Android - wybrane procesy"
+              }
+              baseScore={selectedAuditId === 1 ? 77.5 : 83.7}
               baseElements={DEFAULT_BASE_ELEMENTS}
               previousErrors={ENRICHED_DEFAULT_PREVIOUS_ERRORS}
               onSaveReaudit={handleSaveReaudit}
@@ -2064,7 +2088,11 @@ export default function App() {
             <ReauditDetailsPageView
               setView={setCurrentView}
               reaudit={selectedReauditForDetails || reauditsList[0] || null}
-              auditTitle="Portal informacyjny - wybrane podstrony"
+              auditTitle={
+                selectedAuditId === 1
+                  ? "Portal informacyjny - wybrane podstrony"
+                  : "Aplikacja mobilna Android - wybrane procesy"
+              }
               showToast={showToast}
             />
           )}
@@ -9110,162 +9138,315 @@ function StepItem({
 }
 
 // ==========================================
-// RAPORTY Z AUDYTÓW (Wyszukiwarka)
+// DANE AUDYTÓW (Współdzielone między listą a podglądem)
 // ==========================================
 
-function RaportyView({ setView, onOpenReaudit, showToast }) {
-  const mockAuditsList = [
-    {
-      id: 1,
-      date: "12.03.2026",
-      status: "Zakończony",
-      title: "Portal informacyjny - wybrane podstrony",
-      devices: "Desktop, Android, iOS",
-      priority: "3",
-      critical: 3,
-      important: 7,
-      marginal: 4,
-      score: "77.55%",
-      icon: MonitorSmartphone,
-      statusVariant: "success",
-      auditor: "Piotr Smułkowski",
-    },
-    {
-      id: 2,
-      date: "04.03.2026",
-      status: "Zakończony",
-      title: "Aplikacja mobilna Android - wybrane procesy",
-      devices: "Android",
-      priority: "2",
-      critical: 2,
-      important: 5,
-      marginal: 3,
-      score: "83.67%",
-      icon: Smartphone,
-      statusVariant: "success",
-      auditor: "Piotr Smułkowski",
-    },
-    {
-      id: 3,
-      date: "15.04.2026",
-      status: "W trakcie",
-      title: "Serwis transakcyjny - Nowy Dashboard",
-      devices: "Desktop",
-      priority: "5",
-      critical: 5,
-      important: 14,
-      marginal: 8,
-      score: "62.10%",
-      icon: MonitorSmartphone,
-      statusVariant: "warning",
-      auditor: "Anna Nowak",
-    },
-    {
-      id: 4,
-      date: "22.04.2026",
-      status: "W trakcie",
-      title: "Aplikacja mobilna - moduł inwestycji",
-      devices: "iOS, Android",
-      priority: "1",
-      critical: 1,
-      important: 3,
-      marginal: 2,
-      score: "89.40%",
-      icon: Smartphone,
-      statusVariant: "warning",
-      auditor: "Jan Kowalski",
-    },
-    {
-      id: 5,
-      date: "10.05.2026",
-      status: "Zakończony",
-      title: "Dokumenty PDF - Regulaminy kart",
-      devices: "Dokumenty",
-      priority: "0",
-      critical: 0,
-      important: 1,
-      marginal: 2,
-      score: "95.00%",
-      icon: FileText,
-      statusVariant: "success",
-      auditor: "Piotr Smułkowski",
-    },
-    {
-      id: 6,
-      date: "05.06.2026",
-      status: "Nowy",
-      title: "Proces reklamacyjny - formularze",
-      devices: "Desktop",
-      priority: "8",
-      critical: 8,
-      important: 19,
-      marginal: 11,
-      score: "45.20%",
-      icon: LayoutGrid,
-      statusVariant: "info",
-      auditor: "Anna Nowak",
-    },
-    {
-      id: 7,
-      date: "18.05.2026",
-      status: "Zakończony",
-      title: "Bankowość korporacyjna BusinessNet - moduł autoryzacji",
-      devices: "Desktop",
-      priority: "2",
-      critical: 2,
-      important: 6,
-      marginal: 5,
-      score: "88.20%",
-      icon: Monitor,
-      statusVariant: "success",
-      auditor: "Piotr Smułkowski",
-    },
-    {
-      id: 8,
-      date: "26.05.2026",
-      status: "W trakcie",
-      title: "Aplikacja iOS - Przelewy i Kantor Walutowy",
-      devices: "iOS",
-      priority: "1",
-      critical: 1,
-      important: 4,
-      marginal: 2,
-      score: "91.50%",
-      icon: Smartphone,
-      statusVariant: "warning",
-      auditor: "Jan Kowalski",
-    },
-    {
-      id: 9,
-      date: "02.06.2026",
-      status: "W trakcie",
-      title: "Portal Hipoteczny - Kalkulator i Wniosek Kredytowy",
-      devices: "Desktop",
-      priority: "4",
-      critical: 4,
-      important: 11,
-      marginal: 7,
-      score: "73.40%",
-      icon: MonitorSmartphone,
-      statusVariant: "warning",
-      auditor: "Anna Nowak",
-    },
-    {
-      id: 10,
-      date: "14.06.2026",
-      status: "Zakończony",
-      title: "Tabela Opłat i Prowizji PDF - Dokumenty Cyfrowe",
-      devices: "Dokumenty",
-      priority: "0",
-      critical: 0,
-      important: 2,
-      marginal: 3,
-      score: "92.10%",
-      icon: FileText,
-      statusVariant: "success",
-      auditor: "Piotr Smułkowski",
-    },
-  ];
+export interface SharedAuditItem {
+  id: number;
+  date: string;
+  period: string;
+  status: string;
+  title: string;
+  subtitle: string;
+  devices: string;
+  priority: string;
+  critical: number;
+  important: number;
+  marginal: number;
+  score: string;
+  scoreNum: number;
+  brokenCriteria: number;
+  totalCriteria: number;
+  icon: any;
+  statusVariant: "success" | "warning" | "info" | "danger";
+  auditor: string;
+  hasReaudits: boolean;
+  summaryText: string;
+  testedElements: Array<{
+    id: number;
+    title: string;
+    priorities: number;
+    warnings: number;
+    marginals: number;
+    channel: string;
+  }>;
+}
+
+const SHARED_AUDITS_LIST: SharedAuditItem[] = [
+  {
+    id: 1,
+    date: "12.03.2026",
+    period: "01.03.2026 - 12.03.2026",
+    status: "Zakończony",
+    title: "Portal informacyjny - wybrane podstrony",
+    subtitle: "Raport z badania dostępności cyfrowej serwisu WWW i portalu informacyjnego",
+    devices: "Desktop, Android, iOS",
+    priority: "3",
+    critical: 3,
+    important: 7,
+    marginal: 4,
+    score: "77.55%",
+    scoreNum: 77.5,
+    brokenCriteria: 11,
+    totalCriteria: 49,
+    icon: MonitorSmartphone,
+    statusVariant: "success",
+    auditor: "Piotr Smułkowski",
+    hasReaudits: true, // AUDYT Z REAUDYTAMI
+    summaryText: "Audyt obejmował kluczowe ścieżki użytkownika na stronie głównej oraz w formularzach kontaktowych. Zidentyfikowano głównie problemy związane z niewystarczającym kontrastem elementów interaktywnych oraz brakiem odpowiednich etykiet dla czytników ekranu w procesie logowania. Mimo relatywnie wysokiego ogólnego wyniku dostępności (77.5%), wdrożenie rekomendacji dla 3 błędów priorytetowych (tzw. blokerów) jest bezwzględnie wymagane do spełnienia normy ustawowej.",
+    testedElements: [
+      { id: 1, title: "Strona główna", priorities: 1, warnings: 1, marginals: 2, channel: "WWW" },
+      { id: 2, title: 'Podstrona "konta"', priorities: 2, warnings: 0, marginals: 1, channel: "Aplikacja" },
+      { id: 3, title: 'Podstrona "karty"', priorities: 0, warnings: 0, marginals: 0, channel: "Dokumenty" },
+    ],
+  },
+  {
+    id: 2,
+    date: "04.03.2026",
+    period: "15.02.2026 - 04.03.2026",
+    status: "Zakończony",
+    title: "Aplikacja mobilna Android - wybrane procesy",
+    subtitle: "Raport z badania dostępności aplikacji natywnej Android WCAG 2.1 AA",
+    devices: "Android",
+    priority: "2",
+    critical: 2,
+    important: 5,
+    marginal: 3,
+    score: "83.67%",
+    scoreNum: 83.7,
+    brokenCriteria: 8,
+    totalCriteria: 49,
+    icon: Smartphone,
+    statusVariant: "success",
+    auditor: "Piotr Smułkowski",
+    hasReaudits: false, // AUDYT BEZ ZROBIONYCH REAUDYTÓW (0 REAUDYTÓW)
+    summaryText: "Badanie natywnej aplikacji bankowej na platformie Android z czytnikiem ekranu TalkBack oraz powiększeniem systemowym. Wykryto usterki w procesie autoryzacji transakcji mobilnych oraz brak poprawnego focus order w niestandardowych kontrolkach UI. Dla tego badania nie zarejestrowano jeszcze żadnego re-audytu powdrożeniowego.",
+    testedElements: [
+      { id: 1, title: "Ekran logowania i kod PIN", priorities: 1, warnings: 1, marginals: 1, channel: "Android" },
+      { id: 2, title: "Zlecenie przelewu ekspresowego", priorities: 1, warnings: 2, marginals: 1, channel: "Android" },
+      { id: 3, title: "Historia operacji i wyciągi", priorities: 0, warnings: 2, marginals: 1, channel: "Android" },
+    ],
+  },
+  {
+    id: 3,
+    date: "15.04.2026",
+    period: "01.04.2026 - 15.04.2026",
+    status: "W trakcie",
+    title: "Serwis transakcyjny - Nowy Dashboard",
+    subtitle: "Raport z audytu nowego pulpitu transakcyjnego WCAG 2.1 AA",
+    devices: "Desktop",
+    priority: "5",
+    critical: 5,
+    important: 14,
+    marginal: 8,
+    score: "62.10%",
+    scoreNum: 62.1,
+    brokenCriteria: 16,
+    totalCriteria: 49,
+    icon: MonitorSmartphone,
+    statusVariant: "warning",
+    auditor: "Anna Nowak",
+    hasReaudits: false, // AUDYT BEZ REAUDYTÓW
+    summaryText: "Audyt nowego pulpitu klienta bankowości transakcyjnej. Stwierdzono liczne blokery w nawigacji klawiaturą (pułapki fokusowe w widżetach finansowych) oraz brak wsparcia dla trybu wysokiego kontrastu. Badanie oczekuje na wdrożenie poprawek i zlecenie pierwszego re-audytu.",
+    testedElements: [
+      { id: 1, title: "Pulpit główny - widżety rachunków", priorities: 2, warnings: 5, marginals: 3, channel: "Desktop" },
+      { id: 2, title: "Moduł przelewów i odbiorców", priorities: 2, warnings: 6, marginals: 3, channel: "Desktop" },
+      { id: 3, title: "Historia transakcji i wyciągi", priorities: 1, warnings: 3, marginals: 2, channel: "Desktop" },
+    ],
+  },
+  {
+    id: 4,
+    date: "22.04.2026",
+    period: "10.04.2026 - 22.04.2026",
+    status: "W trakcie",
+    title: "Aplikacja mobilna - moduł inwestycji",
+    subtitle: "Raport z badania modułu inwestycyjnego na iOS i Android",
+    devices: "iOS, Android",
+    priority: "1",
+    critical: 1,
+    important: 3,
+    marginal: 2,
+    score: "89.40%",
+    scoreNum: 89.4,
+    brokenCriteria: 5,
+    totalCriteria: 49,
+    icon: Smartphone,
+    statusVariant: "warning",
+    auditor: "Jan Kowalski",
+    hasReaudits: false,
+    summaryText: "Weryfikacja modułu funduszy inwestycyjnych i notowań giełdowych. Drobne niedociągnięcia w kontrastach wykresów finansowych.",
+    testedElements: [
+      { id: 1, title: "Pulpit portfela inwestycyjnego", priorities: 1, warnings: 1, marginals: 1, channel: "Mobile" },
+      { id: 2, title: "Wykresy notowań funduszy", priorities: 0, warnings: 2, marginals: 1, channel: "Mobile" },
+    ],
+  },
+  {
+    id: 5,
+    date: "10.05.2026",
+    period: "01.05.2026 - 10.05.2026",
+    status: "Zakończony",
+    title: "Dokumenty PDF - Regulaminy kart",
+    subtitle: "Weryfikacja dostępności cyfrowej wzorców umownych i tabel opłat",
+    devices: "Dokumenty",
+    priority: "0",
+    critical: 0,
+    important: 1,
+    marginal: 2,
+    score: "95.00%",
+    scoreNum: 95.0,
+    brokenCriteria: 3,
+    totalCriteria: 49,
+    icon: FileText,
+    statusVariant: "success",
+    auditor: "Piotr Smułkowski",
+    hasReaudits: false,
+    summaryText: "Ocena dokumentów do pobrania pod kątem struktury tagów, języka dokumentu oraz kolejności odczytu w czytnikach PDF/UA.",
+    testedElements: [
+      { id: 1, title: "Regulamin kart płatniczych 2026", priorities: 0, warnings: 1, marginals: 1, channel: "Dokument" },
+    ],
+  },
+  {
+    id: 6,
+    date: "05.06.2026",
+    period: "20.05.2026 - 05.06.2026",
+    status: "Nowy",
+    title: "Proces reklamacyjny - formularze",
+    subtitle: "Audyt dostępności formularza zgłoszenia skargi konsumenckiej",
+    devices: "Desktop",
+    priority: "8",
+    critical: 8,
+    important: 19,
+    marginal: 11,
+    score: "45.20%",
+    scoreNum: 45.2,
+    brokenCriteria: 24,
+    totalCriteria: 49,
+    icon: LayoutGrid,
+    statusVariant: "info",
+    auditor: "Anna Nowak",
+    hasReaudits: false,
+    summaryText: "Krytyczne bariery w formularzu zgłoszeniowym: brak komunikatów błędów dla technologii asystujących, błędy w powiązaniach pól z etykietami.",
+    testedElements: [
+      { id: 1, title: "Formularz rejestracji reklamacji", priorities: 5, warnings: 10, marginals: 6, channel: "WWW" },
+      { id: 2, title: "Ekran potwierdzenia wysłania zgłoszenia", priorities: 3, warnings: 9, marginals: 5, channel: "WWW" },
+    ],
+  },
+  {
+    id: 7,
+    date: "18.05.2026",
+    period: "05.05.2026 - 18.05.2026",
+    status: "Zakończony",
+    title: "Bankowość korporacyjna BusinessNet - moduł autoryzacji",
+    subtitle: "Badanie procesu wieloosobowej autoryzacji płatności masowych",
+    devices: "Desktop",
+    priority: "2",
+    critical: 2,
+    important: 6,
+    marginal: 5,
+    score: "88.20%",
+    scoreNum: 88.2,
+    brokenCriteria: 9,
+    totalCriteria: 49,
+    icon: Monitor,
+    statusVariant: "success",
+    auditor: "Piotr Smułkowski",
+    hasReaudits: false,
+    summaryText: "System bankowości korporacyjnej dla firm. Wysoki poziom zgodności, usterki dotyczą głównie kontrastu nieaktywnych przycisków akceptacji.",
+    testedElements: [
+      { id: 1, title: "Lista paczek przelewów do podpisu", priorities: 1, warnings: 3, marginals: 2, channel: "Desktop" },
+      { id: 2, title: "Modal podpisu podpisem kwalifikowanym", priorities: 1, warnings: 3, marginals: 3, channel: "Desktop" },
+    ],
+  },
+  {
+    id: 8,
+    date: "26.05.2026",
+    period: "12.05.2026 - 26.05.2026",
+    status: "W trakcie",
+    title: "Aplikacja iOS - Przelewy i Kantor Walutowy",
+    subtitle: "Audyt dostępności natywnej aplikacji iOS z VoiceOver",
+    devices: "iOS",
+    priority: "1",
+    critical: 1,
+    important: 4,
+    marginal: 2,
+    score: "91.50%",
+    scoreNum: 91.5,
+    brokenCriteria: 6,
+    totalCriteria: 49,
+    icon: Smartphone,
+    statusVariant: "warning",
+    auditor: "Jan Kowalski",
+    hasReaudits: false,
+    summaryText: "VoiceOver działa poprawnie na większości ekranów transakcyjnych. Drobne poprawki w dynamicznym przeliczaniu kursów walut.",
+    testedElements: [
+      { id: 1, title: "Kantor wymiany walut - kalkulator", priorities: 1, warnings: 2, marginals: 1, channel: "iOS" },
+    ],
+  },
+  {
+    id: 9,
+    date: "02.06.2026",
+    period: "18.05.2026 - 02.06.2026",
+    status: "W trakcie",
+    title: "Portal Hipoteczny - Kalkulator i Wniosek Kredytowy",
+    subtitle: "Audyt procesu wnioskowania o kredyt hipoteczny",
+    devices: "Desktop",
+    priority: "4",
+    critical: 4,
+    important: 11,
+    marginal: 7,
+    score: "73.40%",
+    scoreNum: 73.4,
+    brokenCriteria: 14,
+    totalCriteria: 49,
+    icon: MonitorSmartphone,
+    statusVariant: "warning",
+    auditor: "Anna Nowak",
+    hasReaudits: false,
+    summaryText: "Kalkulator raty kredytowej zawiera suwaki trudne w obsłudze klawiaturą bez użycia myszy. Wymaga dodania atrybutów aria-valuenow.",
+    testedElements: [
+      { id: 1, title: "Kalkulator zdolności kredytowej", priorities: 2, warnings: 5, marginals: 3, channel: "Desktop" },
+      { id: 2, title: "Krok 1: Dane wnioskodawcy i dochody", priorities: 2, warnings: 6, marginals: 4, channel: "Desktop" },
+    ],
+  },
+  {
+    id: 10,
+    date: "14.06.2026",
+    period: "01.06.2026 - 14.06.2026",
+    status: "Zakończony",
+    title: "Tabela Opłat i Prowizji PDF - Dokumenty Cyfrowe",
+    subtitle: "Weryfikacja dostępności cyfrowej tabeli taryfowej dla klientów indywidualnych",
+    devices: "Dokumenty",
+    priority: "0",
+    critical: 0,
+    important: 2,
+    marginal: 3,
+    score: "92.10%",
+    scoreNum: 92.1,
+    brokenCriteria: 4,
+    totalCriteria: 49,
+    icon: FileText,
+    statusVariant: "success",
+    auditor: "Piotr Smułkowski",
+    hasReaudits: false,
+    summaryText: "Tabela opłat posiada poprawnie oznaczone nagłówki kolumn i wierszy oraz przypisane atrybuty Scope. Spełnia wymogi normy PDF/UA.",
+    testedElements: [
+      { id: 1, title: "Tabela opłat i prowizji - wydanie 2026", priorities: 0, warnings: 2, marginals: 3, channel: "Dokument" },
+    ],
+  },
+];
+
+function RaportyView({
+  setView,
+  onOpenReaudit,
+  onSelectAudit,
+  showToast,
+}: {
+  setView: (v: string) => void;
+  onOpenReaudit?: (title?: string, type?: string, auditor?: string) => void;
+  onSelectAudit?: (id: number) => void;
+  showToast?: (t: string, b: string, type?: string) => void;
+}) {
+  const mockAuditsList = SHARED_AUDITS_LIST;
 
   // Pinned / Obserwowane audyty (Ulubione z persistencją w localStorage)
   const [pinnedAuditIds, setPinnedAuditIds] = useState<string[]>(() => {
@@ -9500,15 +9681,17 @@ function RaportyView({ setView, onOpenReaudit, showToast }) {
               <button
                 type="button"
                 onClick={() => setView("reaudyt-nowy")}
-                className="inline-flex items-center justify-center gap-1.5 bg-[#0038F8] hover:bg-[#002ECC] text-white px-3.5 py-2 text-xs font-bold rounded-lg shadow-xs transition-all cursor-pointer active:translate-y-px"
-                title="Wprowadź i zarejestruj wyniki ponownego audytu"
+                className="inline-flex items-center justify-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 border border-slate-300 px-3.5 py-2 text-xs font-bold rounded-lg shadow-2xs transition-all cursor-pointer active:translate-y-px"
+                title="Wprowadź i zarejestruj wyniki ponownego audytu ręcznie"
               >
-                <Plus size={14} />
+                <Plus size={14} className="text-[#0038F8]" />
                 <span>Dodaj Reaudyt</span>
               </button>
               <ReauditButton
-                onClick={() => setView("reaudyt-nowy")}
-                variant="secondary"
+                onClick={() => {
+                  if (onOpenReaudit) onOpenReaudit();
+                }}
+                variant="primary"
               />
             </div>
           </div>
@@ -10000,13 +10183,18 @@ function RaportyView({ setView, onOpenReaudit, showToast }) {
                     return (
                       <tr
                         key={audit.id}
-                        onClick={() => setView("raport-szczegoly")}
+                        data-testid="audit-row"
+                        onClick={() => {
+                          if (onSelectAudit) onSelectAudit(audit.id);
+                          setView("raport-szczegoly");
+                        }}
                         className="hover:bg-slate-50/80 transition-colors cursor-pointer group"
                         tabIndex={0}
                         role="button"
                         onKeyDown={(e) => {
                           if (e.key === "Enter" || e.key === " ") {
                             e.preventDefault();
+                            if (onSelectAudit) onSelectAudit(audit.id);
                             setView("raport-szczegoly");
                           }
                         }}
@@ -10162,18 +10350,22 @@ function RaportyView({ setView, onOpenReaudit, showToast }) {
                               type="button"
                               onClick={(e) => {
                                 e.stopPropagation();
-                                setView("reaudyt-nowy");
+                                if (onSelectAudit) onSelectAudit(audit.id);
+                                if (onOpenReaudit) {
+                                  onOpenReaudit(audit.title, "Audyt WCAG 2.1 AA", audit.auditor);
+                                }
                               }}
-                              className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 hover:text-slate-900 transition-colors cursor-pointer"
-                              title={`Dodaj reaudyt dla ${audit.title}`}
+                              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 hover:text-slate-900 transition-colors cursor-pointer"
+                              title={`Zleć reaudyt dla "${audit.title}" (otwiera okno zamawiania)`}
                             >
-                              <Plus size={12} className="text-[#0038F8]" />
-                              <span>Reaudyt</span>
+                              <RotateCcw size={12} className="text-[#0038F8]" />
+                              <span>Zleć reaudyt</span>
                             </button>
                             <button
                               type="button"
                               onClick={(e) => {
                                 e.stopPropagation();
+                                if (onSelectAudit) onSelectAudit(audit.id);
                                 setView("raport-szczegoly");
                               }}
                               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-[#0038F8]/10 text-[#0038F8] hover:bg-[#0038F8] hover:text-white transition-colors cursor-pointer"
@@ -10207,9 +10399,20 @@ function RaportyView({ setView, onOpenReaudit, showToast }) {
                 marginal={audit.marginal}
                 score={audit.score}
                 icon={audit.icon}
+                hasReaudits={audit.hasReaudits}
                 isPinned={pinnedAuditIds.some((pId) => String(pId) === String(audit.id))}
                 onTogglePin={(e) => togglePinAudit(audit.id, audit.title, e)}
-                onClick={() => setView("raport-szczegoly")}
+                onOpenReaudit={(e) => {
+                  e?.stopPropagation();
+                  if (onSelectAudit) onSelectAudit(audit.id);
+                  if (onOpenReaudit) {
+                    onOpenReaudit(audit.title, "Audyt WCAG 2.1 AA", audit.auditor);
+                  }
+                }}
+                onClick={() => {
+                  if (onSelectAudit) onSelectAudit(audit.id);
+                  setView("raport-szczegoly");
+                }}
               />
             ))}
           </div>
@@ -10232,9 +10435,28 @@ function ReportCard({
   marginal = 0,
   score,
   icon: DeviceIcon,
+  hasReaudits = true,
   isPinned = false,
   onTogglePin,
+  onOpenReaudit,
   onClick,
+}: {
+  date: string;
+  status: string;
+  statusVariant?: any;
+  title: string;
+  devices: string;
+  priority: string;
+  critical?: number;
+  important?: number;
+  marginal?: number;
+  score: string;
+  icon: any;
+  hasReaudits?: boolean;
+  isPinned?: boolean;
+  onTogglePin?: (e: any) => void;
+  onOpenReaudit?: (e: any) => void;
+  onClick?: () => void;
 }) {
   return (
     <Card
@@ -10247,7 +10469,16 @@ function ReportCard({
           <Calendar size={12} className="text-indigo-600 shrink-0" />
           <span>{date}</span>
         </Badge>
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1.5 flex-wrap justify-end">
+          {!hasReaudits && (
+            <span
+              className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200"
+              title="Ten audyt nie ma jeszcze wykonanych reaudytów (0 reaudytów)"
+            >
+              <RotateCcw size={10} className="text-amber-700" />
+              0 reaudytów
+            </span>
+          )}
           <button
             type="button"
             onClick={(e) => {
@@ -10358,15 +10589,31 @@ function ReportCard({
             {devices}
           </div>
         </div>
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            if (onClick) onClick();
-          }}
-          className="w-8 h-8 sm:w-9 sm:h-9 bg-[#0038F8] hover:bg-[#002ECC] text-white rounded-lg sm:rounded-xl flex items-center justify-center transition-all shadow-sm"
-        >
-          <ArrowRight size={14} className="sm:w-4 sm:h-4" strokeWidth={2.5} />
-        </button>
+        <div className="flex items-center gap-1.5 shrink-0">
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              if (onOpenReaudit) onOpenReaudit(e);
+            }}
+            className="h-8 sm:h-9 px-2.5 bg-slate-100 hover:bg-[#0038F8] hover:text-white text-slate-700 rounded-lg sm:rounded-xl flex items-center gap-1 text-xs font-bold transition-all shadow-2xs cursor-pointer"
+            title="Zleć formalny reaudyt dla tego audytu (otwiera okno zamawiania)"
+          >
+            <RotateCcw size={12} />
+            <span className="hidden xl:inline">Zleć</span>
+          </button>
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              if (onClick) onClick();
+            }}
+            className="w-8 h-8 sm:w-9 sm:h-9 bg-[#0038F8] hover:bg-[#002ECC] text-white rounded-lg sm:rounded-xl flex items-center justify-center transition-all shadow-sm cursor-pointer"
+            title="Przejdź do szczegółów audytu"
+          >
+            <ArrowRight size={14} className="sm:w-4 sm:h-4" strokeWidth={2.5} />
+          </button>
+        </div>
       </div>
     </Card>
   );
@@ -10375,17 +10622,29 @@ function ReportCard({
 function ReportSummaryView({
   setView,
   onOpenReaudit,
+  onAddNewReaudit,
   onOpenReauditDetails,
   reauditsList = INITIAL_REAUDITS_HISTORY,
+  selectedAuditId = 2,
+  onSelectAuditId,
   showToast,
 }: {
   setView: (view: string) => void;
   onOpenReaudit?: (title?: string, type?: string, auditor?: string) => void;
+  onAddNewReaudit?: (title?: string) => void;
   onOpenReauditDetails?: (reaudit: ReauditRecord) => void;
   reauditsList?: ReauditRecord[];
+  selectedAuditId?: number;
+  onSelectAuditId?: (id: number) => void;
   showToast?: (title: string, message: string) => void;
 }) {
-  const currentAuditId = "1";
+  const currentAudit =
+    SHARED_AUDITS_LIST.find((a) => a.id === selectedAuditId) ||
+    SHARED_AUDITS_LIST[1]; // Domyślnie audyt #2 (Android bez reaudytów)
+
+  const currentAuditId = String(currentAudit.id);
+  const auditReaudits = currentAudit.hasReaudits ? reauditsList : [];
+
   const [isPinned, setIsPinned] = useState(() => {
     try {
       const saved = localStorage.getItem("wally_pinned_audits");
@@ -10412,8 +10671,8 @@ function ReportSummaryView({
         showToast(
           next ? "Przypięto do obserwowanych" : "Odpięto z obserwowanych",
           next
-            ? "Ten audyt został przypięty i dodany do listy Twoich obserwowanych."
-            : "Ten audyt został usunięty z listy Twoich obserwowanych."
+            ? `Audyt "${currentAudit.title}" został przypięty i dodany do listy Twoich obserwowanych.`
+            : `Audyt "${currentAudit.title}" został usunięty z listy Twoich obserwowanych.`
         );
       }
       return next;
@@ -10424,7 +10683,7 @@ function ReportSummaryView({
     if (showToast) {
       showToast(
         "Pobieranie raportu Word (.docx)",
-        "Generowanie dostępnego cyfrowo dokumentu raportu Microsoft Word (.docx) z zachowaniem hierarchii nagłówków, tabel i tekstu alternatywnego..."
+        `Generowanie dostępnego cyfrowo dokumentu raportu Microsoft Word (.docx) dla "${currentAudit.title}" z zachowaniem hierarchii nagłówków, tabel i tekstu alternatywnego...`
       );
     }
   };
@@ -10433,7 +10692,7 @@ function ReportSummaryView({
     if (showToast) {
       showToast(
         "Pobieranie raportu Excel (.xlsx)",
-        "Generowanie arkusza Excel (.xlsx) z pełnym wykazem błędów i wskaźników WCAG..."
+        `Generowanie arkusza Excel (.xlsx) z pełnym wykazem błędów i wskaźników WCAG dla "${currentAudit.title}"...`
       );
     }
   };
@@ -10441,9 +10700,9 @@ function ReportSummaryView({
   const handleTriggerReaudit = () => {
     if (onOpenReaudit) {
       onOpenReaudit(
-        "Portal informacyjny - wybrane podstrony",
+        currentAudit.title,
         "Audyt WCAG 2.1 AA",
-        "Piotr Smułkowski"
+        currentAudit.auditor
       );
     }
   };
@@ -10454,15 +10713,37 @@ function ReportSummaryView({
         breadcrumbs={[
           { label: "Pulpit", onClick: () => setView("przeglad") },
           { label: "Audyty", onClick: () => setView("raporty") },
-          { label: "Portal informacyjny (wybrane podstrony)" },
+          { label: currentAudit.title },
         ]}
         badges={
-          <Badge variant="success">
-            <CheckCircle2 size={13} className="shrink-0" /> Zakończony
-          </Badge>
+          <div className="flex items-center gap-2 flex-wrap">
+            <Badge variant={currentAudit.statusVariant}>
+              {currentAudit.statusVariant === "success" && (
+                <CheckCircle2 size={13} className="shrink-0" />
+              )}
+              {currentAudit.statusVariant === "warning" && (
+                <Activity size={13} className="shrink-0" />
+              )}
+              {currentAudit.statusVariant === "info" && (
+                <Eye size={13} className="shrink-0" />
+              )}
+              <span>{currentAudit.status}</span>
+            </Badge>
+            {auditReaudits.length === 0 ? (
+              <span className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-800 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-md">
+                <RotateCcw size={11} className="text-amber-700" />
+                <span>Brak reaudytów (0)</span>
+              </span>
+            ) : (
+              <span className="inline-flex items-center gap-1 text-[11px] font-bold text-blue-700 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded-md">
+                <ClipboardCheck size={11} className="text-blue-700" />
+                <span>Reaudyty: {auditReaudits.length}</span>
+              </span>
+            )}
+          </div>
         }
-        title="Portal informacyjny - wybrane podstrony"
-        subtitle="Raport z badania dostępności cyfrowej WCAG 2.1 AA"
+        title={currentAudit.title}
+        subtitle={currentAudit.subtitle || "Raport z badania dostępności cyfrowej WCAG 2.1 AA"}
         actions={
           <div className="flex items-center gap-2 flex-wrap">
             <button
@@ -10500,17 +10781,17 @@ function ReportSummaryView({
             <button
               type="button"
               onClick={() => {
-                if (onOpenReaudit) onOpenReaudit();
+                if (onAddNewReaudit) onAddNewReaudit(currentAudit.title);
                 else setView("reaudyt-nowy");
               }}
-              className="flex justify-center items-center gap-1.5 bg-[#0038F8] hover:bg-[#002ECC] text-white px-3.5 py-2 rounded-lg font-bold shadow-xs transition-colors text-xs cursor-pointer active:translate-y-px"
-              title="Wprowadź i zarejestruj wyniki ponownego audytu"
+              className="flex justify-center items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 border border-slate-300 px-3.5 py-2 rounded-lg font-bold shadow-2xs transition-colors text-xs cursor-pointer active:translate-y-px"
+              title="Wprowadź i zarejestruj wyniki ponownego audytu ręcznie"
             >
-              <Plus size={14} /> <span>Dodaj Reaudyt</span>
+              <Plus size={14} className="text-[#0038F8]" /> <span>Dodaj Reaudyt</span>
             </button>
             <ReauditButton
               onClick={handleTriggerReaudit}
-              variant="secondary"
+              variant="primary"
             />
           </div>
         }
@@ -10519,6 +10800,46 @@ function ReportSummaryView({
       <div className="flex-1 md:overflow-y-auto bg-[#f8fafc] w-full">
         <div className="max-w-[1600px] mx-auto w-full p-4 sm:p-6 lg:p-8 flex flex-col gap-5">
 
+          {/* SZYBKI PRZEŁĄCZNIK WIDOKU AUDYTU (Audyt bez reaudytów vs Audyt z reaudytami) */}
+          <div className="bg-white border border-slate-200/90 rounded-xl p-3 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                Podgląd audytu:
+              </span>
+              <span className="text-xs font-extrabold text-slate-900">
+                {currentAudit.title}
+              </span>
+            </div>
+            <div className="flex items-center gap-2 flex-wrap">
+              <button
+                type="button"
+                onClick={() => onSelectAuditId && onSelectAuditId(2)}
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                  currentAudit.id === 2
+                    ? "bg-[#0038F8] text-white shadow-xs"
+                    : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                }`}
+                title="Pokaż audyt bez zrobionych reaudytów (Android - 0 reaudytów)"
+              >
+                <Smartphone size={13} />
+                <span>Audyt bez reaudytów (Android - 0 reaudytów)</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => onSelectAuditId && onSelectAuditId(1)}
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                  currentAudit.id === 1
+                    ? "bg-[#0038F8] text-white shadow-xs"
+                    : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                }`}
+                title="Pokaż audyt z wykonanymi reaudytami (Portal - 2 reaudyty)"
+              >
+                <MonitorSmartphone size={13} />
+                <span>Audyt z reaudytami (Portal - 2 reaudyty)</span>
+              </button>
+            </div>
+          </div>
+
           {/* KARTA PODSUMOWANIA WYKONAWCZEGO I METADANYCH AUDYTU */}
           <Card className="bg-white border border-slate-200/90 rounded-xl shadow-xs overflow-hidden">
             {/* Zintegrowany pasek metadanych audytu */}
@@ -10526,12 +10847,12 @@ function ReportSummaryView({
               <div className="flex flex-wrap items-center gap-3 sm:gap-5 font-semibold text-slate-600">
                 <div className="flex items-center gap-1.5">
                   <Calendar size={14} className="text-[#0038F8]" />
-                  <span>01.03.2026 - 12.03.2026</span>
+                  <span>{currentAudit.period || currentAudit.date}</span>
                 </div>
                 <div className="w-px h-3.5 bg-slate-200 hidden sm:block" />
                 <div className="flex items-center gap-1.5">
                   <User size={14} className="text-[#0038F8]" />
-                  <span>Audytor: <strong className="text-slate-800 font-bold">Piotr Smułkowski</strong></span>
+                  <span>Audytor: <strong className="text-slate-800 font-bold">{currentAudit.auditor}</strong></span>
                 </div>
                 <div className="w-px h-3.5 bg-slate-200 hidden sm:block" />
                 <div className="flex items-center gap-1.5">
@@ -10541,9 +10862,17 @@ function ReportSummaryView({
               </div>
 
               <div className="flex items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                  <CheckCircle2 size={12} className="text-emerald-600" />
-                  <span>Audyt zatwierdzony</span>
+                <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold ${
+                  currentAudit.status === "Zakończony"
+                    ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                    : "bg-amber-50 text-amber-800 border border-amber-200"
+                }`}>
+                  {currentAudit.status === "Zakończony" ? (
+                    <CheckCircle2 size={12} className="text-emerald-600" />
+                  ) : (
+                    <Activity size={12} className="text-amber-600" />
+                  )}
+                  <span>{currentAudit.status === "Zakończony" ? "Audyt zatwierdzony" : "Audyt w trakcie"}</span>
                 </span>
               </div>
             </div>
@@ -10560,7 +10889,7 @@ function ReportSummaryView({
               </div>
 
               <p className="text-sm text-slate-700 leading-relaxed pl-1 sm:pl-9 font-normal">
-                Audyt obejmował kluczowe ścieżki użytkownika na stronie głównej oraz w formularzach kontaktowych. Zidentyfikowano głównie problemy związane z niewystarczającym kontrastem elementów interaktywnych oraz brakiem odpowiednich etykiet dla czytników ekranu w procesie logowania. Mimo relatywnie wysokiego ogólnego wyniku dostępności (77.5%), wdrożenie rekomendacji dla 3 błędów priorytetowych (tzw. blokerów) jest bezwzględnie wymagane do spełnienia normy ustawowej.
+                {currentAudit.summaryText}
               </p>
             </div>
           </Card>
@@ -10577,7 +10906,7 @@ function ReportSummaryView({
                   Dostępność
                 </span>
                 <span className="text-2xl font-black text-slate-900 leading-tight">
-                  77.5%
+                  {currentAudit.score}
                 </span>
               </div>
             </Card>
@@ -10592,7 +10921,7 @@ function ReportSummaryView({
                   Priorytetowe
                 </span>
                 <span className="text-2xl font-black text-red-700 leading-tight">
-                  3
+                  {currentAudit.critical}
                 </span>
               </div>
             </Card>
@@ -10607,7 +10936,7 @@ function ReportSummaryView({
                   Ważne
                 </span>
                 <span className="text-2xl font-black text-amber-800 leading-tight">
-                  1
+                  {currentAudit.important}
                 </span>
               </div>
             </Card>
@@ -10622,7 +10951,7 @@ function ReportSummaryView({
                   Marginalne
                 </span>
                 <span className="text-2xl font-black text-blue-700 leading-tight">
-                  3
+                  {currentAudit.marginal}
                 </span>
               </div>
             </Card>
@@ -10638,466 +10967,498 @@ function ReportSummaryView({
                 </span>
                 <div className="flex items-baseline gap-1">
                   <span className="text-2xl font-black text-slate-900 leading-tight">
-                    11
+                    {currentAudit.brokenCriteria}
                   </span>
                   <span className="text-xs font-bold text-slate-600">
-                    / 49
+                    / {currentAudit.totalCriteria}
                   </span>
                 </div>
               </div>
             </Card>
           </div>
 
-          {/* HISTORIA I REAUDYTY (BIAŁA KARTA ZAMIAST NIEBIESKIEGO TŁA) */}
+          {/* HISTORIA I REAUDYTY */}
           <Card className="p-4 sm:p-5 bg-white border border-slate-200 rounded-xl shadow-xs">
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
               <div className="flex items-center gap-2">
                 <History size={18} className="text-[#0038F8]" />
                 <h2 className="text-[15px] sm:text-base font-bold text-slate-900">
-                  Historia i Reaudyty ({reauditsList.length})
+                  Historia i Reaudyty ({auditReaudits.length})
                 </h2>
+                {auditReaudits.length === 0 && (
+                  <span className="text-[11px] font-bold text-amber-800 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full">
+                    Brak wykonanych reaudytów
+                  </span>
+                )}
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap">
                 <button
                   type="button"
                   onClick={() => {
-                    if (onOpenReaudit) onOpenReaudit();
+                    if (onAddNewReaudit) onAddNewReaudit(currentAudit.title);
                     else setView("reaudyt-nowy");
                   }}
-                  className="inline-flex items-center gap-1.5 bg-[#0038F8] hover:bg-[#002ECC] text-white px-3 py-1.5 rounded-lg text-xs font-bold shadow-xs transition-colors cursor-pointer active:translate-y-px"
-                  title="Wprowadź i zarejestruj wyniki ponownego audytu"
+                  className="inline-flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 border border-slate-300 px-3 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer"
+                  title="Wprowadź i zarejestruj wyniki ponownego audytu ręcznie"
                 >
-                  <Plus size={13} />
+                  <Plus size={13} className="text-[#0038F8]" />
                   <span>Dodaj Reaudyt</span>
                 </button>
                 <ReauditButton
                   onClick={handleTriggerReaudit}
-                  variant="secondary"
+                  variant="primary"
                   size="sm"
-                  className="hidden sm:inline-flex text-xs py-1.5 px-3"
+                  className="text-xs py-1.5 px-3"
                 />
               </div>
             </div>
 
-            <div className="flex flex-col gap-2.5">
-          {reauditsList.map((reaudit) => {
-            const prevErrors = reaudit.verifiedPreviousErrors || [];
-            const fixedNum = prevErrors.filter((e) => e.status === "fixed").length;
-            const hasNew = Boolean(reaudit.newErrors && reaudit.newErrors.length > 0);
+            {auditReaudits.length > 0 ? (
+              <div className="flex flex-col gap-2.5">
+                {auditReaudits.map((reaudit) => {
+                  const prevErrors = reaudit.verifiedPreviousErrors || [];
+                  const fixedNum = prevErrors.filter((e) => e.status === "fixed").length;
+                  const hasNew = Boolean(reaudit.newErrors && reaudit.newErrors.length > 0);
 
-            return (
-              <div
-                key={reaudit.id}
-                className="flex flex-col sm:flex-row sm:items-center justify-between bg-slate-50/70 hover:bg-slate-100/80 border border-slate-200/80 hover:border-[#0038F8]/30 rounded-xl p-3 sm:p-3.5 transition-all cursor-pointer gap-4 group"
-                onClick={() => {
-                  if (onOpenReauditDetails) {
-                    onOpenReauditDetails(reaudit);
-                  } else {
-                    setView("reaudyt-szczegoly");
-                  }
-                }}
-                title="Kliknij, aby otworzyć szczegółowy raport weryfikacji tego reaudytu"
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    if (onOpenReauditDetails) {
-                      onOpenReauditDetails(reaudit);
-                    } else {
-                      setView("reaudyt-szczegoly");
-                    }
-                  }
-                }}
-              >
-                <div className="flex items-center gap-3.5 flex-1 min-w-[240px]">
-                  <div className="w-9 h-9 rounded-xl bg-blue-50 text-[#0038F8] group-hover:bg-[#0038F8] group-hover:text-white transition-colors flex items-center justify-center flex-shrink-0">
-                    <ClipboardCheck size={17} />
-                  </div>
-                  <div className="min-w-0 pr-3">
-                    <div className="text-[14px] font-bold text-slate-800 leading-snug group-hover:text-[#0038F8] transition-colors truncate">
-                      {reaudit.name}
-                    </div>
-                    <div className="flex items-center gap-2 text-[11px] text-slate-500 font-medium mt-0.5 truncate flex-wrap">
-                      <span className="flex items-center gap-1 shrink-0">
-                        <Calendar size={11} /> {reaudit.date}
-                      </span>
-                      <span className="text-slate-300">•</span>
-                      <span className="flex items-center gap-1 shrink-0">
-                        <User size={11} /> {reaudit.auditor}
-                      </span>
-                      {prevErrors.length > 0 && (
-                        <>
-                          <span className="text-slate-300">•</span>
-                          <span className="text-emerald-700 font-bold bg-emerald-50 px-1.5 py-0.2 rounded text-[10px] border border-emerald-200">
-                            Poprawiono: {fixedNum} / {prevErrors.length}
-                          </span>
-                        </>
-                      )}
-                      {hasNew && (
-                        <span className="text-amber-800 font-bold bg-amber-50 px-1.5 py-0.2 rounded text-[10px] border border-amber-200">
-                          +{reaudit.newErrors.length} nowe usterki
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-                <div className="flex flex-wrap items-center justify-between sm:justify-end gap-3 sm:gap-5 w-full sm:w-auto mt-2 sm:mt-0 pt-2.5 sm:pt-0 border-t border-slate-200/60 sm:border-none">
-                  <div className="flex flex-col hidden sm:flex shrink-0 items-center justify-center">
-                    <span className="text-[10px] font-bold text-slate-600 uppercase tracking-widest mb-0.5">
-                      Złamane Kryt.
-                    </span>
-                    <span className="text-[15px] font-extrabold text-slate-800 text-center">
-                      {reaudit.brokenCriteria}
-                    </span>
-                  </div>
-
-                  <div className="hidden sm:flex shrink-0 items-center justify-center">
-                    <Badge
-                      variant={
-                        reaudit.status === "Zakończony" ? "success" : "warning"
-                      }
-                      className="!py-0.5 !px-2.5 !text-[11px] w-max font-bold"
-                    >
-                      {reaudit.status}
-                    </Badge>
-                  </div>
-
-                  <div className="flex shrink-0 items-center justify-end">
-                    <div className="flex items-center gap-2.5 bg-white px-2.5 py-1 rounded-lg border border-slate-200 shadow-2xs">
-                      <div
-                        className="relative group/tip flex items-center gap-1.5 border-r border-slate-200 pr-2.5 cursor-help"
-                        title={`Błędy priorytetowe: ${reaudit.criticalErrors}`}
-                      >
-                        <AlertOctagon size={13} className={reaudit.criticalErrors > 0 ? "text-red-700" : "text-slate-500"} />
-                        <span className={`text-[14px] font-black ${reaudit.criticalErrors > 0 ? "text-red-700" : "text-slate-600"}`}>
-                          {reaudit.criticalErrors}
-                        </span>
-                        <div
-                          role="tooltip"
-                          className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 pointer-events-none opacity-0 invisible group-hover/tip:opacity-100 group-hover/tip:visible transition-all duration-150 z-50 bg-slate-900 text-white text-[11px] font-semibold px-2.5 py-1 rounded-lg shadow-xl whitespace-nowrap"
-                        >
-                          Błędy priorytetowe: {reaudit.criticalErrors}
-                          <span className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-slate-900" />
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-[10px] font-bold text-slate-600 uppercase tracking-widest hidden sm:block">
-                          Zgodność:
-                        </span>
-                        <span
-                          className={`text-[14px] font-black ${
-                            reaudit.score >= 80
-                              ? "text-emerald-700"
-                              : "text-amber-800"
-                          }`}
-                        >
-                          {reaudit.score}%
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="w-8 flex justify-end shrink-0 hidden sm:flex">
-                    <ChevronRight size={18} className="text-slate-500 group-hover:text-[#0038F8] transition-colors" />
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-        <ReauditButton
-          onClick={handleTriggerReaudit}
-          variant="secondary"
-          fullWidth
-          className="mt-4 flex sm:hidden"
-        />
-      </Card>
-
-      {/* Przetestowane Elementy - Widok tabelaryczny z czytelnym podziałem na wagi błędów */}
-      {(() => {
-        const testedElements = [
-          {
-            id: 1,
-            title: "Strona główna",
-            priorities: 1,
-            warnings: 1,
-            marginals: 2,
-            channel: "WWW",
-          },
-          {
-            id: 2,
-            title: 'Podstrona "konta"',
-            priorities: 2,
-            warnings: 0,
-            marginals: 1,
-            channel: "Aplikacja",
-          },
-          {
-            id: 3,
-            title: 'Podstrona "karty"',
-            priorities: 0,
-            warnings: 0,
-            marginals: 0,
-            channel: "Dokumenty",
-          },
-        ];
-
-        const totalPriorities = testedElements.reduce((acc, el) => acc + el.priorities, 0);
-        const totalWarnings = testedElements.reduce((acc, el) => acc + el.warnings, 0);
-        const totalMarginals = testedElements.reduce((acc, el) => acc + el.marginals, 0);
-
-        return (
-          <Card className="p-4 sm:p-5 bg-white border border-slate-200 rounded-xl shadow-xs" data-testid="tested-elements-card">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-4">
-              <div>
-                <div className="flex items-center gap-2.5">
-                  <h2 className="text-[16px] sm:text-[18px] font-bold text-slate-900">
-                    Przetestowane Elementy
-                  </h2>
-                  <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
-                    {testedElements.length}
-                  </span>
-                </div>
-                <p className="text-xs text-slate-600 mt-1">
-                  Wykaz zbadanych podstron i widoków z podziałem błędów według poziomu krytyczności
-                </p>
-              </div>
-
-              {/* Legenda i łączne podsumowanie wag błędów z pełnym kontrastem WCAG AA */}
-              <div className="flex flex-wrap items-center gap-2 self-start md:self-auto bg-slate-50 border border-slate-200 p-1.5 px-3 rounded-xl text-xs">
-                <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider mr-1 hidden sm:inline">
-                  Łącznie błędów:
-                </span>
-                {/* Priorytetowe */}
-                <div className="relative group/tip flex items-center">
-                  <div
-                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-red-50 text-red-700 border border-red-200 shadow-2xs cursor-help"
-                    title={`Błędy priorytetowe: ${totalPriorities}`}
-                  >
-                    <AlertOctagon size={13} className="text-red-700 shrink-0" />
-                    <span>{totalPriorities}</span>
-                    <span className="font-bold text-red-700 text-[11px] hidden sm:inline">priorytetowe</span>
-                  </div>
-                  <div
-                    role="tooltip"
-                    className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 pointer-events-none opacity-0 invisible group-hover/tip:opacity-100 group-hover/tip:visible transition-all duration-150 z-50 bg-slate-900 text-white text-[11px] font-semibold px-2.5 py-1 rounded-lg shadow-xl whitespace-nowrap"
-                  >
-                    Błędy priorytetowe: {totalPriorities}
-                    <span className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-slate-900" />
-                  </div>
-                </div>
-
-                {/* Ważne */}
-                <div className="relative group/tip flex items-center">
-                  <div
-                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-50 text-amber-800 border border-amber-200 shadow-2xs cursor-help"
-                    title={`Błędy ważne: ${totalWarnings}`}
-                  >
-                    <AlertTriangle size={13} className="text-amber-800 shrink-0" />
-                    <span>{totalWarnings}</span>
-                    <span className="font-bold text-amber-800 text-[11px] hidden sm:inline">ważny</span>
-                  </div>
-                  <div
-                    role="tooltip"
-                    className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 pointer-events-none opacity-0 invisible group-hover/tip:opacity-100 group-hover/tip:visible transition-all duration-150 z-50 bg-slate-900 text-white text-[11px] font-semibold px-2.5 py-1 rounded-lg shadow-xl whitespace-nowrap"
-                  >
-                    Błędy ważne: {totalWarnings}
-                    <span className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-slate-900" />
-                  </div>
-                </div>
-
-                {/* Marginalne */}
-                <div className="relative group/tip flex items-center">
-                  <div
-                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200 shadow-2xs cursor-help"
-                    title={`Błędy marginalne: ${totalMarginals}`}
-                  >
-                    <Info size={13} className="text-blue-700 shrink-0" />
-                    <span>{totalMarginals}</span>
-                    <span className="font-bold text-blue-700 text-[11px] hidden sm:inline">marginalne</span>
-                  </div>
-                  <div
-                    role="tooltip"
-                    className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 pointer-events-none opacity-0 invisible group-hover/tip:opacity-100 group-hover/tip:visible transition-all duration-150 z-50 bg-slate-900 text-white text-[11px] font-semibold px-2.5 py-1 rounded-lg shadow-xl whitespace-nowrap"
-                  >
-                    Błędy marginalne: {totalMarginals}
-                    <span className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-slate-900" />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Tabela elementów */}
-            <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white">
-              <table className="w-full text-left border-collapse min-w-[760px]">
-                <thead className="bg-slate-50 border-b border-slate-200 text-xs font-bold text-slate-600 uppercase tracking-wider">
-                  <tr>
-                    <th className="px-5 py-3.5 w-[36%]">Przetestowany element / ekran</th>
-                    <th className="px-3 py-3.5 text-center w-[14%]">
-                      <div className="inline-flex items-center gap-1.5 text-red-700" title="Błędy o najwyższym priorytecie – blokery dostępności">
-                        <AlertOctagon size={13} className="text-red-700 shrink-0" />
-                        <span>Priorytetowe</span>
-                      </div>
-                    </th>
-                    <th className="px-3 py-3.5 text-center w-[14%]">
-                      <div className="inline-flex items-center gap-1.5 text-amber-800" title="Błędy o znaczącym wpływie na dostępność">
-                        <AlertTriangle size={13} className="text-amber-800 shrink-0" />
-                        <span>Ważne</span>
-                      </div>
-                    </th>
-                    <th className="px-3 py-3.5 text-center w-[14%]">
-                      <div className="inline-flex items-center gap-1.5 text-blue-700" title="Drobne uchybienia o charakterze marginalnym">
-                        <Info size={13} className="text-blue-700 shrink-0" />
-                        <span>Marginalne</span>
-                      </div>
-                    </th>
-                    <th className="px-4 py-3.5 w-[11%]">Kanał</th>
-                    <th className="px-5 py-3.5 text-right w-[11%]">Raport</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100 text-sm">
-                  {testedElements.map((item) => (
-                    <tr
-                      key={item.id}
-                      data-testid="tested-element-item"
-                      onClick={() => setView("raport-bledy")}
-                      className="hover:bg-slate-50/80 transition-colors cursor-pointer group"
-                      tabIndex={0}
+                  return (
+                    <div
+                      key={reaudit.id}
+                      className="flex flex-col sm:flex-row sm:items-center justify-between bg-slate-50/70 hover:bg-slate-100/80 border border-slate-200/80 hover:border-[#0038F8]/30 rounded-xl p-3 sm:p-3.5 transition-all cursor-pointer gap-4 group"
+                      onClick={() => {
+                        if (onOpenReauditDetails) {
+                          onOpenReauditDetails(reaudit);
+                        } else {
+                          setView("reaudyt-szczegoly");
+                        }
+                      }}
+                      title="Kliknij, aby otworzyć szczegółowy raport weryfikacji tego reaudytu"
                       role="button"
+                      tabIndex={0}
                       onKeyDown={(e) => {
                         if (e.key === "Enter" || e.key === " ") {
                           e.preventDefault();
-                          setView("raport-bledy");
+                          if (onOpenReauditDetails) {
+                            onOpenReauditDetails(reaudit);
+                          } else {
+                            setView("reaudyt-szczegoly");
+                          }
                         }
                       }}
                     >
-                      <td className="px-5 py-4">
-                        <div className="flex items-center gap-3.5">
-                          <div className="w-9 h-9 bg-slate-100 group-hover:bg-[#0038F8]/10 group-hover:text-[#0038F8] rounded-xl flex items-center justify-center text-slate-600 transition-colors shrink-0">
-                            <Layout size={18} />
+                      <div className="flex items-center gap-3.5 flex-1 min-w-[240px]">
+                        <div className="w-9 h-9 rounded-xl bg-blue-50 text-[#0038F8] group-hover:bg-[#0038F8] group-hover:text-white transition-colors flex items-center justify-center flex-shrink-0">
+                          <ClipboardCheck size={17} />
+                        </div>
+                        <div className="min-w-0 pr-3">
+                          <div className="text-[14px] font-bold text-slate-800 leading-snug group-hover:text-[#0038F8] transition-colors truncate">
+                            {reaudit.name}
                           </div>
-                          <span className="font-bold text-slate-800 text-[14px] group-hover:text-[#0038F8] transition-colors">
-                            {item.title}
+                          <div className="flex items-center gap-2 text-[11px] text-slate-500 font-medium mt-0.5 truncate flex-wrap">
+                            <span className="flex items-center gap-1 shrink-0">
+                              <Calendar size={11} /> {reaudit.date}
+                            </span>
+                            <span className="text-slate-300">•</span>
+                            <span className="flex items-center gap-1 shrink-0">
+                              <User size={11} /> {reaudit.auditor}
+                            </span>
+                            {prevErrors.length > 0 && (
+                              <>
+                                <span className="text-slate-300">•</span>
+                                <span className="text-emerald-700 font-bold bg-emerald-50 px-1.5 py-0.2 rounded text-[10px] border border-emerald-200">
+                                  Poprawiono: {fixedNum} / {prevErrors.length}
+                                </span>
+                              </>
+                            )}
+                            {hasNew && (
+                              <span className="text-amber-800 font-bold bg-amber-50 px-1.5 py-0.2 rounded text-[10px] border border-amber-200">
+                                +{reaudit.newErrors.length} nowe usterki
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex flex-wrap items-center justify-between sm:justify-end gap-3 sm:gap-5 w-full sm:w-auto mt-2 sm:mt-0 pt-2.5 sm:pt-0 border-t border-slate-200/60 sm:border-none">
+                        <div className="flex flex-col hidden sm:flex shrink-0 items-center justify-center">
+                          <span className="text-[10px] font-bold text-slate-600 uppercase tracking-widest mb-0.5">
+                            Złamane Kryt.
+                          </span>
+                          <span className="text-[15px] font-extrabold text-slate-800 text-center">
+                            {reaudit.brokenCriteria}
                           </span>
                         </div>
-                      </td>
-                      {/* Priorytetowe */}
-                      <td className="px-3 py-4 text-center whitespace-nowrap">
-                        <div className="relative group/tip inline-flex items-center justify-center">
-                          {item.priorities > 0 ? (
-                            <span
-                              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-red-50 text-red-700 border border-red-200/80 shadow-2xs cursor-help"
-                              title={`Błędy priorytetowe: ${item.priorities}`}
-                            >
-                              <AlertOctagon size={13} className="text-red-700 shrink-0" />
-                              <span>{item.priorities}</span>
-                            </span>
-                          ) : (
-                            <span
-                              className="inline-flex items-center justify-center w-7 h-7 rounded-lg text-xs font-bold text-slate-600 bg-slate-100 border border-slate-200 cursor-help"
-                              title="Brak błędów priorytetowych (0)"
-                            >
-                              0
-                            </span>
-                          )}
-                          <div
-                            role="tooltip"
-                            className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 pointer-events-none opacity-0 invisible group-hover/tip:opacity-100 group-hover/tip:visible transition-all duration-150 z-50 bg-slate-900 text-white text-[11px] font-semibold px-2.5 py-1 rounded-lg shadow-xl whitespace-nowrap"
-                          >
-                            Błędy priorytetowe: {item.priorities}
-                            <span className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-slate-900" />
-                          </div>
-                        </div>
-                      </td>
 
-                      {/* Ważne */}
-                      <td className="px-3 py-4 text-center whitespace-nowrap">
-                        <div className="relative group/tip inline-flex items-center justify-center">
-                          {item.warnings > 0 ? (
-                            <span
-                              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-50 text-amber-800 border border-amber-200/80 shadow-2xs cursor-help"
-                              title={`Błędy ważne: ${item.warnings}`}
-                            >
-                              <AlertTriangle size={13} className="text-amber-800 shrink-0" />
-                              <span>{item.warnings}</span>
-                            </span>
-                          ) : (
-                            <span
-                              className="inline-flex items-center justify-center w-7 h-7 rounded-lg text-xs font-bold text-slate-600 bg-slate-100 border border-slate-200 cursor-help"
-                              title="Brak błędów ważnych (0)"
-                            >
-                              0
-                            </span>
-                          )}
-                          <div
-                            role="tooltip"
-                            className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 pointer-events-none opacity-0 invisible group-hover/tip:opacity-100 group-hover/tip:visible transition-all duration-150 z-50 bg-slate-900 text-white text-[11px] font-semibold px-2.5 py-1 rounded-lg shadow-xl whitespace-nowrap"
+                        <div className="hidden sm:flex shrink-0 items-center justify-center">
+                          <Badge
+                            variant={
+                              reaudit.status === "Zakończony" ? "success" : "warning"
+                            }
+                            className="!py-0.5 !px-2.5 !text-[11px] w-max font-bold"
                           >
-                            Błędy ważne: {item.warnings}
-                            <span className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-slate-900" />
-                          </div>
+                            {reaudit.status}
+                          </Badge>
                         </div>
-                      </td>
 
-                      {/* Marginalne */}
-                      <td className="px-3 py-4 text-center whitespace-nowrap">
-                        <div className="relative group/tip inline-flex items-center justify-center">
-                          {item.marginals > 0 ? (
-                            <span
-                              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200/80 shadow-2xs cursor-help"
-                              title={`Błędy marginalne: ${item.marginals}`}
+                        <div className="flex shrink-0 items-center justify-end">
+                          <div className="flex items-center gap-2.5 bg-white px-2.5 py-1 rounded-lg border border-slate-200 shadow-2xs">
+                            <div
+                              className="relative group/tip flex items-center gap-1.5 border-r border-slate-200 pr-2.5 cursor-help"
+                              title={`Błędy priorytetowe: ${reaudit.criticalErrors}`}
                             >
-                              <Info size={13} className="text-blue-700 shrink-0" />
-                              <span>{item.marginals}</span>
-                            </span>
-                          ) : (
-                            <span
-                              className="inline-flex items-center justify-center w-7 h-7 rounded-lg text-xs font-bold text-slate-600 bg-slate-100 border border-slate-200 cursor-help"
-                              title="Brak błędów marginalnych (0)"
-                            >
-                              0
-                            </span>
-                          )}
-                          <div
-                            role="tooltip"
-                            className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 pointer-events-none opacity-0 invisible group-hover/tip:opacity-100 group-hover/tip:visible transition-all duration-150 z-50 bg-slate-900 text-white text-[11px] font-semibold px-2.5 py-1 rounded-lg shadow-xl whitespace-nowrap"
-                          >
-                            Błędy marginalne: {item.marginals}
-                            <span className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-slate-900" />
+                              <AlertOctagon size={13} className={reaudit.criticalErrors > 0 ? "text-red-700" : "text-slate-500"} />
+                              <span className={`text-[14px] font-black ${reaudit.criticalErrors > 0 ? "text-red-700" : "text-slate-600"}`}>
+                                {reaudit.criticalErrors}
+                              </span>
+                              <div
+                                role="tooltip"
+                                className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 pointer-events-none opacity-0 invisible group-hover/tip:opacity-100 group-hover/tip:visible transition-all duration-150 z-50 bg-slate-900 text-white text-[11px] font-semibold px-2.5 py-1 rounded-lg shadow-xl whitespace-nowrap"
+                              >
+                                Błędy priorytetowe: {reaudit.criticalErrors}
+                                <span className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-slate-900" />
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-1.5">
+                              <span className="text-[10px] font-bold text-slate-600 uppercase tracking-widest hidden sm:block">
+                                Zgodność:
+                              </span>
+                              <span
+                                className={`text-[14px] font-black ${
+                                  reaudit.score >= 80
+                                    ? "text-emerald-700"
+                                    : "text-amber-800"
+                                }`}
+                              >
+                                {reaudit.score}%
+                              </span>
+                            </div>
                           </div>
                         </div>
-                      </td>
-                      <td className="px-4 py-4 whitespace-nowrap">
-                        <div className="flex items-center gap-2 text-slate-600 text-xs font-medium">
-                          {getChannelIcon(item.channel)}
-                          <span>{item.channel}</span>
+                        <div className="w-8 flex justify-end shrink-0 hidden sm:flex">
+                          <ChevronRight size={18} className="text-slate-500 group-hover:text-[#0038F8] transition-colors" />
                         </div>
-                      </td>
-                      <td className="px-5 py-4 text-right whitespace-nowrap">
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setView("raport-bledy");
-                          }}
-                          className="inline-flex items-center justify-center gap-1.5 bg-[#0038F8] hover:bg-[#002ECC] text-white px-4 py-2 rounded-xl font-bold text-xs transition-colors shadow-sm cursor-pointer"
-                          title={`Zobacz raport błędów: ${item.title}`}
-                        >
-                          <span>Raport</span>
-                          <ArrowRight size={14} />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              /* STAN PUSTY - DLA AUDYTU BEZ READUDYTÓW */
+              <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50/70 p-6 sm:p-8 text-center flex flex-col items-center justify-center">
+                <div className="w-14 h-14 rounded-2xl bg-blue-50 text-[#0038F8] border border-blue-200/80 flex items-center justify-center mb-3.5 shadow-xs">
+                  <RotateCcw size={26} />
+                </div>
+                <h3 className="text-base sm:text-lg font-extrabold text-slate-900 mb-1">
+                  Ten audyt nie posiada jeszcze wykonanych reaudytów
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 max-w-xl mb-5 leading-relaxed">
+                  Dla tego audytu nie zarejestrowano jeszcze żadnego badania weryfikacyjnego. Po wdrożeniu poprawek zespół może formalnie zlecić reaudyt u audytora prowadzącego (<strong className="text-slate-800">{currentAudit.auditor}</strong>) lub samodzielnie zarejestrować wyniki badania.
+                </p>
+
+                {/* Box informacyjny z dedykowanym audytorem i SLA */}
+                <div className="w-full max-w-lg bg-white border border-slate-200 rounded-xl p-3.5 mb-5 flex items-center justify-between gap-3 text-left shadow-2xs">
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center shrink-0">
+                      <ShieldCheck size={18} />
+                    </div>
+                    <div>
+                      <div className="text-xs font-bold text-slate-900">
+                        Dedykowany audytor: {currentAudit.auditor}
+                      </div>
+                      <div className="text-[11px] text-slate-500 font-medium">
+                        Standardowy czas weryfikacji SLA: do 5 dni roboczych
+                      </div>
+                    </div>
+                  </div>
+                  <span className="hidden sm:inline-flex items-center gap-1 text-[11px] font-bold text-blue-700 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded-full shrink-0">
+                    Gotowy do zlecenia
+                  </span>
+                </div>
+
+                {/* Akcje w stanie pustym */}
+                <div className="flex items-center gap-3 flex-wrap justify-center">
+                  <button
+                    type="button"
+                    onClick={handleTriggerReaudit}
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#0038F8] hover:bg-[#002ECC] text-white text-xs sm:text-sm font-bold shadow-md shadow-blue-500/20 hover:shadow-lg transition-all cursor-pointer active:translate-y-px"
+                    title="Otwórz okno zamawiania reaudytu u audytora"
+                  >
+                    <RotateCcw size={15} />
+                    <span>Zleć reaudyt (Otwórz okno zamawiania)</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (onAddNewReaudit) onAddNewReaudit(currentAudit.title);
+                      else setView("reaudyt-nowy");
+                    }}
+                    className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 text-xs sm:text-sm font-bold shadow-2xs transition-colors cursor-pointer"
+                    title="Wprowadź i oceń błędy w edytorze reaudytu"
+                  >
+                    <Plus size={15} className="text-[#0038F8]" />
+                    <span>Wprowadź reaudyt ręcznie</span>
+                  </button>
+                </div>
+              </div>
+            )}
           </Card>
-        );
-      })()}
+
+          {/* Przetestowane Elementy - Widok tabelaryczny z czytelnym podziałem na wagi błędów */}
+          {(() => {
+            const testedElements = currentAudit.testedElements || [];
+            const totalPriorities = testedElements.reduce((acc, el) => acc + el.priorities, 0);
+            const totalWarnings = testedElements.reduce((acc, el) => acc + el.warnings, 0);
+            const totalMarginals = testedElements.reduce((acc, el) => acc + el.marginals, 0);
+
+            return (
+              <Card className="p-4 sm:p-5 bg-white border border-slate-200 rounded-xl shadow-xs" data-testid="tested-elements-card">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-4">
+                  <div>
+                    <div className="flex items-center gap-2.5">
+                      <h2 className="text-[16px] sm:text-[18px] font-bold text-slate-900">
+                        Przetestowane Elementy
+                      </h2>
+                      <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
+                        {testedElements.length}
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-600 mt-1">
+                      Wykaz zbadanych podstron i widoków z podziałem błędów według poziomu krytyczności
+                    </p>
+                  </div>
+
+                  {/* Legenda i łączne podsumowanie wag błędów z pełnym kontrastem WCAG AA */}
+                  <div className="flex flex-wrap items-center gap-2 self-start md:self-auto bg-slate-50 border border-slate-200 p-1.5 px-3 rounded-xl text-xs">
+                    <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider mr-1 hidden sm:inline">
+                      Łącznie błędów:
+                    </span>
+                    {/* Priorytetowe */}
+                    <div className="relative group/tip flex items-center">
+                      <div
+                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-red-50 text-red-700 border border-red-200 shadow-2xs cursor-help"
+                        title={`Błędy priorytetowe: ${totalPriorities}`}
+                      >
+                        <AlertOctagon size={13} className="text-red-700 shrink-0" />
+                        <span>{totalPriorities}</span>
+                        <span className="font-bold text-red-700 text-[11px] hidden sm:inline">priorytetowe</span>
+                      </div>
+                      <div
+                        role="tooltip"
+                        className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 pointer-events-none opacity-0 invisible group-hover/tip:opacity-100 group-hover/tip:visible transition-all duration-150 z-50 bg-slate-900 text-white text-[11px] font-semibold px-2.5 py-1 rounded-lg shadow-xl whitespace-nowrap"
+                      >
+                        Błędy priorytetowe: {totalPriorities}
+                        <span className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-slate-900" />
+                      </div>
+                    </div>
+
+                    {/* Ważne */}
+                    <div className="relative group/tip flex items-center">
+                      <div
+                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-50 text-amber-800 border border-amber-200 shadow-2xs cursor-help"
+                        title={`Błędy ważne: ${totalWarnings}`}
+                      >
+                        <AlertTriangle size={13} className="text-amber-800 shrink-0" />
+                        <span>{totalWarnings}</span>
+                        <span className="font-bold text-amber-800 text-[11px] hidden sm:inline">ważny</span>
+                      </div>
+                      <div
+                        role="tooltip"
+                        className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 pointer-events-none opacity-0 invisible group-hover/tip:opacity-100 group-hover/tip:visible transition-all duration-150 z-50 bg-slate-900 text-white text-[11px] font-semibold px-2.5 py-1 rounded-lg shadow-xl whitespace-nowrap"
+                      >
+                        Błędy ważne: {totalWarnings}
+                        <span className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-slate-900" />
+                      </div>
+                    </div>
+
+                    {/* Marginalne */}
+                    <div className="relative group/tip flex items-center">
+                      <div
+                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200 shadow-2xs cursor-help"
+                        title={`Błędy marginalne: ${totalMarginals}`}
+                      >
+                        <Info size={13} className="text-blue-700 shrink-0" />
+                        <span>{totalMarginals}</span>
+                        <span className="font-bold text-blue-700 text-[11px] hidden sm:inline">marginalne</span>
+                      </div>
+                      <div
+                        role="tooltip"
+                        className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 pointer-events-none opacity-0 invisible group-hover/tip:opacity-100 group-hover/tip:visible transition-all duration-150 z-50 bg-slate-900 text-white text-[11px] font-semibold px-2.5 py-1 rounded-lg shadow-xl whitespace-nowrap"
+                      >
+                        Błędy marginalne: {totalMarginals}
+                        <span className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-slate-900" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Tabela elementów */}
+                <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white">
+                  <table className="w-full text-left border-collapse min-w-[760px]">
+                    <thead className="bg-slate-50 border-b border-slate-200 text-xs font-bold text-slate-600 uppercase tracking-wider">
+                      <tr>
+                        <th className="px-5 py-3.5 w-[36%]">Przetestowany element / ekran</th>
+                        <th className="px-3 py-3.5 text-center w-[14%]">
+                          <div className="inline-flex items-center gap-1.5 text-red-700" title="Błędy o najwyższym priorytecie – blokery dostępności">
+                            <AlertOctagon size={13} className="text-red-700 shrink-0" />
+                            <span>Priorytetowe</span>
+                          </div>
+                        </th>
+                        <th className="px-3 py-3.5 text-center w-[14%]">
+                          <div className="inline-flex items-center gap-1.5 text-amber-800" title="Błędy o znaczącym wpływie na dostępność">
+                            <AlertTriangle size={13} className="text-amber-800 shrink-0" />
+                            <span>Ważne</span>
+                          </div>
+                        </th>
+                        <th className="px-3 py-3.5 text-center w-[14%]">
+                          <div className="inline-flex items-center gap-1.5 text-blue-700" title="Drobne uchybienia o charakterze marginalnym">
+                            <Info size={13} className="text-blue-700 shrink-0" />
+                            <span>Marginalne</span>
+                          </div>
+                        </th>
+                        <th className="px-4 py-3.5 w-[11%]">Kanał</th>
+                        <th className="px-5 py-3.5 text-right w-[11%]">Raport</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100 text-sm">
+                      {testedElements.map((item) => (
+                        <tr
+                          key={item.id}
+                          data-testid="tested-element-item"
+                          onClick={() => setView("raport-bledy")}
+                          className="hover:bg-slate-50/80 transition-colors cursor-pointer group"
+                          tabIndex={0}
+                          role="button"
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" || e.key === " ") {
+                              e.preventDefault();
+                              setView("raport-bledy");
+                            }
+                          }}
+                        >
+                          <td className="px-5 py-4">
+                            <div className="flex items-center gap-3.5">
+                              <div className="w-9 h-9 bg-slate-100 group-hover:bg-[#0038F8]/10 group-hover:text-[#0038F8] rounded-xl flex items-center justify-center text-slate-600 transition-colors shrink-0">
+                                <Layout size={18} />
+                              </div>
+                              <span className="font-bold text-slate-800 text-[14px] group-hover:text-[#0038F8] transition-colors">
+                                {item.title}
+                              </span>
+                            </div>
+                          </td>
+                          {/* Priorytetowe */}
+                          <td className="px-3 py-4 text-center whitespace-nowrap">
+                            <div className="relative group/tip inline-flex items-center justify-center">
+                              {item.priorities > 0 ? (
+                                <span
+                                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-red-50 text-red-700 border border-red-200/80 shadow-2xs cursor-help"
+                                  title={`Błędy priorytetowe: ${item.priorities}`}
+                                >
+                                  <AlertOctagon size={13} className="text-red-700 shrink-0" />
+                                  <span>{item.priorities}</span>
+                                </span>
+                              ) : (
+                                <span
+                                  className="inline-flex items-center justify-center w-7 h-7 rounded-lg text-xs font-bold text-slate-600 bg-slate-100 border border-slate-200 cursor-help"
+                                  title="Brak błędów priorytetowych (0)"
+                                >
+                                  0
+                                </span>
+                              )}
+                              <div
+                                role="tooltip"
+                                className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 pointer-events-none opacity-0 invisible group-hover/tip:opacity-100 group-hover/tip:visible transition-all duration-150 z-50 bg-slate-900 text-white text-[11px] font-semibold px-2.5 py-1 rounded-lg shadow-xl whitespace-nowrap"
+                              >
+                                Błędy priorytetowe: {item.priorities}
+                                <span className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-slate-900" />
+                              </div>
+                            </div>
+                          </td>
+
+                          {/* Ważne */}
+                          <td className="px-3 py-4 text-center whitespace-nowrap">
+                            <div className="relative group/tip inline-flex items-center justify-center">
+                              {item.warnings > 0 ? (
+                                <span
+                                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-50 text-amber-800 border border-amber-200/80 shadow-2xs cursor-help"
+                                  title={`Błędy ważne: ${item.warnings}`}
+                                >
+                                  <AlertTriangle size={13} className="text-amber-800 shrink-0" />
+                                  <span>{item.warnings}</span>
+                                </span>
+                              ) : (
+                                <span
+                                  className="inline-flex items-center justify-center w-7 h-7 rounded-lg text-xs font-bold text-slate-600 bg-slate-100 border border-slate-200 cursor-help"
+                                  title="Brak błędów ważnych (0)"
+                                >
+                                  0
+                                </span>
+                              )}
+                              <div
+                                role="tooltip"
+                                className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 pointer-events-none opacity-0 invisible group-hover/tip:opacity-100 group-hover/tip:visible transition-all duration-150 z-50 bg-slate-900 text-white text-[11px] font-semibold px-2.5 py-1 rounded-lg shadow-xl whitespace-nowrap"
+                              >
+                                Błędy ważne: {item.warnings}
+                                <span className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-slate-900" />
+                              </div>
+                            </div>
+                          </td>
+
+                          {/* Marginalne */}
+                          <td className="px-3 py-4 text-center whitespace-nowrap">
+                            <div className="relative group/tip inline-flex items-center justify-center">
+                              {item.marginals > 0 ? (
+                                <span
+                                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200/80 shadow-2xs cursor-help"
+                                  title={`Błędy marginalne: ${item.marginals}`}
+                                >
+                                  <Info size={13} className="text-blue-700 shrink-0" />
+                                  <span>{item.marginals}</span>
+                                </span>
+                              ) : (
+                                <span
+                                  className="inline-flex items-center justify-center w-7 h-7 rounded-lg text-xs font-bold text-slate-600 bg-slate-100 border border-slate-200 cursor-help"
+                                  title="Brak błędów marginalnych (0)"
+                                >
+                                  0
+                                </span>
+                              )}
+                              <div
+                                role="tooltip"
+                                className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 pointer-events-none opacity-0 invisible group-hover/tip:opacity-100 group-hover/tip:visible transition-all duration-150 z-50 bg-slate-900 text-white text-[11px] font-semibold px-2.5 py-1 rounded-lg shadow-xl whitespace-nowrap"
+                              >
+                                Błędy marginalne: {item.marginals}
+                                <span className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-slate-900" />
+                              </div>
+                            </div>
+                          </td>
+                          <td className="px-4 py-4 whitespace-nowrap">
+                            <div className="flex items-center gap-2 text-slate-600 text-xs font-medium">
+                              {getChannelIcon(item.channel)}
+                              <span>{item.channel}</span>
+                            </div>
+                          </td>
+                          <td className="px-5 py-4 text-right whitespace-nowrap">
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setView("raport-bledy");
+                              }}
+                              className="inline-flex items-center justify-center gap-1.5 bg-[#0038F8] hover:bg-[#002ECC] text-white px-4 py-2 rounded-xl font-bold text-xs transition-colors shadow-sm cursor-pointer"
+                              title={`Zobacz raport błędów: ${item.title}`}
+                            >
+                              <span>Raport</span>
+                              <ArrowRight size={14} />
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </Card>
+            );
+          })()}
         </div>
       </div>
-
     </div>
   );
 }
