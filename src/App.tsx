@@ -699,7 +699,7 @@ const INITIAL_AUDITOR_TICKETS = [
     contextType: "complaint",
     contextId: "RKL-2026-089",
     contextTitle: "Skarga #RKL-2026-089: Niedostępne wykresy notowań dla NVDA",
-    contextPath: "Skargi i reklamacje > #RKL-2026-089",
+    contextPath: "Skargi i zawiadomienia > #RKL-2026-089",
     contextView: "reklamacja-szczegoly",
     assignedDeveloper: "Kamil Bednarek",
     status: "waiting_auditor",
@@ -924,7 +924,7 @@ function ReauditRequestModal({
   isOpen,
   onClose,
   targetTitle,
-  targetType = "Audyt WCAG 2.1 AA",
+  targetType = "Audyt WCAG 2.2",
   auditor = "Piotr Smułkowski",
   onSubmit,
 }) {
@@ -974,15 +974,15 @@ function ReauditRequestModal({
             <div>
               <div className="flex items-center gap-2 flex-wrap mb-1">
                 <span className="text-[11px] font-bold uppercase tracking-wider text-[#0038F8] bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200/80">
-                  Panel Koordynatora Dostępności
+                  Panel Koordynacji Erste
                 </span>
-                <span className="text-xs text-slate-400 font-semibold">• {targetType}</span>
+                <span className="text-xs text-slate-400 font-semibold">• {targetType || "Audyt WCAG 2.2"}</span>
               </div>
               <h2 id="reaudit-modal-title" className="text-lg sm:text-xl font-extrabold text-slate-900 leading-snug">
-                Zlecenie formalnego re-audytu dostępności
+                Zlecenie re-audytu
               </h2>
               <p className="text-xs text-slate-500 font-medium mt-0.5">
-                Zgłoszenie wdrożonych poprawek do weryfikacji przez akredytowanego audytora WCAG.
+                Zgłoszenie wdrożonych poprawek do sprawdzenia przez audytora WCAG
               </p>
             </div>
           </div>
@@ -999,7 +999,7 @@ function ReauditRequestModal({
         <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-5">
           {/* Target Pill */}
           <div className="bg-slate-50 border border-slate-200 rounded-xl p-3.5 flex items-center justify-between gap-3 text-xs">
-            <span className="text-slate-500 font-semibold">Element audytowany:</span>
+            <span className="text-slate-500 font-semibold">Element audytowany</span>
             <span className="font-bold text-slate-900 text-right truncate">{targetTitle}</span>
           </div>
 
@@ -1013,11 +1013,11 @@ function ReauditRequestModal({
                 <div className="flex items-center gap-1.5">
                   <span className="font-bold text-slate-900 text-sm">{auditor}</span>
                   <span className="text-[10px] font-bold bg-[#0038F8] text-white px-1.5 py-0.5 rounded">
-                    Lead Auditor
+                    Audytor WCAG
                   </span>
                 </div>
                 <div className="text-xs text-slate-600 font-medium mt-0.5">
-                  Dedykowany opiekun i audytor prowadzący Twojej organizacji
+                  Audytor prowadzący Twojej organizacji
                 </div>
               </div>
             </div>
@@ -1031,7 +1031,7 @@ function ReauditRequestModal({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                URL środowiska testowego (Staging / Branch):
+                URL środowiska testowego
               </label>
               <input
                 type="text"
@@ -1043,7 +1043,7 @@ function ReauditRequestModal({
             </div>
             <div>
               <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                Tryb realizacji zlecenia:
+                Tryb realizacji zlecenia
               </label>
               <select
                 value={speed}
@@ -1060,7 +1060,7 @@ function ReauditRequestModal({
           {/* Notes for Auditor */}
           <div>
             <label className="block text-xs font-bold text-slate-700 mb-1.5">
-              Opis wprowadzonych poprawek przez zespół techniczny:
+              Opisz wprowadzone poprawki
             </label>
             <textarea
               rows={3}
@@ -1074,7 +1074,7 @@ function ReauditRequestModal({
           {/* Dodatkowy komentarz */}
           <div>
             <label className="block text-xs font-bold text-slate-700 mb-1.5">
-              Dodatkowy komentarz:
+              Wpisz dodatkowy komentarz
             </label>
             <textarea
               rows={2}
@@ -1094,7 +1094,7 @@ function ReauditRequestModal({
                 onChange={(e) => setRequestConsultation(e.target.checked)}
                 className="rounded text-[#0038F8] accent-[#0038F8] w-4 h-4"
               />
-              <span>Poproś o krótkie spotkanie online (30 min) z audytorem przed weryfikacją</span>
+              <span>Poproś o spotkanie online (30 min.) z audytorem przed rozpoczęciem re-audytu</span>
             </label>
             <label className="flex items-center gap-2 cursor-pointer font-medium text-slate-700">
               <input
@@ -1603,7 +1603,7 @@ const INITIAL_CLIENT_PROFILE: ClientProfile = {
   accountTier: "Enterprise EAA & WCAG 2.1 AA",
 
   // 2. Standardy audytowe & WCAG
-  wcagStandard: "WCAG 2.1 AA",
+  wcagStandard: "WCAG 2.2",
   targetScore: 90,
   auditCoordinatorName: "Kinga Wróblewska",
   auditCoordinatorEmail: "kinga.wroblewska@erstegroup.com",
@@ -1614,7 +1614,7 @@ const INITIAL_CLIENT_PROFILE: ClientProfile = {
 
   // 3. Profil użytkownika
   userName: "Kinga Wróblewska",
-  userRole: "Koordynator Dostępności Cyfrowej",
+  userRole: "Koordynacja Erste",
   userEmail: "kinga.wroblewska@erstegroup.com",
   userPhone: "+48 601 234 567",
   userAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix&backgroundColor=b6e3f4",
@@ -1819,7 +1819,7 @@ export default function App() {
   const [isReauditModalOpen, setIsReauditModalOpen] = useState(false);
   const [reauditContext, setReauditContext] = useState({
     targetTitle: "Aplikacja mobilna Android - wybrane procesy",
-    targetType: "Audyt WCAG 2.1 AA",
+    targetType: "Audyt WCAG 2.2",
     auditor: "Piotr Smułkowski",
   });
   const [toast, setToast] = useState(null);
@@ -1925,7 +1925,7 @@ export default function App() {
   };
 
   // Zlecenie formalnego re-audytu (otwiera okno zamawiania ReauditRequestModal)
-  const handleOpenReaudit = (title?: string, type = "Audyt WCAG 2.1 AA", auditor = "Piotr Smułkowski") => {
+  const handleOpenReaudit = (title?: string, type = "Audyt WCAG 2.2", auditor = "Piotr Smułkowski") => {
     setReauditContext({
       targetTitle:
         title ||
@@ -3179,7 +3179,7 @@ function CreateTicketModal({
         contextType === "error"
           ? "Audyty > Raport błędów"
           : contextType === "complaint"
-          ? "Skargi i reklamacje"
+          ? "Skargi i zawiadomienia"
           : "Audyty i weryfikacje",
       contextView:
         contextType === "error"
@@ -4981,7 +4981,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "Jak zgłosić nową skargę lub barierę zgłoszoną przez klienta?",
-    a: "Przejdź do zakładki 'Skargi i reklamacje' w górnym menu, a następnie kliknij przycisk '+ Nowe zgłoszenie' w prawym górnym rogu. Wypełnij formularz podając tytuł, priorytet, powiązaną usługę oraz dokładny opis sytuacji i używane technologie asystujące (np. NVDA). Zgłoszenie natychmiast trafi do kolejki certyfikowanych audytorów WCAG.",
+    a: "Przejdź do zakładki 'Skargi i zawiadomienia' w górnym menu, a następnie kliknij przycisk '+ Nowe zgłoszenie' w prawym górnym rogu. Wypełnij formularz podając tytuł, priorytet, powiązaną usługę oraz dokładny opis sytuacji i używane technologie asystujące (np. NVDA). Zgłoszenie natychmiast trafi do kolejki certyfikowanych audytorów WCAG.",
   },
   {
     q: "Dlaczego w rekomendacjach technicznych nie ma gotowego kodu programistycznego?",
@@ -5167,7 +5167,7 @@ function HelpGuideModal({ isOpen, onClose, currentView, onNavigate }) {
                     { id: "raport-bledy", label: "Błędy podstrony" },
                     { id: "baza-uslug", label: "Baza Usług" },
                     { id: "raportowanie", label: "Raportowanie" },
-                    { id: "reklamacje", label: "Skargi i reklamacje" },
+                    { id: "reklamacje", label: "Skargi i zawiadomienia" },
                     { id: "reklamacja-szczegoly", label: "Szczegóły skargi" },
                     { id: "komunikaty", label: "Komunikaty" },
                   ].map((v) => (
@@ -5485,7 +5485,7 @@ function TopNavbar({
     { id: "raporty", label: "Audyty", icon: ClipboardCheck },
     { id: "baza-uslug", label: "Baza Usług", icon: Library },
     { id: "raportowanie", label: "Raportowanie", icon: BarChart2 },
-    { id: "reklamacje", label: "Skargi i reklamacje", icon: MessageSquare },
+    { id: "reklamacje", label: "Skargi i zawiadomienia", icon: MessageSquare },
   ];
 
   return (
@@ -5633,7 +5633,7 @@ function TopNavbar({
                     {clientProfile?.userName || "Kinga Wróblewska"}
                   </span>
                   <span className="text-[10px] font-semibold text-slate-600">
-                    {clientProfile?.userRole || "Koordynator Dostępności"}
+                    {clientProfile?.userRole || "Koordynacja Erste"}
                   </span>
                 </div>
                 <ChevronDown
@@ -5656,7 +5656,7 @@ function TopNavbar({
                         {clientProfile?.userName || "Kinga Wróblewska"}
                       </div>
                       <div className="text-[11px] text-slate-600 font-medium">
-                        {clientProfile?.userRole || "Koordynator Dostępności"}
+                        {clientProfile?.userRole || "Koordynacja Erste"}
                       </div>
                       <div className="text-[10px] text-[#0038F8] font-bold mt-0.5">
                         {clientProfile?.orgName || "Erste Group Bank"}
@@ -5930,7 +5930,7 @@ function ViewHeader({
 
             {/* Subtitle */}
             {subtitle && (
-              <p className="text-slate-500 text-sm mt-1 leading-relaxed">
+              <p className="text-slate-600 text-sm sm:text-base mt-1.5 leading-relaxed">
                 {subtitle}
               </p>
             )}
@@ -6139,7 +6139,7 @@ function DashboardErrorsKpiCard({
             Otwarte Błędy
           </span>
           <InfoTooltip
-            text="Łącznie 239 zarejestrowanych barier dostępności: 47 priorytetowych (20%), 128 ważnych (54%) oraz 64 marginalne (26%)."
+            text="Łącznie 239 zarejestrowanych błędów, które wymagają poprawy: 47 priorytetowych (21%), 128 ważnych (54%) oraz 64 marginalne (26%)."
             position="top"
             align="left"
           />
@@ -6147,9 +6147,6 @@ function DashboardErrorsKpiCard({
         <div className="flex items-baseline gap-2">
           <span className="text-2xl sm:text-3xl font-extrabold text-slate-900">
             239
-          </span>
-          <span className="text-xs font-medium text-slate-500">
-            barier w systemach
           </span>
         </div>
       </div>
@@ -6159,7 +6156,7 @@ function DashboardErrorsKpiCard({
         {/* Pasek składowy - na pierwszy rzut oka widać dominację koloru bursztynowego (54%) */}
         <div
           className="w-full h-2 rounded-full bg-slate-100 flex overflow-hidden gap-0.5"
-          title="Struktura barier: Priorytetowe 20%, Ważne 54%, Marginalne 26%"
+          title="Struktura barier: Priorytetowe 21%, Ważne 54%, Marginalne 26%"
         >
           <div
             className="h-full bg-red-500 rounded-l-full"
@@ -6175,25 +6172,22 @@ function DashboardErrorsKpiCard({
           />
         </div>
 
-        {/* Czyste zestawienie liczbowo-procentowe */}
+        {/* Czyste zestawienie liczbowe bez zbędnych % */}
         <div className="flex items-center justify-between text-xs text-slate-600 mt-2">
           <div className="flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-red-500 shrink-0" />
             <span className="text-slate-500">Prio:</span>
             <span className="font-bold text-slate-900">47</span>
-            <span className="text-slate-400 text-[11px] font-normal">(20%)</span>
           </div>
           <div className="flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-amber-500 shrink-0" />
             <span className="text-amber-900 font-medium">Ważne:</span>
             <span className="font-black text-slate-900">128</span>
-            <span className="text-amber-700 text-[11px] font-bold">(54%)</span>
           </div>
           <div className="flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-blue-500 shrink-0" />
             <span className="text-slate-500">Marg:</span>
             <span className="font-bold text-slate-900">64</span>
-            <span className="text-slate-400 text-[11px] font-normal">(26%)</span>
           </div>
         </div>
       </div>
@@ -6239,8 +6233,8 @@ function DashboardView({
         breadcrumbs={[
           { label: "Pulpit" },
         ]}
-        title={`Witaj, ${clientProfile?.userName ? clientProfile.userName.split(" ")[0] : "Kinga"}`}
-        subtitle={`Oto aktualny stan dostępności cyfrowej dla organizacji ${clientProfile?.orgName || "Erste Group Bank"}.`}
+        title={clientProfile?.userName?.startsWith("Kinga") ? "Witaj, Kingo," : (clientProfile?.userName ? `Witaj, ${clientProfile.userName.split(" ")[0]},` : "Witaj, Kingo,")}
+        subtitle="znajdziesz tu aktualne wskaźniki dostępności, wyniki oceny zgodności z WCAG 2.2 oraz informacje, które pomogą Ci planować i monitorować działania naprawcze."
         actions={
           <>
             <button
@@ -6255,7 +6249,7 @@ function DashboardView({
               className="flex items-center gap-2 bg-[#0038F8] hover:bg-[#002ECC] text-white px-5 py-2.5 rounded-xl text-sm font-bold shadow-xs transition-colors cursor-pointer"
             >
               <ClipboardCheck size={16} />
-              <span>Przeglądaj audyty</span>
+              <span>Audyty</span>
             </button>
           </>
         }
@@ -6303,7 +6297,7 @@ function DashboardView({
 
               <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-slate-700 font-medium mt-1.5">
                 <span>
-                  Koordynator organizacji:{" "}
+                  Koordynacja Erste:{" "}
                   <button
                     type="button"
                     onClick={() => {
@@ -6322,7 +6316,7 @@ function DashboardView({
                 </span>
                 <span className="hidden sm:inline text-slate-300">•</span>
                 <span>
-                  Opiekun W-ally:{" "}
+                  Koordynacja W-ally:{" "}
                   <button
                     type="button"
                     onClick={() => {
@@ -6333,7 +6327,7 @@ function DashboardView({
                       }
                     }}
                     className="text-slate-900 hover:text-[#0038F8] font-bold underline decoration-slate-300 hover:decoration-[#0038F8] cursor-pointer inline-flex items-center gap-1"
-                    title="Zobacz profil Opiekuna W-ally i umów spotkanie 30 min"
+                    title="Zobacz profil Koordynatora W-ally i umów spotkanie 30 min"
                   >
                     <span>Tomasz Straszak</span>
                     <ExternalLink size={12} className="text-[#0038F8]" />
@@ -6376,7 +6370,7 @@ function DashboardView({
               Średnia Dostępność
             </span>
             <InfoTooltip
-              text="Średni zagregowany wskaźnik spełnienia kryteriów sukcesu WCAG 2.1 AA we wszystkich audytowanych serwisach i procesach cyfrowych."
+              text="Średni poziom spełnienia kryteriów WCAG 2.2 we wszystkich audytowanych serwisach i procesach cyfrowych."
               position="top"
               align="left"
             />
@@ -6390,7 +6384,7 @@ function DashboardView({
                 Cel: {clientProfile?.targetScore || 90}%
               </span>
               <InfoTooltip
-                text={`Strategiczny cel organizacji (${clientProfile?.orgName || "Erste Group"}) zdefiniowany w profilu organizacji, zgodny z wymaganiami ${clientProfile?.wcagStandard || "WCAG 2.1 AA"}.`}
+                text="Strategiczny cel Erste Group Bank AG."
                 position="top"
                 align="left"
               />
@@ -6411,7 +6405,7 @@ function DashboardView({
                 142 procesy
               </span>
               <InfoTooltip
-                text="Łączna liczba zinwentaryzowanych procesów w Bazie Usług podlegających cyklicznemu monitoringowi dostępności."
+                text="Liczba opisanych procesów w Bazie Usług"
                 position="bottom"
                 align="right"
               />
@@ -6422,7 +6416,7 @@ function DashboardView({
               Pokrycie Audytowe
             </span>
             <InfoTooltip
-              text="Odsetek zidentyfikowanych procesów i ścieżek cyfrowych posiadających aktualny i ważny audyt WCAG."
+              text="Odsetek opisanych procesów w Bazie Usług, które mają aktualny audyt dostępności."
               position="top"
               align="left"
             />
@@ -6447,7 +6441,7 @@ function DashboardView({
               Przeprowadzone Audyty
             </span>
             <InfoTooltip
-              text="Suma sfinalizowanych audytów certyfikacyjnych oraz re-audytów zarejestrowanych w systemie."
+              text="Liczba zakończonych audytów i re-audytów zarejestrowanych w W-ally"
               position="top"
               align="left"
             />
@@ -6459,7 +6453,7 @@ function DashboardView({
                 4 w trakcie
               </span>
               <InfoTooltip
-                text="Audyty oraz re-audyty aktualnie realizowane przez zespół certyfikowanych audytorów WCAG."
+                text="Audyty i re-audyty, które aktualnie realizuje zespół audytorów WCAG"
                 position="top"
                 align="left"
               />
@@ -6690,7 +6684,7 @@ function DashboardView({
                   Trend dostępności vs Błędy w czasie
                 </h3>
                 <InfoTooltip
-                  text="Zestawienie średniego wskaźnika zgodności WCAG (niebieskie słupki) z liczbą nowych wykrytych błędów (czerwone słupki) na przestrzeni ostatnich 12 miesięcy."
+                  text="Porównanie średniego poziomu zgodności z WCAG (niebieskie słupki) i liczby nowo wykrytych błędów (czerwone słupki) w ciągu ostatnich 12 miesięcy."
                   position="top"
                   align="left"
                 />
@@ -6909,7 +6903,7 @@ function DashboardView({
                     )}
                   </div>
                   <p className="text-xs text-slate-600 font-medium mt-0.5">
-                    Bezpośredni kontakt merytoryczny z zespołem audytorów WCAG bez konieczności spotkań online.
+                    Bezpośredni kontakt z zespołem audytorów WCAG
                   </p>
                 </div>
               </div>
@@ -7103,7 +7097,7 @@ function DashboardView({
                       <ExternalLink size={13} className="text-slate-400 group-hover/opiekun:text-[#0038F8]" />
                     </span>
                     <span className="text-xs font-bold text-slate-700 bg-white px-2 py-0.5 rounded-md border border-slate-200 shadow-2xs">
-                      Opiekun Klienta
+                      Koordynacja W-ally
                     </span>
                     <span className="text-xs font-bold text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-md border border-emerald-200 flex items-center gap-1">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block"></span>
@@ -7129,8 +7123,6 @@ function DashboardView({
                       <Mail size={13} className="text-[#0038F8]" />
                       <span>tomek@widzialni.eu</span>
                     </a>
-                    <span className="text-slate-300 hidden sm:inline">•</span>
-                    <span className="text-slate-500 text-xs hidden sm:inline">Ustalenia, wyceny, dystrybucja zadań</span>
                   </div>
                 </div>
               </div>
@@ -9211,7 +9203,7 @@ const SHARED_AUDITS_LIST: SharedAuditItem[] = [
     period: "15.02.2026 - 04.03.2026",
     status: "Zakończony",
     title: "Aplikacja mobilna Android - wybrane procesy",
-    subtitle: "Raport z badania dostępności aplikacji natywnej Android WCAG 2.1 AA",
+    subtitle: "Raport z badania dostępności aplikacji natywnej Android WCAG 2.2",
     devices: "Android",
     priority: "2",
     critical: 2,
@@ -9238,7 +9230,7 @@ const SHARED_AUDITS_LIST: SharedAuditItem[] = [
     period: "01.04.2026 - 15.04.2026",
     status: "W trakcie",
     title: "Serwis transakcyjny - Nowy Dashboard",
-    subtitle: "Raport z audytu nowego pulpitu transakcyjnego WCAG 2.1 AA",
+    subtitle: "Raport z audytu nowego pulpitu transakcyjnego WCAG 2.2",
     devices: "Desktop",
     priority: "5",
     critical: 5,
@@ -9678,33 +9670,16 @@ function RaportyView({
               <h1 className="text-[24px] sm:text-[32px] font-extrabold text-slate-900 tracking-tight leading-tight">
                 Raporty z audytów
               </h1>
-              <p className="text-slate-500 text-sm mt-1 leading-relaxed">
-                Przeglądaj i filtruj dynamicznie wyniki przeprowadzonych audytów cyfrowych.
+              <p className="text-slate-600 text-sm mt-1 leading-relaxed">
+                Filtruj i przeglądaj wyniki przeprowadzanych audytów.
               </p>
-            </div>
-            <div className="flex items-center gap-2 flex-wrap shrink-0">
-              <button
-                type="button"
-                onClick={() => setView("reaudyt-nowy")}
-                className="inline-flex items-center justify-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 border border-slate-300 px-3.5 py-2 text-xs font-bold rounded-lg shadow-2xs transition-all cursor-pointer active:translate-y-px"
-                title="Wprowadź i zarejestruj wyniki ponownego audytu ręcznie"
-              >
-                <Plus size={14} className="text-[#0038F8]" />
-                <span>Dodaj Reaudyt</span>
-              </button>
-              <ReauditButton
-                onClick={() => {
-                  if (onOpenReaudit) onOpenReaudit();
-                }}
-                variant="primary"
-              />
             </div>
           </div>
 
         <div className="mb-3">
           <Input
             icon={Search}
-            placeholder="Wyszukaj audyt po tytule, banku lub kanale..."
+            placeholder="Wyszukaj audyt po tytule, statusie lub kanale..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full bg-white"
@@ -9778,6 +9753,22 @@ function RaportyView({
               </button>
               {activeDropdown === "status" && (
                 <div className="absolute top-full left-0 mt-1.5 w-52 bg-white border border-slate-200 rounded-xl shadow-xl z-50 p-2 space-y-1">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSelectedStatuses({});
+                      setActiveDropdown(null);
+                    }}
+                    className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold text-left transition-colors cursor-pointer ${
+                      !Object.values(selectedStatuses).some(Boolean)
+                        ? "bg-[#0038F8] text-white"
+                        : "hover:bg-slate-100 text-slate-700"
+                    }`}
+                  >
+                    <span>Wszystkie audyty</span>
+                    {!Object.values(selectedStatuses).some(Boolean) && <CheckCircle2 size={13} className="text-white" />}
+                  </button>
+                  <div className="h-px bg-slate-100 my-1" />
                   {["Zakończony", "W trakcie", "Nowy"].map((st) => {
                     const isChecked = Boolean(selectedStatuses[st]);
                     return (
@@ -9826,6 +9817,22 @@ function RaportyView({
               </button>
               {activeDropdown === "kanal" && (
                 <div className="absolute top-full left-0 mt-1.5 w-52 bg-white border border-slate-200 rounded-xl shadow-xl z-50 p-2 space-y-1">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSelectedChannels({});
+                      setActiveDropdown(null);
+                    }}
+                    className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold text-left transition-colors cursor-pointer ${
+                      !Object.values(selectedChannels).some(Boolean)
+                        ? "bg-[#0038F8] text-white"
+                        : "hover:bg-slate-100 text-slate-700"
+                    }`}
+                  >
+                    <span>Wszystkie kanały</span>
+                    {!Object.values(selectedChannels).some(Boolean) && <CheckCircle2 size={13} className="text-white" />}
+                  </button>
+                  <div className="h-px bg-slate-100 my-1" />
                   {["Desktop", "iOS", "Android", "Dokumenty"].map((ch) => {
                     const isChecked = Boolean(selectedChannels[ch]);
                     return (
@@ -10357,14 +10364,14 @@ function RaportyView({
                                 e.stopPropagation();
                                 if (onSelectAudit) onSelectAudit(audit.id);
                                 if (onOpenReaudit) {
-                                  onOpenReaudit(audit.title, "Audyt WCAG 2.1 AA", audit.auditor);
+                                  onOpenReaudit(audit.title, "Audyt WCAG 2.2", audit.auditor);
                                 }
                               }}
                               className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 hover:text-slate-900 transition-colors cursor-pointer"
-                              title={`Zleć reaudyt dla "${audit.title}" (otwiera okno zamawiania)`}
+                              title={`Zleć re-audyt dla "${audit.title}" (otwiera okno zamawiania)`}
                             >
                               <RotateCcw size={12} className="text-[#0038F8]" />
-                              <span>Zleć reaudyt</span>
+                              <span>Zleć re-audyt</span>
                             </button>
                             <button
                               type="button"
@@ -10411,7 +10418,7 @@ function RaportyView({
                   e?.stopPropagation();
                   if (onSelectAudit) onSelectAudit(audit.id);
                   if (onOpenReaudit) {
-                    onOpenReaudit(audit.title, "Audyt WCAG 2.1 AA", audit.auditor);
+                    onOpenReaudit(audit.title, "Audyt WCAG 2.2", audit.auditor);
                   }
                 }}
                 onClick={() => {
@@ -10478,10 +10485,10 @@ function ReportCard({
           {!hasReaudits && (
             <span
               className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200"
-              title="Ten audyt nie ma jeszcze wykonanych reaudytów (0 reaudytów)"
+              title="Ten audyt nie ma jeszcze wykonanych re-audytów (0 re-audytów)"
             >
               <RotateCcw size={10} className="text-amber-700" />
-              0 reaudytów
+              0 re-audytów
             </span>
           )}
           <button
@@ -10544,10 +10551,10 @@ function ReportCard({
             {/* Ważne */}
             <div className="relative group/tip flex items-center">
               <span
-                className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[11px] font-bold bg-amber-50 text-amber-800 border border-amber-200 cursor-help"
+                className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[11px] font-bold bg-amber-50 text-amber-700 border border-amber-200 cursor-help"
                 title={`Błędy ważne: ${important}`}
               >
-                <AlertTriangle size={11} className="text-amber-800" />
+                <AlertTriangle size={11} className="text-amber-700" />
                 {important}
               </span>
               <div
@@ -10579,7 +10586,7 @@ function ReportCard({
           </div>
           <div className="flex flex-col w-16 sm:w-20 shrink-0">
             <span className="text-[10px] font-bold text-slate-600 uppercase tracking-wider mb-0.5">
-              Zgodność
+              Wynik WCAG
             </span>
             <span
               className={`text-base sm:text-lg font-black leading-none ${
@@ -10602,7 +10609,7 @@ function ReportCard({
               if (onOpenReaudit) onOpenReaudit(e);
             }}
             className="h-8 sm:h-9 px-2.5 bg-slate-100 hover:bg-[#0038F8] hover:text-white text-slate-700 rounded-lg sm:rounded-xl flex items-center gap-1 text-xs font-bold transition-all shadow-2xs cursor-pointer"
-            title="Zleć formalny reaudyt dla tego audytu (otwiera okno zamawiania)"
+            title="Zleć formalny re-audyt dla tego audytu (otwiera okno zamawiania)"
           >
             <RotateCcw size={12} />
             <span className="hidden xl:inline">Zleć</span>
@@ -10737,18 +10744,18 @@ function ReportSummaryView({
             {auditReaudits.length === 0 ? (
               <span className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-800 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-md">
                 <RotateCcw size={11} className="text-amber-700" />
-                <span>Brak reaudytów (0)</span>
+                <span>Brak re-audytów (0)</span>
               </span>
             ) : (
               <span className="inline-flex items-center gap-1 text-[11px] font-bold text-blue-700 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded-md">
                 <ClipboardCheck size={11} className="text-blue-700" />
-                <span>Reaudyty: {auditReaudits.length}</span>
+                <span>Re-audyty: {auditReaudits.length}</span>
               </span>
             )}
           </div>
         }
         title={currentAudit.title}
-        subtitle={currentAudit.subtitle || "Raport z badania dostępności cyfrowej WCAG 2.1 AA"}
+        subtitle="Raport z badania dostępności cyfrowej WCAG 2.2"
         actions={
           <div className="flex items-center gap-2 flex-wrap">
             <button
@@ -10792,7 +10799,7 @@ function ReportSummaryView({
               className="flex justify-center items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 border border-slate-300 px-3.5 py-2 rounded-lg font-bold shadow-2xs transition-colors text-xs cursor-pointer active:translate-y-px"
               title="Wprowadź i zarejestruj wyniki ponownego audytu ręcznie"
             >
-              <Plus size={14} className="text-[#0038F8]" /> <span>Dodaj Reaudyt</span>
+              <Plus size={14} className="text-[#0038F8]" /> <span>Dodaj re-audyt</span>
             </button>
             <ReauditButton
               onClick={handleTriggerReaudit}
@@ -10824,10 +10831,10 @@ function ReportSummaryView({
                     ? "bg-[#0038F8] text-white shadow-xs"
                     : "bg-slate-100 text-slate-700 hover:bg-slate-200"
                 }`}
-                title="Pokaż audyt bez zrobionych reaudytów (Android - 0 reaudytów)"
+                title="Pokaż audyt bez zrobionych re-audytów (Android - 0 re-audytów)"
               >
                 <Smartphone size={13} />
-                <span>Audyt bez reaudytów (Android - 0 reaudytów)</span>
+                <span>Audyt bez re-audytów (Android - 0 re-audytów)</span>
               </button>
               <button
                 type="button"
@@ -10837,10 +10844,10 @@ function ReportSummaryView({
                     ? "bg-[#0038F8] text-white shadow-xs"
                     : "bg-slate-100 text-slate-700 hover:bg-slate-200"
                 }`}
-                title="Pokaż audyt z wykonanymi reaudytami (Portal - 2 reaudyty)"
+                title="Pokaż audyt z wykonanymi re-audytami (Portal - 2 re-audyty)"
               >
                 <MonitorSmartphone size={13} />
-                <span>Audyt z reaudytami (Portal - 2 reaudyty)</span>
+                <span>Audyt z re-audytami (Portal - 2 re-audyty)</span>
               </button>
             </div>
           </div>
@@ -10862,23 +10869,8 @@ function ReportSummaryView({
                 <div className="w-px h-3.5 bg-slate-200 hidden sm:block" />
                 <div className="flex items-center gap-1.5">
                   <ShieldCheck size={14} className="text-[#0038F8]" />
-                  <span>Standard: <strong className="text-slate-800 font-bold">WCAG 2.1 Poziom AA</strong></span>
+                  <span>Standard: <strong className="text-slate-800 font-bold">WCAG 2.2</strong></span>
                 </div>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold ${
-                  currentAudit.status === "Zakończony"
-                    ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
-                    : "bg-amber-50 text-amber-800 border border-amber-200"
-                }`}>
-                  {currentAudit.status === "Zakończony" ? (
-                    <CheckCircle2 size={12} className="text-emerald-600" />
-                  ) : (
-                    <Activity size={12} className="text-amber-600" />
-                  )}
-                  <span>{currentAudit.status === "Zakończony" ? "Audyt zatwierdzony" : "Audyt w trakcie"}</span>
-                </span>
               </div>
             </div>
 
@@ -10901,14 +10893,14 @@ function ReportSummaryView({
 
           {/* RZĄD 5 KART KPI - ZGODNOŚĆ + WSZYSTKIE 3 WAGI BŁĘDÓW + KRYTERIA (PEŁEN KONTRAST WCAG AA) */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
-            {/* 1. Dostępność */}
+            {/* 1. Wynik WCAG */}
             <Card className="p-3.5 sm:p-4 hover:border-[#0038F8]/30 transition-all flex items-center gap-3.5">
               <div className="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0 border border-emerald-200/80">
                 <CheckCircle2 size={22} />
               </div>
               <div className="min-w-0">
                 <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider block truncate">
-                  Dostępność
+                  Wynik WCAG
                 </span>
                 <span className="text-2xl font-black text-slate-900 leading-tight">
                   {currentAudit.score}
@@ -10988,11 +10980,11 @@ function ReportSummaryView({
               <div className="flex items-center gap-2">
                 <History size={18} className="text-[#0038F8]" />
                 <h2 className="text-[15px] sm:text-base font-bold text-slate-900">
-                  Historia i Reaudyty ({auditReaudits.length})
+                  Historia i re-audyty ({auditReaudits.length})
                 </h2>
                 {auditReaudits.length === 0 && (
                   <span className="text-[11px] font-bold text-amber-800 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full">
-                    Brak wykonanych reaudytów
+                    Brak wykonanych re-audytów
                   </span>
                 )}
               </div>
@@ -11007,7 +10999,7 @@ function ReportSummaryView({
                   title="Wprowadź i zarejestruj wyniki ponownego audytu ręcznie"
                 >
                   <Plus size={13} className="text-[#0038F8]" />
-                  <span>Dodaj Reaudyt</span>
+                  <span>Dodaj re-audyt</span>
                 </button>
                 <ReauditButton
                   onClick={handleTriggerReaudit}
@@ -11152,10 +11144,10 @@ function ReportSummaryView({
                   <RotateCcw size={26} />
                 </div>
                 <h3 className="text-base sm:text-lg font-extrabold text-slate-900 mb-1">
-                  Ten audyt nie posiada jeszcze wykonanych reaudytów
+                  Ten audyt nie posiada jeszcze wykonanych re-audytów
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-600 max-w-xl mb-5 leading-relaxed">
-                  Dla tego audytu nie zarejestrowano jeszcze żadnego badania weryfikacyjnego. Po wdrożeniu poprawek zespół może formalnie zlecić reaudyt u audytora prowadzącego (<strong className="text-slate-800">{currentAudit.auditor}</strong>) lub samodzielnie zarejestrować wyniki badania.
+                  Dla tego audytu nie zarejestrowano jeszcze żadnego badania weryfikacyjnego. Po wdrożeniu poprawek zespół może formalnie zlecić re-audyt u audytora prowadzącego (<strong className="text-slate-800">{currentAudit.auditor}</strong>) lub samodzielnie zarejestrować wyniki badania.
                 </p>
 
                 {/* Box informacyjny z dedykowanym audytorem i SLA */}
@@ -11184,10 +11176,10 @@ function ReportSummaryView({
                     type="button"
                     onClick={handleTriggerReaudit}
                     className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#0038F8] hover:bg-[#002ECC] text-white text-xs sm:text-sm font-bold shadow-md shadow-blue-500/20 hover:shadow-lg transition-all cursor-pointer active:translate-y-px"
-                    title="Otwórz okno zamawiania reaudytu u audytora"
+                    title="Otwórz okno zamawiania re-audytu u audytora"
                   >
                     <RotateCcw size={15} />
-                    <span>Zleć reaudyt (Otwórz okno zamawiania)</span>
+                    <span>Zleć re-audyt (Otwórz okno zamawiania)</span>
                   </button>
                   <button
                     type="button"
@@ -11196,17 +11188,17 @@ function ReportSummaryView({
                       else setView("reaudyt-nowy");
                     }}
                     className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 text-xs sm:text-sm font-bold shadow-2xs transition-colors cursor-pointer"
-                    title="Wprowadź i oceń błędy w edytorze reaudytu"
+                    title="Wprowadź i oceń błędy w edytorze re-audytu"
                   >
                     <Plus size={15} className="text-[#0038F8]" />
-                    <span>Wprowadź reaudyt ręcznie</span>
+                    <span>Wprowadź re-audyt ręcznie</span>
                   </button>
                 </div>
               </div>
             )}
           </Card>
 
-          {/* Przetestowane Elementy - Widok tabelaryczny z czytelnym podziałem na wagi błędów */}
+          {/* Przetestowane elementy - Widok tabelaryczny z czytelnym podziałem na wagi błędów */}
           {(() => {
             const testedElements = currentAudit.testedElements || [];
             const totalPriorities = testedElements.reduce((acc, el) => acc + el.priorities, 0);
@@ -11219,7 +11211,7 @@ function ReportSummaryView({
                   <div>
                     <div className="flex items-center gap-2.5">
                       <h2 className="text-[16px] sm:text-[18px] font-bold text-slate-900">
-                        Przetestowane Elementy
+                        Przetestowane elementy
                       </h2>
                       <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
                         {testedElements.length}
@@ -11361,10 +11353,11 @@ function ReportSummaryView({
                                 </span>
                               ) : (
                                 <span
-                                  className="inline-flex items-center justify-center w-7 h-7 rounded-lg text-xs font-bold text-slate-600 bg-slate-100 border border-slate-200 cursor-help"
+                                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold text-slate-400 bg-slate-50 border border-slate-200/80 shadow-2xs cursor-help"
                                   title="Brak błędów priorytetowych (0)"
                                 >
-                                  0
+                                  <AlertOctagon size={13} className="text-slate-400 shrink-0" />
+                                  <span>0</span>
                                 </span>
                               )}
                               <div
@@ -11390,10 +11383,11 @@ function ReportSummaryView({
                                 </span>
                               ) : (
                                 <span
-                                  className="inline-flex items-center justify-center w-7 h-7 rounded-lg text-xs font-bold text-slate-600 bg-slate-100 border border-slate-200 cursor-help"
+                                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold text-slate-400 bg-slate-50 border border-slate-200/80 shadow-2xs cursor-help"
                                   title="Brak błędów ważnych (0)"
                                 >
-                                  0
+                                  <AlertTriangle size={13} className="text-slate-400 shrink-0" />
+                                  <span>0</span>
                                 </span>
                               )}
                               <div
@@ -11419,10 +11413,11 @@ function ReportSummaryView({
                                 </span>
                               ) : (
                                 <span
-                                  className="inline-flex items-center justify-center w-7 h-7 rounded-lg text-xs font-bold text-slate-600 bg-slate-100 border border-slate-200 cursor-help"
+                                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold text-slate-400 bg-slate-50 border border-slate-200/80 shadow-2xs cursor-help"
                                   title="Brak błędów marginalnych (0)"
                                 >
-                                  0
+                                  <Info size={13} className="text-slate-400 shrink-0" />
+                                  <span>0</span>
                                 </span>
                               )}
                               <div
@@ -16962,10 +16957,10 @@ function ComplaintsModuleView({
       <ViewHeader
         breadcrumbs={[
           { label: "Pulpit", onClick: () => setView("przeglad") },
-          { label: "Skargi i reklamacje" },
+          { label: "Skargi i zawiadomienia" },
         ]}
-        title="Moduł Skarg i reklamacji"
-        subtitle="Zgłaszaj skargi i reklamacje dostępności od klientów, przypisuj zespoły deweloperskie i wdrażaj gotowe rekomendacje techniczne."
+        title="Moduł Skarg i zawiadomień"
+        subtitle="Zgłaszaj skargi i zawiadomienia o braku dostępności od klientów, przypisuj zespoły deweloperskie i wdrażaj gotowe rekomendacje techniczne."
         actions={
           <div className="flex items-center gap-2 flex-wrap">
             <button
@@ -17865,7 +17860,7 @@ function ComplaintDetailsView({
       <ViewHeader
         breadcrumbs={[
           { label: "Pulpit", onClick: () => setView("przeglad") },
-          { label: "Skargi i reklamacje", onClick: () => setView("reklamacje") },
+          { label: "Skargi i zawiadomienia", onClick: () => setView("reklamacje") },
           { label: `Zgłoszenie #${complaint.id}` },
         ]}
         badges={
@@ -18842,10 +18837,10 @@ function ComplaintCreateView({
       <ViewHeader
         breadcrumbs={[
           { label: "Pulpit", onClick: () => setView("przeglad") },
-          { label: "Skargi i reklamacje", onClick: () => setView("reklamacje") },
+          { label: "Skargi i zawiadomienia", onClick: () => setView("reklamacje") },
           { label: "Nowe zgłoszenie" },
         ]}
-        title="Nowe zgłoszenie skargi / reklamacji"
+        title="Nowe zgłoszenie skargi / zawiadomienia"
         subtitle="Opisz problem dostępności zgłoszony przez klienta. Nasi certyfikowani audytorzy WCAG przeanalizują kod i przygotują gotowe rekomendacje techniczne."
         actions={
           <button
