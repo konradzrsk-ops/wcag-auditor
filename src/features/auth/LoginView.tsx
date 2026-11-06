@@ -238,7 +238,8 @@ export function LoginView({ onLogin }: LoginViewProps) {
               </Button>
             </div>
 
-            {/* Security notice */}
+            {/* Security notice - tymczasowo ukryty na życzenie użytkownika */}
+            {/*
             <div className="mt-8 p-4 bg-blue-50/50 border border-blue-100 rounded-control flex items-start gap-3">
               <ShieldCheck
                 size={20}
@@ -258,6 +259,7 @@ export function LoginView({ onLogin }: LoginViewProps) {
                 .
               </p>
             </div>
+            */}
           </div>
 
           {/* Footer */}
@@ -346,7 +348,8 @@ export function LoginView({ onLogin }: LoginViewProps) {
               deklaracje PAD z jednego, scentralizowanego miejsca.
             </p>
 
-            {/* Testimonial */}
+            {/* Testimonial - tymczasowo ukryty na życzenie użytkownika */}
+            {/*
             <div className="bg-white/5 border border-white/10 p-6 rounded-2xl backdrop-blur-sm">
               <div className="flex gap-1 text-amber-400 mb-3" aria-hidden="true">
                 {[1, 2, 3, 4, 5].map((i) => (
@@ -379,6 +382,7 @@ export function LoginView({ onLogin }: LoginViewProps) {
                 </div>
               </div>
             </div>
+            */}
           </div>
         </div>
       </div>

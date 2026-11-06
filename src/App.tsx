@@ -2439,6 +2439,8 @@ function LoginView({ onLogin }) {
                 </button>
               </form>
 
+              {/* Tymczasowo ukryty komunikat o koncie służbowym / polityce bezpieczeństwa na życzenie użytkownika */}
+              {/*
               <div className="mt-8 p-4 bg-slate-50 border border-slate-200/80 rounded-xl flex items-start gap-3">
                 <ShieldCheck
                   size={20}
@@ -2456,6 +2458,7 @@ function LoginView({ onLogin }) {
                   .
                 </p>
               </div>
+              */}
             </div>
 
             {/* Stopka */}
@@ -2523,6 +2526,8 @@ function LoginView({ onLogin }) {
                 )}
               </p>
 
+              {/* Tymczasowo ukryta sekcja referencji (testimonial) na życzenie użytkownika */}
+              {/*
               <div className="bg-white/5 border border-white/10 p-6 rounded-xl backdrop-blur-sm">
                 <div className="flex gap-1 text-amber-400 mb-3">
                   {[1, 2, 3, 4, 5].map((i) => (
@@ -2557,6 +2562,7 @@ function LoginView({ onLogin }) {
                   </div>
                 </div>
               </div>
+              */}
             </div>
           </div>
         </div>
