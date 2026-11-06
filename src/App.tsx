@@ -1784,8 +1784,29 @@ class AppErrorBoundary extends React.Component<AppErrorBoundaryProps, AppErrorBo
 // ==========================================
 
 export default function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [currentView, setCurrentView] = useState("przeglad");
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
+    if (typeof window !== "undefined") {
+      const h = window.location.hash;
+      if (h === "#makiety-popup" || h === "#ukryte-makiety-popup") {
+        return true;
+      }
+      try {
+        return localStorage.getItem("wcag_auditor_authenticated") === "true";
+      } catch {
+        return false;
+      }
+    }
+    return false;
+  });
+  const [currentView, setCurrentView] = useState<string>(() => {
+    if (typeof window !== "undefined") {
+      const h = window.location.hash;
+      if (h === "#makiety-popup" || h === "#ukryte-makiety-popup") {
+        return "ukryte-makiety-popup";
+      }
+    }
+    return "przeglad";
+  });
   const [clientProfile, setClientProfile] = useState<ClientProfile>(() => {
     try {
       const saved = localStorage.getItem("wcag_auditor_client_profile");
@@ -1868,6 +1889,7 @@ export default function App() {
     const checkHash = () => {
       const h = window.location.hash;
       if (h === "#makiety-popup" || h === "#ukryte-makiety-popup") {
+        setIsAuthenticated(true);
         setCurrentView("ukryte-makiety-popup");
       }
     };
@@ -1948,8 +1970,22 @@ export default function App() {
     setCurrentView("reaudyt-szczegoly");
   };
 
-  if (!isAuthenticated) {
-    return <LoginView onLogin={() => setIsAuthenticated(true)} />;
+  const handleLogin = () => {
+    try {
+      localStorage.setItem("wcag_auditor_authenticated", "true");
+    } catch {}
+    setIsAuthenticated(true);
+  };
+
+  const handleLogout = () => {
+    try {
+      localStorage.removeItem("wcag_auditor_authenticated");
+    } catch {}
+    setIsAuthenticated(false);
+  };
+
+  if (!isAuthenticated && currentView !== "ukryte-makiety-popup") {
+    return <LoginView onLogin={handleLogin} />;
   }
 
   return (
@@ -1969,7 +2005,7 @@ export default function App() {
         <TopNavbar
           currentView={currentView}
           setCurrentView={setCurrentView}
-          onLogout={() => setIsAuthenticated(false)}
+          onLogout={handleLogout}
           isAnnouncementsOpen={isAnnouncementsOpen}
           setIsAnnouncementsOpen={setIsAnnouncementsOpen}
           announcements={announcements}

@@ -35,23 +35,8 @@
       window.addEventListener('load', function() {
         sessionStorage.removeItem('wally_auto_reload');
       });
-
-      // Jeśli strona jest serwowana statycznie ze środowiska GitHub Pages (np. bezpośrednio z gałęzi main)
-      if (window.location.hostname.includes('github.io') && !document.querySelector('script[src*="assets/index"]')) {
-        var link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.crossOrigin = '';
-        link.href = './assets/index-BNm_JkOM.css';
-        document.head.appendChild(link);
-
-        var script = document.createElement('script');
-        script.type = 'module';
-        script.crossOrigin = '';
-        script.src = './assets/index-BnUC1kFj.js';
-        document.head.appendChild(script);
-      }
     </script>
-    <script type="module" crossorigin src="./assets/index-BY0jf-ke.js"></script>
+    <script type="module" crossorigin src="./assets/index-DTxG_M1z.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-BFVRItvE.css">
   </head>
   <body class="font-sans antialiased bg-slate-50">
