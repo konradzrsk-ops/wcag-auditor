@@ -71,14 +71,11 @@ export function AuditListView() {
     },
     {
       id: "client",
-      label: "Klient",
+      label: "Organizacja",
       type: "select",
       value: selectedClient,
       options: [
-        { value: "ING", label: "ING Bank Śląski" },
-        { value: "mBank", label: "mBank" },
-        { value: "Santander", label: "Santander" },
-        { value: "PKO BP", label: "PKO BP" },
+        { value: "Twoja Firma", label: "Twoja Firma SA" },
       ],
     },
     {

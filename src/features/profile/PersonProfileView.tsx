@@ -102,18 +102,18 @@ const DEFAULT_PIOTR_AUDITOR_PROFILE: PersonProfileData = {
   bio: "Główny audytor dostępności cyfrowej (Lead WCAG Auditor). Certyfikowany ekspert IAAP (WAS – Web Accessibility Specialist, CPACC). Odpowiada za bezpośrednie audytowanie systemów bankowości cyfrowej, zaawansowane testy z technologiami asystującymi (NVDA, JAWS, VoiceOver), analizę semantyki HTML5/WAI-ARIA oraz przygotowywanie formalnych rekomendacji technicznych dla zespołów deweloperskich.",
 };
 
-// Domyślny profil Koordynatora (Kinga Wróblewska)
+// Domyślny profil Koordynatora (Kinga Nowacka)
 const createCoordinatorProfile = (clientProfile?: ClientProfile): PersonProfileData => ({
-  id: "kinga-wroblewska",
-  name: clientProfile?.auditCoordinatorName || clientProfile?.userName || "Kinga Wróblewska",
+  id: "kinga-nowacka",
+  name: clientProfile?.auditCoordinatorName || clientProfile?.userName || "Kinga Nowacka",
   role: "Koordynator Dostępności Cyfrowej & Główny Administrator",
   type: "coordinator",
   avatar:
     clientProfile?.userAvatar ||
     "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=256&h=256",
-  email: clientProfile?.auditCoordinatorEmail || clientProfile?.userEmail || "kinga.wroblewska@erstegroup.com",
+  email: clientProfile?.auditCoordinatorEmail || clientProfile?.userEmail || "kinga.nowacka@twojafirma.pl",
   phone: "+48 22 123 45 67",
-  organization: clientProfile?.orgName || "Erste Group Bank AG",
+  organization: clientProfile?.orgName || "Twoja Firma SA",
   location: "Warszawa / Centrala",
   status: "Aktywna w systemie",
   bio: "Główny koordynator dostępności cyfrowej w organizacji. Odpowiada za strategię spełniania wymogów WCAG 2.1 AA / 2.2 AA, podział zadań pomiędzy zespoły deweloperskie oraz nadzór nad realizacją rekomendacji audytorskich.",
@@ -141,7 +141,13 @@ export function PersonProfileView({
     if (!person || person === "Tomasz Straszak" || (typeof person === "object" && "name" in person && person.name === "Tomasz Straszak")) {
       return DEFAULT_TOMASZ_PROFILE;
     }
-    if (person === "Kinga Wróblewska" || (typeof person === "object" && "name" in person && (person.name === "Kinga Wróblewska" || person.name === clientProfile?.auditCoordinatorName))) {
+    if (
+      person === "Kinga Nowacka" ||
+      (typeof person === "object" &&
+        "name" in person &&
+        (person.name === "Kinga Nowacka" ||
+          person.name === clientProfile?.auditCoordinatorName))
+    ) {
       return createCoordinatorProfile(clientProfile);
     }
     if (typeof person === "object") {
@@ -152,9 +158,9 @@ export function PersonProfileView({
         role: p.role || "Członek zespołu",
         type: p.type || "developer",
         avatar: p.avatar || "https://api.dicebear.com/7.x/avataaars/svg?seed=" + (p.name || "User"),
-        email: p.email || "kontakt@erstegroup.com",
+        email: p.email || "kontakt@twojafirma.pl",
         phone: p.phone || "+48 500 000 000",
-        organization: clientProfile?.orgName || "Erste Group Bank AG",
+        organization: clientProfile?.orgName || "Twoja Firma SA",
         location: p.location || "Polska / Zdalnie",
         status: p.status === "active" ? "Aktywny" : "Dostępny",
         specialization: p.specialization,
@@ -170,7 +176,9 @@ export function PersonProfileView({
   }, [person, clientProfile]);
 
   const isAccountManager = profileData.type === "manager" || profileData.name.includes("Tomasz Straszak");
-  const isCoordinator = profileData.type === "coordinator" || profileData.name.includes("Kinga Wróblewska");
+  const isCoordinator =
+    profileData.type === "coordinator" ||
+    profileData.name.includes("Kinga Nowacka");
   const isAuditor = profileData.type === "auditor" || profileData.name.includes("Piotr Smułkowski");
   const isDeveloper = !isAccountManager && !isCoordinator && !isAuditor;
 
@@ -354,7 +362,7 @@ export function PersonProfileView({
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs sm:text-sm text-slate-600 font-semibold">
                   <span className="flex items-center gap-1.5">
                     <Building2 size={15} className="text-slate-400" />
-                    {profileData.organization || "Erste Group Bank AG"}
+                    {profileData.organization || "Twoja Firma SA"}
                   </span>
                   {profileData.location && (
                     <span className="flex items-center gap-1.5">
@@ -944,7 +952,7 @@ export function PersonProfileView({
                 <div className="space-y-3">
                   {[
                     {
-                      name: "Serwis transakcyjny Erste Group (Bankowość Internetowa)",
+                      name: "Główny Serwis Transakcyjny WWW",
                       channel: "Desktop WWW",
                       status: "Bieżąca obsługa skarg i re-audytów",
                       score: "85.2%",
@@ -1053,7 +1061,7 @@ export function PersonProfileView({
         )}
 
         {/* ======================================================== */}
-        {/* SEKCJA DEDYKOWANA DLA KOORDYNATORA (KINGA WRÓBLEWSKA)    */}
+        {/* SEKCJA DEDYKOWANA DLA KOORDYNATORA (KINGA NOWACKA)     */}
         {/* ======================================================== */}
         {isCoordinator && (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">

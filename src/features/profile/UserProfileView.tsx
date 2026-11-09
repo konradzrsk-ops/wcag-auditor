@@ -101,7 +101,7 @@ const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
   {
     id: "tm-1",
     name: "Marek Kowalski",
-    email: "m.kowalski@erstegroup.com",
+    email: "m.kowalski@twojafirma.pl",
     role: "Lead Frontend Developer (React / Next.js)",
     specialization: "frontend",
     specializationLabel: "Frontend WWW",
@@ -116,7 +116,7 @@ const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
   {
     id: "tm-2",
     name: "Aleksandra Nowak",
-    email: "a.nowak@erstegroup.com",
+    email: "a.nowak@twojafirma.pl",
     role: "Senior iOS Developer (Swift)",
     specialization: "mobile",
     specializationLabel: "Aplikacja iOS",
@@ -131,7 +131,7 @@ const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
   {
     id: "tm-3",
     name: "Paweł Wiśniewski",
-    email: "p.wisniewski@erstegroup.com",
+    email: "p.wisniewski@twojafirma.pl",
     role: "Senior Android Developer (Kotlin)",
     specialization: "mobile",
     specializationLabel: "Aplikacja Android",
@@ -146,7 +146,7 @@ const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
   {
     id: "tm-4",
     name: "Magdalena Ciesielska",
-    email: "m.ciesielska@erstegroup.com",
+    email: "m.ciesielska@twojafirma.pl",
     role: "QA Accessibility Specialist / Tester",
     specialization: "qa",
     specializationLabel: "Dostępność QA (NVDA/TalkBack)",
@@ -161,7 +161,7 @@ const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
   {
     id: "tm-5",
     name: "Kamil Bednarek",
-    email: "k.bednarek@erstegroup.com",
+    email: "k.bednarek@twojafirma.pl",
     role: "Senior UI/UX Designer (Design System)",
     specialization: "design",
     specializationLabel: "Design System & Kontrasty",
@@ -877,13 +877,13 @@ export function UserProfileView({
                             onClick={() =>
                               handleChange(
                                 "orgLogo",
-                                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHgYtVh9h9eIsSNsP76-1aodQJJzy5gNNVXR6n_oyQ0g&s"
+                                "./logos/twoja-firma.png"
                               )
                             }
                             className="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-colors cursor-pointer shrink-0"
-                            title="Wstaw domyślne logo Erste"
+                            title="Wstaw domyślne logo Twoja Firma"
                           >
-                            Logo Erste
+                            Logo Twoja Firma
                           </button>
                         </div>
                       </div>
@@ -904,7 +904,7 @@ export function UserProfileView({
                           onChange={(e) =>
                             handleChange("orgAltText", e.target.value)
                           }
-                          placeholder="np. Logo Erste Group Bank"
+                          placeholder="np. Logo Twoja Firma SA"
                           className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/30 focus:border-[#0038F8]"
                         />
                         <p className="text-[11px] text-slate-500 mt-1 flex items-start gap-1">
@@ -969,8 +969,8 @@ export function UserProfileView({
                           className="max-h-24 w-auto max-w-[220px] object-contain drop-shadow-xs block"
                           style={{ borderRadius: 0 }}
                           onError={(e) => {
-                            if (e.currentTarget.src !== "./logos/erste.png") {
-                              e.currentTarget.src = "./logos/erste.png";
+                            if (e.currentTarget.src !== "./logos/twoja-firma.png") {
+                              e.currentTarget.src = "./logos/twoja-firma.png";
                             }
                           }}
                         />
@@ -1012,7 +1012,7 @@ export function UserProfileView({
                         onChange={(e) =>
                           handleChange("orgName", e.target.value)
                         }
-                        placeholder="np. Erste Group Bank AG"
+                        placeholder="np. Twoja Firma SA"
                         className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs sm:text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/30 focus:border-[#0038F8]"
                       />
                     </div>
@@ -1028,7 +1028,7 @@ export function UserProfileView({
                           onChange={(e) =>
                             handleChange("orgShortName", e.target.value)
                           }
-                          placeholder="np. Erste"
+                          placeholder="np. Twoja Firma"
                           className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs sm:text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/30 focus:border-[#0038F8]"
                         />
                       </div>
@@ -1092,7 +1092,7 @@ export function UserProfileView({
                         onChange={(e) =>
                           handleChange("domain", e.target.value)
                         }
-                        placeholder="https://www.erstegroup.com"
+                        placeholder="https://www.twojafirma.pl"
                         className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs sm:text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/30 focus:border-[#0038F8]"
                       />
                     </div>
@@ -1581,7 +1581,7 @@ export function UserProfileView({
                       onChange={(e) =>
                         handleChange("auditCoordinatorName", e.target.value)
                       }
-                      placeholder="np. Kinga Wróblewska"
+                      placeholder="np. Kinga Nowacka"
                       className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs sm:text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/30"
                     />
                   </div>
@@ -2169,7 +2169,7 @@ export function UserProfileView({
                     required
                     value={memberForm.email}
                     onChange={(e) => setMemberForm({ ...memberForm, email: e.target.value })}
-                    placeholder="t.zielinski@erstegroup.com"
+                    placeholder="t.zielinski@twojafirma.pl"
                     className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2 text-xs sm:text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/30"
                   />
                 </div>

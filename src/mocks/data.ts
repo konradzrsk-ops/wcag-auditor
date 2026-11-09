@@ -243,8 +243,8 @@ export const chartTrendData: ChartDataPoint[] = [
 export const mockAuditsList: AuditReport[] = [
   {
     id: "a1",
-    clientName: "ING",
-    title: "Audyt dostępności serwisu ing.pl",
+    clientName: "Twoja Firma",
+    title: "Audyt serwisu głównego WWW",
     status: "Zakończony",
     auditor: "Anna Ekspert",
     wcagLevel: "AA",
@@ -258,8 +258,8 @@ export const mockAuditsList: AuditReport[] = [
   },
   {
     id: "a2",
-    clientName: "ING",
-    title: "Audyt aplikacji mobilnej Moje ING (Android)",
+    clientName: "Twoja Firma",
+    title: "Audyt aplikacji mobilnej (Android)",
     status: "W trakcie",
     auditor: "Piotr Audytor",
     wcagLevel: "AA",
@@ -273,8 +273,8 @@ export const mockAuditsList: AuditReport[] = [
   },
   {
     id: "a3",
-    clientName: "mBank",
-    title: "Audyt serwisu transakcyjnego mBank",
+    clientName: "Twoja Firma",
+    title: "Audyt serwisu transakcyjnego",
     status: "Zakończony",
     auditor: "Anna Ekspert",
     wcagLevel: "AAA",
@@ -288,8 +288,8 @@ export const mockAuditsList: AuditReport[] = [
   },
   {
     id: "a4",
-    clientName: "Santander",
-    title: "Audyt procesu otwarcia konta Santander",
+    clientName: "Twoja Firma",
+    title: "Audyt procesu rejestracji i onboardingu",
     status: "Nowy",
     auditor: "Piotr Audytor",
     wcagLevel: "AA",
@@ -303,8 +303,8 @@ export const mockAuditsList: AuditReport[] = [
   },
   {
     id: "a5",
-    clientName: "PKO BP",
-    title: "Audyt aplikacji iPKO",
+    clientName: "Twoja Firma",
+    title: "Audyt aplikacji mobilnej (iOS)",
     status: "W trakcie",
     auditor: "Anna Ekspert",
     wcagLevel: "AA",
@@ -318,8 +318,8 @@ export const mockAuditsList: AuditReport[] = [
   },
   {
     id: "a6",
-    clientName: "ING",
-    title: "Audyt dokumentów PDF - regulaminy",
+    clientName: "Twoja Firma",
+    title: "Audyt dokumentów PDF - regulaminy i wzorce umów",
     status: "Zakończony",
     auditor: "Piotr Audytor",
     wcagLevel: "A",
@@ -558,7 +558,7 @@ export const mockRegulatoryData: RegulatoryService[] = [
   },
   {
     id: "reg2",
-    name: "Aplikacja mobilna Moje ING (Android)",
+    name: "Aplikacja mobilna (Android)",
     type: "Aplikacja mobilna",
     compliance: "Częściowo zgodna",
     lastAuditDate: "10.03.2024",

@@ -361,9 +361,9 @@ const initialComplaintsData = [
     status: "Gotowa rekomendacja",
     responsiblePerson: "Marek Pawlak (Lead Frontend Developer)",
     devTeam: "Marek Pawlak (Lead Frontend Developer)",
-    jiraUrl: "https://jira.bank.pl/browse/ACC-104",
+    jiraUrl: "https://jira.twojafirma.pl/browse/ACC-104",
     jiraTicket: "ACC-104",
-    reporter: "Katarzyna Wiśniewska (Koordynator Dostępności)",
+    reporter: "Kinga Nowacka (Koordynator Dostępności)",
     auditor: "Piotr Smułkowski (Lead WCAG Auditor)",
     date: "18.04.2026",
     slaDeadline: "25.04.2026 (pozostało 4 dni)",
@@ -382,7 +382,7 @@ const initialComplaintsData = [
     comments: [
       {
         id: 1,
-        author: "Katarzyna Wiśniewska",
+        author: "Kinga Nowacka",
         role: "Koordynator Dostępności",
         date: "18.04.2026 10:15",
         text: "Zgłoszenie wpłynęło od klienta korzystającego z NVDA. Prosimy o audyt i rekomendację dla zespołu frontend.",
@@ -411,7 +411,7 @@ const initialComplaintsData = [
     status: "W trakcie wdrożenia",
     responsiblePerson: "Michał Zieliński (Senior Mobile Dev - iOS/Android)",
     devTeam: "Michał Zieliński (Senior Mobile Dev - iOS/Android)",
-    jiraUrl: "https://jira.bank.pl/browse/MOB-451",
+    jiraUrl: "https://jira.twojafirma.pl/browse/MOB-451",
     jiraTicket: "MOB-451",
     reporter: "Tomasz Dąbrowski (Lead UX)",
     auditor: "Anna Nowak (Senior WCAG Specialist)",
@@ -459,9 +459,9 @@ const initialComplaintsData = [
     wcagCriterion: "3.3.1 Identyfikacja błędu (Poziom A)",
     priority: "Priorytetowy",
     status: "W trakcie analizy",
-    responsiblePerson: "Katarzyna Wiśniewska (Koordynator Dostępności)",
-    devTeam: "Katarzyna Wiśniewska (Koordynator Dostępności)",
-    jiraUrl: "https://jira.bank.pl/browse/KRED-209",
+    responsiblePerson: "Kinga Nowacka (Koordynator Dostępności)",
+    devTeam: "Kinga Nowacka (Koordynator Dostępności)",
+    jiraUrl: "https://jira.twojafirma.pl/browse/KRED-209",
     jiraTicket: "KRED-209",
     reporter: "Marta Lis (Oficer ds. Zgodności)",
     auditor: "Piotr Smułkowski (Lead WCAG Auditor)",
@@ -494,7 +494,7 @@ const initialComplaintsData = [
     status: "Zamknięte",
     responsiblePerson: "Grzegorz Kamiński (Product Manager)",
     devTeam: "Grzegorz Kamiński (Product Manager)",
-    jiraUrl: "https://jira.bank.pl/browse/DOC-88",
+    jiraUrl: "https://jira.twojafirma.pl/browse/DOC-88",
     jiraTicket: "DOC-88",
     reporter: "Grzegorz Kamiński (Product Manager)",
     auditor: "Piotr Smułkowski",
@@ -667,8 +667,8 @@ const INITIAL_AUDITOR_TICKETS = [
       {
         id: "m-104-1",
         sender: "client",
-        authorName: "Piotr Smułkowski",
-        authorRole: "Koordynator Dostępności (Bank)",
+        authorName: "Kinga Nowacka",
+        authorRole: "Koordynator Dostępności",
         authorAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix&backgroundColor=b6e3f4",
         date: "Dzisiaj, 09:30",
         content: "Cześć Tomku, zespół frontendowy przygotował poprawkę dla błędu #ERR-204 w formularzu przelewu. Zwiększyli kontrast ramki zaznaczonego checkboxa do 3.8:1 na białym tle. Czy w świetle kryterium 1.4.11 Non-text Contrast w WCAG 2.2 taki współczynnik jest dla Was w 100% akceptowalny, czy musimy bezwzględnie dociągnąć do 4.5:1? Mamy jutro release kandydat.",
@@ -683,7 +683,7 @@ const INITIAL_AUDITOR_TICKETS = [
         authorRole: "Dedykowany Opiekun Klienta",
         authorAvatar: "https://wally.widzialni.eu//uploads/avatars/avatar_133_1760079096.jpg",
         date: "Dzisiaj, 10:12 (15 min temu)",
-        content: "Cześć Piotrze! Skonsultowałem tę kwestię natychmiast z naszym audytorem wiodącym WCAG. Dobra wiadomość: dla komponentów interfejsu użytkownika (formularze, kontrolki, ramki pól wyboru) kryterium sukcesu 1.4.11 Non-text Contrast wymaga kontrastu minimum 3.0:1 względem przyległego tła (współczynnik 4.5:1 dotyczy wyłącznie standardowego tekstu z kryterium 1.4.3). Współczynnik 3.8:1 jest w pełni zgodny z WCAG 2.1 oraz WCAG 2.2 na poziomie AA! Audytor potwierdził, że możecie bezpiecznie wdrażać ten komponent do jutrzejszego release'u.",
+        content: "Cześć Kingo! Skonsultowałem tę kwestię natychmiast z naszym audytorem wiodącym WCAG. Dobra wiadomość: dla komponentów interfejsu użytkownika (formularze, kontrolki, ramki pól wyboru) kryterium sukcesu 1.4.11 Non-text Contrast wymaga kontrastu minimum 3.0:1 względem przyległego tła (współczynnik 4.5:1 dotyczy wyłącznie standardowego tekstu z kryterium 1.4.3). Współczynnik 3.8:1 jest w pełni zgodny z WCAG 2.1 oraz WCAG 2.2 na poziomie AA! Audytor potwierdził, że możecie bezpiecznie wdrażać ten komponent do jutrzejszego release'u.",
         attachments: [
           { name: "wytyczna_wcag_1_4_11_komponenty.pdf", size: "1.2 MB" }
         ],
@@ -718,8 +718,8 @@ const INITIAL_AUDITOR_TICKETS = [
       {
         id: "m-103-1",
         sender: "client",
-        authorName: "Piotr Smułkowski",
-        authorRole: "Koordynator Dostępności (Bank)",
+        authorName: "Kinga Nowacka",
+        authorRole: "Koordynator Dostępności",
         authorAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix&backgroundColor=b6e3f4",
         date: "Wczoraj, 14:15",
         content: "Dzień dobry Panie Doktorze, otrzymaliśmy skargę od niewidomego klienta (skarga #RKL-2026-089), który nie jest w stanie odczytać wykresów świecowych notowań giełdowych w portalu Makler. Zespół Dev pyta o wzorcową implementację tabeli ukrytej dostępnej pod skrótem klawiszowym lub aria-describedby. Czy moglibyśmy prosić o wytyczną techniczną?",
@@ -731,7 +731,7 @@ const INITIAL_AUDITOR_TICKETS = [
         authorRole: "Główny Audytor WCAG",
         authorAvatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
         date: "Wczoraj, 16:40",
-        content: "Dzień dobry. Zapoznałem się ze strukturą komponentu wykresu. Przygotowuję dla Waszego zespołu deweloperskiego wzorcowy kod HTML/ARIA z tabelą semantyczną transponującą serie danych w czasie rzeczywistym oraz zoptymalizowaną pod czytniki ekranu NVDA i JAWS. Pełną próbkę kodu prześlę dziś do końca dnia roboczego.",
+        content: "Dzień dobry Pani Kingo. Zapoznałem się ze strukturą komponentu wykresu. Przygotowuję dla Waszego zespołu deweloperskiego wzorcowy kod HTML/ARIA z tabelą semantyczną transponującą serie danych w czasie rzeczywistym oraz zoptymalizowaną pod czytniki ekranu NVDA i JAWS. Pełną próbkę kodu prześlę dziś do końca dnia roboczego.",
       },
     ],
   },
@@ -763,8 +763,8 @@ const INITIAL_AUDITOR_TICKETS = [
       {
         id: "m-102-1",
         sender: "client",
-        authorName: "Piotr Smułkowski",
-        authorRole: "Koordynator Dostępności (Bank)",
+        authorName: "Kinga Nowacka",
+        authorRole: "Koordynator Dostępności",
         authorAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix&backgroundColor=b6e3f4",
         date: "18 maja 2026, 11:00",
         content: "Tomku, zamknęliśmy poprawki dla 6 zgłoszonych błędów w module Blik. Kiedy audytor mógłby przystąpić do reaudytu weryfikacyjnego na środowisku testowym?",
@@ -806,11 +806,11 @@ const INITIAL_AUDITOR_TICKETS = [
       {
         id: "m-101-1",
         sender: "client",
-        authorName: "Piotr Smułkowski",
-        authorRole: "Koordynator Dostępności (Bank)",
+        authorName: "Kinga Nowacka",
+        authorRole: "Koordynator Dostępności",
         authorAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix&backgroundColor=b6e3f4",
         date: "12 maja 2026, 15:30",
-        content: "Czy posiadacie aktualny wzór deklaracji dostępności zgodny z wytycznymi Ministerstwa Cyfryzacji oraz nadchodzącym EAA dla banków komercyjnych?",
+        content: "Czy posiadacie aktualny wzór deklaracji dostępności zgodny z wytycznymi Ministerstwa Cyfryzacji oraz nadchodzącym EAA dla naszej organizacji?",
       },
       {
         id: "m-101-2",
@@ -819,7 +819,7 @@ const INITIAL_AUDITOR_TICKETS = [
         authorRole: "Dedykowany Opiekun Klienta",
         authorAvatar: "https://wally.widzialni.eu//uploads/avatars/avatar_133_1760079096.jpg",
         date: "13 maja 2026, 10:05",
-        content: "Cześć Piotrze! Oczywiście, przesyłam zaktualizowany wzorzec deklaracji z uzupełnionymi klauzulami prawnymi wymaganymi przez KNF i EAA. W pliku zaznaczyłem na żółto pola do uzupełnienia danymi banku.",
+        content: "Cześć Kingo! Oczywiście, przesyłam zaktualizowany wzorzec deklaracji z uzupełnionymi klauzulami prawnymi wymaganymi przez przepisy i EAA. W pliku zaznaczyłem na żółto pola do uzupełnienia danymi organizacji.",
         attachments: [
           { name: "wzorzec_deklaracji_dostepnosci_2026.docx", size: "85 KB" }
         ],
@@ -929,7 +929,7 @@ function ReauditRequestModal({
   onSubmit,
 }) {
   const [speed, setSpeed] = useState("standard");
-  const [stagingUrl, setStagingUrl] = useState("https://staging-acc.bank.pl/release-2026-q2");
+  const [stagingUrl, setStagingUrl] = useState("https://staging-acc.twojafirma.pl/release-2026-q2");
   const [notes, setNotes] = useState("");
   const [additionalComment, setAdditionalComment] = useState("");
   const [requestConsultation, setRequestConsultation] = useState(false);
@@ -974,7 +974,7 @@ function ReauditRequestModal({
             <div>
               <div className="flex items-center gap-2 flex-wrap mb-1">
                 <span className="text-[11px] font-bold uppercase tracking-wider text-[#0038F8] bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200/80">
-                  Panel Koordynacji Erste
+                  Panel Koordynacji Twoja Firma
                 </span>
                 <span className="text-xs text-slate-400 font-semibold">• {targetType || "Audyt WCAG 2.2"}</span>
               </div>
@@ -1037,7 +1037,7 @@ function ReauditRequestModal({
                 type="text"
                 value={stagingUrl}
                 onChange={(e) => setStagingUrl(e.target.value)}
-                placeholder="https://staging.bank.pl/..."
+                placeholder="https://staging.twojafirma.pl/..."
                 className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
               />
             </div>
@@ -1243,7 +1243,7 @@ function ComplaintEditModal({ isOpen, onClose, complaint, onSave }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     const ticketKey = (formData.jiraUrl || "").replace(/https?:\/\/[^/]+\/browse\//, "").trim();
-    const fullUrl = formData.jiraUrl ? (formData.jiraUrl.startsWith("http") ? formData.jiraUrl : `https://jira.bank.pl/browse/${formData.jiraUrl}`) : "";
+    const fullUrl = formData.jiraUrl ? (formData.jiraUrl.startsWith("http") ? formData.jiraUrl : `https://jira.twojafirma.pl/browse/${formData.jiraUrl}`) : "";
     const criteriaJoined = selectedCriteria.length > 0 ? selectedCriteria.join(", ") : "2.1.1 Klawiatura (Poziom A)";
 
     if (onSave) {
@@ -1498,7 +1498,7 @@ function ComplaintEditModal({ isOpen, onClose, complaint, onSave }) {
                 type="text"
                 value={formData.jiraUrl || ""}
                 onChange={(e) => setFormData({ ...formData, jiraUrl: e.target.value })}
-                placeholder="np. https://jira.bank.pl/browse/ACC-104 lub ACC-104"
+                placeholder="np. https://jira.twojafirma.pl/browse/ACC-104 lub ACC-104"
                 className="w-full bg-slate-50 border border-slate-200 rounded-lg pl-9 pr-3 py-2 text-xs font-semibold text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
               />
             </div>
@@ -1588,34 +1588,34 @@ function ComplaintEditModal({ isOpen, onClose, complaint, onSave }) {
 }
 
 // ==========================================
-// DOMYŚLNY PROFIL KLIENTA I ORGANIZACJI (ERSTE GROUP)
+// DOMYŚLNY PROFIL KLIENTA I ORGANIZACJI (TWOJA FIRMA SA)
 // ==========================================
 
 const INITIAL_CLIENT_PROFILE: ClientProfile = {
-  // 1. Profil organizacji & Branding (Erste Group jako domyślne)
-  orgName: "Erste Group Bank AG",
-  orgShortName: "Erste",
-  orgLogo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHgYtVh9h9eIsSNsP76-1aodQJJzy5gNNVXR6n_oyQ0g&s",
-  orgAltText: "Logo Erste Group Bank",
+  // 1. Profil organizacji & Branding (Twoja Firma jako domyślne)
+  orgName: "Twoja Firma SA",
+  orgShortName: "Twoja Firma",
+  orgLogo: "./logos/twoja-firma.png",
+  orgAltText: "Logo Twoja Firma SA",
   taxId: "PL 525-000-00-00",
-  sector: "Bankowość i finanse",
-  domain: "https://www.erstegroup.com",
+  sector: "Usługi cyfrowe i finanse",
+  domain: "https://www.twojafirma.pl",
   accountTier: "Enterprise EAA & WCAG 2.1 AA",
 
   // 2. Standardy audytowe & WCAG
   wcagStandard: "WCAG 2.2",
   targetScore: 90,
-  auditCoordinatorName: "Kinga Wróblewska",
-  auditCoordinatorEmail: "kinga.wroblewska@erstegroup.com",
+  auditCoordinatorName: "Kinga Nowacka",
+  auditCoordinatorEmail: "kinga.nowacka@twojafirma.pl",
   auditCoordinatorPhone: "+48 22 500 12 34",
   department: "Departament Transformacji Cyfrowej i UX",
   declarationDate: "2026-03-15",
-  declarationUrl: "https://www.erstegroup.com/pl/deklaracja-dostepnosci",
+  declarationUrl: "https://www.twojafirma.pl/deklaracja-dostepnosci",
 
   // 3. Profil użytkownika
-  userName: "Kinga Wróblewska",
-  userRole: "Koordynacja Erste",
-  userEmail: "kinga.wroblewska@erstegroup.com",
+  userName: "Kinga Nowacka",
+  userRole: "Koordynator Dostępności",
+  userEmail: "kinga.nowacka@twojafirma.pl",
   userPhone: "+48 601 234 567",
   userAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix&backgroundColor=b6e3f4",
   twoFactorEnabled: true,
@@ -1631,7 +1631,7 @@ const INITIAL_CLIENT_PROFILE: ClientProfile = {
     {
       id: "tm-1",
       name: "Marek Kowalski",
-      email: "m.kowalski@erstegroup.com",
+      email: "m.kowalski@twojafirma.pl",
       role: "Lead Frontend Developer (React / Next.js)",
       specialization: "frontend",
       specializationLabel: "Frontend WWW",
@@ -1646,7 +1646,7 @@ const INITIAL_CLIENT_PROFILE: ClientProfile = {
     {
       id: "tm-2",
       name: "Aleksandra Nowak",
-      email: "a.nowak@erstegroup.com",
+      email: "a.nowak@twojafirma.pl",
       role: "Senior iOS Developer (Swift)",
       specialization: "mobile",
       specializationLabel: "Aplikacja iOS",
@@ -1661,7 +1661,7 @@ const INITIAL_CLIENT_PROFILE: ClientProfile = {
     {
       id: "tm-3",
       name: "Paweł Wiśniewski",
-      email: "p.wisniewski@erstegroup.com",
+      email: "p.wisniewski@twojafirma.pl",
       role: "Senior Android Developer (Kotlin)",
       specialization: "mobile",
       specializationLabel: "Aplikacja Android",
@@ -1676,7 +1676,7 @@ const INITIAL_CLIENT_PROFILE: ClientProfile = {
     {
       id: "tm-4",
       name: "Magdalena Ciesielska",
-      email: "m.ciesielska@erstegroup.com",
+      email: "m.ciesielska@twojafirma.pl",
       role: "QA Accessibility Specialist / Tester",
       specialization: "qa",
       specializationLabel: "Dostępność QA (NVDA/TalkBack)",
@@ -1691,7 +1691,7 @@ const INITIAL_CLIENT_PROFILE: ClientProfile = {
     {
       id: "tm-5",
       name: "Kamil Bednarek",
-      email: "k.bednarek@erstegroup.com",
+      email: "k.bednarek@twojafirma.pl",
       role: "Senior UI/UX Designer (Design System)",
       specialization: "design",
       specializationLabel: "Design System & Kontrasty",
@@ -2366,7 +2366,7 @@ function LoginView({ onLogin }) {
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder={t("login.form.email_placeholder", "twoj.email@twojabank.pl")}
+                      placeholder={t("login.form.email_placeholder", "twoj.email@twojafirma.pl")}
                       className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-12 pr-4 py-3.5 text-sm font-semibold text-slate-900 placeholder:text-slate-400 placeholder:font-medium focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50 focus:border-[#0038F8] transition-all bg-white"
                       required
                     />
@@ -4949,7 +4949,7 @@ const VIEW_GUIDES = {
       {
         name: "Logo Klienta & Branding",
         badge: "Identyfikacja",
-        desc: "Wprowadź adres URL logo (np. Erste) lub wgraj plik z dysku. Logo jest prezentowane na pulpicie i w nagłówkach raportów.",
+        desc: "Wprowadź adres URL logo (np. Twoja Firma) lub wgraj plik z dysku. Logo jest prezentowane na pulpicie i w nagłówkach raportów.",
       },
       {
         name: "Wymóg WCAG 1.1.1 (Tekst alternatywny)",
@@ -5672,10 +5672,10 @@ function TopNavbar({
                 />
                 <div className="hidden sm:flex flex-col text-left">
                   <span className="text-xs font-bold text-slate-800 leading-tight">
-                    {clientProfile?.userName || "Kinga Wróblewska"}
+                    {clientProfile?.userName || "Kinga Nowacka"}
                   </span>
                   <span className="text-[10px] font-semibold text-slate-600">
-                    {clientProfile?.userRole || "Koordynacja Erste"}
+                    {clientProfile?.userRole || "Koordynator Dostępności"}
                   </span>
                 </div>
                 <ChevronDown
@@ -5695,13 +5695,13 @@ function TopNavbar({
                   <div className="absolute right-0 mt-2 w-60 bg-white border border-slate-200 shadow-xl rounded-xl z-50 py-1.5 animate-fadeIn">
                     <div className="px-4 py-2 border-b border-slate-100 sm:hidden">
                       <div className="text-xs font-bold text-slate-800">
-                        {clientProfile?.userName || "Kinga Wróblewska"}
+                        {clientProfile?.userName || "Kinga Nowacka"}
                       </div>
                       <div className="text-[11px] text-slate-600 font-medium">
-                        {clientProfile?.userRole || "Koordynacja Erste"}
+                        {clientProfile?.userRole || "Koordynator Dostępności"}
                       </div>
                       <div className="text-[10px] text-[#0038F8] font-bold mt-0.5">
-                        {clientProfile?.orgName || "Erste Group Bank"}
+                        {clientProfile?.orgName || "Twoja Firma SA"}
                       </div>
                     </div>
                     <button
@@ -5787,7 +5787,7 @@ function TopNavbar({
                 <span>Zarządzaj kontem</span>
               </div>
               <span className="text-xs text-slate-400 font-semibold">
-                {clientProfile?.orgShortName || "Erste"}
+                {clientProfile?.orgShortName || "Twoja Firma"}
               </span>
             </button>
 
@@ -6300,13 +6300,13 @@ function DashboardView({
       <div className="flex-1 md:overflow-y-auto bg-[#f8fafc] w-full">
         <div className="max-w-[1600px] mx-auto w-full px-4 sm:px-6 lg:px-8 py-5 sm:py-6 flex flex-col gap-5 sm:gap-6">
 
-        {/* BANER TOŻSAMOŚCI ORGANIZACJI KLIENTA Z LOGO (NP. ERSTE) */}
+        {/* BANER TOŻSAMOŚCI ORGANIZACJI KLIENTA Z LOGO (TWOJA FIRMA) */}
         <div
           data-testid="client-org-banner"
           className="bg-white border border-slate-200/90 rounded-2xl p-4 sm:p-5 md:px-6 md:py-5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6 relative overflow-hidden"
         >
           <div className="flex items-center gap-4 sm:gap-5 min-w-0">
-            {/* LOGO KLIENTA (NP. ERSTE) - CAŁKOWICIE BEZ RAMKI, BEZ ZAOKRĄGLEŃ NA OBRAZIE */}
+            {/* LOGO KLIENTA (TWOJA FIRMA) - CAŁKOWICIE BEZ RAMKI, BEZ ZAOKRĄGLEŃ NA OBRAZIE */}
             <div
               className="flex items-center justify-center shrink-0 cursor-pointer group py-1"
               onClick={() => {
@@ -6322,8 +6322,8 @@ function DashboardView({
                   className="h-9 sm:h-11 w-auto max-w-[150px] sm:max-w-[180px] object-contain block group-hover:opacity-90 transition-opacity"
                   style={{ borderRadius: 0 }}
                   onError={(e) => {
-                    if (e.currentTarget.src !== "./logos/erste.png") {
-                      e.currentTarget.src = "./logos/erste.png";
+                    if (e.currentTarget.src !== "./logos/twoja-firma.png") {
+                      e.currentTarget.src = "./logos/twoja-firma.png";
                     }
                   }}
                 />
@@ -6334,17 +6334,17 @@ function DashboardView({
 
             <div className="min-w-0 border-l border-slate-200 pl-4 sm:pl-5">
               <h2 className="text-base sm:text-lg font-black text-slate-900 tracking-tight flex items-center gap-2">
-                <span>{clientProfile?.orgName || "Erste Group Bank AG"}</span>
+                <span>{clientProfile?.orgName || "Twoja Firma SA"}</span>
               </h2>
 
               <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-slate-700 font-medium mt-1.5">
                 <span>
-                  Koordynacja Erste:{" "}
+                  Koordynacja {clientProfile?.orgShortName || "Twoja Firma"}:{" "}
                   <button
                     type="button"
                     onClick={() => {
                       if (onViewPersonProfile) {
-                        onViewPersonProfile("Kinga Wróblewska");
+                        onViewPersonProfile("Kinga Nowacka");
                       } else {
                         setView("profil");
                       }
@@ -6352,7 +6352,7 @@ function DashboardView({
                     className="text-slate-900 hover:text-[#0038F8] font-bold underline decoration-slate-300 hover:decoration-[#0038F8] cursor-pointer inline-flex items-center gap-1"
                     title="Zobacz profil Koordynatora"
                   >
-                    <span>{clientProfile?.auditCoordinatorName || "Kinga Wróblewska"}</span>
+                    <span>{clientProfile?.auditCoordinatorName || "Kinga Nowacka"}</span>
                     <ExternalLink size={12} className="text-slate-400" />
                   </button>
                 </span>
@@ -6426,7 +6426,7 @@ function DashboardView({
                 Cel: {clientProfile?.targetScore || 90}%
               </span>
               <InfoTooltip
-                text="Strategiczny cel Erste Group Bank AG."
+                text="Strategiczny cel Twoja Firma SA."
                 position="top"
                 align="left"
               />
@@ -11659,7 +11659,7 @@ function ReportErrorsView({
       initialStatus: "W pracach Dev",
       initialDevTeam: "Zespół Bankowości Internetowej (Frontend)",
       assignedDeveloper: "Marek Kowalski",
-      initialJiraUrl: "https://jira.bank.pl/browse/FE-1082",
+      initialJiraUrl: "https://jira.twojafirma.pl/browse/FE-1082",
     },
     {
       id: "#001",
@@ -11669,7 +11669,7 @@ function ReportErrorsView({
       initialStatus: "W pracach Dev",
       initialDevTeam: "Zespół Bankowości Internetowej (Frontend)",
       assignedDeveloper: "Marek Kowalski",
-      initialJiraUrl: "https://jira.bank.pl/browse/FE-1082",
+      initialJiraUrl: "https://jira.twojafirma.pl/browse/FE-1082",
     },
     {
       id: "#002",
@@ -11679,7 +11679,7 @@ function ReportErrorsView({
       initialStatus: "Poprawione (do re-audytu)",
       initialDevTeam: "Zespół Aplikacji Mobilnych (iOS)",
       assignedDeveloper: "Aleksandra Nowak",
-      initialJiraUrl: "https://jira.bank.pl/browse/FE-1044",
+      initialJiraUrl: "https://jira.twojafirma.pl/browse/FE-1044",
     },
     {
       id: "#003",
@@ -12031,7 +12031,7 @@ function ErrorAccordionItem({
           {/* Jira badge on error header */}
           {jiraUrl && (
             <a
-              href={jiraUrl.startsWith("http") ? jiraUrl : `https://jira.bank.pl/browse/${jiraUrl}`}
+              href={jiraUrl.startsWith("http") ? jiraUrl : `https://jira.twojafirma.pl/browse/${jiraUrl}`}
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
@@ -12115,7 +12115,7 @@ function ErrorAccordionItem({
                   </span>
                   {jiraUrl && (
                     <a
-                      href={jiraUrl.startsWith("http") ? jiraUrl : `https://jira.bank.pl/browse/${jiraUrl}`}
+                      href={jiraUrl.startsWith("http") ? jiraUrl : `https://jira.twojafirma.pl/browse/${jiraUrl}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-[11px] text-[#0038F8] hover:underline flex items-center gap-1 font-semibold"
@@ -12130,7 +12130,7 @@ function ErrorAccordionItem({
                     type="text"
                     value={jiraUrl}
                     onChange={(e) => setJiraUrl(e.target.value)}
-                    placeholder="np. https://jira.bank.pl/browse/FE-1082 lub FE-1082"
+                    placeholder="np. https://jira.twojafirma.pl/browse/FE-1082 lub FE-1082"
                     className="w-full bg-white border border-slate-200 rounded-lg pl-8 pr-3 py-2 text-xs font-semibold text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
                   />
                 </div>
@@ -12946,7 +12946,7 @@ function ManagementFilterSection({
                 : "bg-white text-slate-800 border-slate-300 hover:border-slate-400 hover:bg-slate-50"
             }`}
           >
-            <span>1. Jednostka{mgmtUnit !== "all" ? `: ${mgmtUnit === "detal" ? "Detaliczna" : "Korporacyjna"}` : ": ING Bank Śląski (Całość)"}</span>
+            <span>1. Jednostka{mgmtUnit !== "all" ? `: ${mgmtUnit === "detal" ? "Detaliczna" : "Korporacyjna"}` : `: ${clientProfile?.orgName || "Twoja Firma SA"} (Całość)`}</span>
             <ChevronDown size={14} className={mgmtUnit !== "all" ? "text-white" : "text-slate-500"} />
           </button>
           {activeDropdown === "mgmt_unit" && (
@@ -12955,9 +12955,9 @@ function ManagementFilterSection({
               style={{ zIndex: 100 }}
             >
               {[
-                { id: "all", label: "ING Bank Śląski (Wszystkie piony)" },
-                { id: "detal", label: "Pion Bankowości Detalicznej" },
-                { id: "corp", label: "Pion Bankowości Korporacyjnej i MŚP" },
+                { id: "all", label: `${clientProfile?.orgName || "Twoja Firma SA"} (Wszystkie piony)` },
+                { id: "detal", label: "Pion Usług Detalicznych / B2C" },
+                { id: "corp", label: "Pion Usług Korporacyjnych / B2B" },
               ].map((opt) => (
                 <button
                   key={opt.id}
@@ -13815,7 +13815,7 @@ function ReportingModuleView({ setView, showToast }) {
                 clearMgmtFilters={clearMgmtFilters}
                 mgmtFiltersCount={mgmtFiltersCount}
                 hasActiveFilters={mgmtFiltersCount > 0}
-                scopeSummaryText={`ING Bank Śląski • Zgodność ogólna: 86.2% (+4.2% r/r) • 47 błędów priorytetowych w obsłudze • Cykl Q1/Q2 2026`}
+                scopeSummaryText={`${clientProfile?.orgName || "Twoja Firma SA"} • Zgodność ogólna: 86.2% (+4.2% r/r) • 47 błędów priorytetowych w obsłudze • Cykl Q1/Q2 2026`}
               />
 
               {/* Widok raportu zarządczego */}
@@ -16604,7 +16604,7 @@ function RegulatoryReportView() {
     },
     {
       id: "r2",
-      name: "Aplikacja mobilna Moje ING (Android)",
+      name: "Aplikacja mobilna (Android)",
       type: "Aplikacja mobilna",
       compliance: "Częściowo zgodna",
       lastAudit: "15.02.2024",
@@ -17597,7 +17597,7 @@ function ComplaintsModuleView({
                     <span
                       onClick={(e) => {
                         e.stopPropagation();
-                        window.open(item.jiraUrl.startsWith("http") ? item.jiraUrl : `https://jira.bank.pl/browse/${item.jiraUrl}`, "_blank");
+                        window.open(item.jiraUrl.startsWith("http") ? item.jiraUrl : `https://jira.twojafirma.pl/browse/${item.jiraUrl}`, "_blank");
                       }}
                       className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200/80 transition-colors cursor-pointer"
                       title="Kliknij, aby otworzyć zadanie w Jira (nowa karta)"
@@ -17744,7 +17744,7 @@ function ComplaintDetailsView({
 
   const handleSaveJiraUrl = () => {
     const ticketKey = currentJiraUrl.replace(/https?:\/\/[^/]+\/browse\//, "").trim();
-    const fullUrl = currentJiraUrl ? (currentJiraUrl.startsWith("http") ? currentJiraUrl : `https://jira.bank.pl/browse/${currentJiraUrl}`) : "";
+    const fullUrl = currentJiraUrl ? (currentJiraUrl.startsWith("http") ? currentJiraUrl : `https://jira.twojafirma.pl/browse/${currentJiraUrl}`) : "";
     const updated = complaintsList.map((item) => {
       if (item.id === complaint.id) {
         return {
@@ -17922,7 +17922,7 @@ function ComplaintDetailsView({
             )}
             {complaint.jiraUrl && (
               <a
-                href={complaint.jiraUrl.startsWith("http") ? complaint.jiraUrl : `https://jira.bank.pl/browse/${complaint.jiraUrl}`}
+                href={complaint.jiraUrl.startsWith("http") ? complaint.jiraUrl : `https://jira.twojafirma.pl/browse/${complaint.jiraUrl}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200/80 transition-colors"
@@ -18465,7 +18465,7 @@ function ComplaintDetailsView({
                       type="text"
                       value={currentJiraUrl}
                       onChange={(e) => setCurrentJiraUrl(e.target.value)}
-                      placeholder="np. https://jira.bank.pl/browse/ACC-104 lub ACC-104"
+                      placeholder="np. https://jira.twojafirma.pl/browse/ACC-104 lub ACC-104"
                       className="w-full bg-slate-50 border border-slate-200 rounded-lg pl-8 pr-3 py-2 text-xs font-semibold text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
                     />
                   </div>
@@ -18493,7 +18493,7 @@ function ComplaintDetailsView({
                     </div>
                   </div>
                   <a
-                    href={complaint.jiraUrl.startsWith("http") ? complaint.jiraUrl : `https://jira.bank.pl/browse/${complaint.jiraUrl}`}
+                    href={complaint.jiraUrl.startsWith("http") ? complaint.jiraUrl : `https://jira.twojafirma.pl/browse/${complaint.jiraUrl}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 px-2.5 py-1.5 rounded text-xs font-bold shadow-xs shrink-0 transition-colors"
@@ -18824,7 +18824,7 @@ function ComplaintCreateView({
     }
 
     const ticketKey = (formData.jiraUrl || "").replace(/https?:\/\/[^/]+\/browse\//, "").trim();
-    const fullUrl = formData.jiraUrl ? (formData.jiraUrl.startsWith("http") ? formData.jiraUrl : `https://jira.bank.pl/browse/${formData.jiraUrl}`) : "";
+    const fullUrl = formData.jiraUrl ? (formData.jiraUrl.startsWith("http") ? formData.jiraUrl : `https://jira.twojafirma.pl/browse/${formData.jiraUrl}`) : "";
     const criteriaJoined = selectedCriteria.length > 0 ? selectedCriteria.join(", ") : "2.1.1 Klawiatura (Poziom A)";
 
     const newId = "RKL-2026-0" + (Math.floor(Math.random() * 800) + 100);
@@ -19140,7 +19140,7 @@ function ComplaintCreateView({
                         type="text"
                         value={formData.jiraUrl}
                         onChange={(e) => setFormData({ ...formData, jiraUrl: e.target.value })}
-                        placeholder="np. https://jira.bank.pl/browse/ACC-104 lub ACC-104"
+                        placeholder="np. https://jira.twojafirma.pl/browse/ACC-104 lub ACC-104"
                         className="w-full bg-white border border-slate-200 rounded-xl pl-9 pr-3 py-2.5 text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0038F8]/50"
                       />
                     </div>
@@ -19194,7 +19194,7 @@ function ComplaintCreateView({
                         Procedura rozpatrywania skargi
                       </h3>
                       <p className="text-[11px] text-slate-500 font-medium">
-                        Standard bankowy: {clientProfile?.orgName || "Erste Group Bank AG"}
+                        Standard organizacji: {clientProfile?.orgName || "Twoja Firma SA"}
                       </p>
                     </div>
                   </div>
