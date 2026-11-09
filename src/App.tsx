@@ -2237,7 +2237,48 @@ export default function App() {
             <span>•</span>
             <span className="text-slate-500">Platforma Zarządzania Dostępnością Cyfrową WCAG</span>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 flex-wrap">
+            {/* PRZEŁĄCZNIK WARIANTU AUDYTU (DEV / MAKIETY) */}
+            <div className="inline-flex items-center bg-slate-100 p-0.5 rounded-lg border border-slate-200 text-[11px]">
+              <span className="px-2 py-0.5 text-slate-500 font-bold hidden md:inline text-[10px] uppercase tracking-wider">
+                Audyt:
+              </span>
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedAuditId(2);
+                  if (currentView !== "raport-szczegoly") setCurrentView("raport-szczegoly");
+                }}
+                className={`px-2 py-1 rounded-md font-bold transition-all cursor-pointer flex items-center gap-1 text-[11px] ${
+                  selectedAuditId === 2
+                    ? "bg-[#0038F8] text-white shadow-2xs"
+                    : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/60"
+                }`}
+                title="Przełącz na audyt bez re-audytów (Aplikacja Android - 0 re-audytów)"
+              >
+                <Smartphone size={12} />
+                <span>Bez reaudytów</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedAuditId(1);
+                  if (currentView !== "raport-szczegoly") setCurrentView("raport-szczegoly");
+                }}
+                className={`px-2 py-1 rounded-md font-bold transition-all cursor-pointer flex items-center gap-1 text-[11px] ${
+                  selectedAuditId === 1
+                    ? "bg-[#0038F8] text-white shadow-2xs"
+                    : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/60"
+                }`}
+                title="Przełącz na audyt z wykonanymi re-audytami (Portal informacyjny - 2 re-audyty)"
+              >
+                <MonitorSmartphone size={12} />
+                <span>Z reaudytami</span>
+              </button>
+            </div>
+
+            <span className="text-slate-300">|</span>
+
             <button
               type="button"
               onClick={() => setCurrentView("ukryte-makiety-popup")}
@@ -10854,45 +10895,6 @@ function ReportSummaryView({
       <div className="flex-1 md:overflow-y-auto bg-[#f8fafc] w-full">
         <div className="max-w-[1600px] mx-auto w-full p-4 sm:p-6 lg:p-8 flex flex-col gap-5">
 
-          {/* SZYBKI PRZEŁĄCZNIK WIDOKU AUDYTU (Audyt bez reaudytów vs Audyt z reaudytami) */}
-          <div className="bg-white border border-slate-200/90 rounded-xl p-3 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div className="flex items-center gap-2">
-              <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
-                Podgląd audytu:
-              </span>
-              <span className="text-xs font-extrabold text-slate-900">
-                {currentAudit.title}
-              </span>
-            </div>
-            <div className="flex items-center gap-2 flex-wrap">
-              <button
-                type="button"
-                onClick={() => onSelectAuditId && onSelectAuditId(2)}
-                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                  currentAudit.id === 2
-                    ? "bg-[#0038F8] text-white shadow-xs"
-                    : "bg-slate-100 text-slate-700 hover:bg-slate-200"
-                }`}
-                title="Pokaż audyt bez zrobionych re-audytów (Android - 0 re-audytów)"
-              >
-                <Smartphone size={13} />
-                <span>Audyt bez re-audytów (Android - 0 re-audytów)</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => onSelectAuditId && onSelectAuditId(1)}
-                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                  currentAudit.id === 1
-                    ? "bg-[#0038F8] text-white shadow-xs"
-                    : "bg-slate-100 text-slate-700 hover:bg-slate-200"
-                }`}
-                title="Pokaż audyt z wykonanymi re-audytami (Portal - 2 re-audyty)"
-              >
-                <MonitorSmartphone size={13} />
-                <span>Audyt z re-audytami (Portal - 2 re-audyty)</span>
-              </button>
-            </div>
-          </div>
 
           {/* KARTA PODSUMOWANIA WYKONAWCZEGO I METADANYCH AUDYTU */}
           <Card className="bg-white border border-slate-200/90 rounded-xl shadow-xs overflow-hidden">
