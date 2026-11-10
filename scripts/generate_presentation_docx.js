@@ -195,7 +195,7 @@ function createDetailsTable(visualPoints, businessBenefit) {
 }
 
 async function generateDocx() {
-  console.log('Generating updated Word presentation document (with Baza Usług included)...');
+  console.log('Generating updated Word presentation document (cleaned narrative & natural pacing)...');
 
   const doc = new Document({
     styles: {
@@ -243,7 +243,7 @@ async function generateDocx() {
           new Paragraph({
             children: [
               new TextRun({
-                text: 'Kompletny materiał demonstracyjny ze zrzutami ekranu, analizą komponentów oraz narracją lektora (szkic zaktualizowany pod kątem uwag do makiet, bazy usług i gotowy dla Anety do redakcji).',
+                text: 'Kompletny materiał demonstracyjny ze zrzutami ekranu, analizą komponentów oraz narracją lektora (teksty oczyszczone z uwag roboczych, dostosowane do naturalnego tempa wdrożeniowego i gotowe dla Anety do ostatecznej redakcji).',
                 size: 22,
                 color: '475569',
               }),
@@ -270,7 +270,7 @@ async function generateDocx() {
                       new Paragraph({
                         children: [
                           new TextRun({ text: '⏱️ Szacowany czas trwania wideo: ', bold: true }),
-                          new TextRun({ text: 'ok. 5 minut (310 sekund)', bold: true, color: '0038F8' }),
+                          new TextRun({ text: 'ok. 6:25 min (385 sekund – swobodny, naturalny rytm narracji)', bold: true, color: '0038F8' }),
                         ],
                       }),
                       new Paragraph({
@@ -281,8 +281,8 @@ async function generateDocx() {
                       }),
                       new Paragraph({
                         children: [
-                          new TextRun({ text: '📌 Pełen zakres modułów: ', bold: true }),
-                          new TextRun({ text: '1. Logowanie (bezpieczeństwo korporacyjne). 2. Pulpit (dashboard 360°). 3. Audyty i Reaudyty (weryfikacja napraw). 4. Baza Usług i Procesów (architektura EAA, 6 domen, filtry kanałowe, kafelki, tabela i ścieżka klienta). 5. Raportowanie (Excel, scoring usług, zapowiedź PAD). 6. Moduł Konsultacji (kontakt Koordynatora z audytorem i opiekunem, powiązanie z audytem lub skargą). 7. Rejestr Skarg (#RKL z integracjami). 8. Podsumowanie (Pulpit ekosystemu).' }),
+                          new TextRun({ text: '📌 Zakres modułów: ', bold: true }),
+                          new TextRun({ text: '1. Logowanie Enterprise. 2. Pulpit 360°. 3. Audyty i Reaudyty powdrożeniowe. 4. Baza Usług i Procesów Cyfrowych (architektura EAA, 6 domen, filtry 4 kanałów, kafelki, tabela i ścieżka klienta). 5. Raportowanie (Excel, scoring procesów, zapowiedź PAD). 6. Moduł Konsultacji (centralny kanał ustaleń Koordynatora z audytorem i opiekunem klienta). 7. Rejestr Skarg (#RKL z integracjami Jira/audyt). 8. Podsumowanie ekosystemu.' }),
                         ],
                       }),
                       new Paragraph({
@@ -303,62 +303,62 @@ async function generateDocx() {
           // ==================== AGENDA / TIMELINE ====================
           new Paragraph({
             children: [
-              new TextRun({ text: 'Agenda i Oś Czasu Prezentacji (~5:00 min)', bold: true, size: 26, color: '0F172A' }),
+              new TextRun({ text: 'Agenda i Oś Czasu Prezentacji (~6:25 min)', bold: true, size: 26, color: '0F172A' }),
             ],
             spacing: { before: 200, after: 140 },
           }),
           new Paragraph({
             children: [
-              new TextRun({ text: '1. Wstęp & Bezpieczne Logowanie (0:00 – 0:20 | 20 s) — ', bold: true }),
-              new TextRun({ text: 'Pierwsze wrażenie, korporacyjne bezpieczeństwo, cel platformy.' }),
+              new TextRun({ text: '1. Wstęp & Bezpieczne Logowanie (0:00 – 0:25 | 25 s) — ', bold: true }),
+              new TextRun({ text: 'Pierwsze wrażenie, standardy Enterprise, ochrona danych audytowych.' }),
             ],
             spacing: { after: 50 },
           }),
           new Paragraph({
             children: [
-              new TextRun({ text: '2. Pulpit (Dashboard) – Centrum Dowodzenia (0:20 – 1:15 | 55 s) — ', bold: true }),
-              new TextRun({ text: 'Widok całościowy, komunikaty/baner, KPI, trendy zgodności, Top bariery.' }),
+              new TextRun({ text: '2. Pulpit (Dashboard) – Centrum Dowodzenia (0:25 – 1:35 | 70 s) — ', bold: true }),
+              new TextRun({ text: 'Widok całościowy, komunikaty/baner, KPI, trendy kwartalne, usługi wymagające uwagi.' }),
             ],
             spacing: { after: 50 },
           }),
           new Paragraph({
             children: [
-              new TextRun({ text: '3. Audyty i Reaudyty – Diagnostyka i Weryfikacja (1:15 – 2:25 | 70 s) — ', bold: true }),
-              new TextRun({ text: 'Lista badań, raport WCAG 2.2, reaudyty klienta, dedykowany proces zlecenia.' }),
+              new TextRun({ text: '3. Audyty i Reaudyty – Diagnostyka i Weryfikacja (1:35 – 3:00 | 85 s) — ', bold: true }),
+              new TextRun({ text: 'Katalog badań, szczegółowy raport WCAG 2.2, oś czasu reaudytów, formularz i wyniki weryfikacji.' }),
             ],
             spacing: { after: 50 },
           }),
           new Paragraph({
             children: [
-              new TextRun({ text: '4. Baza Usług i Procesów Cyfrowych – Inwentaryzacja EAA (2:25 – 3:05 | 40 s) — ', bold: true }),
-              new TextRun({ text: 'Katalog 6 domen bankowych, 50 zbadanych procesów, filtry kanałowe, kafelki i tabela, karta procesu biznesowego.' }),
+              new TextRun({ text: '4. Baza Usług i Procesów Cyfrowych – Inwentaryzacja EAA (3:00 – 3:55 | 55 s) — ', bold: true }),
+              new TextRun({ text: 'Hub 6 domen bankowych, 50 zbadanych procesów, filtry kanałowe, kafelki i tabela, karta procesu biznesowego.' }),
             ],
             spacing: { after: 50 },
           }),
           new Paragraph({
             children: [
-              new TextRun({ text: '5. Raportowanie & Dostępność Usług (3:05 – 3:55 | 50 s) — ', bold: true }),
-              new TextRun({ text: 'Zestawienia audytów (Excel), scoring usług bankowych, zapowiedź raportów C-Level i PAD.' }),
+              new TextRun({ text: '5. Raportowanie & Dostępność Usług (3:55 – 4:50 | 55 s) — ', bold: true }),
+              new TextRun({ text: 'Zestawienia audytów (Excel), scoring procesów biznesowych, zapowiedź raportów C-Level i PAD.' }),
             ],
             spacing: { after: 50 },
           }),
           new Paragraph({
             children: [
-              new TextRun({ text: '6. Moduł Konsultacji – Centralny Kanał Ustaleń (3:55 – 4:25 | 30 s) — ', bold: true }),
-              new TextRun({ text: 'Strategiczny kontakt Koordynatora z audytorem i opiekunem, zamawianie prac, powiązanie z audytem lub skargą.' }),
+              new TextRun({ text: '6. Moduł Konsultacji – Centralny Kanał Ustaleń (4:50 – 5:25 | 35 s) — ', bold: true }),
+              new TextRun({ text: 'Dedykowana przestrzeń współpracy Koordynatora Dostępności z audytorem WCAG i opiekunem klienta, w powiązaniu z audytem lub skargą.' }),
             ],
             spacing: { after: 50 },
           }),
           new Paragraph({
             children: [
-              new TextRun({ text: '7. Rejestr Skarg i Zawiadomień (4:25 – 4:55 | 30 s) — ', bold: true }),
+              new TextRun({ text: '7. Rejestr Skarg i Zawiadomień (5:25 – 6:05 | 40 s) — ', bold: true }),
               new TextRun({ text: 'Centralny rejestr spraw, szczegóły konkretnej skargi (#RKL-2026-089) z integracjami Jira/audyt oraz nowy formularz.' }),
             ],
             spacing: { after: 50 },
           }),
           new Paragraph({
             children: [
-              new TextRun({ text: '8. Podsumowanie & Wdrożenie Ekosystemu (4:55 – 5:10 | 15 s) — ', bold: true }),
+              new TextRun({ text: '8. Podsumowanie & Wdrożenie Ekosystemu (6:05 – 6:25 | 20 s) — ', bold: true }),
               new TextRun({ text: 'Podsumowanie wartości platformy w oparciu o zintegrowany Pulpit.' }),
             ],
             spacing: { after: 300 },
@@ -383,7 +383,7 @@ async function generateDocx() {
           }),
           createVoiceoverBox(
             '„Dzień dobry. Witamy w W-ally – platformie do kompleksowego zarządzania dostępnością cyfrową WCAG w Twojej organizacji. Zaczynamy od bezpiecznego logowania służbowego, które gwarantuje pełną ochronę danych audytowych oraz spełnienie rygorystycznych wymogów bezpieczeństwa IT.”',
-            '0:00 – 0:20 (20 sekund)'
+            '0:00 – 0:25 (25 sekund)'
           ),
           new Paragraph({ spacing: { after: 120 } }),
           createDetailsTable(
@@ -415,8 +415,8 @@ async function generateDocx() {
             spacing: { after: 140 },
           }),
           createVoiceoverBox(
-            '„Po zalogowaniu trafiamy bezpośrednio na Pulpit Główny – centrum dowodzenia dostępnością cyfrową. Zamiast przekopywać się przez setki stron raportów PDF, koordynator i kadra zarządzająca otrzymują natychmiastowy, całościowy wgląd w kondycję serwisów WWW, aplikacji mobilnych iOS i Android oraz procesów transakcyjnych.”',
-            '0:20 – 0:35 (15 sekund)'
+            '„Po zalogowaniu trafiamy bezpośrednio na Pulpit Główny – centrum dowodzenia dostępnością cyfrową. Zamiast przekopywać się przez setki stron raportów PDF, koordynator i kadra zarządzająca otrzymują natychmiastowy, całościowy wgląd w kondycję serwisów WWW, aplikacji mobilnych iOS i Android oraz kluczowych procesów biznesowych.”',
+            '0:25 – 0:45 (20 sekund)'
           ),
           new Paragraph({ spacing: { after: 120 } }),
           createDetailsTable(
@@ -446,8 +446,8 @@ async function generateDocx() {
             spacing: { after: 120 },
           }),
           createVoiceoverBox(
-            '„Na samej górze ekranu znajduje się sekcja komunikatów. Zespół produktowy W-ally publikuje tu najważniejsze aktualizacje: od nowych wytycznych WCAG 2.2, przez terminy regulacyjne EAA, po powiadomienia o zrealizowanych reaudytach.”',
-            '0:35 – 0:45 (10 sekund)'
+            '„Na samej górze ekranu znajduje się sekcja komunikatów. Zespół W-ally publikuje tu najważniejsze aktualizacje: od nowych wytycznych WCAG 2.2, przez terminy regulacyjne Europejskiego Aktu o Dostępności, po powiadomienia o zrealizowanych reaudytach i postępach wdrożeń.”',
+            '0:45 – 0:58 (13 sekund)'
           ),
           new Paragraph({ spacing: { after: 100 } }),
           createDetailsTable(
@@ -477,8 +477,8 @@ async function generateDocx() {
             spacing: { after: 120 },
           }),
           createVoiceoverBox(
-            '„Poniżej prezentujemy cztery kluczowe wskaźniki: ogólny poziom zgodności organizacji, liczbę aktywnych audytów, zrealizowane reaudyty weryfikacyjne oraz średni czas naprawy krytycznych błędów. Obok – interaktywny wykres trendu pokazujący realny wzrost dostępności w ujęciu kwartalnym.”',
-            '0:45 – 1:00 (15 sekund)'
+            '„Poniżej prezentujemy cztery kluczowe wskaźniki: ogólny poziom zgodności organizacji, liczbę aktywnych audytów, zrealizowane reaudyty weryfikacyjne oraz średni czas usuwania krytycznych barier. Obok – interaktywny wykres trendu pokazujący realny, systematyczny wzrost dostępności w ujęciu kwartalnym.”',
+            '0:58 – 1:18 (20 sekund)'
           ),
           new Paragraph({ spacing: { after: 100 } }),
           createDetailsTable(
@@ -508,8 +508,8 @@ async function generateDocx() {
             spacing: { after: 120 },
           }),
           createVoiceoverBox(
-            '„System automatycznie priorytetyzuje usługi wymagające pilnej uwagi. Widzimy tu procesy z najniższym scoringiem lub przekroczonym SLA poprawek. Koordynator nie traci czasu na analizy – od razu wie, do którego zespołu deweloperskiego skierować priorytetowe zadania.”',
-            '1:00 – 1:15 (15 sekund)'
+            '„System automatycznie priorytetyzuje usługi wymagające pilnej uwagi. Widzimy tu procesy z najniższym scoringiem lub przekroczonym czasem naprawy. Koordynator nie traci czasu na manualne analizy – od razu wie, do którego zespołu deweloperskiego skierować priorytetowe zadania.”',
+            '1:18 – 1:35 (17 sekund)'
           ),
           new Paragraph({ spacing: { after: 100 } }),
           createDetailsTable(
@@ -541,8 +541,8 @@ async function generateDocx() {
             spacing: { after: 140 },
           }),
           createVoiceoverBox(
-            '„Przechodzimy do serca diagnostycznego W-ally – modułu Audyty. To tutaj gromadzone są wszystkie formalne badania dostępności cyfrowej. Zgodnie z ustaleniami, widok jest w pełni przygotowany do prezentacji: usunęliśmy niepotrzebny przycisk „Zleć audyt”, a system skupia się na prezentacji zrealizowanych badań oraz obsłudze reaudytów.”',
-            '1:15 – 1:35 (20 sekund)'
+            '„Przechodzimy do modułu Audyty – serca diagnostycznego W-ally. To tutaj gromadzone są wszystkie formalne badania dostępności cyfrowej przeprowadzone w Twojej organizacji. Moduł zapewnia pełną ewidencję zrealizowanych projektów audytowych w podziale na kanały oraz przejrzystą, intuicyjną ścieżkę prowadzenia powdrożeniowych reaudytów.”',
+            '1:35 – 2:00 (25 sekund)'
           ),
           new Paragraph({ spacing: { after: 120 } }),
           createDetailsTable(
@@ -572,8 +572,8 @@ async function generateDocx() {
             spacing: { after: 120 },
           }),
           createVoiceoverBox(
-            '„Otwierając szczegóły audytu – na przykład dla Portalu Informacyjnego – otrzymujemy kompleksowy raport. Widzimy ocenę zgodności (77.5%), rozkład kryteriów WCAG na wykresie radarowym oraz listę barier z podziałem na krytyczne, poważne i umiarkowane. Każdy błąd posiada dokładny opis, zrzut ekranu oraz techniczną rekomendację naprawy dla programistów.”',
-            '1:35 – 1:55 (20 sekund)'
+            '„Otwierając szczegóły audytu – na przykład dla Portalu Informacyjnego – otrzymujemy kompleksowy raport wykonawczy. Widzimy ogólną ocenę zgodności, rozkład kryteriów WCAG na wykresie radarowym oraz listę uchybień z podziałem na bariery krytyczne, poważne i umiarkowane. Każdy błąd posiada dokładny opis, zrzut ekranu oraz techniczną rekomendację naprawy przygotowaną bezpośrednio pod zespół programistów.”',
+            '2:00 – 2:25 (25 sekund)'
           ),
           new Paragraph({ spacing: { after: 100 } }),
           createDetailsTable(
@@ -603,8 +603,8 @@ async function generateDocx() {
             spacing: { after: 120 },
           }),
           createVoiceoverBox(
-            '„Kluczową przewagą W-ally jest wbudowana obsługa reaudytów. Gdy zespół deweloperski wdroży poprawki, nie zamawiamy kolejnego, pełnego audytu od zera. Oś czasu pokazuje kolejne rundy weryfikacyjne: widzimy, jak z pierwotnego wyniku 77% portal osiągnął 91.5% po pierwszym reaudycie i 96% po drugim.”',
-            '1:55 – 2:10 (15 sekund)'
+            '„Kluczową przewagą W-ally jest wbudowana obsługa reaudytów. Gdy zespół programistów wdroży poprawki, nie zamawiamy kolejnego, pełnego audytu od zera. Oś czasu pokazuje kolejne rundy weryfikacyjne: widzimy, jak z pierwotnego wyniku 77% portal osiągnął 91.5% po pierwszym reaudycie i 96% po kolejnym.”',
+            '2:25 – 2:40 (15 sekund)'
           ),
           new Paragraph({ spacing: { after: 100 } }),
           createDetailsTable(
@@ -634,8 +634,8 @@ async function generateDocx() {
             spacing: { after: 120 },
           }),
           createVoiceoverBox(
-            '„Proces zlecenia reaudytu jest maksymalnie uproszczony: koordynator klika przycisk „Zleć re-audyt”, wskazuje środowisko testowe, np. staging, wybiera błędy zgłoszone przez deweloperów jako naprawione i przesyła zlecenie bezpośrednio do zespołu audytorskiego W-ally.”',
-            '2:10 – 2:20 (10 sekund)'
+            '„Proces zlecenia reaudytu jest maksymalnie uproszczony: koordynator klika przycisk „Zleć re-audyt”, wskazuje środowisko testowe lub stagingowe, zaznacza błędy zgłoszone przez deweloperów jako naprawione i przesyła zlecenie bezpośrednio do audytorów W-ally.”',
+            '2:40 – 2:50 (10 sekund)'
           ),
           new Paragraph({ spacing: { after: 100 } }),
           createDetailsTable(
@@ -665,8 +665,8 @@ async function generateDocx() {
             spacing: { after: 120 },
           }),
           createVoiceoverBox(
-            '„Po zakończeniu weryfikacji przez audytora otrzymujemy przejrzysty bilans: błędy oznaczone zielonym statusem „Naprawiony” zostają oficjalnie zamknięte w historii serwisu, a jeśli któraś z poprawek okazała się niewystarczająca, audytor odnotowuje precyzyjne wskazówki, co należy poprawić w kodzie.”',
-            '2:20 – 2:25 (5 sekund)'
+            '„Po zakończeniu weryfikacji otrzymujemy przejrzysty bilans: błędy oznaczone zielonym statusem „Naprawiony” zostają oficjalnie zamknięte w historii serwisu, a jeśli któraś z poprawek wymaga jeszcze dopracowania, audytor odnotowuje precyzyjne wskazówki techniczne dla zespołu wdrożeniowego.”',
+            '2:50 – 3:00 (10 sekund)'
           ),
           new Paragraph({ spacing: { after: 100 } }),
           createDetailsTable(
@@ -681,7 +681,7 @@ async function generateDocx() {
           new Paragraph({ spacing: { after: 360 } }),
 
           // =========================================================================
-          // MODUŁ 3: BAZA USŁUG I PROCESÓW (NOWOŚĆ W SCENARIUSZU)
+          // MODUŁ 3: BAZA USŁUG I PROCESÓW (ARCHITEKTURA EAA)
           // =========================================================================
           new Paragraph({
             children: [
@@ -698,8 +698,8 @@ async function generateDocx() {
             spacing: { after: 140 },
           }),
           createVoiceoverBox(
-            '„Przechodzimy do Bazy Usług i Procesów – serca architektury cyfrowej w W-ally. Aby sprostać wymaganiom Europejskiego Aktu o Dostępności (EAA), system nie ogranicza się do badania pojedynczych stron, lecz inwentaryzuje całe ścieżki i produkty bankowe. Widzimy tu 6 głównych domen usługowych, 50 zbadanych procesów i pełne, stuprocentowe pokrycie audytowe. Z tego poziomu koordynator natychmiast diagnozuje poziom zgodności WCAG każdego obszaru biznesowego instytucji.”',
-            '2:25 – 2:40 (15 sekund)'
+            '„Przechodzimy do Bazy Usług i Procesów – serca architektury cyfrowej w W-ally. Aby w pełni sprostać wymaganiom Europejskiego Aktu o Dostępności (EAA), system nie ogranicza się do badania pojedynczych adresów URL, lecz inwentaryzuje całe ścieżki i produkty biznesowe. Widzimy tu 6 głównych domen usługowych, 50 zbadanych procesów cyfrowych oraz 100% pokrycia audytowego. Z tego poziomu koordynator natychmiast diagnozuje poziom zgodności WCAG każdego obszaru biznesowego instytucji.”',
+            '3:00 – 3:20 (20 sekund)'
           ),
           new Paragraph({ spacing: { after: 120 } }),
           createDetailsTable(
@@ -738,7 +738,7 @@ async function generateDocx() {
           }),
           createVoiceoverBox(
             '„Otwierając wykaz procesów, zyskujemy precyzyjne narzędzie operacyjne. W-ally pozwala filtrować procesy według czterech ujednoliconych kanałów: Desktop WWW, aplikacji na systemy iOS i Android oraz dokumentów cyfrowych PDF. Intuicyjny przełącznik widoku umożliwia płynne przejście między bogatymi kafelkami prezentacyjnymi a zwartą tabelą danych – idealną do masowej ewidencji dla audytorów i zespołów compliance.”',
-            '2:40 – 2:55 (15 sekund)'
+            '3:20 – 3:40 (20 sekund)'
           ),
           new Paragraph({ spacing: { after: 100 } }),
           createDetailsTable(
@@ -770,7 +770,7 @@ async function generateDocx() {
           }),
           createVoiceoverBox(
             '„Klikając w dowolny proces – na przykład Otwarcie Rachunku Osobistego – przechodzimy do szczegółowej karty procesu. W-ally mapuje całą ścieżkę klienta, rozbijając proces na poszczególne ekrany i widoki transakcyjne. Dzięki temu dokładnie wiemy, na którym kroku formularza występują bariery, który zespół deweloperski odpowiada za poprawki i możemy jednym kliknięciem zlecić re-audyt powdrożeniowy dla tej konkretnej ścieżki.”',
-            '2:55 – 3:05 (10 sekund)'
+            '3:40 – 3:55 (15 sekund)'
           ),
           new Paragraph({ spacing: { after: 100 } }),
           createDetailsTable(
@@ -786,7 +786,7 @@ async function generateDocx() {
           new Paragraph({ spacing: { after: 360 } }),
 
           // =========================================================================
-          // MODUŁ 4: RAPORTOWANIE (DAWNY KROK 3)
+          // MODUŁ 4: RAPORTOWANIE
           // =========================================================================
           new Paragraph({
             children: [
@@ -803,8 +803,8 @@ async function generateDocx() {
             spacing: { after: 140 },
           }),
           createVoiceoverBox(
-            '„Kolejnym filarem W-ally jest Moduł Raportowania. Pierwsza zakładka – Raporty z Audytów – pozwala tworzyć przekrojowe zestawienia wielu badań naraz. Usunęliśmy stąd zbędny etap pośredni: jednym kliknięciem generujesz i pobierasz gotowy plik Excel z pełnym wykazem wskaźników, urządzeń i statusów, idealny do wewnętrznych analiz analitycznych.”',
-            '3:05 – 3:20 (15 sekund)'
+            '„Kolejnym filarem platformy jest Moduł Raportowania. Pierwsza zakładka – Raporty z Audytów – pozwala generować przekrojowe zestawienia z wielu badań naraz. Bez zbędnych formalności, jednym kliknięciem pobierasz gotowy arkusz Excel z pełnym wykazem wskaźników, zbadanych kanałów i statusów usterek, idealny do wewnętrznych analiz analitycznych i audytowych.”',
+            '3:55 – 4:15 (20 sekund)'
           ),
           new Paragraph({ spacing: { after: 120 } }),
           createDetailsTable(
@@ -834,8 +834,8 @@ async function generateDocx() {
             spacing: { after: 120 },
           }),
           createVoiceoverBox(
-            '„Druga gotowa zakładka to Dostępność Usług. To unikalne spojrzenie biznesowe: zamiast patrzeć wyłącznie na serwery i adresy URL, W-ally zestawia ze sobą wyniki procesów z Bazy Usług – takich jak wzięcie kredytu hipotecznego, założenie rachunku czy płatności BLIK. Widzimy dokładny scoring każdego procesu i poziom ryzyka biznesowego.”',
-            '3:20 – 3:35 (15 sekund)'
+            '„Druga zakładka to Dostępność Usług. To unikalne spojrzenie biznesowe: zamiast patrzeć wyłącznie na serwery i adresy URL, W-ally zestawia ze sobą wyniki procesów z Bazy Usług – takich jak wzięcie pożyczki, założenie rachunku czy płatności BLIK. Widzimy dokładny scoring każdego procesu i poziom ryzyka biznesowego w poszczególnych liniach produktowych.”',
+            '4:15 – 4:35 (20 sekund)'
           ),
           new Paragraph({ spacing: { after: 100 } }),
           createDetailsTable(
@@ -859,14 +859,14 @@ async function generateDocx() {
           createImageParagraph('18_popup_raporty_zarzadcze.png', 500, 320),
           new Paragraph({
             children: [
-              new TextRun({ text: 'Rysunek 17: Zapowiedź planowanego modułu Raportów Zarządczych C-Level (popup informacyjny w makiecie)', size: 16, italics: true, color: '64748B' }),
+              new TextRun({ text: 'Rysunek 17: Zapowiedź modułu Raportów Zarządczych C-Level oraz Deklaracji Dostępności PAD (popup informacyjny w makiecie)', size: 16, italics: true, color: '64748B' }),
             ],
             alignment: AlignmentType.CENTER,
             spacing: { after: 120 },
           }),
           createVoiceoverBox(
-            '„Kolejne dwa moduły raportowania – Raporty Zarządcze dla C-Level oraz Sprawozdawczość Regulacyjna PAD i EAA – są obecnie w fazie projektowej. Zostały zaprezentowane w formie estetycznych zapowiedzi. Docelowo pozwolą one jednym kliknięciem wygenerować urzędowy wzór Deklaracji Dostępności zgodnie z Ustawą oraz syntetyczne podsumowanie trendów dla dyrekcji.”',
-            '3:35 – 3:55 (20 sekund)'
+            '„Rozwijamy również zaawansowaną sprawozdawczość: dedykowane Raporty Zarządcze dla dyrekcji oraz moduł automatycznego generowania Deklaracji Dostępności zgodnie z wymogami ustawy o dostępności cyfrowej i dyrektywy EAA. Pozwoli to kadrze zarządzającej zaoszczędzić dziesiątki godzin pracy przy corocznych obowiązkach sprawozdawczych.”',
+            '4:35 – 4:50 (15 sekund)'
           ),
           new Paragraph({ spacing: { after: 100 } }),
           createDetailsTable(
@@ -881,7 +881,7 @@ async function generateDocx() {
           new Paragraph({ spacing: { after: 360 } }),
 
           // =========================================================================
-          // MODUŁ 5: KONSULTACJE (DAWNY KROK 4)
+          // MODUŁ 5: KONSULTACJE (OCZYSZCZONA NARRACJA DLA KOORDYNATORA)
           // =========================================================================
           new Paragraph({
             children: [
@@ -892,23 +892,23 @@ async function generateDocx() {
           createImageParagraph('17_konsultacje_modul_tickety.png', 500, 325),
           new Paragraph({
             children: [
-              new TextRun({ text: 'Rysunek 18: Zaprojektowany moduł Konsultacje – bezpieczny kanał komunikacji Koordynatora Dostępności z audytorem WCAG i opiekunem klienta, z powiązaniem do audytów i reklamacji (w trakcie wdrożenia do produkcji)', size: 16, italics: true, color: '64748B' }),
+              new TextRun({ text: 'Rysunek 18: Moduł Konsultacje – bezpieczny kanał komunikacji Koordynatora Dostępności z audytorem WCAG i opiekunem klienta, z powiązaniem do audytów i reklamacji', size: 16, italics: true, color: '64748B' }),
             ],
             alignment: AlignmentType.CENTER,
             spacing: { after: 140 },
           }),
           createVoiceoverBox(
-            '„Kolejnym kluczowym elementem systemu jest Moduł Konsultacji – i zależy nam na dosłownym zachowaniu tej nazwy. Nie proponujemy modelu, w którym każdy deweloper pisze bezpośrednio do audytora z pojedynczym błędem technicznym, tworząc chaos komunikacyjny. Konsultacje to strategiczne narzędzie dedykowane dla Koordynatora Dostępności do bezpośredniego kontaktu z certyfikowanym audytorem oraz opiekunem klienta po stronie W-ally. W jednym miejscu przenosimy do systemu całą rozproszoną dotąd komunikację mailową i telefoniczną: możemy tu omawiać skomplikowane reklamacje, uzgadniać interpretacje kryteriów WCAG, a także zamawiać nowe prace i audyty. Co niezwykle ułatwia odnalezienie się w sprawach – każda konsultacja może być bezpośrednio przypisana do konkretnego audytu lub konkretnej reklamacji. Dzięki temu zarówno organizacja, jak i audytorzy mają zawsze pełny kontekst ustaleń i pełną historię decyzji pod ręką. Moduł prezentuje zaprojektowany interfejs i jest obecnie w trakcie końcowego wdrożenia produkcyjnego.”',
-            '3:55 – 4:25 (30 sekund)'
+            '„Kolejnym kluczowym elementem ekosystemu jest Moduł Konsultacji. To dedykowana przestrzeń współpracy dla Koordynatora Dostępności, zapewniająca bezpośredni kontakt z certyfikowanym audytorem WCAG oraz dedykowanym opiekunem klienta po stronie W-ally. Zamiast rozproszonej komunikacji mailowej i telefonicznej, wszystkie ustalenia gromadzimy w jednym uporządkowanym miejscu. Koordynator może tu szybko skonsultować interpretację kryteriów WCAG, omówić nietypowe zgłoszenia od klientów czy zamówić nowe prace i audyty. Co szczególnie wartościowe – każdy wątek konsultacyjny można bezpośrednio powiązać z konkretnym audytem lub konkretną reklamacją, dzięki czemu audytorzy i zespół organizacji zawsze pracują w pełnym kontekście sprawy.”',
+            '4:50 – 5:25 (35 sekund)'
           ),
           new Paragraph({ spacing: { after: 120 } }),
           createDetailsTable(
             [
               'Panel wątków konsultacyjnych z filtrami statusów („Wymaga odpowiedzi”, „W trakcie ustaleń”, „Zakończone”) oraz kontekstów powiązania.',
-              'Dedykowany kanał współpracy: Koordynator Dostępności – Audytor WCAG – Opiekun Klienta (brak rozproszenia i chaosu mailowego).',
+              'Dedykowany kanał współpracy: Koordynator Dostępności – Audytor WCAG – Opiekun Klienta (brak rozproszenia i chaosu komunikacyjnego).',
               'Kontekstowe przypisanie: bezpośrednie powiązanie wątku z konkretnym audytem cyfrowym lub skargą/reklamacją konsumencką.',
               'Przestrzeń ustaleń strategicznych: omawianie reklamacji, interpretacji wytycznych WCAG 2.2 oraz zamawianie nowych audytów i prac eksperckich.',
-              'Status: moduł zaprojektowany zgodnie z docelowym UX, obecnie w fazie końcowego wdrożenia produkcyjnego.',
+              'Status wdrożeniowy: widok zaprojektowany zgodnie z docelowym UX, przygotowywany do wdrożenia produkcyjnego.',
             ],
             'Uporządkowanie i centralizacja komunikacji: koniec z gubieniem ustaleń w e-mailach i rozmowach. Koordynator Dostępności zachowuje pełną kontrolę nad zakresem, interpretacją barier i zleceniami, mając bezpośredni dostęp do audytora i opiekuna w kontekście konkretnego audytu lub reklamacji.'
           ),
@@ -916,7 +916,7 @@ async function generateDocx() {
           new Paragraph({ spacing: { after: 360 } }),
 
           // =========================================================================
-          // MODUŁ 6: SKARGI I REKLAMACJE (DAWNY KROK 5)
+          // MODUŁ 6: SKARGI I REKLAMACJE (REJESTR + SZCZEGÓŁY SKARGI)
           // =========================================================================
           new Paragraph({
             children: [
@@ -933,8 +933,8 @@ async function generateDocx() {
             spacing: { after: 140 },
           }),
           createVoiceoverBox(
-            '„Kolejnym kluczowym modułem operacyjnym są Skargi i Zawiadomienia. Ustawa o dostępności nakłada na podmioty obowiązek rejestrowania i terminowego odpowiadania na zgłoszenia użytkowników z niepełnosprawnościami. W-ally zapewnia centralny rejestr takich spraw z monitoringiem ustawowych terminów, wagą problemu i powiązaniem z audytami technicznymi.”',
-            '4:25 – 4:40 (15 sekund)'
+            '„Kolejnym modułem operacyjnym są Skargi i Zawiadomienia. Przepisy o dostępności nakładają na instytucje obowiązek formalnego rejestrowania i terminowego odpowiadania na zgłoszenia użytkowników ze szczególnymi potrzebami. W-ally zapewnia centralny rejestr takich spraw z monitoringiem terminów ustawowych, wagą problemu i powiązaniem z audytami technicznymi.”',
+            '5:25 – 5:40 (15 sekund)'
           ),
           new Paragraph({ spacing: { after: 120 } }),
           createDetailsTable(
@@ -965,8 +965,8 @@ async function generateDocx() {
             spacing: { after: 120 },
           }),
           createVoiceoverBox(
-            '„Wchodząc w szczegóły konkretnej sprawy – na przykład zgłoszenia dotyczącego niedostępnych wykresów dla czytnika NVDA – odkrywamy pełną moc integracyjną W-ally. Z poziomu jednego ekranu widzimy licznik terminu ustawowego, przypisanego programistę oraz bezpośredni link do zadania w systemie Jira. Co więcej: skarga jest zintegrowana z wątkiem w module Konsultacji u audytora, a po wdrożeniu poprawki koordynator może jednym kliknięciem zlecić reaudyt weryfikacyjny, zamykając sprawę zgodnie z prawem.”',
-            '4:40 – 4:55 (15 sekund)'
+            '„Wchodząc w szczegóły konkretnej sprawy – na przykład zgłoszenia dotyczącego niedostępnych wykresów dla czytnika NVDA – odkrywamy pełną moc integracyjną W-ally. Z poziomu jednego ekranu widzimy licznik terminu ustawowego, przypisanego dewelopera oraz bezpośredni odnośnik do zadania w systemie Jira. Co więcej, skarga jest zintegrowana z wątkiem w module Konsultacji u audytora, a po wdrożeniu poprawki koordynator może jednym kliknięciem zlecić reaudyt weryfikacyjny, zamykając sprawę w pełni profesjonalnie i zgodnie z prawem.”',
+            '5:40 – 5:55 (15 sekund)'
           ),
           new Paragraph({ spacing: { after: 100 } }),
           createDetailsTable(
@@ -999,8 +999,8 @@ async function generateDocx() {
             spacing: { after: 120 },
           }),
           createVoiceoverBox(
-            '„W razie wpływu zawiadomienia pracownik infolinii lub oddziału rejestruje wniosek w 2 minuty: wybiera dotkniętą usługę, typ bariery – na przykład brak obsługi czytnika ekranu NVDA – oraz dane kontaktowe klienta. Zgłoszenie natychmiast trafia do koordynatora dostępności.”',
-            '4:55 – 5:02 (7 sekund)'
+            '„W razie wpływu zawiadomienia pracownik infolinii lub oddziału rejestruje wniosek w zaledwie dwie minuty: wybiera dotkniętą usługę, opisuje barierę – na przykład brak obsługi czytnika ekranu – oraz wprowadza dane kontaktowe klienta. Zgłoszenie natychmiast trafia do koordynatora dostępności.”',
+            '5:55 – 6:05 (10 sekund)'
           ),
           new Paragraph({ spacing: { after: 100 } }),
           createDetailsTable(
@@ -1015,7 +1015,7 @@ async function generateDocx() {
           new Paragraph({ spacing: { after: 360 } }),
 
           // =========================================================================
-          // MODUŁ 7: PODSUMOWANIE & CALL TO ACTION (DAWNY KROK 6)
+          // MODUŁ 7: PODSUMOWANIE & CALL TO ACTION
           // =========================================================================
           new Paragraph({
             children: [
@@ -1033,7 +1033,7 @@ async function generateDocx() {
           }),
           createVoiceoverBox(
             '„Podsumowując: W-ally to nie jest zwykła przeglądarka audytów czy statyczna baza wiedzy. To kompletny, nowoczesny ekosystem, który łączy kadrę zarządzającą, koordynatorów dostępności, audytorów i deweloperów w jednym środowisku pracy. Zapewnia realną oszczędność budżetu dzięki reaudytom, chroni przed ryzykiem prawnym i realnie podnosi jakość cyfrowych usług Twojej organizacji. Dziękujemy za uwagę i zapraszamy do wspólnego wdrożenia platformy W-ally.”',
-            '5:02 – 5:15 (13 sekund)'
+            '6:05 – 6:25 (20 sekund)'
           ),
           new Paragraph({ spacing: { after: 120 } }),
           createDetailsTable(
